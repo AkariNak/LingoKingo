@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,6 @@
 </head>
 <body>
 
-  <!-- ── HEADER ── -->
   <header>
     <div class="logo">
       <span class="logo-kr">한국어</span>
@@ -19,38 +18,36 @@
       <span class="logo-sub">click words · build your deck · study</span>
     </div>
     <div class="header-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="toggle light/dark mode">
+        <span class="theme-icon" id="themeIcon">☀️</span>
+        <span class="theme-label" id="themeLabel">light</span>
+      </button>
       <div class="deck-count">
         <span>deck</span>
         <span class="deck-badge" id="deckCountBadge">0</span>
       </div>
-      <div class="word-count">
-        <span id="wordCountLabel">0 words</span>
-      </div>
     </div>
   </header>
 
-  <!-- ── CONTROLS ── -->
   <div class="controls">
     <div class="controls-row">
       <input type="text" id="searchInput" placeholder="search hangul, romanization, or meaning…" oninput="App.render()" />
       <select id="sortSelect" onchange="App.render()">
         <option value="default">default order</option>
-        <option value="az">a → z (romanization)</option>
-        <option value="za">z → a (romanization)</option>
+        <option value="az">a → z</option>
+        <option value="za">z → a</option>
         <option value="short">shortest first</option>
         <option value="long">longest first</option>
         <option value="common">most common first</option>
         <option value="uncommon">least common first</option>
-        <option value="pos">part of speech</option>
       </select>
+      <button class="btn btn-sm" onclick="App.expandAll()">expand all</button>
+      <button class="btn btn-sm" onclick="App.collapseAll()">collapse all</button>
     </div>
-    <div class="filter-tags" id="filterTags"></div>
   </div>
 
-  <!-- ── WORD GRID ── -->
-  <div class="word-grid" id="wordGrid"></div>
+  <div class="word-sections" id="wordSections"></div>
 
-  <!-- ── DECK PANEL ── -->
   <div class="deck-panel">
     <div class="deck-header">
       <span class="deck-title">your deck</span>
@@ -64,7 +61,6 @@
     </div>
   </div>
 
-  <!-- ── STUDY MODAL ── -->
   <div class="modal-overlay" id="modalOverlay" onclick="App.closeOnOverlay(event)">
     <div class="modal">
       <div class="modal-top">
@@ -72,7 +68,7 @@
         <div class="modal-meta" id="modalMeta"></div>
         <button class="modal-close" onclick="App.closeStudy()" aria-label="close">✕</button>
       </div>
-      <div class="card-hint">tap card to flip</div>
+      <div class="card-hint">tap card to flip · arrow keys to navigate · space to flip</div>
       <div class="card-scene" onclick="App.flipCard()">
         <div class="flash-card" id="flashCard">
           <div class="card-face front" id="cardFront"></div>
