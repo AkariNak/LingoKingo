@@ -159,7 +159,7 @@ body.light .empty-deck{color:#a09d96}
 /* ── MODAL ── */
 #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:1rem}
 #overlay.open{display:flex}
-#modal{border:1px solid;border-radius:12px;width:100%;max-width:480px;padding:1.6rem;display:flex;flex-direction:column;gap:1rem;animation:cin .2s ease both;transition:background .2s}
+#modal{border:1px solid;border-radius:12px;width:100%;max-width:480px;padding:1.6rem;display:flex;flex-direction:column;gap:1rem;transition:background .2s}#overlay.open #modal{animation:cin .2s ease both}
 body.dark  #modal{background:#16161c;border-color:rgba(255,255,255,.15)}
 body.light #modal{background:#fff;border-color:rgba(0,0,0,.18)}
 .m-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
