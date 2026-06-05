@@ -509,12 +509,49 @@ var WORDS=[
 {kr:"수고했어",ro:"sugohesseo",meaning:"good work / you worked hard",example:"오늘 수고했어 — good work today",pos:"expression",freq:7}
 ];
 
-var DECK_COLORS=['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#c8c87a'];
-var DECK_NAMES=['Deck 1','Deck 2','Deck 3','Deck 4','Deck 5'];
-var decks=[{},{},{},{},{}]; // decks[i][kr] = true
-var activeDeckIdx=0; // which deck left-click adds to
-function saveToStorage(){try{localStorage.setItem('krfc-decks',JSON.stringify(decks));localStorage.setItem('krfc-deck-names',JSON.stringify(DECK_NAMES));}catch(e){}}
-function loadFromStorage(){try{var d=localStorage.getItem('krfc-decks');if(d)decks=JSON.parse(d);var n=localStorage.getItem('krfc-deck-names');if(n){var parsed=JSON.parse(n);parsed.forEach(function(name,i){DECK_NAMES[i]=name;});}}catch(e){}}
+// AVAILABLE PALETTE — cycles through for new decks
+var PALETTE=['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#7ac8c8','#c8c87a','#c87a7a','#a87ac8'];
+// decks = [{name, color, words:{kr:true}}]
+var decks=[];
+var activeDeckIdx=-1; // -1 = no deck selected (click-to-add mode off)
+
+function saveToStorage(){
+  try{
+    var data=decks.map(function(d){return{name:d.name,color:d.color,words:d.words};});
+    localStorage.setItem('krfc-decks2',JSON.stringify(data));
+    localStorage.setItem('krfc-active',activeDeckIdx);
+  }catch(e){}
+}
+function loadFromStorage(){
+  try{
+    var raw=localStorage.getItem('krfc-decks2');
+    if(raw){decks=JSON.parse(raw);}
+    var ai=localStorage.getItem('krfc-active');
+    if(ai!==null)activeDeckIdx=parseInt(ai,10);
+    if(activeDeckIdx>=decks.length)activeDeckIdx=-1;
+  }catch(e){}
+}
+function nextColor(){
+  var used=decks.map(function(d){return d.color;});
+  for(var i=0;i<PALETTE.length;i++){if(used.indexOf(PALETTE[i])<0)return PALETTE[i];}
+  return PALETTE[decks.length%PALETTE.length];
+}
+function addDeck(name){
+  decks.push({name:name,color:nextColor(),words:{}});
+  activeDeckIdx=decks.length-1;
+  saveToStorage();
+  renderDeckSwitcher();
+  renderDeck();
+  render();
+}
+function deleteDeck(idx){
+  decks.splice(idx,1);
+  if(activeDeckIdx>=decks.length)activeDeckIdx=decks.length-1;
+  saveToStorage();
+  renderDeckSwitcher();
+  renderDeck();
+  render();
+}
 var openSecs={};
 var curGroup='pos';
 var studyList=[];
@@ -536,11 +573,11 @@ var GROUPS={
 
 // ── HELPERS ──
 function deckColorFor(kr){
-  for(var i=0;i<decks.length;i++){if(decks[i][kr])return DECK_COLORS[i];}
+  for(var i=0;i<decks.length;i++){if(decks[i].words[kr])return decks[i].color;}
   return null;
 }
 function deckIdxFor(kr){
-  for(var i=0;i<decks.length;i++){if(decks[i][kr])return i;}
+  for(var i=0;i<decks.length;i++){if(decks[i].words[kr])return i;}
   return -1;
 }
 
@@ -553,100 +590,185 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')removeCtxMen
 function showCtxMenu(e,w){
   e.preventDefault();
   removeCtxMenu();
+  var isDark=document.body.classList.contains('dark');
   var menu=document.createElement('div');
   menu.id='ctx-menu';
-  menu.style.cssText='position:fixed;z-index:999;border-radius:8px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);min-width:160px;';
-  var isDark=document.body.classList.contains('dark');
+  menu.style.cssText='position:fixed;z-index:9999;border-radius:9px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4);min-width:170px;';
   menu.style.background=isDark?'#1e1e28':'#fff';
-  menu.style.border=isDark?'1px solid rgba(255,255,255,.15)':'1px solid rgba(0,0,0,.15)';
+  menu.style.border=isDark?'1px solid rgba(255,255,255,.14)':'1px solid rgba(0,0,0,.14)';
 
-  // header
+  // word label at top
+  var wlbl=document.createElement('div');
+  wlbl.style.cssText='padding:8px 13px 5px;font-family:Noto Sans KR,sans-serif;font-size:.9rem;font-weight:500;';
+  wlbl.style.color=isDark?'#f0eee8':'#1c1a16';
+  wlbl.textContent=w.kr+' — '+w.ro;
+  menu.appendChild(wlbl);
+
   var hd=document.createElement('div');
-  hd.style.cssText='padding:7px 13px 5px;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;';
+  hd.style.cssText='padding:2px 13px 6px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;';
   hd.style.color=isDark?'#55555f':'#a09d96';
   hd.textContent='add to deck';
   menu.appendChild(hd);
 
-  decks.forEach(function(d,i){
-    var row=document.createElement('div');
-    var inThis=!!d[w.kr];
-    var inOther=!inThis&&deckIdxFor(w.kr)>=0;
-    row.style.cssText='padding:8px 13px;font-size:.75rem;cursor:pointer;display:flex;align-items:center;gap:9px;transition:background .1s;font-family:DM Mono,monospace;';
-    row.style.color=isDark?'#f0eee8':'#1c1a16';
+  if(decks.length===0){
+    var none=document.createElement('div');
+    none.style.cssText='padding:6px 13px 8px;font-size:.72rem;';
+    none.style.color=isDark?'#55555f':'#a09d96';
+    none.textContent='no decks yet — create one below';
+    menu.appendChild(none);
+  } else {
+    decks.forEach(function(deck,i){
+      var inThis=!!deck.words[w.kr];
+      var row=document.createElement('div');
+      row.style.cssText='padding:7px 13px;font-size:.74rem;cursor:pointer;display:flex;align-items:center;gap:9px;font-family:DM Mono,monospace;';
+      row.style.color=isDark?'#f0eee8':'#1c1a16';
+      var dot=document.createElement('span');
+      dot.style.cssText='width:9px;height:9px;border-radius:50%;flex-shrink:0;border:2px solid '+deck.color+';transition:background .1s;';
+      if(inThis)dot.style.background=deck.color;
+      var lbl=document.createElement('span');lbl.style.flex='1';lbl.textContent=deck.name+(inThis?' ✓':'');
+      row.appendChild(dot);row.appendChild(lbl);
+      row.onmouseenter=function(){row.style.background=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';};
+      row.onmouseleave=function(){row.style.background='';};
+      row.onclick=function(ev){
+        ev.stopPropagation();
+        // remove from all decks first
+        decks.forEach(function(d){delete d.words[w.kr];});
+        // if wasn't in this one, add it; otherwise just removed (toggle)
+        if(!inThis)deck.words[w.kr]=true;
+        saveToStorage();removeCtxMenu();renderDeckSwitcher();renderDeck();render();
+      };
+      menu.appendChild(row);
+    });
+  }
 
-    var dot=document.createElement('span');
-    dot.style.cssText='width:9px;height:9px;border-radius:50%;flex-shrink:0;border:2px solid '+DECK_COLORS[i]+';';
-    if(inThis)dot.style.background=DECK_COLORS[i];
-
-    var lbl=document.createElement('span');
-    // allow inline rename
-    lbl.contentEditable='false';
-    lbl.textContent=DECK_NAMES[i]+(inThis?' ✓':'');
-    lbl.style.flex='1';
-
-    row.appendChild(dot);row.appendChild(lbl);
-
-    row.onmouseenter=function(){row.style.background=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';};
-    row.onmouseleave=function(){row.style.background='';};
-    row.onclick=function(ev){
-      ev.stopPropagation();
-      // remove from any existing deck first
-      decks.forEach(function(dd){delete dd[w.kr];});
-      if(!inThis)decks[i][w.kr]=true; // toggle off if already in this deck
-      saveToStorage();removeCtxMenu();renderDeck();render();
-    };
-    menu.appendChild(row);
-  });
-
-  // divider + rename active
+  // divider
   var div=document.createElement('div');
-  div.style.cssText='border-top:1px solid;margin:4px 0;';
+  div.style.cssText='border-top:1px solid;margin:3px 0;';
   div.style.borderColor=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.08)';
   menu.appendChild(div);
 
-  var renameRow=document.createElement('div');
-  renameRow.style.cssText='padding:6px 13px;font-size:.68rem;cursor:pointer;display:flex;align-items:center;gap:8px;';
-  renameRow.style.color=isDark?'#888894':'#6a6760';
-  renameRow.innerHTML='rename active deck';
-  renameRow.onmouseenter=function(){renameRow.style.background=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';};
-  renameRow.onmouseleave=function(){renameRow.style.background='';};
-  renameRow.onclick=function(ev){
+  // add new deck
+  var addRow=document.createElement('div');
+  addRow.style.cssText='padding:7px 13px;font-size:.72rem;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:DM Mono,monospace;';
+  addRow.style.color=isDark?'#7ac8a0':'#1a7a4a';
+  addRow.textContent='+ new deck';
+  addRow.onmouseenter=function(){addRow.style.background=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';};
+  addRow.onmouseleave=function(){addRow.style.background='';};
+  addRow.onclick=function(ev){
     ev.stopPropagation();
-    var name=prompt('Rename "'+DECK_NAMES[activeDeckIdx]+'" to:',DECK_NAMES[activeDeckIdx]);
-    if(name&&name.trim()){DECK_NAMES[activeDeckIdx]=name.trim();saveToStorage();renderDeckSwitcher();renderDeck();}
+    var name=prompt('Name your new deck:','');
+    if(name&&name.trim()){
+      addDeck(name.trim());
+      // auto-add this word to the new deck
+      decks[decks.length-1].words[w.kr]=true;
+      saveToStorage();renderDeckSwitcher();renderDeck();render();
+    }
     removeCtxMenu();
   };
-  menu.appendChild(renameRow);
+  menu.appendChild(addRow);
 
   // position
   var x=e.clientX,y=e.clientY;
   menu.style.left=x+'px';menu.style.top=y+'px';
-  document.body.appendChild(menu);
-  ctxMenu=menu;
-  // flip if off-screen
+  document.body.appendChild(menu);ctxMenu=menu;
   var r=menu.getBoundingClientRect();
-  if(r.right>window.innerWidth)menu.style.left=(x-r.width)+'px';
-  if(r.bottom>window.innerHeight)menu.style.top=(y-r.height)+'px';
+  if(r.right>window.innerWidth-8)menu.style.left=(x-r.width)+'px';
+  if(r.bottom>window.innerHeight-8)menu.style.top=(y-r.height)+'px';
 }
 
 // ── DECK SWITCHER ──
 function renderDeckSwitcher(){
   var sw=document.getElementById('deckSwitcher');
   sw.innerHTML='';
-  decks.forEach(function(d,i){
+
+  if(decks.length===0){
+    var empty=document.createElement('div');
+    empty.className='empty-deck';
+    empty.style.paddingBottom='4px';
+    empty.textContent='right-click any word to create your first deck';
+    sw.appendChild(empty);
+    return;
+  }
+
+  decks.forEach(function(deck,i){
     var btn=document.createElement('button');
     btn.className='dbtn'+(i===activeDeckIdx?' dactive':'');
-    btn.style.setProperty('--dc',DECK_COLORS[i]);
-    var dot=document.createElement('span');dot.className='ddot';
-    var lbl=document.createElement('span');lbl.textContent=DECK_NAMES[i];
-    var ct=document.createElement('span');ct.className='dct';ct.textContent=Object.keys(d).length||'';
+    btn.style.setProperty('--dc',deck.color);
+
+    var dot=document.createElement('span');dot.className='ddot';dot.style.background=deck.color;
+    var lbl=document.createElement('span');lbl.textContent=deck.name;
+    var ct=document.createElement('span');ct.className='dct';
+    var wcount=Object.keys(deck.words).length;
+    if(wcount>0)ct.textContent=wcount;
+
     btn.appendChild(dot);btn.appendChild(lbl);btn.appendChild(ct);
-    btn.onclick=function(){activeDeckIdx=i;renderDeckSwitcher();renderDeck();render();};
+
+    btn.onclick=function(){
+      activeDeckIdx=i===activeDeckIdx?-1:i; // click active deck to deselect
+      saveToStorage();renderDeckSwitcher();renderDeck();render();
+    };
+
+    // right-click deck button to rename or delete
+    btn.oncontextmenu=function(e){
+      e.preventDefault();
+      removeCtxMenu();
+      var isDark=document.body.classList.contains('dark');
+      var menu=document.createElement('div');
+      menu.id='ctx-menu';
+      menu.style.cssText='position:fixed;z-index:9999;border-radius:9px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4);min-width:140px;';
+      menu.style.background=isDark?'#1e1e28':'#fff';
+      menu.style.border=isDark?'1px solid rgba(255,255,255,.14)':'1px solid rgba(0,0,0,.14)';
+
+      var deckHd=document.createElement('div');
+      deckHd.style.cssText='padding:7px 13px 5px;font-size:.65rem;letter-spacing:.08em;font-weight:500;text-transform:uppercase;';
+      deckHd.style.color=deck.color;deckHd.textContent=deck.name;
+      menu.appendChild(deckHd);
+
+      function menuRow(label,color,fn){
+        var row=document.createElement('div');
+        row.style.cssText='padding:7px 13px;font-size:.74rem;cursor:pointer;font-family:DM Mono,monospace;';
+        row.style.color=color||(isDark?'#f0eee8':'#1c1a16');
+        row.textContent=label;
+        row.onmouseenter=function(){row.style.background=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';};
+        row.onmouseleave=function(){row.style.background='';};
+        row.onclick=function(ev){ev.stopPropagation();removeCtxMenu();fn();};
+        menu.appendChild(row);
+      }
+      menuRow('rename',null,function(){
+        var n=prompt('Rename deck:',deck.name);
+        if(n&&n.trim()){deck.name=n.trim();saveToStorage();renderDeckSwitcher();renderDeck();}
+      });
+      menuRow('delete deck','#c87a7a',function(){
+        if(confirm('Delete "'+deck.name+'"? Words won't be deleted.')){deleteDeck(i);}
+      });
+
+      var x=e.clientX,y=e.clientY;
+      menu.style.left=x+'px';menu.style.top=y+'px';
+      document.body.appendChild(menu);ctxMenu=menu;
+      var r=menu.getBoundingClientRect();
+      if(r.right>window.innerWidth-8)menu.style.left=(x-r.width)+'px';
+      if(r.bottom>window.innerHeight-8)menu.style.top=(y-r.height)+'px';
+    };
+
     sw.appendChild(btn);
   });
+
+  // always show a + button at the end
+  var addBtn=document.createElement('button');
+  addBtn.className='dbtn';
+  addBtn.style.setProperty('--dc','#7ac8a0');
+  addBtn.style.color='#7ac8a0';
+  addBtn.style.borderColor='rgba(122,200,160,.35)';
+  addBtn.textContent='+ new deck';
+  addBtn.onclick=function(){
+    var name=prompt('Name your new deck:','');
+    if(name&&name.trim())addDeck(name.trim());
+  };
+  sw.appendChild(addBtn);
 }
 
 // theme
+var theme=localStorage.getItem('krfc-theme')||'dark';// theme
 var theme=localStorage.getItem('krfc-theme')||'dark';
 applyTheme(theme);
 document.getElementById('themeBtn').onclick=function(){
@@ -712,7 +834,7 @@ function render(){
       chip.title=w.meaning+' — '+w.example;
       chip.style.animationDelay=Math.min(i*0.008,0.18)+'s';
       var chipColor=deckColorFor(w.kr);
-      if(chipColor){chip.style.borderColor=chipColor;chip.style.background='rgba(0,0,0,0)';}
+      if(chipColor){chip.style.borderColor=chipColor;}
       var kr=document.createElement('span');kr.className='chip-kr';kr.textContent=w.kr;
       if(chipColor)kr.style.color=chipColor;
       var ro=document.createElement('span');ro.className='chip-ro';ro.textContent=w.ro;
@@ -738,7 +860,11 @@ function collapseAll(){openSecs={};render();}
 
 // deck
 function toggleWord(w){
-  var d=decks[activeDeckIdx];
+  if(activeDeckIdx<0||activeDeckIdx>=decks.length){
+    // no deck active — just a visual hint bounce, do nothing
+    return;
+  }
+  var d=decks[activeDeckIdx].words;
   if(d[w.kr])delete d[w.kr];else d[w.kr]=true;
   saveToStorage();pop();renderDeck();render();
 }
@@ -748,34 +874,40 @@ function pop(){
   setTimeout(function(){b.classList.remove('pop');},200);
 }
 function renderDeck(){
-  var d=decks[activeDeckIdx];
-  var keys=Object.keys(d);
-  document.getElementById('deckBadge').textContent=keys.length;
   var c=document.getElementById('deckChips');
-  if(keys.length===0){c.innerHTML='<span class="empty-deck">no words yet — left-click to add, right-click to choose deck</span>';return;}
+  var badge=document.getElementById('deckBadge');
+  if(activeDeckIdx<0||activeDeckIdx>=decks.length){
+    badge.textContent='0';
+    c.innerHTML='<span class="empty-deck">select or create a deck below, then left-click words to add them</span>';
+    return;
+  }
+  var deck=decks[activeDeckIdx];
+  var keys=Object.keys(deck.words);
+  badge.textContent=keys.length;
+  if(keys.length===0){c.innerHTML='<span class="empty-deck">left-click words to add to <strong style="color:'+deck.color+'">'+deck.name+'</strong></span>';return;}
   c.innerHTML='';
   keys.forEach(function(kr){
     var w=WORDS.find(function(x){return x.kr===kr;});if(!w)return;
     var chip=document.createElement('div');chip.className='dchip';
-    chip.style.borderColor=DECK_COLORS[activeDeckIdx];
-    chip.style.color=DECK_COLORS[activeDeckIdx];
+    chip.style.borderColor=deck.color;chip.style.color=deck.color;
     var ks=document.createElement('span');ks.textContent=w.kr;
     var rs=document.createElement('span');rs.className='dchip-ro';rs.textContent=w.ro;
     var x=document.createElement('button');x.className='dchip-x';x.textContent='×';
-    x.onclick=function(){delete d[kr];saveToStorage();renderDeck();render();};
-    chip.appendChild(ks);chip.appendChild(rs);chip.appendChild(x);
-    c.appendChild(chip);
+    x.onclick=function(){delete deck.words[kr];saveToStorage();renderDeck();render();};
+    chip.appendChild(ks);chip.appendChild(rs);chip.appendChild(x);c.appendChild(chip);
   });
 }
 function clearDeck(){
-  decks[activeDeckIdx]={};
+  if(activeDeckIdx<0||activeDeckIdx>=decks.length)return;
+  decks[activeDeckIdx].words={};
   saveToStorage();renderDeck();render();
 }
 
 // study
 function openStudy(){
-  var keys=Object.keys(decks[activeDeckIdx]);
-  if(keys.length===0){alert('Add words to '+DECK_NAMES[activeDeckIdx]+' first! (right-click a word to choose a deck)');return;}
+  if(activeDeckIdx<0||activeDeckIdx>=decks.length){alert('Select a deck first by clicking it in the deck panel.');return;}
+  var keys=Object.keys(decks[activeDeckIdx].words);
+  if(keys.length===0){alert(decks[activeDeckIdx].name+' has no words yet. Add some first!');return;}
   studyList=shuffle(keys.map(function(kr){return WORDS.find(function(w){return w.kr===kr;});}).filter(Boolean));
   sIdx=0;sFlip=false;renderCard();
   document.getElementById('overlay').classList.add('open');
