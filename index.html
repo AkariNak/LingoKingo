@@ -643,6 +643,14 @@ function openStudy(){
   sIdx=0;sFlip=false;renderCard();
   document.getElementById('overlay').classList.add('open');
 }
+function reshuffleAndRender(){
+  var cur=studyList[sIdx];
+  studyList=shuffle(studyList);
+  // make sure the current card doesn't show up first again
+  var newIdx=studyList.findIndex(function(w){return w.kr===cur.kr;});
+  if(newIdx===0&&studyList.length>1){var tmp=studyList[0];studyList[0]=studyList[1];studyList[1]=tmp;}
+  sIdx=0;renderCard();
+}
 function closeStudy(){document.getElementById('overlay').classList.remove('open');}
 function overlayClick(e){if(e.target===document.getElementById('overlay'))closeStudy();}
 function renderCard(){
@@ -654,9 +662,16 @@ function renderCard(){
   document.getElementById('fcard').classList.remove('flip');sFlip=false;
 }
 function flipCard(){sFlip=!sFlip;document.getElementById('fcard').classList.toggle('flip',sFlip);}
-function nextCard(){sIdx=(sIdx+1)%studyList.length;renderCard();}
+function nextCard(){
+  sIdx++;
+  if(sIdx>=studyList.length){
+    reshuffleAndRender();
+  } else {
+    renderCard();
+  }
+}
 function prevCard(){sIdx=(sIdx-1+studyList.length)%studyList.length;renderCard();}
-function reshuffleStudy(){studyList=shuffle(studyList);sIdx=0;renderCard();}
+function reshuffleStudy(){reshuffleAndRender();}
 
 function shuffle(a){
   var r=a.slice();
