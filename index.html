@@ -193,7 +193,7 @@ body.light .fc-pos{color:#a09d96}
 .fc-ex{font-size:.72rem;font-style:italic;line-height:1.5;margin-top:3px}
 body.dark  .fc-ex{color:#888894}
 body.light .fc-ex{color:#6a6760}
-.m-nav{display:flex;align-items:center;justify-content:space-between}
+.m-nav{display:flex;align-items:center;justify-content:center}
 .m-prog{font-size:.7rem;text-align:center}
 body.dark  .m-prog{color:#888894}
 body.light .m-prog{color:#6a6760}
@@ -263,9 +263,7 @@ body.light .m-prog{color:#6a6760}
       </div>
     </div>
     <div class="m-nav">
-      <button class="abtn" onclick="prevCard()">← prev</button>
-      <span class="m-prog" id="mProg"></span>
-      <button class="abtn" onclick="nextCard()">next →</button>
+      <button class="abtn accent" style="width:100%;justify-content:center" onclick="nextCard()">next →</button>
     </div>
     <div class="m-reshuffle">
       <button class="abtn" onclick="reshuffleStudy()">↺ reshuffle</button>
@@ -655,7 +653,7 @@ function renderCard(){
   var w=studyList[sIdx];
   document.getElementById('cFront').innerHTML='<div class="fc-kr">'+w.kr+'</div><div class="fc-ro">'+w.ro+'</div><div class="fc-pos">'+w.pos+'</div>';
   document.getElementById('cBack').innerHTML='<div class="fc-meaning">'+w.meaning+'</div><div class="fc-ex">'+w.example+'</div>';
-  document.getElementById('mProg').textContent=(sIdx+1)+' / '+studyList.length;
+
   document.getElementById('mMeta').textContent=w.pos;
   document.getElementById('fcard').classList.remove('flip');sFlip=false;
 }
