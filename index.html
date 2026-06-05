@@ -103,7 +103,7 @@ body.light .sec-count{background:#ebe8e2;border-color:rgba(0,0,0,.12);color:#6a6
 body.dark  .sec-chev{color:#55555f}
 body.light .sec-chev{color:#a09d96}
 
-.sec-body{display:none;flex-wrap:wrap;gap:6px;padding:.8rem 1.2rem 1rem;border-top:1px solid;transition:background .2s}
+.sec-body{flex-wrap:wrap;gap:6px;padding:.8rem 1.2rem 1rem;border-top:1px solid;transition:background .2s}
 body.dark  .sec-body{border-color:rgba(255,255,255,.08);background:#0e0e12}
 body.light .sec-body{border-color:rgba(0,0,0,.09);background:#f4f2ed}
 
@@ -739,7 +739,7 @@ function renderDeckSwitcher(){
         if(n&&n.trim()){deck.name=n.trim();saveToStorage();renderDeckSwitcher();renderDeck();}
       });
       menuRow('delete deck','#c87a7a',function(){
-        if(confirm('Delete "'+deck.name+'"? Words won't be deleted.')){deleteDeck(i);}
+        if(confirm('Delete "'+deck.name+'"? Words will not be deleted.')){deleteDeck(i);}
       });
 
       var x=e.clientX,y=e.clientY;
