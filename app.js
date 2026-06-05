@@ -19,20 +19,32 @@ const App = (() => {
         adverb:'var(--accent)', expression:'var(--red)', pronoun:'var(--teal)', particle:'var(--yellow)'
       })[pos] || 'var(--muted)',
     },
-    frequency: {
-      label: 'frequency',
+    most_common: {
+      label: 'most common first',
       getKey: w => {
-        if (w.freq >= 10) return 'essential';
-        if (w.freq >= 8)  return 'very common';
-        if (w.freq >= 6)  return 'common';
-        if (w.freq >= 4)  return 'uncommon';
-        return 'rare';
+        if (w.freq >= 10) return '★★★ essential (freq 10)';
+        if (w.freq >= 8)  return '★★☆ very common (freq 8–9)';
+        if (w.freq >= 6)  return '★☆☆ common (freq 6–7)';
+        if (w.freq >= 4)  return '◇◇◇ uncommon (freq 4–5)';
+        return '— rare (freq 1–3)';
       },
-      order: () => ['essential','very common','common','uncommon','rare'],
-      color: () => 'var(--accent)',
+      order: () => ['★★★ essential (freq 10)','★★☆ very common (freq 8–9)','★☆☆ common (freq 6–7)','◇◇◇ uncommon (freq 4–5)','— rare (freq 1–3)'],
+      color: () => 'var(--green)',
     },
-    length: {
-      label: 'word length',
+    least_common: {
+      label: 'least common first',
+      getKey: w => {
+        if (w.freq >= 10) return '★★★ essential (freq 10)';
+        if (w.freq >= 8)  return '★★☆ very common (freq 8–9)';
+        if (w.freq >= 6)  return '★☆☆ common (freq 6–7)';
+        if (w.freq >= 4)  return '◇◇◇ uncommon (freq 4–5)';
+        return '— rare (freq 1–3)';
+      },
+      order: () => ['— rare (freq 1–3)','◇◇◇ uncommon (freq 4–5)','★☆☆ common (freq 6–7)','★★☆ very common (freq 8–9)','★★★ essential (freq 10)'],
+      color: () => 'var(--red)',
+    },
+    length_short: {
+      label: 'shortest first',
       getKey: w => {
         const l = w.kr.length;
         if (l <= 1) return '1 character';
@@ -42,19 +54,38 @@ const App = (() => {
         return '5+ characters';
       },
       order: () => ['1 character','2 characters','3 characters','4 characters','5+ characters'],
-      color: () => 'var(--accent2)',
+      color: () => 'var(--teal)',
+    },
+    length_long: {
+      label: 'longest first',
+      getKey: w => {
+        const l = w.kr.length;
+        if (l <= 1) return '1 character';
+        if (l <= 2) return '2 characters';
+        if (l <= 3) return '3 characters';
+        if (l <= 4) return '4 characters';
+        return '5+ characters';
+      },
+      order: () => ['5+ characters','4 characters','3 characters','2 characters','1 character'],
+      color: () => 'var(--accent3)',
     },
     alpha: {
       label: 'a → z',
       getKey: w => w.ro[0].toUpperCase(),
       order: keys => [...new Set(keys)].sort(),
-      color: () => 'var(--green)',
+      color: () => 'var(--accent2)',
     },
     alpha_desc: {
       label: 'z → a',
       getKey: w => w.ro[0].toUpperCase(),
       order: keys => [...new Set(keys)].sort().reverse(),
-      color: () => 'var(--accent3)',
+      color: () => 'var(--accent)',
+    },
+    in_deck: {
+      label: 'in my deck',
+      getKey: w => deck.has(w.kr) ? 'added to deck' : 'not in deck',
+      order: () => ['added to deck', 'not in deck'],
+      color: key => key === 'added to deck' ? 'var(--accent)' : 'var(--muted)',
     },
   };
 
