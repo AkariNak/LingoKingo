@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>한국어 — Korean Flashcards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">
+      <span class="logo-kr">한국어</span>
+      <span class="logo-en">Korean Flashcards</span>
+      <span class="logo-sub">click words · build your deck · study</span>
+    </div>
+    <div class="header-right">
+      <div class="deck-count">
+        <span>deck</span>
+        <span class="deck-badge" id="deckCountBadge">0</span>
+      </div>
+      <div class="word-count">
+        <span id="wordCountLabel">0 words</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── CONTROLS ── -->
+  <div class="controls">
+    <div class="controls-row">
+      <input type="text" id="searchInput" placeholder="search hangul, romanization, or meaning…" oninput="App.render()" />
+      <select id="sortSelect" onchange="App.render()">
+        <option value="default">default order</option>
+        <option value="az">a → z (romanization)</option>
+        <option value="za">z → a (romanization)</option>
+        <option value="short">shortest first</option>
+        <option value="long">longest first</option>
+        <option value="common">most common first</option>
+        <option value="uncommon">least common first</option>
+        <option value="pos">part of speech</option>
+      </select>
+    </div>
+    <div class="filter-tags" id="filterTags"></div>
+  </div>
+
+  <!-- ── WORD GRID ── -->
+  <div class="word-grid" id="wordGrid"></div>
+
+  <!-- ── DECK PANEL ── -->
+  <div class="deck-panel">
+    <div class="deck-header">
+      <span class="deck-title">your deck</span>
+      <div class="deck-actions">
+        <button class="btn btn-danger" onclick="App.clearDeck()">remove all</button>
+        <button class="btn btn-accent" onclick="App.openStudy()">study deck →</button>
+      </div>
+    </div>
+    <div class="deck-chips" id="deckChips">
+      <span class="empty-deck">no words yet — click any word above to add it</span>
+    </div>
+  </div>
+
+  <!-- ── STUDY MODAL ── -->
+  <div class="modal-overlay" id="modalOverlay" onclick="App.closeOnOverlay(event)">
+    <div class="modal">
+      <div class="modal-top">
+        <span class="modal-title">study mode</span>
+        <div class="modal-meta" id="modalMeta"></div>
+        <button class="modal-close" onclick="App.closeStudy()" aria-label="close">✕</button>
+      </div>
+      <div class="card-hint">tap card to flip</div>
+      <div class="card-scene" onclick="App.flipCard()">
+        <div class="flash-card" id="flashCard">
+          <div class="card-face front" id="cardFront"></div>
+          <div class="card-face back" id="cardBack"></div>
+        </div>
+      </div>
+      <div class="modal-nav">
+        <button class="btn" onclick="App.prevCard()">← prev</button>
+        <span class="modal-progress" id="modalProgress"></span>
+        <button class="btn" onclick="App.nextCard()">next →</button>
+      </div>
+      <div class="modal-reshuffle">
+        <button class="btn" onclick="App.reshuffleDeck()">↺ reshuffle</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="words.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
