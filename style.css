@@ -202,7 +202,7 @@ select:focus { border-color: var(--accent); }
 .pos-particle   .section-pos { color: var(--yellow);   }
 
 .section-body {
-  display: none;
+  /* display managed by JS */
   flex-wrap: wrap; gap: 7px;
   padding: 0.85rem 1.25rem 1rem;
   background: var(--bg);
@@ -266,7 +266,7 @@ select:focus { border-color: var(--accent); }
 
 /* ── MODAL ── */
 .modal-overlay {
-  display: none; position: fixed; inset: 0;
+  /* display managed by JS */ position: fixed; inset: 0;
   background: rgba(0,0,0,0.7);
   z-index: 200; align-items: center; justify-content: center; padding: 1rem;
 }
