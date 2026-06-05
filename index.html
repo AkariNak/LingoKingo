@@ -1,83 +1,681 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>한국어 — Korean Flashcards</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>한국어 Korean Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s}
+body.dark{background:#0e0e12;color:#f0eee8}
+body.light{background:#f4f2ed;color:#1c1a16}
+
+/* surfaces */
+body.dark  .surface  {background:#16161c}
+body.dark  .surface2 {background:#1e1e28}
+body.light .surface  {background:#fff}
+body.light .surface2 {background:#ebe8e2}
+
+/* borders */
+body.dark  .bd  {border-color:rgba(255,255,255,.08)}
+body.dark  .bd2 {border-color:rgba(255,255,255,.15)}
+body.light .bd  {border-color:rgba(0,0,0,.09)}
+body.light .bd2 {border-color:rgba(0,0,0,.18)}
+
+/* text */
+body.dark  .t-muted{color:#888894}
+body.dark  .t-subtle{color:#55555f}
+body.light .t-muted{color:#6a6760}
+body.light .t-subtle{color:#a09d96}
+
+/* accent */
+body.dark  {--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28)}
+body.light {--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px}
+body.dark  ::-webkit-scrollbar-thumb{background:#2a2a3a}
+body.light ::-webkit-scrollbar-thumb{background:#ccc}
+
+/* ── HEADER ── */
+#hdr{padding:1.5rem 2rem 1.1rem;border-bottom:1px solid;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:.75rem;position:sticky;top:0;z-index:100;transition:background .2s}
+body.dark  #hdr{background:#0e0e12;border-color:rgba(255,255,255,.08)}
+body.light #hdr{background:#f4f2ed;border-color:rgba(0,0,0,.09)}
+.logo-kr{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:.78rem;color:var(--acc);letter-spacing:.15em;display:block}
+.logo-en{font-family:'DM Serif Display',serif;font-size:1.7rem;line-height:1;display:block}
+.logo-sub{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;margin-top:3px;display:block}
+.hdr-r{display:flex;align-items:center;gap:.9rem}
+#themeBtn{font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 13px;border-radius:99px;border:1px solid;cursor:pointer;transition:all .15s;letter-spacing:.04em}
+body.dark  #themeBtn{background:#1e1e28;border-color:rgba(255,255,255,.15);color:#888894}
+body.light #themeBtn{background:#ebe8e2;border-color:rgba(0,0,0,.18);color:#6a6760}
+#themeBtn:hover{border-color:var(--acc);color:var(--acc)}
+.deck-lbl{font-size:.7rem}
+body.dark  .deck-lbl{color:#888894}
+body.light .deck-lbl{color:#6a6760}
+#deckBadge{background:var(--acc);color:#fff;font-weight:500;padding:2px 9px;border-radius:99px;font-size:.7rem;min-width:24px;text-align:center;display:inline-block;transition:transform .15s}
+#deckBadge.pop{transform:scale(1.35)}
+
+/* ── CONTROLS ── */
+#ctrl{padding:.8rem 2rem;border-bottom:1px solid;position:sticky;top:85px;z-index:90;transition:background .2s}
+body.dark  #ctrl{background:#0e0e12;border-color:rgba(255,255,255,.08)}
+body.light #ctrl{background:#f4f2ed;border-color:rgba(0,0,0,.09)}
+.ctrl-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:7px}
+.ctrl-row:last-child{margin-bottom:0}
+#searchInput{font-family:'DM Mono',monospace;font-size:.76rem;padding:7px 13px;border-radius:6px;border:1px solid;outline:none;width:260px;transition:border-color .2s,background .2s}
+body.dark  #searchInput{background:#1e1e28;border-color:rgba(255,255,255,.15);color:#f0eee8}
+body.light #searchInput{background:#fff;border-color:rgba(0,0,0,.18);color:#1c1a16}
+#searchInput::placeholder{color:#55555f}
+body.light #searchInput::placeholder{color:#a09d96}
+#searchInput:focus{border-color:var(--acc)}
+
+/* group + util buttons */
+.gbtn,.ubtn{font-family:'DM Mono',monospace;font-size:.67rem;padding:5px 12px;border-radius:99px;border:1px solid;cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.03em}
+body.dark  .gbtn,.dark .ubtn{background:#1e1e28;border-color:rgba(255,255,255,.15);color:#888894}
+body.light .gbtn,.light .ubtn{background:#fff;border-color:rgba(0,0,0,.18);color:#6a6760}
+.gbtn:hover,.ubtn:hover{border-color:var(--acc);color:var(--acc)}
+.gbtn.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:500}
+.ubtn{border-radius:6px;font-size:.68rem;padding:5px 11px}
+body.dark  .ubtn{background:#1e1e28;border-color:rgba(255,255,255,.15);color:#888894}
+body.light .ubtn{background:#fff;border-color:rgba(0,0,0,.18);color:#6a6760}
+
+/* ── SECTIONS ── */
+#wordSections{padding:1rem 2rem .5rem;display:flex;flex-direction:column;gap:7px}
+.sec{border:1px solid;border-radius:10px;overflow:hidden;transition:border-color .15s}
+body.dark  .sec{border-color:rgba(255,255,255,.08)}
+body.light .sec{border-color:rgba(0,0,0,.09)}
+body.dark  .sec:hover{border-color:rgba(255,255,255,.15)}
+body.light .sec:hover{border-color:rgba(0,0,0,.18)}
+
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;cursor:pointer;user-select:none;transition:background .15s}
+body.dark  .sec-hdr{background:#16161c}
+body.light .sec-hdr{background:#fff}
+body.dark  .sec-hdr:hover{background:#1e1e28}
+body.light .sec-hdr:hover{background:#ebe8e2}
+
+.sec-left{display:flex;align-items:center;gap:9px}
+.sec-name{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.sec-count{font-size:.62rem;padding:2px 8px;border-radius:99px;border:1px solid}
+body.dark  .sec-count{background:#1e1e28;border-color:rgba(255,255,255,.1);color:#888894}
+body.light .sec-count{background:#ebe8e2;border-color:rgba(0,0,0,.12);color:#6a6760}
+.sec-sel{font-size:.62rem;padding:2px 8px;border-radius:99px;background:var(--acc-bg);border:1px solid var(--acc-bd);color:var(--acc)}
+.sec-chev{font-size:.62rem}
+body.dark  .sec-chev{color:#55555f}
+body.light .sec-chev{color:#a09d96}
+
+.sec-body{display:none;flex-wrap:wrap;gap:6px;padding:.8rem 1.2rem 1rem;border-top:1px solid;transition:background .2s}
+body.dark  .sec-body{border-color:rgba(255,255,255,.08);background:#0e0e12}
+body.light .sec-body{border-color:rgba(0,0,0,.09);background:#f4f2ed}
+
+/* ── WORD CHIPS ── */
+@keyframes cin{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.chip{display:flex;flex-direction:column;gap:2px;border:1px solid;border-radius:6px;padding:7px 11px 8px;cursor:pointer;user-select:none;transition:background .12s,border-color .12s;animation:cin .14s ease both}
+body.dark  .chip{background:#16161c;border-color:rgba(255,255,255,.08)}
+body.light .chip{background:#fff;border-color:rgba(0,0,0,.09)}
+body.dark  .chip:hover{background:#1e1e28;border-color:rgba(255,255,255,.15)}
+body.light .chip:hover{background:#ebe8e2;border-color:rgba(0,0,0,.18)}
+.chip.on{border-color:var(--acc);background:var(--acc-bg)}
+.chip.on .chip-kr{color:var(--acc)}
+.chip-kr{font-family:'Noto Sans KR',sans-serif;font-size:.98rem;font-weight:500;line-height:1.2}
+.chip-ro{font-size:.58rem}
+body.dark  .chip-ro{color:#888894}
+body.light .chip-ro{color:#6a6760}
+.empty-msg{font-size:.74rem;width:100%;text-align:center;padding:1.5rem 0}
+body.dark  .empty-msg{color:#55555f}
+body.light .empty-msg{color:#a09d96}
+
+/* ── DECK PANEL ── */
+#deckPanel{border-top:1px solid;padding:1.2rem 2rem 2rem;margin-top:.5rem;transition:background .2s}
+body.dark  #deckPanel{background:#16161c;border-color:rgba(255,255,255,.08)}
+body.light #deckPanel{background:#fff;border-color:rgba(0,0,0,.09)}
+.deck-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.deck-title{font-family:'DM Serif Display',serif;font-size:1.05rem}
+.deck-acts{display:flex;gap:7px}
+.abtn{font-family:'DM Mono',monospace;font-size:.7rem;padding:6px 14px;border-radius:6px;border:1px solid;cursor:pointer;transition:all .15s;letter-spacing:.03em}
+body.dark  .abtn{background:#1e1e28;border-color:rgba(255,255,255,.15);color:#f0eee8}
+body.light .abtn{background:#ebe8e2;border-color:rgba(0,0,0,.18);color:#1c1a16}
+.abtn:hover{border-color:var(--acc);color:var(--acc)}
+body.dark  .abtn:hover{background:#26263a}
+body.light .abtn:hover{background:#dedad2}
+.abtn.accent{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:500}
+.abtn.accent:hover{opacity:.85;color:#fff}
+.abtn.danger{color:#c87a7a;border-color:rgba(200,122,122,.3);background:transparent}
+.abtn.danger:hover{background:rgba(200,122,122,.08);border-color:#c87a7a}
+body.light .abtn.danger{color:#8c2020;border-color:rgba(140,32,32,.3)}
+
+#deckChips{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
+.dchip{display:flex;align-items:center;gap:5px;background:var(--acc-bg);border:1px solid var(--acc-bd);border-radius:99px;padding:3px 7px 3px 11px;font-size:.78rem;color:var(--acc);font-family:'Noto Sans KR',sans-serif;animation:cin .13s ease both}
+.dchip-ro{font-family:'DM Mono',monospace;font-size:.58rem}
+body.dark  .dchip-ro{color:#888894}
+body.light .dchip-ro{color:#6a6760}
+.dchip-x{background:none;border:none;cursor:pointer;font-size:12px;padding:0 2px;transition:color .12s}
+body.dark  .dchip-x{color:#888894}
+body.light .dchip-x{color:#6a6760}
+.dchip-x:hover{color:#c87a7a}
+.empty-deck{font-size:.7rem}
+body.dark  .empty-deck{color:#55555f}
+body.light .empty-deck{color:#a09d96}
+
+/* ── MODAL ── */
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:1rem}
+#overlay.open{display:flex}
+#modal{border:1px solid;border-radius:12px;width:100%;max-width:480px;padding:1.6rem;display:flex;flex-direction:column;gap:1rem;animation:cin .2s ease both;transition:background .2s}
+body.dark  #modal{background:#16161c;border-color:rgba(255,255,255,.15)}
+body.light #modal{background:#fff;border-color:rgba(0,0,0,.18)}
+.m-top{display:flex;align-items:center;justify-content:space-between;gap:.8rem}
+.m-title{font-family:'DM Serif Display',serif;font-size:1.05rem}
+.m-meta{font-size:.65rem;flex:1}
+body.dark  .m-meta{color:#888894}
+body.light .m-meta{color:#6a6760}
+.m-close{background:none;border:none;cursor:pointer;font-size:1rem;padding:4px;transition:color .12s}
+body.dark  .m-close{color:#888894}
+body.light .m-close{color:#6a6760}
+body.dark  .m-close:hover{color:#f0eee8}
+body.light .m-close:hover{color:#1c1a16}
+.card-hint{text-align:center;font-size:.6rem;letter-spacing:.06em}
+body.dark  .card-hint{color:#55555f}
+body.light .card-hint{color:#a09d96}
+.card-scene{perspective:1100px;height:210px;cursor:pointer}
+.fcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .48s cubic-bezier(.4,0,.2,1)}
+.fcard.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;border:1px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:1.75rem 1.25rem;text-align:center;transition:background .2s}
+body.dark  .face{background:#1e1e28;border-color:rgba(255,255,255,.15)}
+body.light .face{background:#ebe8e2;border-color:rgba(0,0,0,.18)}
+.face.back{transform:rotateY(180deg)}
+.fc-kr{font-family:'Noto Sans KR',sans-serif;font-size:2.8rem;font-weight:700;line-height:1}
+.fc-ro{font-size:.8rem}
+body.dark  .fc-ro{color:#888894}
+body.light .fc-ro{color:#6a6760}
+.fc-pos{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em}
+body.dark  .fc-pos{color:#55555f}
+body.light .fc-pos{color:#a09d96}
+.fc-meaning{font-family:'DM Serif Display',serif;font-size:1.3rem;line-height:1.2}
+.fc-ex{font-size:.72rem;font-style:italic;line-height:1.5;margin-top:3px}
+body.dark  .fc-ex{color:#888894}
+body.light .fc-ex{color:#6a6760}
+.m-nav{display:flex;align-items:center;justify-content:space-between}
+.m-prog{font-size:.7rem;text-align:center}
+body.dark  .m-prog{color:#888894}
+body.light .m-prog{color:#6a6760}
+.m-reshuffle{text-align:center}
+
+@media(max-width:600px){
+  #hdr,#ctrl,#deckPanel{padding-left:1rem;padding-right:1rem}
+  #wordSections{padding:1rem 1rem .5rem}
+  #searchInput{width:100%}
+  #ctrl{top:74px}
+}
+</style>
 </head>
-<body>
+<body class="dark">
 
-  <header>
-    <div class="logo">
-      <span class="logo-kr">한국어</span>
-      <span class="logo-en">Korean Flashcards</span>
-      <span class="logo-sub">click words · build your deck · study</span>
-    </div>
-    <div class="header-right">
-      <button class="theme-toggle" id="themeToggle" aria-label="toggle theme">light mode</button>
-      <div class="deck-count">
-        <span>deck</span>
-        <span class="deck-badge" id="deckCountBadge">0</span>
-      </div>
-    </div>
-  </header>
-
-  <div class="controls">
-    <div class="controls-row">
-      <input type="text" id="searchInput" placeholder="search hangul, romanization, or meaning…" oninput="App.render()" />
-      <div class="group-bar" id="groupBar"></div>
-    </div>
-    <div class="controls-row controls-row-2">
-      <button class="btn btn-sm" onclick="App.expandAll()">expand all</button>
-      <button class="btn btn-sm" onclick="App.collapseAll()">collapse all</button>
+<div id="hdr">
+  <div class="logo">
+    <span class="logo-kr">한국어</span>
+    <span class="logo-en">Korean Flashcards</span>
+    <span class="logo-sub t-subtle">click words · build your deck · study</span>
+  </div>
+  <div class="hdr-r">
+    <button id="themeBtn">light mode</button>
+    <div style="display:flex;align-items:center;gap:7px">
+      <span class="deck-lbl">deck</span>
+      <span id="deckBadge">0</span>
     </div>
   </div>
+</div>
 
-  <div class="word-sections" id="wordSections"></div>
+<div id="ctrl">
+  <div class="ctrl-row">
+    <input id="searchInput" type="text" placeholder="search hangul, romanization, or meaning…"/>
+    <div id="groupBar"></div>
+  </div>
+  <div class="ctrl-row">
+    <button class="ubtn" onclick="expandAll()">expand all</button>
+    <button class="ubtn" onclick="collapseAll()">collapse all</button>
+  </div>
+</div>
 
-  <div class="deck-panel">
-    <div class="deck-header">
-      <span class="deck-title">your deck</span>
-      <div class="deck-actions">
-        <button class="btn btn-danger" onclick="App.clearDeck()">remove all</button>
-        <button class="btn btn-accent" onclick="App.openStudy()">study deck →</button>
-      </div>
-    </div>
-    <div class="deck-chips" id="deckChips">
-      <span class="empty-deck">no words yet — click any word above to add it</span>
+<div id="wordSections"></div>
+
+<div id="deckPanel">
+  <div class="deck-hdr">
+    <span class="deck-title">your deck</span>
+    <div class="deck-acts">
+      <button class="abtn danger" onclick="clearDeck()">remove all</button>
+      <button class="abtn accent" onclick="openStudy()">study deck →</button>
     </div>
   </div>
+  <div id="deckChips"><span class="empty-deck">no words yet — click any word above to add it</span></div>
+</div>
 
-  <div class="modal-overlay" id="modalOverlay" onclick="App.closeOnOverlay(event)">
-    <div class="modal">
-      <div class="modal-top">
-        <span class="modal-title">study mode</span>
-        <div class="modal-meta" id="modalMeta"></div>
-        <button class="modal-close" onclick="App.closeStudy()" aria-label="close">✕</button>
-      </div>
-      <div class="card-hint">tap to flip · arrow keys to navigate · space to flip</div>
-      <div class="card-scene" onclick="App.flipCard()">
-        <div class="flash-card" id="flashCard">
-          <div class="card-face front" id="cardFront"></div>
-          <div class="card-face back" id="cardBack"></div>
-        </div>
-      </div>
-      <div class="modal-nav">
-        <button class="btn" onclick="App.prevCard()">← prev</button>
-        <span class="modal-progress" id="modalProgress"></span>
-        <button class="btn" onclick="App.nextCard()">next →</button>
-      </div>
-      <div class="modal-reshuffle">
-        <button class="btn" onclick="App.reshuffleDeck()">↺ reshuffle</button>
+<div id="overlay" onclick="overlayClick(event)">
+  <div id="modal">
+    <div class="m-top">
+      <span class="m-title">study mode</span>
+      <span class="m-meta" id="mMeta"></span>
+      <button class="m-close" onclick="closeStudy()">✕</button>
+    </div>
+    <div class="card-hint">tap to flip · arrows to navigate · space to flip</div>
+    <div class="card-scene" onclick="flipCard()">
+      <div class="fcard" id="fcard">
+        <div class="face front" id="cFront"></div>
+        <div class="face back"  id="cBack"></div>
       </div>
     </div>
+    <div class="m-nav">
+      <button class="abtn" onclick="prevCard()">← prev</button>
+      <span class="m-prog" id="mProg"></span>
+      <button class="abtn" onclick="nextCard()">next →</button>
+    </div>
+    <div class="m-reshuffle">
+      <button class="abtn" onclick="reshuffleStudy()">↺ reshuffle</button>
+    </div>
   </div>
+</div>
 
-  <script src="words.js"></script>
-  <script src="app.js"></script>
+<script>
+var WORDS=[
+{kr:"눈",ro:"nun",meaning:"eye / eyes",example:"눈이 예뻐요 — your eyes are pretty",pos:"noun",freq:9},
+{kr:"빠져",ro:"ppajyeo",meaning:"falling into / drawn in",example:"나 빠져 — I'm falling for you",pos:"verb",freq:7},
+{kr:"느껴",ro:"neukkyeo",meaning:"feeling / I feel",example:"뭔가 느껴 — I feel something",pos:"verb",freq:7},
+{kr:"자꾸",ro:"jakku",meaning:"repeatedly / keeps happening",example:"자꾸 생각나 — keeps coming to mind",pos:"adverb",freq:7},
+{kr:"끌려",ro:"kkeullyeo",meaning:"being pulled / attracted",example:"네게 끌려 — being pulled toward you",pos:"verb",freq:6},
+{kr:"설레",ro:"seolle",meaning:"heart fluttering / excited feeling",example:"설레는 기분 — a heart-fluttering feeling",pos:"verb",freq:6},
+{kr:"떨려",ro:"tteollyeo",meaning:"trembling / heart racing",example:"심장이 떨려 — my heart is trembling",pos:"verb",freq:6},
+{kr:"자석",ro:"jaseok",meaning:"magnet",example:"자석처럼 끌려 — pulled like a magnet",pos:"noun",freq:4},
+{kr:"순간",ro:"sungan",meaning:"moment / instant",example:"그 순간 — that moment",pos:"noun",freq:8},
+{kr:"가까이",ro:"gakkai",meaning:"close / near",example:"가까이 와 — come closer",pos:"adverb",freq:7},
+{kr:"바라봐",ro:"barabwa",meaning:"look at / gaze at",example:"나를 바라봐 — look at me",pos:"verb",freq:6},
+{kr:"심장",ro:"simjang",meaning:"heart (organ) / heartbeat",example:"심장이 뛰어 — my heart is beating",pos:"noun",freq:6},
+{kr:"머릿속",ro:"meoritssok",meaning:"inside one's head / mind",example:"머릿속이 복잡해 — my head is a mess",pos:"noun",freq:5},
+{kr:"두근두근",ro:"dugeundugeun",meaning:"thump-thump (heartbeat sound)",example:"두근두근 떨려 — thump thump I'm trembling",pos:"expression",freq:4},
+{kr:"뻔해",ro:"ppeonhae",meaning:"obvious / predictable",example:"너무 뻔해 — so obvious",pos:"adjective",freq:5},
+{kr:"자꾸만",ro:"jakkuman",meaning:"just keeps on / over and over",example:"자꾸만 생각나 — just keeps coming to mind",pos:"adverb",freq:5},
+{kr:"온통",ro:"ontong",meaning:"entirely / all over",example:"온통 너야 — it's all you",pos:"adverb",freq:5},
+{kr:"모르게",ro:"moreuge",meaning:"unknowingly / without realizing",example:"나도 모르게 — without even realizing it",pos:"adverb",freq:5},
+{kr:"멈춰",ro:"meomchwo",meaning:"stop / halt",example:"멈춰 서 — stop right there",pos:"verb",freq:6},
+{kr:"달라",ro:"dalla",meaning:"different / unlike",example:"뭔가 달라 — something's different",pos:"adjective",freq:7},
+{kr:"그냥",ro:"geunyang",meaning:"just / simply / without reason",example:"그냥 좋아 — I just like it",pos:"adverb",freq:9},
+{kr:"왠지",ro:"waenji",meaning:"for some reason / somehow",example:"왠지 좋아 — I like it for some reason",pos:"adverb",freq:7},
+{kr:"처음",ro:"cheoeum",meaning:"first time / beginning",example:"처음 만났을 때 — when we first met",pos:"noun",freq:8},
+{kr:"익숙해",ro:"iksukhae",meaning:"familiar / used to",example:"점점 익숙해져 — getting more familiar",pos:"adjective",freq:6},
+{kr:"나",ro:"na",meaning:"I / me (informal)",example:"나 좋아해 — I like you",pos:"pronoun",freq:10},
+{kr:"너",ro:"neo",meaning:"you (informal)",example:"너 때문에 — because of you",pos:"pronoun",freq:10},
+{kr:"우리",ro:"uri",meaning:"we / us / our",example:"우리 같이 가자 — let's go together",pos:"pronoun",freq:10},
+{kr:"저",ro:"jeo",meaning:"I / me (formal)",example:"저는 학생이에요 — I am a student",pos:"pronoun",freq:9},
+{kr:"당신",ro:"dangsin",meaning:"you (formal/written)",example:"당신을 사랑해요 — I love you",pos:"pronoun",freq:7},
+{kr:"그",ro:"geu",meaning:"he / that / the",example:"그 사람 — that person",pos:"pronoun",freq:8},
+{kr:"그녀",ro:"geunyeo",meaning:"she / her",example:"그녀는 예뻐 — she is pretty",pos:"pronoun",freq:7},
+{kr:"이것",ro:"igeot",meaning:"this (thing)",example:"이것은 뭐야? — what is this?",pos:"pronoun",freq:8},
+{kr:"저것",ro:"jeogeot",meaning:"that (thing far away)",example:"저것은 뭐야? — what is that?",pos:"pronoun",freq:7},
+{kr:"누구",ro:"nugu",meaning:"who",example:"누구야? — who is it?",pos:"pronoun",freq:9},
+{kr:"무엇",ro:"mueot",meaning:"what",example:"무엇을 원해? — what do you want?",pos:"pronoun",freq:9},
+{kr:"뭐",ro:"mwo",meaning:"what (casual)",example:"뭐 해? — what are you doing?",pos:"pronoun",freq:10},
+{kr:"마음",ro:"maeum",meaning:"heart / mind / feelings",example:"내 마음 알아? — do you know my feelings?",pos:"noun",freq:9},
+{kr:"손",ro:"son",meaning:"hand",example:"손 잡아 — hold my hand",pos:"noun",freq:9},
+{kr:"입",ro:"ip",meaning:"mouth / lips",example:"입술이 예뻐 — your lips are pretty",pos:"noun",freq:8},
+{kr:"얼굴",ro:"eolgul",meaning:"face",example:"얼굴이 예쁘다 — your face is pretty",pos:"noun",freq:8},
+{kr:"머리",ro:"meori",meaning:"head / hair",example:"머리가 아파 — my head hurts",pos:"noun",freq:8},
+{kr:"몸",ro:"mom",meaning:"body",example:"몸이 아파 — my body hurts",pos:"noun",freq:7},
+{kr:"목소리",ro:"moksori",meaning:"voice",example:"목소리가 예뻐 — your voice is beautiful",pos:"noun",freq:7},
+{kr:"눈물",ro:"nunmul",meaning:"tears",example:"눈물이 나 — tears are falling",pos:"noun",freq:7},
+{kr:"기억",ro:"gieok",meaning:"memory",example:"기억해? — do you remember?",pos:"noun",freq:7},
+{kr:"꿈",ro:"kkum",meaning:"dream",example:"꿈 같아 — it's like a dream",pos:"noun",freq:7},
+{kr:"행복",ro:"haengbok",meaning:"happiness",example:"행복해 — I'm happy",pos:"noun",freq:7},
+{kr:"슬픔",ro:"seulpeum",meaning:"sadness / sorrow",example:"슬픔을 느껴 — I feel sadness",pos:"noun",freq:5},
+{kr:"사랑",ro:"sarang",meaning:"love",example:"사랑해 — I love you",pos:"noun",freq:10},
+{kr:"기분",ro:"gibun",meaning:"feeling / mood",example:"기분이 좋아 — I'm in a good mood",pos:"noun",freq:8},
+{kr:"감정",ro:"gamjeong",meaning:"emotion / feeling",example:"감정을 숨겨 — hiding my emotions",pos:"noun",freq:6},
+{kr:"힘",ro:"him",meaning:"strength / power / energy",example:"힘을 내 — cheer up / draw strength",pos:"noun",freq:8},
+{kr:"오늘",ro:"oneul",meaning:"today",example:"오늘 뭐 해? — what are you doing today?",pos:"noun",freq:10},
+{kr:"내일",ro:"naeil",meaning:"tomorrow",example:"내일 만나자 — let's meet tomorrow",pos:"noun",freq:9},
+{kr:"어제",ro:"eoje",meaning:"yesterday",example:"어제 뭐 했어? — what did you do yesterday?",pos:"noun",freq:9},
+{kr:"지금",ro:"jigeum",meaning:"now / right now",example:"지금 어디야? — where are you now?",pos:"adverb",freq:10},
+{kr:"여기",ro:"yeogi",meaning:"here / this place",example:"여기 있어 — I'm here",pos:"noun",freq:9},
+{kr:"거기",ro:"geogi",meaning:"there / that place",example:"거기 있어? — are you there?",pos:"noun",freq:8},
+{kr:"집",ro:"jip",meaning:"home / house",example:"집에 가 — go home",pos:"noun",freq:10},
+{kr:"학교",ro:"hakgyo",meaning:"school",example:"학교에 가요 — I go to school",pos:"noun",freq:9},
+{kr:"회사",ro:"hoesa",meaning:"company / office / workplace",example:"회사에 가 — going to work",pos:"noun",freq:8},
+{kr:"밤",ro:"bam",meaning:"night",example:"밤이 깊어 — the night is deep",pos:"noun",freq:8},
+{kr:"낮",ro:"nat",meaning:"daytime / noon",example:"낮에 만나 — let's meet during the day",pos:"noun",freq:7},
+{kr:"봄",ro:"bom",meaning:"spring (season)",example:"봄이 왔어 — spring has come",pos:"noun",freq:7},
+{kr:"별",ro:"byeol",meaning:"star",example:"별처럼 빛나 — shining like a star",pos:"noun",freq:7},
+{kr:"하늘",ro:"haneul",meaning:"sky",example:"하늘이 예쁘다 — the sky is pretty",pos:"noun",freq:8},
+{kr:"바람",ro:"baram",meaning:"wind / breeze",example:"바람이 불어 — the wind blows",pos:"noun",freq:7},
+{kr:"길",ro:"gil",meaning:"road / path / way",example:"이 길을 따라 — follow this path",pos:"noun",freq:8},
+{kr:"세상",ro:"sesang",meaning:"world / the world",example:"세상이 달라 보여 — the world looks different",pos:"noun",freq:7},
+{kr:"친구",ro:"chingu",meaning:"friend",example:"친구랑 놀아 — hanging out with friends",pos:"noun",freq:10},
+{kr:"가족",ro:"gajok",meaning:"family",example:"가족이 좋아 — I love my family",pos:"noun",freq:9},
+{kr:"남자",ro:"namja",meaning:"man / boy",example:"남자친구 — boyfriend",pos:"noun",freq:9},
+{kr:"여자",ro:"yeoja",meaning:"woman / girl",example:"여자친구 — girlfriend",pos:"noun",freq:9},
+{kr:"사람",ro:"saram",meaning:"person / people",example:"좋은 사람 — a good person",pos:"noun",freq:10},
+{kr:"선생님",ro:"seonsaengnim",meaning:"teacher",example:"선생님 감사합니다 — thank you teacher",pos:"noun",freq:8},
+{kr:"아이",ro:"ai",meaning:"child / kid",example:"아이처럼 — like a child",pos:"noun",freq:8},
+{kr:"언니",ro:"eonni",meaning:"older sister (female speaker)",example:"언니 도와줘 — sis help me",pos:"noun",freq:7},
+{kr:"오빠",ro:"oppa",meaning:"older brother (female speaker)",example:"오빠 보고싶어 — I miss you oppa",pos:"noun",freq:7},
+{kr:"엄마",ro:"eomma",meaning:"mom / mother",example:"엄마 사랑해 — I love you mom",pos:"noun",freq:9},
+{kr:"아빠",ro:"appa",meaning:"dad / father",example:"아빠 보고싶어 — I miss you dad",pos:"noun",freq:9},
+{kr:"음악",ro:"eumak",meaning:"music",example:"음악을 들어 — listening to music",pos:"noun",freq:9},
+{kr:"노래",ro:"norae",meaning:"song",example:"노래 불러 — singing a song",pos:"noun",freq:9},
+{kr:"영화",ro:"yeonghwa",meaning:"movie / film",example:"영화 보러 가자 — let's go watch a movie",pos:"noun",freq:9},
+{kr:"음식",ro:"eumsik",meaning:"food",example:"음식이 맛있어 — the food is delicious",pos:"noun",freq:9},
+{kr:"물",ro:"mul",meaning:"water",example:"물 마셔 — drink some water",pos:"noun",freq:10},
+{kr:"밥",ro:"bap",meaning:"rice / meal / food",example:"밥 먹었어? — have you eaten?",pos:"noun",freq:10},
+{kr:"시간",ro:"sigan",meaning:"time / hour",example:"시간이 없어 — I don't have time",pos:"noun",freq:10},
+{kr:"돈",ro:"don",meaning:"money",example:"돈이 없어 — I don't have money",pos:"noun",freq:9},
+{kr:"책",ro:"chaek",meaning:"book",example:"책을 읽어 — reading a book",pos:"noun",freq:8},
+{kr:"핸드폰",ro:"haendeupon",meaning:"mobile phone / cell phone",example:"핸드폰 어디 있어? — where is my phone?",pos:"noun",freq:9},
+{kr:"사진",ro:"sajin",meaning:"photo / picture",example:"사진 찍어줘 — take a photo for me",pos:"noun",freq:8},
+{kr:"이름",ro:"ireum",meaning:"name",example:"이름이 뭐야? — what's your name?",pos:"noun",freq:9},
+{kr:"말",ro:"mal",meaning:"words / speech / language",example:"말이 안 나와 — words won't come out",pos:"noun",freq:8},
+{kr:"생각",ro:"saenggak",meaning:"thought / idea",example:"좋은 생각이야 — that's a good idea",pos:"noun",freq:9},
+{kr:"이유",ro:"iyu",meaning:"reason / cause",example:"이유를 알아? — do you know the reason?",pos:"noun",freq:7},
+{kr:"가다",ro:"gada",meaning:"to go",example:"학교에 가다 — to go to school",pos:"verb",freq:10},
+{kr:"오다",ro:"oda",meaning:"to come",example:"집에 오다 — to come home",pos:"verb",freq:10},
+{kr:"먹다",ro:"meokda",meaning:"to eat",example:"밥을 먹다 — to eat",pos:"verb",freq:10},
+{kr:"마시다",ro:"masida",meaning:"to drink",example:"물을 마시다 — to drink water",pos:"verb",freq:9},
+{kr:"자다",ro:"jada",meaning:"to sleep",example:"일찍 자다 — to sleep early",pos:"verb",freq:9},
+{kr:"일어나다",ro:"ireonada",meaning:"to wake up / get up",example:"일찍 일어나다 — to wake up early",pos:"verb",freq:8},
+{kr:"앉다",ro:"anda",meaning:"to sit down",example:"여기 앉아 — sit here",pos:"verb",freq:8},
+{kr:"서다",ro:"seoda",meaning:"to stand up",example:"일어서 — stand up",pos:"verb",freq:7},
+{kr:"달리다",ro:"dallida",meaning:"to run",example:"빨리 달려 — run fast",pos:"verb",freq:7},
+{kr:"걷다",ro:"geotda",meaning:"to walk",example:"천천히 걷자 — let's walk slowly",pos:"verb",freq:8},
+{kr:"보다",ro:"boda",meaning:"to see / watch / look",example:"영화를 보다 — to watch a movie",pos:"verb",freq:10},
+{kr:"듣다",ro:"deutda",meaning:"to listen / hear",example:"음악을 듣다 — to listen to music",pos:"verb",freq:9},
+{kr:"말하다",ro:"malhada",meaning:"to speak / say / talk",example:"한국어로 말하다 — to speak in Korean",pos:"verb",freq:10},
+{kr:"읽다",ro:"ikda",meaning:"to read",example:"책을 읽다 — to read a book",pos:"verb",freq:9},
+{kr:"쓰다",ro:"sseuda",meaning:"to write / use",example:"일기를 쓰다 — to write a diary",pos:"verb",freq:8},
+{kr:"알다",ro:"alda",meaning:"to know / understand",example:"알아? — do you know?",pos:"verb",freq:10},
+{kr:"모르다",ro:"moreuda",meaning:"to not know",example:"몰라 — I don't know",pos:"verb",freq:9},
+{kr:"생각하다",ro:"saenggakhada",meaning:"to think",example:"생각해봐 — think about it",pos:"verb",freq:9},
+{kr:"좋아하다",ro:"joahada",meaning:"to like / to be fond of",example:"나 좋아해 — I like you",pos:"verb",freq:10},
+{kr:"사랑하다",ro:"saranghada",meaning:"to love",example:"사랑해 — I love you",pos:"verb",freq:9},
+{kr:"싫어하다",ro:"sirohada",meaning:"to dislike / hate",example:"그건 싫어 — I don't like that",pos:"verb",freq:8},
+{kr:"원하다",ro:"wonhada",meaning:"to want",example:"뭘 원해? — what do you want?",pos:"verb",freq:9},
+{kr:"필요하다",ro:"piryohada",meaning:"to need",example:"도움이 필요해 — I need help",pos:"verb",freq:8},
+{kr:"기다리다",ro:"gidarida",meaning:"to wait",example:"나 기다려 — wait for me",pos:"verb",freq:8},
+{kr:"만나다",ro:"mannada",meaning:"to meet",example:"내일 만나자 — let's meet tomorrow",pos:"verb",freq:9},
+{kr:"웃다",ro:"utda",meaning:"to smile / laugh",example:"웃어봐 — try smiling",pos:"verb",freq:8},
+{kr:"울다",ro:"ulda",meaning:"to cry",example:"울지 마 — don't cry",pos:"verb",freq:8},
+{kr:"보고싶다",ro:"bogo sipda",meaning:"to miss someone",example:"너무 보고싶어 — I miss you so much",pos:"verb",freq:8},
+{kr:"좋다",ro:"jota",meaning:"to like / feel good",example:"음악이 좋아 — I like this music",pos:"verb",freq:10},
+{kr:"놀다",ro:"nolda",meaning:"to play / hang out",example:"같이 놀자 — let's hang out",pos:"verb",freq:8},
+{kr:"공부하다",ro:"gongbuhada",meaning:"to study",example:"한국어 공부해 — I'm studying Korean",pos:"verb",freq:9},
+{kr:"일하다",ro:"ilhada",meaning:"to work",example:"열심히 일해 — working hard",pos:"verb",freq:9},
+{kr:"쉬다",ro:"swida",meaning:"to rest",example:"쉬고 싶어 — I want to rest",pos:"verb",freq:8},
+{kr:"받다",ro:"batda",meaning:"to receive / get",example:"선물 받았어 — I received a gift",pos:"verb",freq:9},
+{kr:"주다",ro:"juda",meaning:"to give",example:"나한테 줘 — give it to me",pos:"verb",freq:9},
+{kr:"살다",ro:"salda",meaning:"to live / reside",example:"서울에 살아 — I live in Seoul",pos:"verb",freq:9},
+{kr:"사다",ro:"sada",meaning:"to buy",example:"이거 사줘 — buy this for me",pos:"verb",freq:9},
+{kr:"찾다",ro:"chatda",meaning:"to find / look for",example:"뭘 찾아? — what are you looking for?",pos:"verb",freq:8},
+{kr:"열다",ro:"yeolda",meaning:"to open",example:"문 열어 — open the door",pos:"verb",freq:8},
+{kr:"닫다",ro:"datda",meaning:"to close / shut",example:"문 닫아 — close the door",pos:"verb",freq:7},
+{kr:"만들다",ro:"mandeulda",meaning:"to make / create",example:"음식을 만들어 — making food",pos:"verb",freq:8},
+{kr:"시작하다",ro:"sijakhada",meaning:"to start / begin",example:"시작해볼까? — shall we start?",pos:"verb",freq:8},
+{kr:"끝나다",ro:"kkeutnada",meaning:"to end / finish",example:"수업이 끝났어 — class is over",pos:"verb",freq:7},
+{kr:"도와주다",ro:"dowajuda",meaning:"to help",example:"나 좀 도와줘 — please help me",pos:"verb",freq:8},
+{kr:"잊다",ro:"itda",meaning:"to forget",example:"잊지 마 — don't forget",pos:"verb",freq:7},
+{kr:"기억하다",ro:"gieokhada",meaning:"to remember",example:"기억해? — do you remember?",pos:"verb",freq:7},
+{kr:"연습하다",ro:"yeonseubhada",meaning:"to practice",example:"매일 연습해 — practice every day",pos:"verb",freq:7},
+{kr:"나쁘다",ro:"nappeuda",meaning:"bad",example:"날씨가 나빠 — the weather is bad",pos:"adjective",freq:9},
+{kr:"예쁘다",ro:"yeppeuda",meaning:"pretty / beautiful",example:"너 예뻐 — you're pretty",pos:"adjective",freq:9},
+{kr:"귀엽다",ro:"gwiyeopda",meaning:"cute / adorable",example:"너무 귀여워 — so cute",pos:"adjective",freq:8},
+{kr:"멋있다",ro:"meositda",meaning:"cool / stylish / awesome",example:"너 멋있어 — you look cool",pos:"adjective",freq:8},
+{kr:"크다",ro:"keuda",meaning:"big / large / tall",example:"키가 커 — you're tall",pos:"adjective",freq:10},
+{kr:"작다",ro:"jakda",meaning:"small / little / short",example:"키가 작아 — you're short",pos:"adjective",freq:9},
+{kr:"많다",ro:"manta",meaning:"many / much / a lot",example:"사람이 많아 — there are many people",pos:"adjective",freq:10},
+{kr:"없다",ro:"eopda",meaning:"not exist / don't have",example:"돈이 없어 — I don't have money",pos:"adjective",freq:10},
+{kr:"있다",ro:"itda",meaning:"exist / have / be there",example:"집에 있어 — I'm at home",pos:"adjective",freq:10},
+{kr:"어렵다",ro:"oryeopda",meaning:"difficult / hard",example:"한국어 어려워 — Korean is difficult",pos:"adjective",freq:8},
+{kr:"쉽다",ro:"swipda",meaning:"easy / simple",example:"이건 쉬워 — this is easy",pos:"adjective",freq:8},
+{kr:"재미있다",ro:"jaemiitda",meaning:"fun / interesting",example:"재미있어! — this is fun!",pos:"adjective",freq:8},
+{kr:"재미없다",ro:"jaemieopda",meaning:"boring / not fun",example:"재미없어 — it's boring",pos:"adjective",freq:7},
+{kr:"피곤하다",ro:"pigonhada",meaning:"tired / fatigued",example:"너무 피곤해 — I'm so tired",pos:"adjective",freq:8},
+{kr:"배고프다",ro:"baegopeuda",meaning:"hungry",example:"배고파 — I'm hungry",pos:"adjective",freq:8},
+{kr:"배부르다",ro:"baebureuda",meaning:"full (from eating)",example:"배불러 — I'm full",pos:"adjective",freq:7},
+{kr:"행복하다",ro:"haengbokhada",meaning:"to be happy",example:"행복해 — I'm happy",pos:"adjective",freq:8},
+{kr:"슬프다",ro:"seulpeuda",meaning:"sad / sorrowful",example:"슬퍼 — I'm sad",pos:"adjective",freq:7},
+{kr:"무섭다",ro:"museopda",meaning:"scary / frightening",example:"무서워 — it's scary",pos:"adjective",freq:7},
+{kr:"힘들다",ro:"himdeulda",meaning:"hard / tough / exhausting",example:"너무 힘들어 — it's so hard",pos:"adjective",freq:8},
+{kr:"바쁘다",ro:"bappeuda",meaning:"busy",example:"나 너무 바빠 — I'm so busy",pos:"adjective",freq:8},
+{kr:"조용하다",ro:"joyonghada",meaning:"quiet / silent",example:"조용히 해 — be quiet",pos:"adjective",freq:7},
+{kr:"따뜻하다",ro:"ttatteuthada",meaning:"warm",example:"날씨가 따뜻해 — the weather is warm",pos:"adjective",freq:7},
+{kr:"차갑다",ro:"chagapda",meaning:"cold (to the touch)",example:"손이 차가워 — your hands are cold",pos:"adjective",freq:7},
+{kr:"맛있다",ro:"masitda",meaning:"delicious / tasty",example:"너무 맛있어 — so delicious",pos:"adjective",freq:9},
+{kr:"새롭다",ro:"saereopda",meaning:"new / fresh / novel",example:"새로운 시작 — a new beginning",pos:"adjective",freq:7},
+{kr:"다르다",ro:"dareuda",meaning:"different / unlike",example:"너는 달라 — you're different",pos:"adjective",freq:8},
+{kr:"같다",ro:"gatda",meaning:"same / alike / similar",example:"우리 같아 — we're the same",pos:"adjective",freq:9},
+{kr:"매우",ro:"maeu",meaning:"very / extremely",example:"매우 좋아 — very good",pos:"adverb",freq:9},
+{kr:"너무",ro:"neomu",meaning:"too / so / very much",example:"너무 좋아 — I love it so much",pos:"adverb",freq:10},
+{kr:"정말",ro:"jeongmal",meaning:"really / truly",example:"정말? — really?",pos:"adverb",freq:10},
+{kr:"진짜",ro:"jinjja",meaning:"real / really / for real",example:"진짜야? — is that for real?",pos:"adverb",freq:10},
+{kr:"조금",ro:"jogeum",meaning:"a little / a bit",example:"조금만 — just a little",pos:"adverb",freq:9},
+{kr:"많이",ro:"mani",meaning:"a lot / very much",example:"많이 사랑해 — I love you a lot",pos:"adverb",freq:10},
+{kr:"빨리",ro:"ppalli",meaning:"quickly / fast / hurry",example:"빨리 와 — come quickly",pos:"adverb",freq:9},
+{kr:"천천히",ro:"cheoncheonhi",meaning:"slowly",example:"천천히 말해 — speak slowly",pos:"adverb",freq:8},
+{kr:"항상",ro:"hangsang",meaning:"always",example:"항상 곁에 있을게 — I'll always be by your side",pos:"adverb",freq:9},
+{kr:"가끔",ro:"gakkeum",meaning:"sometimes / occasionally",example:"가끔 생각나 — I think of you sometimes",pos:"adverb",freq:8},
+{kr:"절대",ro:"jeoldae",meaning:"never / absolutely",example:"절대 잊지 마 — never forget",pos:"adverb",freq:7},
+{kr:"같이",ro:"gachi",meaning:"together / with",example:"같이 가자 — let's go together",pos:"adverb",freq:9},
+{kr:"혼자",ro:"honja",meaning:"alone / by oneself",example:"혼자야? — are you alone?",pos:"adverb",freq:8},
+{kr:"왜",ro:"wae",meaning:"why",example:"왜 그래? — why are you like that?",pos:"adverb",freq:10},
+{kr:"어떻게",ro:"eotteoke",meaning:"how / in what way",example:"어떻게 해? — how do I do it?",pos:"adverb",freq:9},
+{kr:"언제",ro:"eonje",meaning:"when",example:"언제 와? — when are you coming?",pos:"adverb",freq:9},
+{kr:"어디",ro:"eodi",meaning:"where",example:"어디 가? — where are you going?",pos:"adverb",freq:9},
+{kr:"아직",ro:"ajik",meaning:"still / yet / not yet",example:"아직 몰라 — I don't know yet",pos:"adverb",freq:8},
+{kr:"벌써",ro:"beolsseo",meaning:"already",example:"벌써 왔어? — you're here already?",pos:"adverb",freq:7},
+{kr:"다시",ro:"dasi",meaning:"again / once more",example:"다시 해봐 — try again",pos:"adverb",freq:9},
+{kr:"곧",ro:"got",meaning:"soon",example:"곧 와 — come soon",pos:"adverb",freq:8},
+{kr:"먼저",ro:"meonjeo",meaning:"first / ahead / beforehand",example:"먼저 가 — go ahead",pos:"adverb",freq:8},
+{kr:"계속",ro:"gyesok",meaning:"continuously / keep going",example:"계속 해봐 — keep going",pos:"adverb",freq:8},
+{kr:"은/는",ro:"eun/neun",meaning:"topic marker",example:"나는 학생이에요 — I am a student",pos:"particle",freq:10},
+{kr:"이/가",ro:"i/ga",meaning:"subject marker",example:"비가 와 — rain is falling",pos:"particle",freq:10},
+{kr:"을/를",ro:"eul/reul",meaning:"object marker",example:"밥을 먹어 — eating rice",pos:"particle",freq:10},
+{kr:"에",ro:"e",meaning:"at / in / to (location)",example:"학교에 가 — go to school",pos:"particle",freq:10},
+{kr:"에서",ro:"eseo",meaning:"at / from (action location)",example:"집에서 먹어 — eating at home",pos:"particle",freq:9},
+{kr:"와/과",ro:"wa/gwa",meaning:"and / with",example:"친구와 가 — going with a friend",pos:"particle",freq:9},
+{kr:"도",ro:"do",meaning:"also / too / even",example:"나도 알아 — I also know",pos:"particle",freq:10},
+{kr:"만",ro:"man",meaning:"only / just",example:"너만 바라봐 — I only look at you",pos:"particle",freq:9},
+{kr:"한테",ro:"hante",meaning:"to / from (a person)",example:"나한테 줘 — give it to me",pos:"particle",freq:8},
+{kr:"처럼",ro:"cheoreum",meaning:"like / as / resembling",example:"별처럼 빛나 — shining like a star",pos:"particle",freq:7},
+{kr:"이랑/랑",ro:"irang/rang",meaning:"with / and (casual)",example:"친구랑 가 — going with a friend",pos:"particle",freq:8},
+{kr:"안녕",ro:"annyeong",meaning:"hello / goodbye (informal)",example:"안녕! — hi!",pos:"expression",freq:10},
+{kr:"안녕하세요",ro:"annyeonghaseyo",meaning:"hello (formal/polite)",example:"안녕하세요 — hello",pos:"expression",freq:10},
+{kr:"감사합니다",ro:"gamsahamnida",meaning:"thank you (formal)",example:"감사합니다 — thank you",pos:"expression",freq:10},
+{kr:"고마워",ro:"gomawo",meaning:"thank you (informal)",example:"고마워! — thanks!",pos:"expression",freq:9},
+{kr:"미안해",ro:"mianhae",meaning:"I'm sorry (informal)",example:"미안해 — I'm sorry",pos:"expression",freq:9},
+{kr:"괜찮아",ro:"gwaenchana",meaning:"it's okay / I'm fine",example:"괜찮아? — are you okay?",pos:"expression",freq:9},
+{kr:"알겠어",ro:"algeseo",meaning:"I understand / got it",example:"알겠어 — got it",pos:"expression",freq:9},
+{kr:"맞아",ro:"maja",meaning:"that's right / correct",example:"맞아! — that's right!",pos:"expression",freq:9},
+{kr:"아니야",ro:"aniya",meaning:"no / it's not (informal)",example:"아니야 달라 — no it's different",pos:"expression",freq:9},
+{kr:"그래",ro:"geurae",meaning:"okay / sure / yes (casual)",example:"그래 하자 — okay let's do it",pos:"expression",freq:9},
+{kr:"대박",ro:"daebak",meaning:"wow / amazing (slang)",example:"대박이야! — that's amazing!",pos:"expression",freq:7},
+{kr:"파이팅",ro:"paiting",meaning:"you can do it / fighting / go!",example:"파이팅! — you've got this!",pos:"expression",freq:7},
+{kr:"잠깐만",ro:"jamkkanman",meaning:"just a moment / wait a sec",example:"잠깐만 — hold on a sec",pos:"expression",freq:8},
+{kr:"어떡해",ro:"eotteokhae",meaning:"what do I do / oh no",example:"어떡해! — what do I do!",pos:"expression",freq:7},
+{kr:"아이고",ro:"aigo",meaning:"oh my / goodness",example:"아이고 힘들어 — oh my this is hard",pos:"expression",freq:7},
+{kr:"보고싶어",ro:"bogosipeo",meaning:"I miss you (informal)",example:"너무 보고싶어 — I miss you so much",pos:"expression",freq:8},
+{kr:"사랑해",ro:"saranghae",meaning:"I love you (informal)",example:"사랑해 — I love you",pos:"expression",freq:10},
+{kr:"잘 자",ro:"jal ja",meaning:"good night / sleep well",example:"잘 자 꿈 꿔 — good night sweet dreams",pos:"expression",freq:8},
+{kr:"수고했어",ro:"sugohesseo",meaning:"good work / you worked hard",example:"오늘 수고했어 — good work today",pos:"expression",freq:7}
+];
+
+var deck={};
+var openSecs={};
+var curGroup='pos';
+var studyList=[];
+var sIdx=0;
+var sFlip=false;
+
+var POS=['expression','verb','adjective','noun','adverb','pronoun','particle'];
+
+var GROUPS={
+  pos:{label:'part of speech',key:function(w){return w.pos},order:function(){return POS},color:function(k){return{verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888'}},
+  most_common:{label:'most common first',key:function(w){return w.freq>=10?'essential (10)':w.freq>=8?'very common (8-9)':w.freq>=6?'common (6-7)':w.freq>=4?'uncommon (4-5)':'rare (1-3)'},order:function(){return['essential (10)','very common (8-9)','common (6-7)','uncommon (4-5)','rare (1-3)']},color:function(){return'#7ac8a0'}},
+  least_common:{label:'least common first',key:function(w){return w.freq>=10?'essential (10)':w.freq>=8?'very common (8-9)':w.freq>=6?'common (6-7)':w.freq>=4?'uncommon (4-5)':'rare (1-3)'},order:function(){return['rare (1-3)','uncommon (4-5)','common (6-7)','very common (8-9)','essential (10)']},color:function(){return'#c87a7a'}},
+  shortest:{label:'shortest first',key:function(w){var l=w.kr.length;return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'},order:function(){return['1 char','2 chars','3 chars','4 chars','5+ chars']},color:function(){return'#7ac8c8'}},
+  longest:{label:'longest first',key:function(w){var l=w.kr.length;return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'},order:function(){return['5+ chars','4 chars','3 chars','2 chars','1 char']},color:function(){return'#c87aa8'}},
+  a_z:{label:'a → z',key:function(w){return w.ro[0].toUpperCase()},order:function(k){return k.slice().sort()},color:function(){return'#7a8cc8'}},
+  z_a:{label:'z → a',key:function(w){return w.ro[0].toUpperCase()},order:function(k){return k.slice().sort().reverse()},color:function(){return'#c8a87a'}},
+  in_deck:{label:'in my deck',key:function(w){return deck[w.kr]?'in deck':'not in deck'},order:function(){return['in deck','not in deck']},color:function(k){return k==='in deck'?'#c8a87a':'#888'}}
+};
+
+// theme
+var theme=localStorage.getItem('krfc-theme')||'dark';
+applyTheme(theme);
+document.getElementById('themeBtn').onclick=function(){
+  theme=theme==='dark'?'light':'dark';
+  applyTheme(theme);
+};
+function applyTheme(t){
+  document.body.className=t;
+  localStorage.setItem('krfc-theme',t);
+  document.getElementById('themeBtn').textContent=t==='dark'?'light mode':'dark mode';
+}
+
+// group buttons
+function buildGroupBtns(){
+  var bar=document.getElementById('groupBar');
+  bar.innerHTML='';
+  Object.keys(GROUPS).forEach(function(k){
+    var b=document.createElement('button');
+    b.className='gbtn'+(k===curGroup?' on':'');
+    b.textContent=GROUPS[k].label;
+    b.onclick=function(){curGroup=k;openSecs={};buildGroupBtns();render();};
+    bar.appendChild(b);
+  });
+}
+
+// render
+function render(){
+  var q=(document.getElementById('searchInput').value||'').toLowerCase().trim();
+  var cfg=GROUPS[curGroup];
+  var filtered=WORDS.filter(function(w){
+    if(!q)return true;
+    return w.kr.indexOf(q)!==-1||w.ro.toLowerCase().indexOf(q)!==-1||w.meaning.toLowerCase().indexOf(q)!==-1;
+  });
+  var groups={};
+  filtered.forEach(function(w){
+    var k=cfg.key(w);
+    if(!groups[k])groups[k]=[];
+    groups[k].push(w);
+  });
+  var allKeys=Object.keys(groups);
+  var ordered=cfg.order(allKeys).filter(function(k){return groups[k]&&groups[k].length>0;});
+  if(q)ordered.forEach(function(k){openSecs[k]=true;});
+  var container=document.getElementById('wordSections');
+  container.innerHTML='';
+  if(ordered.length===0){container.innerHTML='<div class="empty-msg">no words match</div>';return;}
+  ordered.forEach(function(key){
+    var words=groups[key];
+    var isOpen=!!openSecs[key];
+    var selCount=words.filter(function(w){return deck[w.kr];}).length;
+    var color=cfg.color(key);
+    var sec=document.createElement('div');sec.className='sec';
+    var hdr=document.createElement('div');hdr.className='sec-hdr';
+    var left=document.createElement('div');left.className='sec-left';
+    var nm=document.createElement('span');nm.className='sec-name';nm.style.color=color;nm.textContent=key;
+    var ct=document.createElement('span');ct.className='sec-count';ct.textContent=words.length;
+    left.appendChild(nm);left.appendChild(ct);
+    if(selCount>0){var sl=document.createElement('span');sl.className='sec-sel';sl.textContent=selCount+' in deck';left.appendChild(sl);}
+    var chev=document.createElement('span');chev.className='sec-chev';chev.textContent=isOpen?'▴':'▾';
+    hdr.appendChild(left);hdr.appendChild(chev);
+    var body=document.createElement('div');body.className='sec-body';body.style.display=isOpen?'flex':'none';
+    words.forEach(function(w,i){
+      var chip=document.createElement('div');chip.className='chip'+(deck[w.kr]?' on':'');
+      chip.title=w.meaning+' — '+w.example;
+      chip.style.animationDelay=Math.min(i*0.008,0.18)+'s';
+      var kr=document.createElement('span');kr.className='chip-kr';kr.textContent=w.kr;
+      var ro=document.createElement('span');ro.className='chip-ro';ro.textContent=w.ro;
+      chip.appendChild(kr);chip.appendChild(ro);
+      chip.onclick=function(){toggleWord(w);};
+      body.appendChild(chip);
+    });
+    hdr.onclick=function(){
+      if(openSecs[key]){delete openSecs[key];body.style.display='none';chev.textContent='▾';}
+      else{openSecs[key]=true;body.style.display='flex';chev.textContent='▴';}
+    };
+    sec.appendChild(hdr);sec.appendChild(body);container.appendChild(sec);
+  });
+}
+
+function expandAll(){
+  var cfg=GROUPS[curGroup];
+  WORDS.forEach(function(w){openSecs[cfg.key(w)]=true;});
+  render();
+}
+function collapseAll(){openSecs={};render();}
+
+// deck
+function toggleWord(w){
+  if(deck[w.kr])delete deck[w.kr];else deck[w.kr]=true;
+  pop();renderDeck();render();
+}
+function pop(){
+  var b=document.getElementById('deckBadge');
+  b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');
+  setTimeout(function(){b.classList.remove('pop');},200);
+}
+function renderDeck(){
+  var keys=Object.keys(deck);
+  document.getElementById('deckBadge').textContent=keys.length;
+  var c=document.getElementById('deckChips');
+  if(keys.length===0){c.innerHTML='<span class="empty-deck">no words yet — click any word above to add it</span>';return;}
+  c.innerHTML='';
+  keys.forEach(function(kr){
+    var w=WORDS.find(function(x){return x.kr===kr;});if(!w)return;
+    var chip=document.createElement('div');chip.className='dchip';
+    var ks=document.createElement('span');ks.textContent=w.kr;
+    var rs=document.createElement('span');rs.className='dchip-ro';rs.textContent=w.ro;
+    var x=document.createElement('button');x.className='dchip-x';x.textContent='×';
+    x.onclick=function(){delete deck[kr];renderDeck();render();};
+    chip.appendChild(ks);chip.appendChild(rs);chip.appendChild(x);
+    c.appendChild(chip);
+  });
+}
+function clearDeck(){deck={};renderDeck();render();}
+
+// study
+function openStudy(){
+  var keys=Object.keys(deck);
+  if(keys.length===0){alert('Add at least one word to your deck first!');return;}
+  studyList=shuffle(keys.map(function(kr){return WORDS.find(function(w){return w.kr===kr;});}).filter(Boolean));
+  sIdx=0;sFlip=false;renderCard();
+  document.getElementById('overlay').classList.add('open');
+}
+function closeStudy(){document.getElementById('overlay').classList.remove('open');}
+function overlayClick(e){if(e.target===document.getElementById('overlay'))closeStudy();}
+function renderCard(){
+  var w=studyList[sIdx];
+  document.getElementById('cFront').innerHTML='<div class="fc-kr">'+w.kr+'</div><div class="fc-ro">'+w.ro+'</div><div class="fc-pos">'+w.pos+'</div>';
+  document.getElementById('cBack').innerHTML='<div class="fc-meaning">'+w.meaning+'</div><div class="fc-ex">'+w.example+'</div>';
+  document.getElementById('mProg').textContent=(sIdx+1)+' / '+studyList.length;
+  document.getElementById('mMeta').textContent=w.pos;
+  document.getElementById('fcard').classList.remove('flip');sFlip=false;
+}
+function flipCard(){sFlip=!sFlip;document.getElementById('fcard').classList.toggle('flip',sFlip);}
+function nextCard(){sIdx=(sIdx+1)%studyList.length;renderCard();}
+function prevCard(){sIdx=(sIdx-1+studyList.length)%studyList.length;renderCard();}
+function reshuffleStudy(){studyList=shuffle(studyList);sIdx=0;renderCard();}
+
+function shuffle(a){
+  var r=a.slice();
+  for(var i=r.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=r[i];r[i]=r[j];r[j]=t;}
+  return r;
+}
+
+document.addEventListener('keydown',function(e){
+  if(!document.getElementById('overlay').classList.contains('open'))return;
+  if(e.key==='Escape')closeStudy();
+  if(e.key==='ArrowRight')nextCard();
+  if(e.key==='ArrowLeft')prevCard();
+  if(e.key===' '){e.preventDefault();flipCard();}
+});
+
+document.getElementById('searchInput').oninput=render;
+
+buildGroupBtns();
+render();
+</script>
 </body>
 </html>
