@@ -1,44 +1,41 @@
-// ─────────────────────────────────────────────────
-//  KOREAN FLASHCARD APP — app.js
-// ─────────────────────────────────────────────────
-
 const App = (() => {
 
-  // ── STATE ──
-  const deck    = new Set();
-  const openSections = new Set();
+  const deck = new Set();
+  let openSections = new Set();
   let studyDeck = [];
   let studyIdx  = 0;
   let flipped   = false;
 
-  // pos display order
   const POS_ORDER = ['expression','verb','adjective','noun','adverb','pronoun','particle'];
 
-  // ── THEME ──────────────────────────────────────
+  // ── THEME ──
   function initTheme() {
     const saved = localStorage.getItem('krfc-theme') || 'dark';
-    setTheme(saved, false);
+    applyTheme(saved);
     document.getElementById('themeToggle').addEventListener('click', () => {
       const current = document.documentElement.getAttribute('data-theme');
-      setTheme(current === 'dark' ? 'light' : 'dark', true);
+      applyTheme(current === 'dark' ? 'light' : 'dark');
     });
   }
 
-  function setTheme(theme, save) {
+  function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    document.getElementById('themeIcon').textContent  = theme === 'dark' ? '☀️' : '🌙';
-    document.getElementById('themeLabel').textContent = theme === 'dark' ? 'light' : 'dark';
-    if (save) localStorage.setItem('krfc-theme', theme);
+    localStorage.setItem('krfc-theme', theme);
+    const icon  = document.getElementById('themeIcon');
+    const label = document.getElementById('themeLabel');
+    if (theme === 'dark') {
+      icon.textContent  = 'light';
+      label.textContent = 'mode';
+    } else {
+      icon.textContent  = 'dark';
+      label.textContent = 'mode';
+    }
   }
 
-  // ── RENDER ─────────────────────────────────────
+  // ── RENDER ──
   function render() {
     const search = document.getElementById('searchInput').value.toLowerCase().trim();
     const sort   = document.getElementById('sortSelect').value;
-
-    // Group words by pos
-    const groups = {};
-    POS_ORDER.forEach(p => groups[p] = []);
 
     let filtered = WORDS.filter(w =>
       !search ||
@@ -47,88 +44,91 @@ const App = (() => {
       w.meaning.toLowerCase().includes(search)
     );
 
-    // Sort within each group
-    if (sort === 'az')       filtered.sort((a,b) => a.ro.localeCompare(b.ro));
-    else if (sort === 'za')  filtered.sort((a,b) => b.ro.localeCompare(a.ro));
+    if (sort === 'az')        filtered.sort((a,b) => a.ro.localeCompare(b.ro));
+    else if (sort === 'za')   filtered.sort((a,b) => b.ro.localeCompare(a.ro));
     else if (sort === 'short') filtered.sort((a,b) => a.kr.length - b.kr.length);
     else if (sort === 'long')  filtered.sort((a,b) => b.kr.length - a.kr.length);
     else if (sort === 'common')   filtered.sort((a,b) => b.freq - a.freq);
     else if (sort === 'uncommon') filtered.sort((a,b) => a.freq - b.freq);
 
+    const groups = {};
+    POS_ORDER.forEach(p => groups[p] = []);
     filtered.forEach(w => {
       if (groups[w.pos]) groups[w.pos].push(w);
-      else groups[w.pos] = [w];
     });
+
+    if (search) POS_ORDER.forEach(p => { if (groups[p].length) openSections.add(p); });
 
     const container = document.getElementById('wordSections');
     container.innerHTML = '';
 
-    const posesWithWords = (search ? Object.keys(groups).filter(p => groups[p].length > 0) : POS_ORDER);
-
-    // Auto-open all sections when searching
-    if (search) posesWithWords.forEach(p => openSections.add(p));
-
-    posesWithWords.forEach(pos => {
+    POS_ORDER.forEach(pos => {
       const words = groups[pos] || [];
-      if (!words.length && search) return;
+      if (search && words.length === 0) return;
 
-      const selectedInGroup = words.filter(w => deck.has(w.kr)).length;
+      const selectedCount = words.filter(w => deck.has(w.kr)).length;
       const isOpen = openSections.has(pos);
 
       const section = document.createElement('div');
       section.className = `pos-section pos-${pos}${isOpen ? ' open' : ''}`;
-      section.dataset.pos = pos;
+      section.id = `section-${pos}`;
 
-      section.innerHTML = `
-        <div class="section-header" role="button" tabindex="0" aria-expanded="${isOpen}">
-          <div class="section-left">
-            <span class="section-pos">${pos}</span>
-            <span class="section-count">${words.length}</span>
-            <span class="section-selected${selectedInGroup ? ' visible' : ''}" data-sel="${pos}">${selectedInGroup} selected</span>
-          </div>
-          <span class="section-chevron">▾</span>
+      const header = document.createElement('div');
+      header.className = 'section-header';
+      header.setAttribute('role', 'button');
+      header.setAttribute('tabindex', '0');
+      header.innerHTML = `
+        <div class="section-left">
+          <span class="section-pos">${pos}</span>
+          <span class="section-count">${words.length}</span>
+          ${selectedCount ? `<span class="section-selected">${selectedCount} in deck</span>` : ''}
         </div>
-        <div class="section-body" id="body-${pos}"></div>
+        <span class="section-chevron">${isOpen ? '▴' : '▾'}</span>
       `;
 
-      const header = section.querySelector('.section-header');
-      header.addEventListener('click',   () => toggleSection(pos, section));
-      header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggleSection(pos, section); });
+      const body = document.createElement('div');
+      body.className = 'section-body';
+      if (!isOpen) body.style.display = 'none';
 
-      const body = section.querySelector('.section-body');
       if (words.length === 0) {
         body.innerHTML = '<span class="empty-section">no words match</span>';
       } else {
-        const frag = document.createDocumentFragment();
         words.forEach((w, i) => {
           const chip = document.createElement('div');
           chip.className = `word-chip${deck.has(w.kr) ? ' selected' : ''}`;
           chip.style.animationDelay = Math.min(i * 0.01, 0.2) + 's';
-          chip.title = `${w.meaning} · ${w.example}`;
+          chip.title = `${w.meaning} — ${w.example}`;
           chip.setAttribute('role', 'button');
           chip.setAttribute('tabindex', '0');
           chip.innerHTML = `<span class="chip-kr">${w.kr}</span><span class="chip-ro">${w.ro}</span>`;
           chip.addEventListener('click',   () => toggleWord(w));
-          chip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') toggleWord(w); });
-          frag.appendChild(chip);
+          chip.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') toggleWord(w); });
+          body.appendChild(chip);
         });
-        body.appendChild(frag);
       }
 
+      const toggle = () => {
+        const nowOpen = section.classList.contains('open');
+        if (nowOpen) {
+          section.classList.remove('open');
+          body.style.display = 'none';
+          header.querySelector('.section-chevron').textContent = '▾';
+          openSections.delete(pos);
+        } else {
+          section.classList.add('open');
+          body.style.display = 'flex';
+          header.querySelector('.section-chevron').textContent = '▴';
+          openSections.add(pos);
+        }
+      };
+
+      header.addEventListener('click',   toggle);
+      header.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') toggle(); });
+
+      section.appendChild(header);
+      section.appendChild(body);
       container.appendChild(section);
     });
-  }
-
-  function toggleSection(pos, el) {
-    if (openSections.has(pos)) {
-      openSections.delete(pos);
-      el.classList.remove('open');
-      el.querySelector('.section-header').setAttribute('aria-expanded', 'false');
-    } else {
-      openSections.add(pos);
-      el.classList.add('open');
-      el.querySelector('.section-header').setAttribute('aria-expanded', 'true');
-    }
   }
 
   function expandAll() {
@@ -137,11 +137,11 @@ const App = (() => {
   }
 
   function collapseAll() {
-    openSections.clear();
+    openSections = new Set();
     render();
   }
 
-  // ── DECK ───────────────────────────────────────
+  // ── DECK ──
   function toggleWord(w) {
     if (deck.has(w.kr)) deck.delete(w.kr);
     else deck.add(w.kr);
@@ -159,43 +159,34 @@ const App = (() => {
   function renderDeck() {
     const container = document.getElementById('deckChips');
     document.getElementById('deckCountBadge').textContent = deck.size;
-
     if (deck.size === 0) {
       container.innerHTML = '<span class="empty-deck">no words yet — click any word above to add it</span>';
       return;
     }
-
     container.innerHTML = '';
-    const frag = document.createDocumentFragment();
     deck.forEach(kr => {
       const w = WORDS.find(x => x.kr === kr);
       if (!w) return;
       const chip = document.createElement('div');
       chip.className = 'deck-chip';
-      chip.innerHTML = `${w.kr} <span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted)">${w.ro}</span>
+      chip.innerHTML = `${w.kr} <span class="chip-ro-small">${w.ro}</span>
         <button class="deck-chip-remove" aria-label="remove ${w.ro}">×</button>`;
       chip.querySelector('button').addEventListener('click', () => {
-        deck.delete(kr);
-        renderDeck();
-        render();
+        deck.delete(kr); renderDeck(); render();
       });
-      frag.appendChild(chip);
+      container.appendChild(chip);
     });
-    container.appendChild(frag);
   }
 
   function clearDeck() {
-    deck.clear();
-    renderDeck();
-    render();
+    deck.clear(); renderDeck(); render();
   }
 
-  // ── STUDY MODE ─────────────────────────────────
+  // ── STUDY ──
   function openStudy() {
     if (deck.size === 0) { alert('Add at least one word to your deck first!'); return; }
     studyDeck = shuffle([...deck].map(kr => WORDS.find(w => w.kr === kr)).filter(Boolean));
-    studyIdx  = 0;
-    flipped   = false;
+    studyIdx = 0; flipped = false;
     renderCard();
     document.getElementById('modalOverlay').classList.add('open');
   }
@@ -230,11 +221,10 @@ const App = (() => {
     document.getElementById('flashCard').classList.toggle('flipped', flipped);
   }
 
-  function nextCard()     { studyIdx = (studyIdx + 1) % studyDeck.length; renderCard(); }
-  function prevCard()     { studyIdx = (studyIdx - 1 + studyDeck.length) % studyDeck.length; renderCard(); }
-  function reshuffleDeck(){ studyDeck = shuffle(studyDeck); studyIdx = 0; renderCard(); }
+  function nextCard()      { studyIdx = (studyIdx + 1) % studyDeck.length; renderCard(); }
+  function prevCard()      { studyIdx = (studyIdx - 1 + studyDeck.length) % studyDeck.length; renderCard(); }
+  function reshuffleDeck() { studyDeck = shuffle(studyDeck); studyIdx = 0; renderCard(); }
 
-  // ── UTILS ──────────────────────────────────────
   function shuffle(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -244,7 +234,6 @@ const App = (() => {
     return a;
   }
 
-  // ── KEYBOARD ───────────────────────────────────
   document.addEventListener('keydown', e => {
     if (!document.getElementById('modalOverlay').classList.contains('open')) return;
     if (e.key === 'Escape')     closeStudy();
@@ -253,7 +242,6 @@ const App = (() => {
     if (e.key === ' ')          { e.preventDefault(); flipCard(); }
   });
 
-  // ── BOOT ───────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     render();
