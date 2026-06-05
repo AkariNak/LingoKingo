@@ -71,8 +71,7 @@ const App = (() => {
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('krfc-theme', theme);
-    document.getElementById('themeIcon').textContent  = theme === 'dark' ? 'light' : 'dark';
-    document.getElementById('themeLabel').textContent = 'mode';
+    document.getElementById('themeToggle').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
   }
 
   // ── GROUP BUTTONS ──
@@ -293,11 +292,10 @@ const App = (() => {
     if (e.key === ' ')          { e.preventDefault(); flipCard(); }
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
-    initTheme();
-    buildGroupButtons();
-    render();
-  });
+  // Scripts load after DOM (bottom of body), so call directly
+  initTheme();
+  buildGroupButtons();
+  render();
 
   return { render, expandAll, collapseAll, clearDeck, openStudy, closeStudy, closeOnOverlay, flipCard, nextCard, prevCard, reshuffleDeck };
 
