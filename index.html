@@ -646,9 +646,7 @@ function openStudy(){
 function reshuffleAndRender(){
   var cur=studyList[sIdx];
   studyList=shuffle(studyList);
-  // make sure the current card doesn't show up first again
-  var newIdx=studyList.findIndex(function(w){return w.kr===cur.kr;});
-  if(newIdx===0&&studyList.length>1){var tmp=studyList[0];studyList[0]=studyList[1];studyList[1]=tmp;}
+  if(studyList[0].kr===cur.kr&&studyList.length>1){var t=studyList[0];studyList[0]=studyList[1];studyList[1]=t;}
   sIdx=0;renderCard();
 }
 function closeStudy(){document.getElementById('overlay').classList.remove('open');}
@@ -665,10 +663,14 @@ function flipCard(){sFlip=!sFlip;document.getElementById('fcard').classList.togg
 function nextCard(){
   sIdx++;
   if(sIdx>=studyList.length){
-    reshuffleAndRender();
-  } else {
-    renderCard();
+    var last=studyList[studyList.length-1];
+    studyList=shuffle(studyList);
+    if(studyList[0].kr===last.kr&&studyList.length>1){
+      var t=studyList[0];studyList[0]=studyList[1];studyList[1]=t;
+    }
+    sIdx=0;
   }
+  renderCard();
 }
 function prevCard(){sIdx=(sIdx-1+studyList.length)%studyList.length;renderCard();}
 function reshuffleStudy(){reshuffleAndRender();}
