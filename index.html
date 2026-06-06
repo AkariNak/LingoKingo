@@ -81,28 +81,29 @@
 <script src="words-italian.js"></script>
 <script src="sentences-korean.js"></script>
 <script src="sentences-italian.js"></script>
-<script src="app-grammar.js"></script>
 <script src="app.js"></script>
 <script src="app-vocab.js"></script>
 <script src="app-practice.js"></script>
+<script src="app-grammar.js"></script>
 
 <script>
 // ── BOOT ──
 applyTheme(theme);
 vocabInit();
 
+// set language without triggering a premature renderTab
 const savedLang = localStorage.getItem('lf-lang') || 'korean';
-if (savedLang !== 'korean') {
-  switchLang(savedLang);
-} else {
-  document.getElementById('logoScript').textContent = LANGS.korean.script;
-}
+curLang = savedLang;
+const L = LANGS[savedLang];
+document.getElementById('langFlag').textContent  = L.flag;
+document.getElementById('langLabel').textContent = L.label;
+document.getElementById('logoScript').textContent = L.script;
+document.getElementById('searchInput') && (document.getElementById('searchInput').placeholder = L.placeholder);
+document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === savedLang));
 
+// now render the correct tab
 const savedTab = localStorage.getItem('lf-tab') || 'vocab';
 switchTab(savedTab);
-
-// restore active tab button
-document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === savedTab));
 </script>
 </body>
 </html>
