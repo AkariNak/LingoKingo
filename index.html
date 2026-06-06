@@ -119,6 +119,8 @@ input[type="text"]::placeholder{color:var(--su)}
 .dchip-x{background:none;border:none;cursor:pointer;font-size:12px;padding:0 2px;color:var(--mu);transition:color .12s}
 .dchip-x:hover{color:#c87a7a}
 .empty-deck{font-size:.7rem;color:var(--su)}
+.tab-body{padding:1.5rem 2rem;max-width:860px}
+.exercise-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem;margin-bottom:1rem}
 .empty-msg{padding:2.5rem 0;text-align:center;font-size:.78rem;color:var(--su)}
 
 /* ── STUDY MODAL ── */
@@ -152,7 +154,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .practice-score{display:flex;align-items:center;gap:8px;padding:.5rem 0 1rem;font-size:.75rem;color:var(--mu)}
 .score-num{font-size:1.1rem;font-weight:500;color:var(--tx)}
 .score-lbl{color:var(--su)}
-.exercise-card{border:1px solid var(--bd);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem}
+/* exercise-card defined above */
 .ex-meta{display:flex;align-items:center;gap:10px}
 .ex-type{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
 .ex-level{font-size:.65rem;color:var(--su);background:var(--sf2);border:1px solid var(--bd);border-radius:99px;padding:2px 8px}
@@ -1155,7 +1157,8 @@ function renderGrammar(container) {
   }
 
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'padding:1.5rem 2rem;display:flex;flex-direction:column;gap:10px;';
+  wrap.className = 'tab-body';
+  wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
 
   const intro = document.createElement('div');
   intro.className = 't-muted';
@@ -1888,7 +1891,7 @@ function renderPractice(container) {
         ).join('')}
       </div>
     </div>
-    <div id="practiceArea" style="padding:1.5rem 2rem"></div>
+    <div id="practiceArea" class="tab-body"></div>
   `;
   loadPracticeQueue();
   showNextExercise();
@@ -2149,7 +2152,8 @@ function renderGrammar(container) {
   }
 
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'padding:1.5rem 2rem;display:flex;flex-direction:column;gap:10px;';
+  wrap.className = 'tab-body';
+  wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
 
   const intro = document.createElement('div');
   intro.className = 't-muted';
