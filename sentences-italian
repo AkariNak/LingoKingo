@@ -1,0 +1,219 @@
+// ── ITALIAN SENTENCE EXERCISES ────────────────────────────────────────────────
+
+const ITALIAN_SENTENCES = [
+
+  // ── CONJUGATION exercises ──
+  {
+    type:'conjugate',
+    english:'I am tired. (essere — io)',
+    baseForm:'essere',
+    prompt:'Io ___ stanco.',
+    answer:'sono',
+    choices:['sono','sei','è','siamo'],
+    explanation:'"Essere" (to be) is irregular. io=sono, tu=sei, lui/lei=è, noi=siamo, voi=siete, loro=sono.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'You are very kind. (essere — tu)',
+    baseForm:'essere',
+    prompt:'Tu ___ molto gentile.',
+    answer:'sei',
+    choices:['sono','sei','è','siete'],
+    explanation:'Tu form of essere = sei. Note: in Italian you often drop the pronoun since the verb ending shows who you mean.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'She is Italian. (essere — lei)',
+    baseForm:'essere',
+    prompt:'Lei ___ italiana.',
+    answer:'è',
+    choices:['è','sei','sono','siamo'],
+    explanation:'Lei (she/formal you) form of essere = è. Note the grave accent — without it, "e" means "and".',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'I have hunger. (= I\'m hungry) (avere — io)',
+    baseForm:'avere',
+    prompt:'Io ___ fame.',
+    answer:'ho',
+    choices:['ho','hai','ha','abbiamo'],
+    explanation:'"Avere" (to have) is used for many states in Italian: ho fame (hungry), ho sete (thirsty), ho freddo (cold), ho caldo (hot).',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'Do you have time? (avere — tu)',
+    baseForm:'avere',
+    prompt:'Tu ___ tempo?',
+    answer:'hai',
+    choices:['ho','hai','ha','hanno'],
+    explanation:'Tu form of avere = hai. The h is silent — these words only have h to distinguish them from other short words.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'What are you doing? (fare — tu)',
+    baseForm:'fare',
+    prompt:'Cosa ___ ?',
+    answer:'fai',
+    choices:['faccio','fai','fa','fanno'],
+    explanation:'"Fare" (to do/make) is irregular. io=faccio, tu=fai, lui/lei=fa, noi=facciamo, voi=fate, loro=fanno.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'I\'m going home. (andare — io)',
+    baseForm:'andare',
+    prompt:'___ a casa.',
+    answer:'Vado',
+    choices:['Vado','Vai','Va','Andiamo'],
+    explanation:'"Andare" is irregular. io=vado, tu=vai, lui/lei=va, noi=andiamo, voi=andate, loro=vanno.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'We are going to eat. (andare — noi)',
+    baseForm:'andare',
+    prompt:'___ a mangiare.',
+    answer:'Andiamo',
+    choices:['Vado','Andate','Andiamo','Vanno'],
+    explanation:'Noi form of andare = andiamo. This is also used for "let\'s go!" — Andiamo! is one of the most useful expressions.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'I want a coffee. (volere — io)',
+    baseForm:'volere',
+    prompt:'___ un caffè.',
+    answer:'Voglio',
+    choices:['Voglio','Vuoi','Vuole','Vogliamo'],
+    explanation:'"Volere" (to want) is irregular. io=voglio, tu=vuoi, lui/lei=vuole, noi=vogliamo, voi=volete, loro=vogliono.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'Can you help me? (potere — tu)',
+    baseForm:'potere',
+    prompt:'___ aiutarmi?',
+    answer:'Puoi',
+    choices:['Posso','Puoi','Può','Possono'],
+    explanation:'"Potere" (can/to be able to) is irregular. io=posso, tu=puoi, lui/lei=può, noi=possiamo.',
+    level:2
+  },
+  {
+    type:'conjugate',
+    english:'I speak Italian. (parlare — io, -are verb)',
+    baseForm:'parlare',
+    prompt:'___ italiano.',
+    answer:'Parlo',
+    choices:['Parlo','Parli','Parla','Parliamo'],
+    explanation:'-ARE verbs: io=-o, tu=-i, lui/lei=-a, noi=-iamo, voi=-ate, loro=-ano. parlare → parlo.',
+    level:1
+  },
+  {
+    type:'conjugate',
+    english:'Do you understand? (capire — tu, -ire verb)',
+    baseForm:'capire',
+    prompt:'___ ?',
+    answer:'Capisci',
+    choices:['Capisco','Capisci','Capisce','Capiamo'],
+    explanation:'-IRE verbs (isc type): insert -isc- for io/tu/lui/loro. capire → capisci (tu). io=capisco, tu=capisci, lui=capisce.',
+    level:2
+  },
+  {
+    type:'conjugate',
+    english:'I ate. (mangiare — passato prossimo)',
+    baseForm:'mangiare',
+    prompt:'Ieri ___ la pizza.',
+    answer:'ho mangiato',
+    choices:['ho mangiato','ho mangito','sono mangiato','mangiavo'],
+    explanation:'Past tense (passato prossimo): avere/essere + past participle. -ARE verbs: stem + ato. mangiare → mangiato. Most verbs use avere.',
+    level:2
+  },
+  {
+    type:'conjugate',
+    english:'She arrived. (arrivare — passato prossimo with essere)',
+    baseForm:'arrivare',
+    prompt:'Lei ___ ieri.',
+    answer:'è arrivata',
+    choices:['ha arrivato','è arrivata','è arrivato','ha arrivata'],
+    explanation:'Movement verbs use ESSERE not avere. With essere, the participle agrees with the subject: arrivato (m) / arrivata (f). Lei = female = arrivata.',
+    level:3
+  },
+
+  // ── FILL exercises ──
+  {
+    type:'fill',
+    english:'I like music. (piacere construction)',
+    prompt:'___ piace la musica.',
+    answer:'Mi',
+    choices:['Mi','Ti','Gli','Ci'],
+    explanation:'Piacere works backwards from English: "mi piace" = "it pleases me" = "I like it". Mi=to me, ti=to you, gli=to him, le=to her.',
+    level:2
+  },
+  {
+    type:'fill',
+    english:'Do you like pizza? (piacere — tu)',
+    prompt:'___ piace la pizza?',
+    answer:'Ti',
+    choices:['Ti','Mi','Gli','Vi'],
+    explanation:'"Ti piace" = does it please you = do you like it. Ti is the indirect object pronoun for "you" (tu).',
+    level:2
+  },
+  {
+    type:'fill',
+    english:'How are you? (casual)',
+    prompt:'___ stai?',
+    answer:'Come',
+    choices:['Come','Dove','Quando','Perché'],
+    explanation:'"Come stai?" = how are you (casual). "Come sta?" = how are you (formal). Come = how.',
+    level:1
+  },
+  {
+    type:'fill',
+    english:'Where are you? (casual)',
+    prompt:'___ sei?',
+    answer:'Dove',
+    choices:['Dove','Come','Quando','Chi'],
+    explanation:'"Dove" = where. Dove sei? = where are you? (casual). Dove si trova? = where is it located? (formal)',
+    level:1
+  },
+  {
+    type:'fill',
+    english:'I don\'t understand anything.',
+    prompt:'Non capisco ___.',
+    answer:'niente',
+    choices:['niente','qualcosa','tutto','nessuno'],
+    explanation:'Italian double negatives are correct: non...niente = nothing. "Non capisco niente" is standard, not "non capisco non niente".',
+    level:2
+  },
+
+  // ── BUILD exercises ──
+  {
+    type:'build',
+    english:'I eat a good pizza.',
+    blocks:['Mangio','una','buona','pizza','buono','il'],
+    answer:['Mangio','una','buona','pizza'],
+    explanation:'Italian adjectives usually follow nouns BUT common adjectives like buono/bello/grande often come before. Buona agrees with pizza (feminine).',
+    level:1
+  },
+  {
+    type:'build',
+    english:'I want to speak Italian well.',
+    blocks:['Voglio','parlare','italiano','bene','l\'','buono'],
+    answer:['Voglio','parlare','italiano','bene'],
+    explanation:'After modal verbs (voglio, posso, devo) use the infinitive: voglio + parlare. Bene (well) is an adverb — it never changes form.',
+    level:2
+  },
+  {
+    type:'build',
+    english:'Tomorrow I\'m going to Rome with a friend.',
+    blocks:['Domani','vado','a Roma','con un amico','Roma','in'],
+    answer:['Domani','vado','a Roma','con un amico'],
+    explanation:'Time words (domani) come first. Cities use "a" (vado a Roma), countries use "in" (vado in Italia).',
+    level:2
+  },
+];
