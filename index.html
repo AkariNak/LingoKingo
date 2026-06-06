@@ -81,7 +81,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .abtn.danger:hover{background:rgba(200,122,122,.08);border-color:#c87a7a}
 
 /* ── WORD SECTIONS ── */
-#wordSections{padding:1rem 2rem .5rem;display:flex;flex-direction:column;gap:7px}
+#wordSections{padding:1rem 2rem .5rem;display:flex;flex-direction:column;gap:7px;width:100%}
 .sec{border:1px solid var(--bd);border-radius:10px;overflow:hidden;transition:border-color .15s}
 .sec:hover{border-color:var(--bd2)}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;cursor:pointer;background:var(--sf);transition:background .15s;user-select:none}
@@ -103,7 +103,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .reg-badge{font-size:.55rem;padding:1px 6px;border-radius:99px;border:1px solid;letter-spacing:.05em;white-space:nowrap;align-self:flex-start}
 
 /* ── DECK PANEL ── */
-.deck-panel{border-top:1px solid var(--bd);padding:1.2rem 2rem 2rem;margin-top:.5rem}
+.deck-panel{border-top:1px solid var(--bd);padding:1.2rem 2rem 2rem;margin-top:.5rem;width:100%}
 .deck-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 .deck-title{font-family:'DM Serif Display',serif;font-size:1.05rem}
 .deck-acts{display:flex;gap:7px}
@@ -119,7 +119,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .dchip-x{background:none;border:none;cursor:pointer;font-size:12px;padding:0 2px;color:var(--mu);transition:color .12s}
 .dchip-x:hover{color:#c87a7a}
 .empty-deck{font-size:.7rem;color:var(--su)}
-.tab-body{padding:1.5rem 2rem;max-width:860px}
+.tab-body{padding:1.5rem 2rem;max-width:760px;width:100%}
 .exercise-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem;margin-bottom:1rem}
 .empty-msg{padding:2.5rem 0;text-align:center;font-size:.78rem;color:var(--su)}
 
@@ -245,7 +245,7 @@ input[type="text"]::placeholder{color:var(--su)}
   <button class="tab-btn" data-tab="grammar"  onclick="switchTab('grammar')">grammar</button>
 </div>
 
-<div id="mainContent"></div>
+<div id="mainContent" style="display:flex;flex-direction:column;align-items:center"></div>
 
 <div id="studyOverlay" onclick="overlayClick(event)">
   <div id="studyModal">
@@ -1438,8 +1438,9 @@ function saveDeckState() {
 function renderVocab(container) {
   const words = LANGS[curLang].words;
 
+  container.style.alignItems = 'stretch';
   container.innerHTML = `
-    <div class="ctrl">
+    <div class="ctrl" style="width:100%">
       <div class="ctrl-row">
         <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
         <div id="groupBar"></div>
@@ -1883,7 +1884,7 @@ let answered       = false;
 
 function renderPractice(container) {
   container.innerHTML = `
-    <div class="ctrl">
+    <div class="ctrl" style="width:100%">
       <div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
         <span class="ctrl-label">exercise type:</span>
         ${['all','particle','conjugate','build','fill'].map(t =>
