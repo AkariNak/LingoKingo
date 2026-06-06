@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Language Flashcards</title>
+<title>Recall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Crect x='10' y='10' width='52' height='52' rx='8' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='1.5'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root[data-x]{--r:0} /* placeholder */
@@ -210,10 +211,16 @@ input[type="text"]::placeholder{color:var(--su)}
 <body class="dark">
 
 <div id="hdr">
-  <div class="logo">
-    <span class="logo-kr" id="logoScript">한국어</span>
-    <span class="logo-en">Language Flashcards</span>
-    <span class="logo-sub">vocabulary · grammar · practice</span>
+  <div class="logo" style="display:flex;align-items:center;gap:14px">
+    <svg width="44" height="44" viewBox="0 0 72 72" style="flex-shrink:0" aria-hidden="true">
+      <rect width="72" height="72" rx="14" fill="var(--acc)"/>
+      <rect x="10" y="10" width="52" height="52" rx="8" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+      <text x="36" y="50" text-anchor="middle" font-family="Georgia,serif" font-size="34" font-weight="600" fill="white">R</text>
+    </svg>
+    <div>
+      <span class="logo-en" style="font-size:1.65rem">recall</span>
+      <span class="logo-sub" id="logoScript" style="display:block;margin-top:1px">language flashcards</span>
+    </div>
   </div>
   <div class="hdr-r">
     <div class="lang-wrap">
@@ -1284,7 +1291,7 @@ function switchLang(lang) {
   const L = LANGS[lang];
   document.getElementById('langFlag').textContent   = L.flag;
   document.getElementById('langLabel').textContent  = L.label;
-  document.getElementById('logoScript').textContent = L.script;
+  // logoScript is the tagline, not language-specific
   const srch = document.getElementById('searchInput');
   if (srch) srch.placeholder = L.placeholder;
   document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === lang));
@@ -2259,7 +2266,7 @@ function renderGrammar(container) {
   const L = LANGS[savedLang];
   document.getElementById('langFlag').textContent   = L.flag;
   document.getElementById('langLabel').textContent  = L.label;
-  document.getElementById('logoScript').textContent = L.script;
+  // logoScript is the tagline, not language-specific
   document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === savedLang));
 
   // tab
