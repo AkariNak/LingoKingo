@@ -6,14 +6,14 @@ const LANGS = {
     placeholder: 'search hangul, romanization, or meaning…',
     words: typeof KOREAN_WORDS !== 'undefined' ? KOREAN_WORDS : [],
     sentences: () => (typeof KOREAN_SENTENCES !== 'undefined' ? KOREAN_SENTENCES : []),
-    grammar: () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.korean : []),
+    grammar:   () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.korean  : []),
   },
   italian: {
     label: 'Italian', script: 'Italiano', flag: '🇮🇹',
     placeholder: 'search Italian, pronunciation, or meaning…',
     words: typeof ITALIAN_WORDS !== 'undefined' ? ITALIAN_WORDS : [],
     sentences: () => (typeof ITALIAN_SENTENCES !== 'undefined' ? ITALIAN_SENTENCES : []),
-    grammar: () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.italian : []),
+    grammar:   () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.italian : []),
   }
 };
 
