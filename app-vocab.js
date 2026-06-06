@@ -1,9 +1,15 @@
 // ── VOCABULARY TAB ────────────────────────────────────────────────────────────
 
-// Deck state
-let decks        = load('lf-decks', []);
-let activeDeckIdx = load('lf-activeDeck', -1);
-if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
+// Deck state — initialized in vocabInit() after all scripts load
+let decks        = [];
+let activeDeckIdx = -1;
+
+function vocabInit() {
+  decks         = load('lf-decks', []);
+  activeDeckIdx = load('lf-activeDeck', -1);
+  if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
+  curGrouping   = load('lf-grouping', 'pos');
+}
 
 let openSecs = {};
 
@@ -61,7 +67,7 @@ const GROUPINGS = {
   }
 };
 
-let curGrouping = load('lf-grouping', 'pos');
+let curGrouping = 'pos';
 
 // Deck helpers
 function deckColorFor(kr) {
