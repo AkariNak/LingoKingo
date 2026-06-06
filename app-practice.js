@@ -32,7 +32,7 @@ function setPracticeFilter(f) {
 }
 
 function loadPracticeQueue() {
-  const all = LANGS[curLang].sentences || [];
+  const s = LANGS[curLang].sentences; const all = (typeof s === 'function' ? s() : s) || [];
   let filtered = practiceFilter === 'all' ? all : all.filter(s => s.type === practiceFilter);
   if (filtered.length === 0) filtered = all;
   practiceQueue = shuffle(filtered);
