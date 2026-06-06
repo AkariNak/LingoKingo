@@ -1,7 +1,7 @@
 // ── GRAMMAR TAB ───────────────────────────────────────────────────────────────
 
 function renderGrammar(container) {
-  const notes = LANGS[curLang].grammar || [];
+  const g = LANGS[curLang].grammar; const notes = (typeof g === 'function' ? g() : g) || [];
   container.innerHTML = '';
 
   if (notes.length === 0) {
