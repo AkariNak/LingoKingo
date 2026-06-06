@@ -209,6 +209,23 @@ body.light .dbtn.dactive{background:rgba(0,0,0,.03)}
 .dct{font-size:.6rem;opacity:.7}
 .chip.on{border-width:1.5px}
 
+.lang-wrap{position:relative}
+.lang-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 11px;border-radius:6px;border:1px solid;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em;white-space:nowrap}
+body.dark  .lang-btn{background:#1e1e28;border-color:rgba(255,255,255,.15);color:#f0eee8}
+body.light .lang-btn{background:#fff;border-color:rgba(0,0,0,.18);color:#1c1a16}
+.lang-btn:hover{border-color:var(--acc)}
+.lang-chev{font-size:.55rem;opacity:.5}
+.lang-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;border-radius:8px;overflow:hidden;min-width:160px;z-index:300;box-shadow:0 8px 28px rgba(0,0,0,.3)}
+body.dark  .lang-menu{background:#1e1e28;border:1px solid rgba(255,255,255,.13)}
+body.light .lang-menu{background:#fff;border:1px solid rgba(0,0,0,.13)}
+.lang-menu.open{display:block}
+.lang-option{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.74rem;transition:background .12s}
+body.dark  .lang-option{color:#f0eee8}
+body.light .lang-option{color:#1c1a16}
+body.dark  .lang-option:hover{background:rgba(255,255,255,.07)}
+body.light .lang-option:hover{background:rgba(0,0,0,.05)}
+.lang-option.active{color:var(--acc)}
+.lang-script{margin-left:auto;font-size:.65rem;opacity:.55;font-family:'Noto Sans KR',sans-serif}
 @media(max-width:600px){
   #hdr,#ctrl,#deckPanel{padding-left:1rem;padding-right:1rem}
   #wordSections{padding:1rem 1rem .5rem}
@@ -226,11 +243,26 @@ body.light .dbtn.dactive{background:rgba(0,0,0,.03)}
     <span class="logo-sub t-subtle">click words · build your deck · study</span>
   </div>
   <div class="hdr-r">
-    <button id="themeBtn">light mode</button>
-    <div style="display:flex;align-items:center;gap:7px">
-      <span class="deck-lbl">deck</span>
-      <span id="deckBadge">0</span>
-    </div>
+      <div class="lang-wrap">
+        <button class="lang-btn" id="langBtn" onclick="toggleLangMenu()">
+          <span id="langFlag">🇰🇷</span>
+          <span id="langLabel">Korean</span>
+          <span class="lang-chev">▾</span>
+        </button>
+        <div class="lang-menu" id="langMenu">
+          <div class="lang-option active" data-lang="korean" onclick="switchLang('korean')">
+            <span>🇰🇷</span><span>Korean</span><span class="lang-script">한국어</span>
+          </div>
+          <div class="lang-option" data-lang="italian" onclick="switchLang('italian')">
+            <span>🇮🇹</span><span>Italian</span><span class="lang-script">Italiano</span>
+          </div>
+        </div>
+      </div>
+      <button id="themeBtn">light mode</button>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="deck-lbl">deck</span>
+        <span id="deckBadge">0</span>
+      </div>
   </div>
 </div>
 
@@ -283,7 +315,12 @@ body.light .dbtn.dactive{background:rgba(0,0,0,.03)}
 </div>
 
 <script>
-var WORDS=[
+var LANGS={
+  korean:{
+    label:'Korean',
+    script:'한국어',
+    placeholder:'search hangul, romanization, or meaning…',
+    words: [
 {kr:"눈",ro:"nun",meaning:"eye / eyes",example:"눈이 예뻐요 — your eyes are pretty",pos:"noun",freq:9},
 {kr:"빠져",ro:"ppajyeo",meaning:"falling into / drawn in",example:"나 빠져 — I'm falling for you",pos:"verb",freq:7},
 {kr:"느껴",ro:"neukkyeo",meaning:"feeling / I feel",example:"뭔가 느껴 — I feel something",pos:"verb",freq:7},
@@ -507,7 +544,144 @@ var WORDS=[
 {kr:"사랑해",ro:"saranghae",meaning:"I love you (informal)",example:"사랑해 — I love you",pos:"expression",freq:10},
 {kr:"잘 자",ro:"jal ja",meaning:"good night / sleep well",example:"잘 자 꿈 꿔 — good night sweet dreams",pos:"expression",freq:8},
 {kr:"수고했어",ro:"sugohesseo",meaning:"good work / you worked hard",example:"오늘 수고했어 — good work today",pos:"expression",freq:7}
-];
+  ]},
+  italian:{
+    label:'Italian',
+    script:'Italiano',
+    placeholder:'search Italian, pronunciation, or meaning…',
+    words: [
+{kr:"ciao",ro:"CHOW",meaning:"hi / bye (informal)",example:"Ciao! Come stai? — Hi! How are you?",pos:"expression",freq:10},
+{kr:"grazie",ro:"GRAT-syeh",meaning:"thank you",example:"Grazie mille — Thank you very much",pos:"expression",freq:10},
+{kr:"prego",ro:"PREH-go",meaning:"you're welcome / please / go ahead",example:"Prego, si accomodi — Please, have a seat",pos:"expression",freq:10},
+{kr:"scusa",ro:"SKOO-za",meaning:"excuse me / sorry (informal)",example:"Scusa, non capisco — Sorry, I don't understand",pos:"expression",freq:9},
+{kr:"per favore",ro:"pair fa-VO-reh",meaning:"please",example:"Un caffè, per favore — A coffee, please",pos:"expression",freq:10},
+{kr:"mi dispiace",ro:"mee dis-PYA-cheh",meaning:"I'm sorry",example:"Mi dispiace tanto — I'm so sorry",pos:"expression",freq:9},
+{kr:"non lo so",ro:"non lo SO",meaning:"I don't know",example:"Non lo so davvero — I really don't know",pos:"expression",freq:9},
+{kr:"capisce?",ro:"ka-PEE-sheh",meaning:"understand? / you know?",example:"Capisce cosa intendo? — Do you understand what I mean?",pos:"expression",freq:8},
+{kr:"esatto",ro:"eh-ZAT-to",meaning:"exactly / that's right",example:"Esatto! Hai capito — Exactly! You got it",pos:"expression",freq:8},
+{kr:"dai",ro:"DYE",meaning:"come on / go on (interjection)",example:"Dai, non essere triste — Come on, don't be sad",pos:"expression",freq:8},
+{kr:"mamma mia",ro:"MAM-ma MEE-a",meaning:"oh my / wow (exclamation)",example:"Mamma mia, che bello! — Oh my, how beautiful!",pos:"expression",freq:7},
+{kr:"basta",ro:"BA-sta",meaning:"enough / stop it",example:"Basta così — That's enough",pos:"expression",freq:8},
+{kr:"andiamo",ro:"an-DYA-mo",meaning:"let's go",example:"Andiamo, è tardi — Let's go, it's late",pos:"expression",freq:8},
+{kr:"benvenuto",ro:"ben-veh-NOO-to",meaning:"welcome",example:"Benvenuto in Italia — Welcome to Italy",pos:"expression",freq:7},
+{kr:"buongiorno",ro:"bwon-JOR-no",meaning:"good morning / good day",example:"Buongiorno, come va? — Good morning, how's it going?",pos:"expression",freq:10},
+{kr:"buonasera",ro:"bwo-na-SEH-ra",meaning:"good evening",example:"Buonasera a tutti — Good evening everyone",pos:"expression",freq:9},
+{kr:"buonanotte",ro:"bwo-na-NOT-teh",meaning:"good night",example:"Buonanotte, dormi bene — Good night, sleep well",pos:"expression",freq:8},
+{kr:"arrivederci",ro:"ar-ree-veh-DAIR-chee",meaning:"goodbye (formal)",example:"Arrivederci, a presto — Goodbye, see you soon",pos:"expression",freq:9},
+{kr:"a presto",ro:"a PRES-to",meaning:"see you soon",example:"A presto! — See you soon!",pos:"expression",freq:8},
+{kr:"io",ro:"EE-o",meaning:"I / me",example:"Io sono italiano — I am Italian",pos:"pronoun",freq:10},
+{kr:"tu",ro:"TOO",meaning:"you (informal)",example:"Tu sei gentile — You are kind",pos:"pronoun",freq:10},
+{kr:"lui",ro:"LOO-ee",meaning:"he / him",example:"Lui parla bene — He speaks well",pos:"pronoun",freq:9},
+{kr:"lei",ro:"LAY",meaning:"she / her / you (formal)",example:"Lei è molto brava — She is very good",pos:"pronoun",freq:9},
+{kr:"noi",ro:"NOY",meaning:"we / us",example:"Noi andiamo insieme — We go together",pos:"pronoun",freq:9},
+{kr:"voi",ro:"VOY",meaning:"you all / you (plural)",example:"Voi siete pronti? — Are you all ready?",pos:"pronoun",freq:8},
+{kr:"loro",ro:"LO-ro",meaning:"they / them",example:"Loro sono amici — They are friends",pos:"pronoun",freq:8},
+{kr:"questo",ro:"KWES-to",meaning:"this",example:"Questo è mio — This is mine",pos:"pronoun",freq:9},
+{kr:"quello",ro:"KWEL-lo",meaning:"that",example:"Quello è lontano — That is far away",pos:"pronoun",freq:8},
+{kr:"chi",ro:"KEE",meaning:"who",example:"Chi sei tu? — Who are you?",pos:"pronoun",freq:9},
+{kr:"cosa",ro:"KO-za",meaning:"what / thing",example:"Cosa vuoi? — What do you want?",pos:"pronoun",freq:10},
+{kr:"dove",ro:"DO-veh",meaning:"where",example:"Dove sei? — Where are you?",pos:"adverb",freq:10},
+{kr:"quando",ro:"KWAN-do",meaning:"when",example:"Quando arrivi? — When do you arrive?",pos:"adverb",freq:9},
+{kr:"come",ro:"KO-meh",meaning:"how / like / as",example:"Come stai? — How are you?",pos:"adverb",freq:10},
+{kr:"perché",ro:"pair-KEH",meaning:"why / because",example:"Perché sei triste? — Why are you sad?",pos:"adverb",freq:9},
+{kr:"quanto",ro:"KWAN-to",meaning:"how much / how many",example:"Quanto costa? — How much does it cost?",pos:"adverb",freq:9},
+{kr:"molto",ro:"MOL-to",meaning:"very / a lot / much",example:"Mi piace molto — I like it a lot",pos:"adverb",freq:10},
+{kr:"poco",ro:"PO-ko",meaning:"a little / few / not much",example:"Un poco di zucchero — A little sugar",pos:"adverb",freq:9},
+{kr:"troppo",ro:"TROP-po",meaning:"too much / too many",example:"È troppo caro — It's too expensive",pos:"adverb",freq:8},
+{kr:"subito",ro:"SOO-bee-to",meaning:"immediately / right away",example:"Vengo subito — I'm coming right away",pos:"adverb",freq:8},
+{kr:"ancora",ro:"an-KO-ra",meaning:"still / yet / again / more",example:"Ancora una volta — One more time",pos:"adverb",freq:8},
+{kr:"già",ro:"JA",meaning:"already",example:"Ho già mangiato — I already ate",pos:"adverb",freq:8},
+{kr:"sempre",ro:"SEM-preh",meaning:"always",example:"Ti penso sempre — I always think of you",pos:"adverb",freq:9},
+{kr:"mai",ro:"MY",meaning:"never / ever",example:"Non lo faccio mai — I never do that",pos:"adverb",freq:8},
+{kr:"forse",ro:"FOR-seh",meaning:"maybe / perhaps",example:"Forse domani — Maybe tomorrow",pos:"adverb",freq:8},
+{kr:"insieme",ro:"in-SYEH-meh",meaning:"together",example:"Stiamo insieme — We are together",pos:"adverb",freq:8},
+{kr:"solo",ro:"SO-lo",meaning:"alone / only / just",example:"Voglio stare solo — I want to be alone",pos:"adverb",freq:9},
+{kr:"adesso",ro:"a-DES-so",meaning:"now / right now",example:"Adesso capisco — Now I understand",pos:"adverb",freq:9},
+{kr:"dopo",ro:"DO-po",meaning:"after / later",example:"Ci vediamo dopo — See you later",pos:"adverb",freq:9},
+{kr:"prima",ro:"PREE-ma",meaning:"before / first / earlier",example:"Prima di tutto — First of all",pos:"adverb",freq:8},
+{kr:"essere",ro:"ES-seh-reh",meaning:"to be",example:"Voglio essere felice — I want to be happy",pos:"verb",freq:10},
+{kr:"avere",ro:"a-VEH-reh",meaning:"to have",example:"Ho fame — I'm hungry (I have hunger)",pos:"verb",freq:10},
+{kr:"fare",ro:"FA-reh",meaning:"to do / to make",example:"Cosa fai? — What are you doing?",pos:"verb",freq:10},
+{kr:"andare",ro:"an-DA-reh",meaning:"to go",example:"Vado a casa — I'm going home",pos:"verb",freq:10},
+{kr:"venire",ro:"veh-NEE-reh",meaning:"to come",example:"Vieni con me — Come with me",pos:"verb",freq:10},
+{kr:"volere",ro:"vo-LEH-reh",meaning:"to want",example:"Voglio un gelato — I want a gelato",pos:"verb",freq:10},
+{kr:"potere",ro:"po-TEH-reh",meaning:"can / to be able to",example:"Puoi aiutarmi? — Can you help me?",pos:"verb",freq:10},
+{kr:"dovere",ro:"do-VEH-reh",meaning:"must / to have to",example:"Devo andare — I have to go",pos:"verb",freq:9},
+{kr:"sapere",ro:"sa-PEH-reh",meaning:"to know (facts/how to)",example:"So parlare italiano — I know how to speak Italian",pos:"verb",freq:9},
+{kr:"vedere",ro:"veh-DEH-reh",meaning:"to see / to watch",example:"Vediamo un film — Let's watch a film",pos:"verb",freq:9},
+{kr:"dire",ro:"DEE-reh",meaning:"to say / to tell",example:"Cosa vuoi dire? — What do you mean?",pos:"verb",freq:10},
+{kr:"parlare",ro:"par-LA-reh",meaning:"to speak / to talk",example:"Parli italiano? — Do you speak Italian?",pos:"verb",freq:10},
+{kr:"capire",ro:"ka-PEE-reh",meaning:"to understand",example:"Non capisco — I don't understand",pos:"verb",freq:9},
+{kr:"mangiare",ro:"man-JA-reh",meaning:"to eat",example:"Andiamo a mangiare — Let's go eat",pos:"verb",freq:9},
+{kr:"bere",ro:"BEH-reh",meaning:"to drink",example:"Vuoi bere qualcosa? — Do you want to drink something?",pos:"verb",freq:9},
+{kr:"dormire",ro:"dor-MEE-reh",meaning:"to sleep",example:"Devo dormire — I need to sleep",pos:"verb",freq:9},
+{kr:"sentire",ro:"sen-TEE-reh",meaning:"to hear / to feel / to sense",example:"Sento la musica — I hear the music",pos:"verb",freq:8},
+{kr:"pensare",ro:"pen-SA-reh",meaning:"to think",example:"Cosa pensi? — What do you think?",pos:"verb",freq:9},
+{kr:"credere",ro:"KREH-deh-reh",meaning:"to believe / to think",example:"Ci credo — I believe it",pos:"verb",freq:8},
+{kr:"amare",ro:"a-MA-reh",meaning:"to love",example:"Ti amo — I love you",pos:"verb",freq:9},
+{kr:"piacere",ro:"pya-CHEH-reh",meaning:"to like / to please",example:"Mi piace molto — I like it a lot",pos:"verb",freq:10},
+{kr:"aspettare",ro:"as-pet-TA-reh",meaning:"to wait / to expect",example:"Aspetta un momento — Wait a moment",pos:"verb",freq:8},
+{kr:"trovare",ro:"tro-VA-reh",meaning:"to find",example:"Non riesco a trovarlo — I can't find it",pos:"verb",freq:8},
+{kr:"dare",ro:"DA-reh",meaning:"to give",example:"Dammi un secondo — Give me a second",pos:"verb",freq:9},
+{kr:"prendere",ro:"PREN-deh-reh",meaning:"to take / to get",example:"Prendo un caffè — I'll have a coffee",pos:"verb",freq:9},
+{kr:"mettere",ro:"MET-teh-reh",meaning:"to put / to place",example:"Metti qui — Put it here",pos:"verb",freq:8},
+{kr:"uscire",ro:"oo-SHEE-reh",meaning:"to go out / to exit",example:"Usciamo stasera? — Shall we go out tonight?",pos:"verb",freq:8},
+{kr:"tornare",ro:"tor-NA-reh",meaning:"to return / to come back",example:"Torno presto — I'll be back soon",pos:"verb",freq:8},
+{kr:"vivere",ro:"VEE-veh-reh",meaning:"to live",example:"Vivo a Roma — I live in Rome",pos:"verb",freq:8},
+{kr:"lavorare",ro:"la-vo-RA-reh",meaning:"to work",example:"Lavoro tutto il giorno — I work all day",pos:"verb",freq:8},
+{kr:"studiare",ro:"stoo-DYA-reh",meaning:"to study",example:"Studio italiano ogni giorno — I study Italian every day",pos:"verb",freq:8},
+{kr:"bello",ro:"BEL-lo",meaning:"beautiful / nice / great",example:"Che bello! — How beautiful!",pos:"adjective",freq:10},
+{kr:"brutto",ro:"BROOT-to",meaning:"ugly / bad / awful",example:"Che tempo brutto — What awful weather",pos:"adjective",freq:8},
+{kr:"buono",ro:"BWO-no",meaning:"good / tasty / kind",example:"È molto buono — It's very good",pos:"adjective",freq:10},
+{kr:"cattivo",ro:"kat-TEE-vo",meaning:"bad / evil / naughty",example:"Non essere cattivo — Don't be mean",pos:"adjective",freq:8},
+{kr:"grande",ro:"GRAN-deh",meaning:"big / great / tall",example:"Una grande idea — A great idea",pos:"adjective",freq:9},
+{kr:"piccolo",ro:"PEE-ko-lo",meaning:"small / little / young",example:"Un piccolo problema — A small problem",pos:"adjective",freq:9},
+{kr:"nuovo",ro:"NWO-vo",meaning:"new",example:"Un nuovo inizio — A new beginning",pos:"adjective",freq:9},
+{kr:"vecchio",ro:"VEK-kyo",meaning:"old",example:"Il mio vecchio amico — My old friend",pos:"adjective",freq:8},
+{kr:"felice",ro:"feh-LEE-cheh",meaning:"happy",example:"Sono felice di vederti — I'm happy to see you",pos:"adjective",freq:9},
+{kr:"triste",ro:"TREES-teh",meaning:"sad",example:"Perché sei triste? — Why are you sad?",pos:"adjective",freq:8},
+{kr:"stanco",ro:"STAN-ko",meaning:"tired",example:"Sono stanco morto — I'm dead tired",pos:"adjective",freq:8},
+{kr:"occupato",ro:"ok-koo-PA-to",meaning:"busy",example:"Sono molto occupato — I'm very busy",pos:"adjective",freq:7},
+{kr:"pronto",ro:"PRON-to",meaning:"ready",example:"Sei pronto? — Are you ready?",pos:"adjective",freq:9},
+{kr:"facile",ro:"FA-chee-leh",meaning:"easy",example:"È più facile di così — It's easier than this",pos:"adjective",freq:8},
+{kr:"difficile",ro:"dee-FEE-chee-leh",meaning:"difficult",example:"L'italiano è difficile — Italian is difficult",pos:"adjective",freq:8},
+{kr:"vero",ro:"VEH-ro",meaning:"true / real",example:"È vero? — Is it true?",pos:"adjective",freq:9},
+{kr:"stesso",ro:"STES-so",meaning:"same / itself",example:"È la stessa cosa — It's the same thing",pos:"adjective",freq:8},
+{kr:"diverso",ro:"dee-VAIR-so",meaning:"different",example:"È diverso dal solito — It's different from usual",pos:"adjective",freq:7},
+{kr:"amore",ro:"a-MO-reh",meaning:"love",example:"Ti voglio bene — I love you (affection)",pos:"noun",freq:10},
+{kr:"amico",ro:"a-MEE-ko",meaning:"friend",example:"È il mio migliore amico — He's my best friend",pos:"noun",freq:10},
+{kr:"casa",ro:"KA-za",meaning:"home / house",example:"Vado a casa — I'm going home",pos:"noun",freq:10},
+{kr:"famiglia",ro:"fa-MEE-lya",meaning:"family",example:"La mia famiglia è grande — My family is big",pos:"noun",freq:9},
+{kr:"tempo",ro:"TEM-po",meaning:"time / weather",example:"Non ho tempo — I don't have time",pos:"noun",freq:10},
+{kr:"giorno",ro:"JOR-no",meaning:"day",example:"Buona giornata — Have a good day",pos:"noun",freq:10},
+{kr:"notte",ro:"NOT-teh",meaning:"night",example:"Buona notte — Good night",pos:"noun",freq:9},
+{kr:"vita",ro:"VEE-ta",meaning:"life",example:"La vita è bella — Life is beautiful",pos:"noun",freq:9},
+{kr:"mondo",ro:"MON-do",meaning:"world",example:"Il più bello del mondo — The most beautiful in the world",pos:"noun",freq:8},
+{kr:"città",ro:"cheet-TA",meaning:"city / town",example:"Che bella città — What a beautiful city",pos:"noun",freq:8},
+{kr:"acqua",ro:"AK-kwa",meaning:"water",example:"Un bicchiere d'acqua — A glass of water",pos:"noun",freq:10},
+{kr:"cibo",ro:"CHEE-bo",meaning:"food",example:"Il cibo italiano è buonissimo — Italian food is delicious",pos:"noun",freq:9},
+{kr:"caffè",ro:"kaf-FEH",meaning:"coffee",example:"Un caffè per favore — A coffee please",pos:"noun",freq:9},
+{kr:"gelato",ro:"jeh-LA-to",meaning:"ice cream",example:"Voglio un gelato — I want an ice cream",pos:"noun",freq:8},
+{kr:"pizza",ro:"PEET-tsa",meaning:"pizza",example:"Una pizza margherita — A margherita pizza",pos:"noun",freq:8},
+{kr:"uomo",ro:"WO-mo",meaning:"man",example:"Quell'uomo è simpatico — That man is nice",pos:"noun",freq:9},
+{kr:"donna",ro:"DON-na",meaning:"woman",example:"Una donna forte — A strong woman",pos:"noun",freq:9},
+{kr:"bambino",ro:"bam-BEE-no",meaning:"child / baby",example:"Che bambino carino — What a cute child",pos:"noun",freq:8},
+{kr:"ragazzo",ro:"ra-GAT-tso",meaning:"boy / guy / boyfriend",example:"Il mio ragazzo — My boyfriend",pos:"noun",freq:9},
+{kr:"ragazza",ro:"ra-GAT-tsa",meaning:"girl / girlfriend",example:"La mia ragazza — My girlfriend",pos:"noun",freq:9},
+{kr:"nome",ro:"NO-meh",meaning:"name",example:"Come ti chiami? — What is your name?",pos:"noun",freq:9},
+{kr:"parola",ro:"pa-RO-la",meaning:"word",example:"Non conosco questa parola — I don't know this word",pos:"noun",freq:8},
+{kr:"lingua",ro:"LEEN-gwa",meaning:"language / tongue",example:"Imparo la lingua italiana — I'm learning the Italian language",pos:"noun",freq:8},
+{kr:"musica",ro:"MOO-zee-ka",meaning:"music",example:"Amo la musica — I love music",pos:"noun",freq:9},
+{kr:"canzone",ro:"kan-TSO-neh",meaning:"song",example:"Che bella canzone — What a beautiful song",pos:"noun",freq:8},
+{kr:"cuore",ro:"KWO-reh",meaning:"heart",example:"Ti amo con tutto il cuore — I love you with all my heart",pos:"noun",freq:9},
+{kr:"occhio",ro:"OK-kyo",meaning:"eye",example:"Che begli occhi — What beautiful eyes",pos:"noun",freq:8},
+{kr:"mano",ro:"MA-no",meaning:"hand",example:"Dammi la mano — Give me your hand",pos:"noun",freq:8},
+{kr:"testa",ro:"TES-ta",meaning:"head",example:"Ho mal di testa — I have a headache",pos:"noun",freq:8}
+    ]
+  }
+};
+var curLang='korean';
+var WORDS=LANGS[curLang].words;
 
 // AVAILABLE PALETTE — cycles through for new decks
 var PALETTE=['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#7ac8c8','#c8c87a','#c87a7a','#a87ac8'];
@@ -782,6 +956,35 @@ function applyTheme(t){
 }
 
 // group buttons
+function toggleLangMenu(){
+  document.getElementById('langMenu').classList.toggle('open');
+}
+document.addEventListener('click',function(e){
+  var wrap=document.getElementById('langBtn');
+  var menu=document.getElementById('langMenu');
+  if(menu&&wrap&&!wrap.contains(e.target)&&!menu.contains(e.target)){
+    menu.classList.remove('open');
+  }
+});
+function switchLang(lang){
+  curLang=lang;
+  WORDS=LANGS[lang].words;
+  // update header
+  var flags={korean:'🇰🇷',italian:'🇮🇹'};
+  document.getElementById('langFlag').textContent=flags[lang];
+  document.getElementById('langLabel').textContent=LANGS[lang].label;
+  document.getElementById('searchInput').placeholder=LANGS[lang].placeholder;
+  // mark active option
+  document.querySelectorAll('.lang-option').forEach(function(el){
+    el.classList.toggle('active',el.dataset.lang===lang);
+  });
+  document.getElementById('langMenu').classList.remove('open');
+  // reset state
+  openSecs={};
+  localStorage.setItem('krfc-lang',lang);
+  render();
+}
+
 function buildGroupBtns(){
   var bar=document.getElementById('groupBar');
   bar.innerHTML='';
@@ -960,6 +1163,8 @@ document.addEventListener('keydown',function(e){
 
 document.getElementById('searchInput').oninput=render;
 
+var savedLang=localStorage.getItem('krfc-lang')||'korean';
+if(savedLang!=='korean')switchLang(savedLang);
 loadFromStorage();
 buildGroupBtns();
 renderDeckSwitcher();
