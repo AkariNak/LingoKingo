@@ -13,7 +13,7 @@
 :root[data-x]{--r:0} /* placeholder */
 
 /* ── THEMES ── */
-html{overflow-x:hidden;width:100%;font-size:19px}
+html{overflow-x:hidden;width:100%;font-size:16px}
 html[data-size="sm"]{font-size:14px}
 html[data-size="md"]{font-size:16px}
 html[data-size="lg"]{font-size:19px}
@@ -57,11 +57,11 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 
 
 /* ── TABS ── */
-#tabBar{display:flex;gap:0;border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:85px;z-index:90;padding:0 2rem;transition:background .2s;width:100%;box-sizing:border-box}
+#tabBar{display:flex;gap:0;border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:85px;z-index:90;padding:0 1rem;transition:background .2s;width:100%;box-sizing:border-box;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}#tabBar::-webkit-scrollbar{display:none}
 .tab-btn{font-family:'DM Mono',monospace;font-size:.75rem;padding:.7rem 1.1rem;border:none;background:none;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.04em}
 .tab-btn:hover{color:var(--tx)}
 .tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
-#fontBtn{font-family:'DM Mono',monospace;font-size:.8rem;padding:.7rem 1rem;border:none;background:none;color:var(--mu);cursor:pointer;transition:color .15s;letter-spacing:.04em;white-space:nowrap;margin-left:auto;line-height:1}
+#fontBtn{font-family:'DM Mono',monospace;font-size:.8rem;padding:.7rem 1rem;border:none;background:none;color:var(--mu);cursor:pointer;transition:color .15s;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;line-height:1}
 #fontBtn:hover{color:var(--acc)}
 
 /* ── CONTROLS ── */
@@ -2507,7 +2507,7 @@ document.addEventListener('keydown', e => {
 // ── FONT SIZE ─────────────────────────────────────────────────
 const FONT_SIZES = ['sm','md','lg','xl'];
 const FONT_LABELS = {'sm':'small','md':'medium','lg':'large','xl':'x-large'};
-let fontSize = localStorage.getItem('lf-fontsize') || 'lg';
+const _savedSize = localStorage.getItem('lf-fontsize'); let fontSize = ['sm','md','lg','xl'].includes(_savedSize) ? _savedSize : 'lg';
 
 function applyFontSize(size) {
   fontSize = size;
