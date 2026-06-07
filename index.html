@@ -25,11 +25,11 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 ::-webkit-scrollbar-thumb{background:var(--sf3);border-radius:3px}
 
 /* ── HEADER ── */
-#hdr{padding:1.4rem 2rem 1rem;border-bottom:1px solid var(--bd);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:.75rem;position:sticky;top:0;z-index:100;background:var(--bg);transition:background .2s}
+#hdr{padding:1rem 1rem .85rem;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:.5rem;position:sticky;top:0;z-index:100;background:var(--bg);transition:background .2s;min-width:0}
 .logo-kr{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:.78rem;color:var(--acc);letter-spacing:.15em;display:block}
 .logo-en{font-family:'DM Serif Display',serif;font-size:1.7rem;line-height:1;display:block}
 .logo-sub{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;margin-top:3px;display:block;color:var(--su)}
-.hdr-r{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap}
+.hdr-r{display:flex;align-items:center;gap:.75rem;flex-wrap:nowrap;flex-shrink:0}
 
 /* Language switcher */
 .lang-wrap{position:relative}
@@ -206,12 +206,15 @@ input[type="text"]::placeholder{color:var(--su)}
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
-  #hdr,#tabBar,.ctrl,.deck-panel{padding-left:.75rem;padding-right:.75rem}
+  #hdr{padding:.85rem .85rem .75rem}
+  #tabBar,.ctrl,.deck-panel{padding-left:.75rem;padding-right:.75rem}
   #wordSections{padding:.75rem .75rem .5rem}
   input[type="text"]{width:100%}
-  #tabBar{top:76px}
-  .sit-row{padding:.75rem .75rem .5rem}
+  #tabBar{top:68px}
+  .sit-row{padding:.6rem .75rem .5rem}
   .tab-body{padding:1rem .75rem}
+  .logo-en{font-size:1.3rem !important}
+  .logo svg{width:34px !important;height:34px !important}
 }
 
 </style>
@@ -237,14 +240,7 @@ input[type="text"]::placeholder{color:var(--su)}
         <span id="langLabel">Korean</span>
         <span class="lang-chev">▾</span>
       </button>
-      <div class="lang-menu" id="langMenu">
-        <div class="lang-option active" data-lang="korean" onclick="switchLang('korean')">
-          <span>🇰🇷</span><span>Korean</span><span class="lang-script">한국어</span>
-        </div>
-        <div class="lang-option" data-lang="italian" onclick="switchLang('italian')">
-          <span>🇮🇹</span><span>Italian</span><span class="lang-script">Italiano</span>
-        </div>
-      </div>
+
     </div>
     <button id="themeBtn" onclick="toggleTheme()">light mode</button>
     <div style="display:flex;align-items:center;gap:7px">
@@ -285,6 +281,14 @@ input[type="text"]::placeholder{color:var(--su)}
   </div>
 </div>
 
+<div class="lang-menu" id="langMenu">
+  <div class="lang-option active" data-lang="korean" onclick="switchLang('korean')">
+    <span>🇰🇷</span><span>Korean</span><span class="lang-script">한국어</span>
+  </div>
+  <div class="lang-option" data-lang="italian" onclick="switchLang('italian')">
+    <span>🇮🇹</span><span>Italian</span><span class="lang-script">Italiano</span>
+  </div>
+</div>
 <script>
 // ═══════════════════════════════════════════════════════════════
 // DATA
