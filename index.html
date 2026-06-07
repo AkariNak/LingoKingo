@@ -61,6 +61,9 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 .tab-btn{font-family:'DM Mono',monospace;font-size:.75rem;padding:.7rem 1.1rem;border:none;background:none;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.04em}
 .tab-btn:hover{color:var(--tx)}
 .tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
+.script-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--bd2);background:none;color:var(--mu);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.script-btn:hover{border-color:var(--acc);color:var(--acc)}
+.script-btn.script-on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:500}
 #fontBtn{font-family:'DM Mono',monospace;font-size:.8rem;padding:.7rem 1rem;border:none;background:none;color:var(--mu);cursor:pointer;transition:color .15s;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;line-height:1}
 #fontBtn:hover{color:var(--acc)}
 
@@ -1627,6 +1630,7 @@ function switchLang(lang) {
   // default to script grouping for Japanese
   if (lang === 'japanese' && curGrouping === 'pos') { curGrouping = 'script'; save('lf-grouping','script'); }
   if (lang !== 'japanese' && curGrouping === 'script') { curGrouping = 'pos'; save('lf-grouping','pos'); }
+  showScriptFilters(lang === 'japanese');
   renderTab(curTab);
 }
 
@@ -1928,6 +1932,7 @@ function renderWordGrid() {
   let filtered = words.filter(w => {
     if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
     if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
+    if (activeScripts.size > 0 && !activeScripts.has(w.script || '')) return false;
     if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -2789,6 +2794,29 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeBs();
 });
 
+// ── SCRIPT FILTER ─────────────────────────────────────────────
+let activeScripts = new Set(); // empty = show all
+
+function toggleScript(script) {
+  if (activeScripts.has(script)) activeScripts.delete(script);
+  else activeScripts.add(script);
+  updateScriptBtns();
+  renderWordGrid();
+}
+
+function updateScriptBtns() {
+  document.querySelectorAll('.script-btn').forEach(btn => {
+    const s = btn.dataset.script;
+    btn.classList.toggle('script-on', activeScripts.has(s));
+  });
+}
+
+function showScriptFilters(show) {
+  const el = document.getElementById('scriptFilters');
+  if (el) el.style.display = show ? 'flex' : 'none';
+  if (!show) { activeScripts.clear(); updateScriptBtns(); }
+}
+
 // ── FONT SIZE ─────────────────────────────────────────────────
 const FONT_SIZES = ['sm','md','lg','xl'];
 const FONT_LABELS = {'sm':'small','md':'medium','lg':'large','xl':'x-large'};
@@ -2823,6 +2851,7 @@ function cycleFontSize() {
   const savedLang = localStorage.getItem('lf-lang') || 'korean';
   curLang = savedLang;
   const L = LANGS[savedLang];
+  showScriptFilters(savedLang === 'japanese');
   document.getElementById('langFlag').textContent   = L.flag;
   document.getElementById('langLabel').textContent  = L.label;
   // logoScript is the tagline, not language-specific
