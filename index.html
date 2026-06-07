@@ -1294,6 +1294,272 @@ function renderGrammar(container) {
 function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
 function load(key, def) { try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : def; } catch(e) { return def; } }
 
+const JAPANESE_WORDS = [
+
+  // ══════════════════════════════════════════════
+  //  HIRAGANA — character recognition
+  // ══════════════════════════════════════════════
+  {kr:"あ",ro:"a",meaning:"a (ah)",example:"あ！— Ah!",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"い",ro:"i",meaning:"i (ee)",example:"いいえ — no",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"う",ro:"u",meaning:"u (oo)",example:"うみ — sea",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"え",ro:"e",meaning:"e (eh)",example:"えき — train station",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"お",ro:"o",meaning:"o (oh)",example:"おかあさん — mother",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"か",ro:"ka",meaning:"ka",example:"かさ — umbrella",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"き",ro:"ki",meaning:"ki",example:"きた — north",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"く",ro:"ku",meaning:"ku",example:"くに — country",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"け",ro:"ke",meaning:"ke",example:"けむり — smoke",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"こ",ro:"ko",meaning:"ko",example:"こえ — voice",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"さ",ro:"sa",meaning:"sa",example:"さかな — fish",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"し",ro:"shi",meaning:"shi",example:"しろ — white",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"す",ro:"su",meaning:"su",example:"すし — sushi",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"せ",ro:"se",meaning:"se",example:"せんせい — teacher",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"そ",ro:"so",meaning:"so",example:"そら — sky",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"た",ro:"ta",meaning:"ta",example:"たべる — to eat",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ち",ro:"chi",meaning:"chi",example:"ちず — map",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"つ",ro:"tsu",meaning:"tsu",example:"つき — moon",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"て",ro:"te",meaning:"te",example:"てがみ — letter",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"と",ro:"to",meaning:"to",example:"とり — bird",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"な",ro:"na",meaning:"na",example:"なまえ — name",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"に",ro:"ni",meaning:"ni",example:"にわ — garden",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ぬ",ro:"nu",meaning:"nu",example:"ぬの — cloth",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ね",ro:"ne",meaning:"ne",example:"ねこ — cat",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"の",ro:"no",meaning:"no (possessive particle)",example:"わたしのほん — my book",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"は",ro:"ha/wa",meaning:"ha (or wa as topic particle)",example:"はな — flower / は = topic marker",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ひ",ro:"hi",meaning:"hi",example:"ひと — person",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ふ",ro:"fu",meaning:"fu",example:"ふゆ — winter",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"へ",ro:"he/e",meaning:"he (or e as direction particle)",example:"へや — room",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ほ",ro:"ho",meaning:"ho",example:"ほし — star",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ま",ro:"ma",meaning:"ma",example:"まち — town",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"み",ro:"mi",meaning:"mi",example:"みず — water",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"む",ro:"mu",meaning:"mu",example:"むし — insect",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"め",ro:"me",meaning:"me",example:"め — eye",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"も",ro:"mo",meaning:"mo (also/too particle)",example:"わたしも — me too",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"や",ro:"ya",meaning:"ya",example:"やま — mountain",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ゆ",ro:"yu",meaning:"yu",example:"ゆき — snow",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"よ",ro:"yo",meaning:"yo",example:"よる — night",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ら",ro:"ra",meaning:"ra",example:"らいねん — next year",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"り",ro:"ri",meaning:"ri",example:"りんご — apple",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"る",ro:"ru",meaning:"ru",example:"るす — away from home",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"れ",ro:"re",meaning:"re",example:"れいぞうこ — refrigerator",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ろ",ro:"ro",meaning:"ro",example:"ろうか — hallway",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"わ",ro:"wa",meaning:"wa",example:"わたし — I/me",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"を",ro:"wo/o",meaning:"wo (object particle)",example:"ほんをよむ — read a book",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ん",ro:"n",meaning:"n (nasal)",example:"パン — bread (ends in ん)",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+
+  // ══════════════════════════════════════════════
+  //  KATAKANA — character recognition
+  // ══════════════════════════════════════════════
+  {kr:"ア",ro:"a",meaning:"a",example:"アイスクリーム — ice cream",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"イ",ro:"i",meaning:"i",example:"インターネット — internet",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ウ",ro:"u",meaning:"u",example:"ウイルス — virus",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"エ",ro:"e",meaning:"e",example:"エレベーター — elevator",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"オ",ro:"o",meaning:"o",example:"オレンジ — orange",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"カ",ro:"ka",meaning:"ka",example:"カメラ — camera",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"キ",ro:"ki",meaning:"ki",example:"キッチン — kitchen",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ク",ro:"ku",meaning:"ku",example:"クラス — class",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ケ",ro:"ke",meaning:"ke",example:"ケーキ — cake",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"コ",ro:"ko",meaning:"ko",example:"コーヒー — coffee",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"サ",ro:"sa",meaning:"sa",example:"サッカー — soccer",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"シ",ro:"shi",meaning:"shi",example:"シャワー — shower",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ス",ro:"su",meaning:"su",example:"スポーツ — sports",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"セ",ro:"se",meaning:"se",example:"セーター — sweater",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ソ",ro:"so",meaning:"so",example:"ソファ — sofa",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"タ",ro:"ta",meaning:"ta",example:"タクシー — taxi",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"チ",ro:"chi",meaning:"chi",example:"チケット — ticket",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ツ",ro:"tsu",meaning:"tsu",example:"ツアー — tour",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"テ",ro:"te",meaning:"te",example:"テレビ — television",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ト",ro:"to",meaning:"to",example:"トイレ — toilet/bathroom",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ナ",ro:"na",meaning:"na",example:"ナイフ — knife",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ニ",ro:"ni",meaning:"ni",example:"ニュース — news",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ヌ",ro:"nu",meaning:"nu",example:"ヌードル — noodle",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ネ",ro:"ne",meaning:"ne",example:"ネクタイ — necktie",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ノ",ro:"no",meaning:"no",example:"ノート — notebook",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ハ",ro:"ha",meaning:"ha",example:"ハンバーガー — hamburger",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ヒ",ro:"hi",meaning:"hi",example:"ヒーター — heater",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"フ",ro:"fu",meaning:"fu",example:"フランス — France",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ヘ",ro:"he",meaning:"he",example:"ヘルメット — helmet",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ホ",ro:"ho",meaning:"ho",example:"ホテル — hotel",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"マ",ro:"ma",meaning:"ma",example:"マスク — mask",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ミ",ro:"mi",meaning:"mi",example:"ミルク — milk",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ム",ro:"mu",meaning:"mu",example:"ムービー — movie",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"メ",ro:"me",meaning:"me",example:"メニュー — menu",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"モ",ro:"mo",meaning:"mo",example:"モデル — model",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ヤ",ro:"ya",meaning:"ya",example:"ヤード — yard",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ユ",ro:"yu",meaning:"yu",example:"ユニフォーム — uniform",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ヨ",ro:"yo",meaning:"yo",example:"ヨーロッパ — Europe",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ラ",ro:"ra",meaning:"ra",example:"ラジオ — radio",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"リ",ro:"ri",meaning:"ri",example:"リモコン — remote control",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ル",ro:"ru",meaning:"ru",example:"ルール — rule",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"レ",ro:"re",meaning:"re",example:"レストラン — restaurant",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ロ",ro:"ro",meaning:"ro",example:"ロボット — robot",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ワ",ro:"wa",meaning:"wa",example:"ワイン — wine",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ヲ",ro:"wo",meaning:"wo",example:"(rare in katakana)",pos:"katakana",freq:8,register:"neutral",script:"katakana"},
+  {kr:"ン",ro:"n",meaning:"n (nasal)",example:"パン — bread",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+
+  // ══════════════════════════════════════════════
+  //  VOCABULARY — expressions & greetings
+  // ══════════════════════════════════════════════
+  {kr:"こんにちは",ro:"konnichiwa",meaning:"hello / good afternoon",example:"こんにちは！ — Hello!",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport"]},
+  {kr:"おはようございます",ro:"ohayou gozaimasu",meaning:"good morning (formal)",example:"おはようございます — Good morning",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting"]},
+  {kr:"おはよう",ro:"ohayou",meaning:"good morning (casual)",example:"おはよう！ — Morning!",pos:"expression",freq:9,register:"casual",script:"hiragana",sit:["meeting"]},
+  {kr:"こんばんは",ro:"konbanwa",meaning:"good evening",example:"こんばんは — Good evening",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","restaurant"]},
+  {kr:"さようなら",ro:"sayounara",meaning:"goodbye (formal/permanent)",example:"さようなら — Goodbye",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting"]},
+  {kr:"じゃあね",ro:"jaa ne",meaning:"see you / bye (casual)",example:"じゃあね！ — See ya!",pos:"expression",freq:9,register:"casual",script:"hiragana",sit:["meeting"]},
+  {kr:"ありがとうございます",ro:"arigatou gozaimasu",meaning:"thank you (formal)",example:"ありがとうございます — Thank you very much",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","food","shopping","restaurant","airport"]},
+  {kr:"ありがとう",ro:"arigatou",meaning:"thank you (casual)",example:"ありがとう！ — Thanks!",pos:"expression",freq:10,register:"casual",script:"hiragana",sit:["meeting","food","shopping"]},
+  {kr:"すみません",ro:"sumimasen",meaning:"excuse me / I'm sorry",example:"すみません、どこですか？ — Excuse me, where is it?",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around","shopping","restaurant"]},
+  {kr:"ごめんなさい",ro:"gomen nasai",meaning:"I'm sorry (sincere apology)",example:"ごめんなさい — I'm so sorry",pos:"expression",freq:9,register:"neutral",script:"hiragana",sit:["meeting"]},
+  {kr:"はい",ro:"hai",meaning:"yes",example:"はい、そうです — Yes, that's right",pos:"expression",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"いいえ",ro:"iie",meaning:"no",example:"いいえ、ちがいます — No, that's wrong",pos:"expression",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"そうです",ro:"sou desu",meaning:"that's right / yes it is",example:"そうです！ — That's right!",pos:"expression",freq:9,register:"formal",script:"hiragana"},
+  {kr:"わかりました",ro:"wakarimashita",meaning:"I understand / got it",example:"わかりました — Understood",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","airport"]},
+  {kr:"わかりません",ro:"wakarimasen",meaning:"I don't understand",example:"すみません、わかりません — Sorry, I don't understand",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around"]},
+  {kr:"いただきます",ro:"itadakimasu",meaning:"let's eat (said before meals)",example:"いただきます！ — Let's eat!",pos:"expression",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"ごちそうさまでした",ro:"gochisousama deshita",meaning:"thank you for the meal",example:"ごちそうさまでした — That was delicious",pos:"expression",freq:8,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"おねがいします",ro:"onegai shimasu",meaning:"please (request)",example:"みずをおねがいします — Water please",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant","shopping","airport"]},
+  {kr:"大丈夫です",ro:"daijoubu desu",meaning:"it's okay / I'm fine",example:"大丈夫です — I'm okay",pos:"expression",freq:9,register:"neutral",script:"kanji",sit:["meeting","emergency"]},
+  {kr:"よろしくおねがいします",ro:"yoroshiku onegai shimasu",meaning:"nice to meet you / please treat me well",example:"よろしくおねがいします — Nice to meet you",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting"]},
+
+  // ══════════════════════════════════════════════
+  //  VOCABULARY — pronouns & particles
+  // ══════════════════════════════════════════════
+  {kr:"わたし",ro:"watashi",meaning:"I / me (neutral)",example:"わたしはがくせいです — I am a student",pos:"pronoun",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ぼく",ro:"boku",meaning:"I / me (male, casual)",example:"ぼくはたなかです — I am Tanaka",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
+  {kr:"あなた",ro:"anata",meaning:"you (avoid in conversation — use name instead)",example:"あなたのなまえは？— What is your name?",pos:"pronoun",freq:7,register:"neutral",script:"hiragana"},
+  {kr:"かれ",ro:"kare",meaning:"he / him / boyfriend",example:"かれはやさしい — He is kind",pos:"pronoun",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"かのじょ",ro:"kanojo",meaning:"she / her / girlfriend",example:"かのじょはかわいい — She is cute",pos:"pronoun",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"みんな",ro:"minna",meaning:"everyone / all",example:"みんなでいこう — Let's all go together",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
+  {kr:"は",ro:"wa",meaning:"topic marker particle",example:"わたしはがくせいです — I (topic) am a student",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"が",ro:"ga",meaning:"subject marker particle",example:"ねこがいます — There is a cat",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"を",ro:"wo/o",meaning:"object marker particle",example:"ほんをよみます — I read a book",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"に",ro:"ni",meaning:"to / at / for (direction/time)",example:"がっこうにいく — go to school",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"で",ro:"de",meaning:"at / by / with (location of action / means)",example:"バスでいく — go by bus",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"の",ro:"no",meaning:"possessive / connecting particle",example:"わたしのほん — my book",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"も",ro:"mo",meaning:"also / too",example:"わたしもすきです — I like it too",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"か",ro:"ka",meaning:"question marker (turns sentence into question)",example:"これはほんですか？— Is this a book?",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+
+  // ══════════════════════════════════════════════
+  //  VOCABULARY — nouns
+  // ══════════════════════════════════════════════
+  {kr:"なまえ",ro:"namae",meaning:"name",example:"なまえはなんですか？— What is your name?",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["meeting"]},
+  {kr:"ひと",ro:"hito",meaning:"person / people",example:"あのひとはだれですか？— Who is that person?",pos:"noun",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"とも/ともだち",ro:"tomodachi",meaning:"friend",example:"ともだちとあそぶ — play with a friend",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["meeting","dating"]},
+  {kr:"せんせい",ro:"sensei",meaning:"teacher",example:"せんせいにきく — ask the teacher",pos:"noun",freq:9,register:"formal",script:"hiragana"},
+  {kr:"がくせい",ro:"gakusei",meaning:"student",example:"わたしはがくせいです — I am a student",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"みず",ro:"mizu",meaning:"water",example:"みずをください — water please",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"ごはん",ro:"gohan",meaning:"rice / meal",example:"ごはんをたべる — eat a meal",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"おかね",ro:"okane",meaning:"money",example:"おかねがありません — I don't have money",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
+  {kr:"じかん",ro:"jikan",meaning:"time",example:"じかんがありません — I don't have time",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"まち",ro:"machi",meaning:"town / city",example:"このまちがすき — I like this town",pos:"noun",freq:8,register:"neutral",script:"hiragana",sit:["getting_around"]},
+  {kr:"えき",ro:"eki",meaning:"train station",example:"えきはどこですか？— Where is the station?",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"でんしゃ",ro:"densha",meaning:"train",example:"でんしゃにのる — ride the train",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["getting_around"]},
+  {kr:"バス",ro:"basu",meaning:"bus",example:"バスをまつ — wait for the bus",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["getting_around"]},
+  {kr:"タクシー",ro:"takushii",meaning:"taxi",example:"タクシーをよぶ — call a taxi",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["getting_around"]},
+  {kr:"くうこう",ro:"kuukou",meaning:"airport",example:"くうこうにいく — go to the airport",pos:"noun",freq:8,register:"neutral",script:"hiragana",sit:["airport"]},
+  {kr:"ホテル",ro:"hoteru",meaning:"hotel",example:"ホテルはどこですか？— Where is the hotel?",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["airport","getting_around"]},
+  {kr:"レストラン",ro:"resutoran",meaning:"restaurant",example:"レストランにいく — go to a restaurant",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"トイレ",ro:"toire",meaning:"toilet / bathroom",example:"トイレはどこですか？— Where is the bathroom?",pos:"noun",freq:10,register:"neutral",script:"katakana",sit:["airport","getting_around","restaurant"]},
+  {kr:"びょういん",ro:"byouin",meaning:"hospital",example:"びょういんにいく — go to the hospital",pos:"noun",freq:7,register:"neutral",script:"hiragana",sit:["emergency"]},
+  {kr:"けいさつ",ro:"keisatsu",meaning:"police",example:"けいさつをよぶ — call the police",pos:"noun",freq:6,register:"neutral",script:"hiragana",sit:["emergency"]},
+  {kr:"にほん",ro:"nihon",meaning:"Japan",example:"にほんにいきたい — I want to go to Japan",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"にほんご",ro:"nihongo",meaning:"Japanese language",example:"にほんごをべんきょうする — study Japanese",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"コーヒー",ro:"koohii",meaning:"coffee",example:"コーヒーをください — coffee please",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"ビール",ro:"biiru",meaning:"beer",example:"ビールをください — beer please",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"すし",ro:"sushi",meaning:"sushi",example:"すしがたべたい — I want to eat sushi",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"ラーメン",ro:"raamen",meaning:"ramen",example:"ラーメンをたのむ — order ramen",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+
+  // ══════════════════════════════════════════════
+  //  VOCABULARY — adjectives
+  // ══════════════════════════════════════════════
+  {kr:"おおきい",ro:"ookii",meaning:"big / large",example:"おおきいいぬ — a big dog",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ちいさい",ro:"chiisai",meaning:"small / little",example:"ちいさいねこ — a small cat",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"たかい",ro:"takai",meaning:"expensive / tall / high",example:"たかいかばん — an expensive bag",pos:"adjective",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
+  {kr:"やすい",ro:"yasui",meaning:"cheap / inexpensive",example:"やすいです — it's cheap",pos:"adjective",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
+  {kr:"おいしい",ro:"oishii",meaning:"delicious",example:"おいしい！— Delicious!",pos:"adjective",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"かわいい",ro:"kawaii",meaning:"cute / adorable",example:"かわいいねこ — cute cat",pos:"adjective",freq:9,register:"casual",script:"hiragana",sit:["dating","shopping"]},
+  {kr:"かっこいい",ro:"kakkoii",meaning:"cool / stylish",example:"かっこいい！ — So cool!",pos:"adjective",freq:8,register:"casual",script:"hiragana",sit:["dating"]},
+  {kr:"むずかしい",ro:"muzukashii",meaning:"difficult",example:"にほんごはむずかしい — Japanese is difficult",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"やさしい",ro:"yasashii",meaning:"easy / kind / gentle",example:"やさしいひと — a kind person",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"たのしい",ro:"tanoshii",meaning:"fun / enjoyable",example:"たのしい！— Fun!",pos:"adjective",freq:9,register:"casual",script:"hiragana"},
+  {kr:"すごい",ro:"sugoi",meaning:"amazing / wow / incredible",example:"すごい！— Wow / Amazing!",pos:"adjective",freq:9,register:"casual",script:"hiragana",sit:["dating","meeting"]},
+  {kr:"いい",ro:"ii",meaning:"good / fine / nice",example:"いいですね — That's nice",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"わるい",ro:"warui",meaning:"bad",example:"わるいひと — a bad person",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"あたらしい",ro:"atarashii",meaning:"new",example:"あたらしいほん — a new book",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"ふるい",ro:"furui",meaning:"old (things, not people)",example:"ふるいいえ — an old house",pos:"adjective",freq:7,register:"neutral",script:"hiragana"},
+
+  // ══════════════════════════════════════════════
+  //  VOCABULARY — verbs
+  // ══════════════════════════════════════════════
+  {kr:"います",ro:"imasu",meaning:"to exist / to be (living things)",example:"ねこがいます — There is a cat",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"あります",ro:"arimasu",meaning:"to exist / to be (non-living things)",example:"ほんがあります — There is a book",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"いきます",ro:"ikimasu",meaning:"to go",example:"がっこうにいきます — I go to school",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"きます",ro:"kimasu",meaning:"to come",example:"きてください — Please come",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"たべます",ro:"tabemasu",meaning:"to eat",example:"すしをたべます — I eat sushi",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"のみます",ro:"nomimasu",meaning:"to drink",example:"みずをのみます — I drink water",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"みます",ro:"mimasu",meaning:"to see / watch",example:"えいがをみます — I watch a movie",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"ききます",ro:"kikimasu",meaning:"to listen / hear / ask",example:"おんがくをききます — I listen to music",pos:"verb",freq:9,register:"formal",script:"hiragana"},
+  {kr:"はなします",ro:"hanashimasu",meaning:"to speak / talk",example:"にほんごではなします — I speak Japanese",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"わかります",ro:"wakarimasu",meaning:"to understand",example:"わかります — I understand",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around"]},
+  {kr:"かいます",ro:"kaimasu",meaning:"to buy",example:"これをかいます — I'll buy this",pos:"verb",freq:9,register:"formal",script:"hiragana",sit:["shopping"]},
+  {kr:"かえります",ro:"kaerimasu",meaning:"to return / go home",example:"うちにかえります — I'll go home",pos:"verb",freq:9,register:"formal",script:"hiragana"},
+  {kr:"ねます",ro:"nemasu",meaning:"to sleep",example:"はやくねます — I'll sleep early",pos:"verb",freq:9,register:"formal",script:"hiragana"},
+  {kr:"おきます",ro:"okimasu",meaning:"to wake up / get up",example:"はやくおきます — I wake up early",pos:"verb",freq:8,register:"formal",script:"hiragana"},
+  {kr:"べんきょうします",ro:"benkyou shimasu",meaning:"to study",example:"にほんごをべんきょうします — I study Japanese",pos:"verb",freq:9,register:"formal",script:"hiragana"},
+  {kr:"すきです",ro:"suki desu",meaning:"to like / to love",example:"にほんごがすきです — I like Japanese",pos:"verb",freq:10,register:"neutral",script:"hiragana",sit:["dating","meeting"]},
+  {kr:"すみません",ro:"sumimasen",meaning:"excuse me / sorry (also a verb use)",example:"すみません！— Excuse me!",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["airport","getting_around","shopping","restaurant"]},
+
+  // ══════════════════════════════════════════════
+  //  VOCABULARY — adverbs & useful words
+  // ══════════════════════════════════════════════
+  {kr:"とても",ro:"totemo",meaning:"very / extremely",example:"とてもおいしい — very delicious",pos:"adverb",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"すごく",ro:"sugoku",meaning:"very / really (casual)",example:"すごくかわいい — really cute",pos:"adverb",freq:9,register:"casual",script:"hiragana"},
+  {kr:"ちょっと",ro:"chotto",meaning:"a little / just a moment",example:"ちょっとまって — wait a moment",pos:"adverb",freq:10,register:"casual",script:"hiragana",sit:["meeting","getting_around"]},
+  {kr:"もう",ro:"mou",meaning:"already / anymore",example:"もうたべました — I already ate",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"まだ",ro:"mada",meaning:"still / not yet",example:"まだです — not yet",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"いつも",ro:"itsumo",meaning:"always",example:"いつもありがとう — thank you as always",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"たぶん",ro:"tabun",meaning:"probably / maybe",example:"たぶんいきます — I'll probably go",pos:"adverb",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"どこ",ro:"doko",meaning:"where",example:"どこですか？— Where is it?",pos:"adverb",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"なに/なん",ro:"nani/nan",meaning:"what",example:"なんですか？— What is it?",pos:"adverb",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"いつ",ro:"itsu",meaning:"when",example:"いつきますか？— When are you coming?",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"なぜ/どうして",ro:"naze/doushite",meaning:"why",example:"どうしてですか？— Why?",pos:"adverb",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"どうぞ",ro:"douzo",meaning:"please / go ahead / here you go",example:"どうぞ — Please / Go ahead",pos:"adverb",freq:9,register:"formal",script:"hiragana",sit:["meeting","food","shopping"]},
+  {kr:"いくら",ro:"ikura",meaning:"how much",example:"いくらですか？— How much is it?",pos:"adverb",freq:9,register:"neutral",script:"hiragana",sit:["shopping","food","restaurant"]},
+
+  // ══════════════════════════════════════════════
+  //  KANJI — essential characters
+  // ══════════════════════════════════════════════
+  {kr:"日",ro:"nichi/hi",meaning:"sun / day / Japan",example:"日本 (nihon) — Japan",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"本",ro:"hon/moto",meaning:"book / origin / Japan",example:"本を読む — read a book",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"人",ro:"jin/hito",meaning:"person / people",example:"日本人 (nihonjin) — Japanese person",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"大",ro:"dai/oo",meaning:"big / large / great",example:"大学 (daigaku) — university",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"小",ro:"shou/chii",meaning:"small / little",example:"小学校 (shougakkou) — elementary school",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"山",ro:"san/yama",meaning:"mountain",example:"富士山 (fujisan) — Mt. Fuji",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"川",ro:"kawa/gawa",meaning:"river",example:"川のそば — by the river",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
+  {kr:"水",ro:"sui/mizu",meaning:"water",example:"水をください — water please",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["food","restaurant"]},
+  {kr:"火",ro:"ka/hi",meaning:"fire",example:"火曜日 (kayoubi) — Tuesday",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"木",ro:"moku/ki",meaning:"tree / wood",example:"木曜日 (mokuyoubi) — Thursday",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"金",ro:"kin/kana",meaning:"gold / money / Friday",example:"お金 (okane) — money",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["shopping"]},
+  {kr:"土",ro:"do/tsuchi",meaning:"earth / soil / Saturday",example:"土曜日 (doyoubi) — Saturday",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
+  {kr:"月",ro:"getsu/tsuki",meaning:"moon / month / Monday",example:"月曜日 (getsuyoubi) — Monday",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"年",ro:"nen/toshi",meaning:"year",example:"今年 (kotoshi) — this year",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"上",ro:"jou/ue",meaning:"up / above / on top",example:"上に — on top",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"下",ro:"ka/shita",meaning:"down / below / under",example:"下に — below",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"中",ro:"chuu/naka",meaning:"middle / inside / China",example:"中に入る — enter inside",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"食",ro:"shoku/ta",meaning:"eat / food",example:"食べる (taberu) — to eat",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["food","restaurant"]},
+  {kr:"飲",ro:"in/no",meaning:"drink",example:"飲む (nomu) — to drink",pos:"kanji",freq:9,register:"neutral",script:"kanji",sit:["food","restaurant"]},
+  {kr:"見",ro:"ken/mi",meaning:"see / look / watch",example:"見る (miru) — to see",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"言",ro:"gen/i",meaning:"say / word / language",example:"言う (iu) — to say",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"行",ro:"kou/i",meaning:"go",example:"行く (iku) — to go",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["airport","getting_around"]},
+  {kr:"来",ro:"rai/ku",meaning:"come",example:"来る (kuru) — to come",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"好",ro:"kou/su",meaning:"like / fond of",example:"好き (suki) — to like",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["dating"]},
+  {kr:"友",ro:"yuu/tomo",meaning:"friend",example:"友達 (tomodachi) — friend",pos:"kanji",freq:9,register:"neutral",script:"kanji",sit:["meeting","dating"]},
+  {kr:"学",ro:"gaku/mana",meaning:"study / learn",example:"学校 (gakkou) — school",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"語",ro:"go/kata",meaning:"language / word",example:"日本語 (nihongo) — Japanese",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"何",ro:"nani/nan",meaning:"what",example:"何ですか？ — What is it?",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"今",ro:"kon/ima",meaning:"now / present",example:"今日 (kyou) — today",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"私",ro:"watashi",meaning:"I / me",example:"私は学生です — I am a student",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+];
+
 const LANGS = {
   korean: {
     label:'Korean', script:'한국어', flag:'🇰🇷',
@@ -1308,6 +1574,13 @@ const LANGS = {
     words: ITALIAN_WORDS,
     sentences: ITALIAN_SENTENCES,
     grammar: GRAMMAR.italian,
+  },
+  japanese: {
+    label:'Japanese', script:'日本語', flag:'🇯🇵',
+    placeholder:'search hiragana, romaji, or meaning…',
+    words: JAPANESE_WORDS,
+    sentences: [],
+    grammar: [],
   }
 };
 
@@ -1348,6 +1621,9 @@ function switchLang(lang) {
   document.getElementById('langMenu').classList.remove('open');
   openSecs = {};
   activeSituation = null;
+  // default to script grouping for Japanese
+  if (lang === 'japanese' && curGrouping === 'pos') { curGrouping = 'script'; save('lf-grouping','script'); }
+  if (lang !== 'japanese' && curGrouping === 'script') { curGrouping = 'pos'; save('lf-grouping','pos'); }
   renderTab(curTab);
 }
 
@@ -1393,7 +1669,7 @@ function speak(text, lang) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang === 'korean' ? 'ko-KR' : 'it-IT';
+  u.lang = lang === 'korean' ? 'ko-KR' : lang === 'japanese' ? 'ja-JP' : 'it-IT';
   u.rate = 0.85;
   window.speechSynthesis.speak(u);
 }
@@ -1420,15 +1696,21 @@ let activeDeckIdx = -1;
 
 let openSecs = {};
 
-const POS_ORDER = ['expression','verb','adjective','noun','adverb','pronoun','particle'];
+const POS_ORDER = ['expression','verb','adjective','noun','adverb','pronoun','particle','hiragana','katakana','kanji'];
 const PALETTE   = ['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#7ac8c8','#c8c87a','#c87a7a','#a87ac8'];
 
 const GROUPINGS = {
+  script: {
+    label:'by script',
+    key: w => w.script || w.pos,
+    order: () => ['hiragana','katakana','kanji','expression','verb','adjective','noun','adverb','pronoun','particle'],
+    color: k => ({hiragana:'#7ac8a0',katakana:'#7a8cc8',kanji:'#c87aa8',verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
+  },
   pos: {
     label:'part of speech',
     key: w => w.pos,
     order: () => POS_ORDER,
-    color: k => ({verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
+    color: k => ({verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a',hiragana:'#7ac8a0',katakana:'#7a8cc8',kanji:'#c87aa8'}[k]||'#888')
   },
   register: {
     label:'formality',
