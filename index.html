@@ -121,11 +121,13 @@ input[type="text"]::placeholder{color:var(--su)}
 .dchip-x:hover{color:#c87a7a}
 .empty-deck{font-size:.7rem;color:var(--su)}
 .tab-body{padding:1.5rem 2rem;width:100%}
-.sit-row{display:flex;flex-wrap:wrap;gap:7px;padding:.85rem 1rem .6rem;border-bottom:1px solid var(--bd);width:100%;box-sizing:border-box}
+.sit-row{display:flex;flex-wrap:wrap;gap:7px;padding:.85rem 1rem .6rem;border-bottom:1px solid var(--bd);width:100%;box-sizing:border-box;align-items:center}
 .sit-pill{font-family:"DM Mono",monospace;font-size:.72rem;padding:6px 14px;border-radius:99px;border:1px solid rgba(128,128,128,.2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;letter-spacing:.02em;white-space:nowrap}
 .sit-pill:hover{border-color:var(--sc);color:var(--sc)}
 .sit-pill.sit-active{background:var(--sc);border-color:var(--sc);color:#fff;font-weight:500}
 .filters-toggle{white-space:nowrap}
+.sit-add-all{margin-left:auto;font-family:'DM Mono',monospace;font-size:.7rem;padding:6px 14px;border-radius:99px;border:1px solid var(--acc);background:none;color:var(--acc);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.sit-add-all:hover{background:var(--acc);color:var(--bg)}
 #bottomSheet{background:var(--sf)}
 .bs-deck-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:background .12s;border:none;width:100%;text-align:left;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--tx);background:none}
 .bs-deck-row:hover,.bs-deck-row:active{background:var(--sf2)}
@@ -1534,6 +1536,20 @@ function buildSitPills() {
   const row = document.getElementById('sitRow');
   if (!row) return;
   row.innerHTML = '';
+
+  // "all situations" pill
+  const allBtn = document.createElement('button');
+  allBtn.className = 'sit-pill' + (activeSituation === 'all' ? ' sit-active' : '');
+  allBtn.textContent = 'all situations';
+  allBtn.style.setProperty('--sc', '#c8a87a');
+  allBtn.onclick = () => {
+    activeSituation = activeSituation === 'all' ? null : 'all';
+    openSecs = {};
+    buildSitPills();
+    renderWordGrid();
+  };
+  row.appendChild(allBtn);
+
   SITUATIONS.forEach(s => {
     const btn = document.createElement('button');
     btn.className = 'sit-pill' + (activeSituation === s.key ? ' sit-active' : '');
@@ -1547,6 +1563,33 @@ function buildSitPills() {
     };
     row.appendChild(btn);
   });
+
+  // "add all to deck" button — only shown when a situation is active
+  if (activeSituation) {
+    const words = LANGS[curLang].words;
+    const sitWords = activeSituation === 'all'
+      ? words.filter(w => w.sit && w.sit.length > 0)
+      : words.filter(w => w.sit && w.sit.includes(activeSituation));
+
+    const addAll = document.createElement('button');
+    addAll.className = 'sit-add-all';
+    addAll.textContent = 'add all to deck →';
+    addAll.onclick = () => {
+      if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
+        // no deck selected — open bottom sheet to create one, then add all
+        const name = prompt('Name your new deck (all ' + sitWords.length + ' words will be added):','');
+        if (!name || !name.trim()) return;
+        addDeck(name.trim());
+        sitWords.forEach(w => decks[decks.length-1].words[w.kr] = true);
+        saveDeckState(); buildSitPills(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
+        return;
+      }
+      const deck = decks[activeDeckIdx];
+      sitWords.forEach(w => deck.words[w.kr] = true);
+      saveDeckState(); buildSitPills(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
+    };
+    row.appendChild(addAll);
+  }
 }
 
 function toggleFilters() {
@@ -1580,7 +1623,8 @@ function renderWordGrid() {
   const words = LANGS[curLang].words;
 
   let filtered = words.filter(w => {
-    if (activeSituation && !(w.sit && w.sit.includes(activeSituation))) return false;
+    if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
+    if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
     if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
     return true;
   });
