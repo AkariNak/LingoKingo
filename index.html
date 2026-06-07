@@ -1683,25 +1683,36 @@ function renderWordGrid() {
 
     wds.forEach((w, i) => {
       const chip = document.createElement('div');
-      const chipColor = deckColorFor(w.kr);
-      chip.className = 'chip' + (chipColor ? ' on' : '');
-      if (chipColor) chip.style.borderColor = chipColor;
+      chip.className = 'chip' + (deckColorsFor(w.kr).length > 0 ? ' on' : '');
+      const chipColors = deckColorsFor(w.kr);
+      const chipColor  = chipColors[0] || null;
       chip.style.animationDelay = Math.min(i * 0.008, 0.2) + 's';
-      chip.title = `${w.meaning} — ${w.example}`;
+      chip.title = w.meaning + ' — ' + w.example;
 
-      // register badge
+      if (chipColors.length > 1) {
+        chip.style.border = '2px solid transparent';
+        chip.style.backgroundImage = 'linear-gradient(' + chip.style.background + ',var(--sf)),linear-gradient(135deg,' + chipColors.join(',') + ')';
+        chip.style.backgroundOrigin = 'border-box';
+        chip.style.backgroundClip = 'padding-box,border-box';
+      } else if (chipColor) {
+        chip.style.borderColor = chipColor;
+      }
+
       const regColor = {formal:'#7a8cc8',casual:'#c8a87a',neutral:'transparent'}[w.register||'neutral'];
+      const dotsHtml = chipColors.map(c =>
+        '<span style="width:6px;height:6px;border-radius:50%;background:' + c + ';flex-shrink:0;display:inline-block"></span>'
+      ).join('');
 
-      chip.innerHTML = `
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">
-          <span class="chip-kr" style="${chipColor?'color:'+chipColor:''}">${w.kr}</span>
-          ${w.register && w.register !== 'neutral' ? `<span class="reg-badge" style="background:${regColor}20;color:${regColor};border-color:${regColor}40">${w.register}</span>` : ''}
-        </div>
-        <span class="chip-ro">${w.ro}</span>
-      `;
-
-      // left click = add to active deck
-      chip.onclick = () => openBs(w);
+      chip.innerHTML =
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">' +
+          '<span class="chip-kr"' + (chipColor ? ' style="color:' + chipColor + '"' : '') + '>' + w.kr + '</span>' +
+          '<div style="display:flex;align-items:center;gap:3px">' +
+            (chipColors.length > 1 ? dotsHtml : '') +
+            (w.register && w.register !== 'neutral' ? '<span class="reg-badge" style="background:' + regColor + '20;color:' + regColor + ';border-color:' + regColor + '40">' + w.register + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<span class="chip-ro">' + w.ro + '</span>';
+            chip.onclick = () => openBs(w);
       chip.oncontextmenu = e => { e.preventDefault(); openBs(w); };
 
       body.appendChild(chip);
