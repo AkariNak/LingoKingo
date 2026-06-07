@@ -48,9 +48,9 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 #themeBtn:hover{border-color:var(--acc);color:var(--acc)}
 
 /* Deck badge */
-.deck-lbl{font-size:.7rem;color:var(--mu)}
-#deckBadge{background:var(--acc);color:var(--bg);font-weight:500;padding:2px 9px;border-radius:99px;font-size:.7rem;min-width:24px;text-align:center;display:inline-block;transition:transform .15s}
-#deckBadge.pop{transform:scale(1.35)}
+
+
+
 
 /* ── TABS ── */
 #tabBar{display:flex;gap:0;border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:85px;z-index:90;padding:0 2rem;transition:background .2s;width:100%;box-sizing:border-box}
@@ -126,6 +126,11 @@ input[type="text"]::placeholder{color:var(--su)}
 .sit-pill:hover{border-color:var(--sc);color:var(--sc)}
 .sit-pill.sit-active{background:var(--sc);border-color:var(--sc);color:#fff;font-weight:500}
 .filters-toggle{white-space:nowrap}
+#bottomSheet{background:var(--sf)}
+.bs-deck-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:background .12s;border:none;width:100%;text-align:left;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--tx);background:none}
+.bs-deck-row:hover,.bs-deck-row:active{background:var(--sf2)}
+.bs-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.bs-check{margin-left:auto;color:var(--acc);font-size:1rem}
 .filters-row{flex-wrap:wrap;gap:7px;padding-top:6px}
 .exercise-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem;margin-bottom:1rem}
 .empty-msg{padding:2.5rem 0;text-align:center;font-size:.78rem;color:var(--su)}
@@ -243,10 +248,7 @@ input[type="text"]::placeholder{color:var(--su)}
 
     </div>
     <button id="themeBtn" onclick="toggleTheme()">light mode</button>
-    <div style="display:flex;align-items:center;gap:7px">
-      <span class="deck-lbl">deck</span>
-      <span id="deckBadge">0</span>
-    </div>
+
   </div>
 </div>
 
@@ -265,7 +267,7 @@ input[type="text"]::placeholder{color:var(--su)}
       <span class="m-meta" id="mMeta"></span>
       <button class="m-close" onclick="closeStudy()">✕</button>
     </div>
-    <div class="card-hint">tap to flip · space to flip · → for next</div>
+    <div class="card-hint">tap card to flip · swipe or tap next →</div>
     <div class="card-scene" onclick="flipCard()">
       <div class="fcard" id="fcard">
         <div class="face front" id="cFront"></div>
@@ -278,6 +280,18 @@ input[type="text"]::placeholder{color:var(--su)}
     <div class="m-reshuffle">
       <button class="abtn" onclick="reshuffleStudy()">↺ reshuffle</button>
     </div>
+  </div>
+</div>
+
+<div id="bsOverlay" onclick="closeBs()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500"></div>
+<div id="bottomSheet" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:501;border-radius:18px 18px 0 0;padding:0 0 env(safe-area-inset-bottom,0);max-height:75vh;overflow-y:auto;transition:transform .25s cubic-bezier(.4,0,.2,1)">
+  <div style="width:36px;height:4px;border-radius:99px;margin:10px auto 0;background:var(--bd2)"></div>
+  <div id="bsWord" style="padding:14px 20px 4px;font-family:'Noto Sans KR',sans-serif;font-size:1.1rem;font-weight:500;color:var(--tx)"></div>
+  <div id="bsMeaning" style="padding:0 20px 10px;font-size:.75rem;color:var(--mu)"></div>
+  <div style="padding:0 12px 4px;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)">add to deck</div>
+  <div id="bsDecks" style="padding:0 12px 8px;display:flex;flex-direction:column;gap:4px"></div>
+  <div style="padding:4px 12px 16px;border-top:1px solid var(--bd);margin-top:4px">
+    <button onclick="bsNewDeck()" style="width:100%;padding:12px;border-radius:10px;border:1px dashed var(--bd2);background:none;color:var(--acc);font-family:'DM Mono',monospace;font-size:.8rem;cursor:pointer;text-align:left">+ create new deck</button>
   </div>
 </div>
 
@@ -1620,11 +1634,8 @@ function renderWordGrid() {
       `;
 
       // left click = add to active deck
-      chip.onclick = () => toggleWordInDeck(w);
-      // right click = deck context menu
-      chip.oncontextmenu = e => showWordCtxMenu(e, w);
-      // middle click or speak button = listen
-      chip.ondblclick = () => speak(w.kr, curLang);
+      chip.onclick = () => openBs(w);
+      chip.oncontextmenu = e => { e.preventDefault(); openBs(w); };
 
       body.appendChild(chip);
     });
@@ -1661,17 +1672,11 @@ function toggleWordInDeck(w) {
   const d = decks[activeDeckIdx].words;
   if (d[w.kr]) delete d[w.kr]; else d[w.kr] = true;
   saveDeckState();
-  animateBadge();
   renderDeckChips();
   renderWordGrid();
 }
 
-function animateBadge() {
-  const b = document.getElementById('deckBadge');
-  if (!b) return;
-  b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
-  setTimeout(() => b.classList.remove('pop'), 200);
-}
+
 
 function renderDeckSwitcher() {
   const sw = document.getElementById('deckSwitcher');
@@ -1717,13 +1722,13 @@ function renderDeckChips() {
   const badge = document.getElementById('deckBadge');
 
   if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
-    if (badge) badge.textContent = '0';
+  
     c.innerHTML = '<span class="empty-deck">select or create a deck, then click words to add them</span>';
     return;
   }
   const deck = decks[activeDeckIdx];
   const keys = Object.keys(deck.words);
-  if (badge) badge.textContent = keys.length;
+
 
   if (keys.length === 0) {
     c.innerHTML = `<span class="empty-deck">left-click words to add to <strong style="color:${deck.color}">${deck.name}</strong></span>`;
@@ -2118,7 +2123,7 @@ function renderBuildExercise(ex) {
   prompt.innerHTML = '<span style="opacity:.5;font-size:.75rem">arrange the blocks in the correct order:</span>';
 
   const ansArea = document.getElementById('ansArea');
-  ansArea.innerHTML = '<div class="build-slots" id="buildSlots"><span class="slot-hint">tap blocks below to place them here</span></div>';
+  ansArea.innerHTML = '<div class="build-slots" id="buildSlots"><span class="slot-hint">tap blocks below to build the sentence</span></div>';
 
   const choices = document.getElementById('choicesDiv');
   choices.innerHTML = '';
@@ -2159,7 +2164,7 @@ function selectBlock(btn, block, ex) {
       chip.remove();
       btn.disabled = false;
       btn.style.opacity = '1';
-      if (slots.children.length === 0) slots.innerHTML = '<span class="slot-hint">tap blocks below to place them here</span>';
+      if (slots.children.length === 0) slots.innerHTML = '<span class="slot-hint">tap blocks below to build the sentence</span>';
     }
   };
   slots.appendChild(chip);
@@ -2315,6 +2320,82 @@ function renderGrammar(container) {
 // ═══════════════════════════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════════════════════════
+// ── BOTTOM SHEET ──────────────────────────────────────────────
+let bsWord = null;
+
+function openBs(w) {
+  bsWord = w;
+  const sheet = document.getElementById('bottomSheet');
+  const overlay = document.getElementById('bsOverlay');
+  document.getElementById('bsWord').textContent = w.kr + '  ' + w.ro;
+  document.getElementById('bsMeaning').textContent = w.meaning;
+  renderBsDecks();
+  overlay.style.display = 'block';
+  sheet.style.display = 'block';
+  requestAnimationFrame(() => {
+    sheet.style.transform = 'translateY(0)';
+  });
+}
+
+function closeBs() {
+  document.getElementById('bottomSheet').style.display = 'none';
+  document.getElementById('bsOverlay').style.display = 'none';
+  bsWord = null;
+}
+
+function renderBsDecks() {
+  const container = document.getElementById('bsDecks');
+  container.innerHTML = '';
+
+  if (decks.length === 0) {
+    container.innerHTML = '<div style="padding:8px 14px;font-size:.78rem;color:var(--su)">no decks yet — create one below</div>';
+    return;
+  }
+
+  decks.forEach((deck, i) => {
+    const inDeck = bsWord && !!deck.words[bsWord.kr];
+    const btn = document.createElement('button');
+    btn.className = 'bs-deck-row';
+    btn.innerHTML = `
+      <span class="bs-dot" style="background:${deck.color};border:2px solid ${deck.color}"></span>
+      <span style="flex:1">${deck.name}</span>
+      <span style="font-size:.7rem;color:var(--mu)">${Object.keys(deck.words).length} words</span>
+      ${inDeck ? '<span class="bs-check">✓</span>' : ''}
+    `;
+    btn.onclick = () => {
+      if (!bsWord) return;
+      // remove from all decks first
+      decks.forEach(d => delete d.words[bsWord.kr]);
+      // toggle — if wasn't in this deck, add it
+      if (!inDeck) deck.words[bsWord.kr] = true;
+      saveDeckState();
+      renderBsDecks();
+      renderDeckChips();
+      renderDeckSwitcher();
+      renderWordGrid();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function bsNewDeck() {
+  const name = prompt('Name your new deck:', '');
+  if (!name || !name.trim()) return;
+  addDeck(name.trim());
+  if (bsWord) {
+    decks[decks.length - 1].words[bsWord.kr] = true;
+    saveDeckState();
+  }
+  renderBsDecks();
+  renderDeckChips();
+  renderDeckSwitcher();
+  renderWordGrid();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeBs();
+});
+
 (function boot() {
   // init deck state
   decks         = load('lf-decks', []);
