@@ -223,6 +223,16 @@ input[type="text"]::placeholder{color:var(--su)}
 .ex-pre{font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;white-space:pre-wrap;color:var(--tx)}
 
 /* ── RESPONSIVE ── */
+.onboard-banner{background:linear-gradient(135deg,var(--sf2),var(--sf));border-bottom:1px solid var(--bd);padding:1.25rem 2rem}
+.onboard-inner{max-width:680px}
+.onboard-tag{display:inline-block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-family:'DM Mono',monospace;margin-bottom:.4rem}
+.onboard-title{display:block;font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--tx);margin-bottom:.4rem}
+.onboard-desc{display:block;font-size:.78rem;color:var(--mu);line-height:1.65;margin-bottom:.85rem;max-width:560px}
+.onboard-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.obtn{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:var(--acc);border:none;color:var(--bg);cursor:pointer;font-weight:500}
+.obtn:hover{opacity:.85}
+.obtn-ghost{font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 14px;border-radius:6px;background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer}
+.obtn-ghost:hover{color:var(--tx);border-color:var(--tx)}
 @media(max-width:600px){
   #hdr{padding:.85rem .85rem .75rem}
   #tabBar,.ctrl,.deck-panel{padding-left:.75rem;padding-right:.75rem}
@@ -1808,8 +1818,10 @@ function saveDeckState() {
 function renderVocab(container) {
   const words = LANGS[curLang].words;
 
-  container.innerHTML = `
-    <div class="ctrl">
+  // Show onboarding banner if first visit for this language
+  const seenKey = 'lf-seen-' + curLang;
+  const isFirstVisit = !localStorage.getItem(seenKey);
+  container.innerHTML = `<div class="ctrl">
       <div class="sit-row" id="sitRow"></div>
       <div class="ctrl-row filters-row" id="filtersRow" style="display:none">
         <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
@@ -1837,6 +1849,10 @@ function renderVocab(container) {
   `;
 
   document.getElementById('searchInput2').oninput = renderWordGrid;
+  if (isFirstVisit) {
+    const banner = buildOnboardBanner();
+    container.insertBefore(banner, container.firstChild);
+  }
   buildSitPills();
   buildGroupBtns();
   renderWordGrid();
@@ -1962,6 +1978,10 @@ function renderWordGrid() {
     allKeys = Object.keys(groups);
     ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
     if (search) ordered.forEach(k => openSecs[k] = true);
+  // auto-open first section if nothing is open (first load feel)
+  if (Object.keys(openSecs).length === 0 && ordered.length > 0) {
+    openSecs[ordered[0]] = true;
+  }
   }
 
   container.innerHTML = '';
@@ -2349,7 +2369,12 @@ let selectedBlocks = [];
 let answered       = false;
 
 function renderPractice(container) {
+  // Show onboarding banner if first visit for this language
+  const seenKey = 'lf-seen-' + curLang;
+  const isFirstVisit = !localStorage.getItem(seenKey);
+
   container.innerHTML = `
+    
     <div class="ctrl">
       <div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
         <span class="ctrl-label">exercise type:</span>
@@ -2838,6 +2863,64 @@ function applyFontSize(size) {
 function cycleFontSize() {
   const idx = FONT_SIZES.indexOf(fontSize);
   applyFontSize(FONT_SIZES[(idx + 1) % FONT_SIZES.length]);
+}
+
+// ── ONBOARDING ──────────────────────────────────────────────
+function buildOnboardBanner() {
+  const msgs = {
+    korean: {title:'New to Korean?', desc:'Start with essential words — greetings, pronouns, and core verbs. The most common filter shows the most important words first.', btn:'show essentials first', fn:'startHereKorean'},
+    italian: {title:'New to Italian?', desc:'Begin with greetings and the 8 key irregular verbs — essere, avere, fare, andare, venire, volere, potere, dovere. Everything builds on them.', btn:'show essentials first', fn:'startHereItalian'},
+    japanese: {title:'New to Japanese?', desc:'Learn hiragana first (46 sounds, ~2 weeks). Then katakana. Vocabulary and kanji come after you can read both. Use the script filter buttons above.', btn:'start with hiragana', fn:'startHereJapanese'},
+  };
+  const m = msgs[curLang] || msgs.korean;
+  const div = document.createElement('div');
+  div.className = 'onboard-banner';
+  div.id = 'onboardBanner';
+  div.innerHTML =
+    '<span class="onboard-tag">start here</span>' +
+    '<span class="onboard-title">' + m.title + '</span>' +
+    '<span class="onboard-desc">' + m.desc + '</span>' +
+    '<div class="onboard-actions">' +
+      '<button class="obtn" onclick="window[' + "'"+m.fn+"'" + ']()">' + m.btn + ' →</button>' +
+      '<button class="obtn-ghost" onclick="dismissOnboard()">I already know this</button>' +
+    '</div>';
+  return div;
+}
+
+function dismissOnboard() {
+  localStorage.setItem('lf-seen-' + curLang, '1');
+  const b = document.getElementById('onboardBanner');
+  if (b) b.style.display = 'none';
+}
+
+function startHereKorean() {
+  dismissOnboard();
+  // set to most common filter, open essential section
+  curGrouping = 'most_common';
+  save('lf-grouping', 'most_common');
+  openSecs = {'essential':true};
+  buildGroupBtns();
+  renderWordGrid();
+}
+
+function startHereItalian() {
+  dismissOnboard();
+  curGrouping = 'most_common';
+  save('lf-grouping', 'most_common');
+  openSecs = {'essential':true};
+  buildGroupBtns();
+  renderWordGrid();
+}
+
+function startHereJapanese() {
+  dismissOnboard();
+  curGrouping = 'script';
+  save('lf-grouping', 'script');
+  activeScripts = new Set(['hiragana']);
+  updateScriptBtns();
+  openSecs = {'hiragana':true};
+  buildGroupBtns();
+  renderWordGrid();
 }
 
 (function boot() {
