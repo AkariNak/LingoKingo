@@ -1585,11 +1585,27 @@ function renderWordGrid() {
     return true;
   });
 
-  const groups = {};
-  filtered.forEach(w => { const k = cfg.key(w); if (!groups[k]) groups[k]=[]; groups[k].push(w); });
-  const allKeys = Object.keys(groups);
-  const ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
-  if (search) ordered.forEach(k => openSecs[k] = true);
+  let groups = {}, allKeys, ordered;
+
+  if (activeSituation) {
+    // When a situation is active, group by priority tier and auto-open all
+    const tierKey = w => w.freq >= 9 ? 'say this first' : w.freq >= 7 ? 'essential' : 'good to know';
+    const tierOrder = ['say this first', 'essential', 'good to know'];
+    const tierColors = {'say this first':'#7ac8a0','essential':'#c8a87a','good to know':'#888894'};
+    filtered.sort((a,b) => b.freq - a.freq);
+    filtered.forEach(w => { const k = tierKey(w); if (!groups[k]) groups[k]=[]; groups[k].push(w); });
+    allKeys = tierOrder;
+    ordered = tierOrder.filter(k => groups[k]?.length > 0);
+    ordered.forEach(k => openSecs[k] = true);
+    // override color for section rendering
+    window._sitTierColors = tierColors;
+  } else {
+    window._sitTierColors = null;
+    filtered.forEach(w => { const k = cfg.key(w); if (!groups[k]) groups[k]=[]; groups[k].push(w); });
+    allKeys = Object.keys(groups);
+    ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
+    if (search) ordered.forEach(k => openSecs[k] = true);
+  }
 
   container.innerHTML = '';
   if (ordered.length === 0) { container.innerHTML = '<div class="empty-msg">no words match</div>'; return; }
@@ -1597,7 +1613,7 @@ function renderWordGrid() {
   ordered.forEach(key => {
     const wds = groups[key];
     const isOpen = !!openSecs[key];
-    const color = cfg.color(key);
+    const color = (window._sitTierColors && window._sitTierColors[key]) ? window._sitTierColors[key] : cfg.color(key);
     const selCount = wds.filter(w => deckColorFor(w.kr)).length;
 
     const sec = document.createElement('div'); sec.className = 'sec';
