@@ -1324,6 +1324,7 @@ function toggleTheme() {
   theme = theme === 'dark' ? 'light' : 'dark';
   localStorage.setItem('lf-theme', theme);
   document.body.className = theme;
+  applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
 }
 
@@ -1365,7 +1366,10 @@ document.addEventListener('click', e => {
 function switchTab(tab) {
   curTab = tab;
   localStorage.setItem('lf-tab', tab);
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+    b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false');
+  });
   renderTab(tab);
 }
 
@@ -1688,6 +1692,10 @@ function renderWordGrid() {
       const chipColor  = chipColors[0] || null;
       chip.style.animationDelay = Math.min(i * 0.008, 0.2) + 's';
       chip.title = w.meaning + ' — ' + w.example;
+      chip.setAttribute('role', 'button');
+      chip.setAttribute('tabindex', '0');
+      chip.setAttribute('aria-label', w.kr + ', ' + w.ro + ', ' + w.meaning);
+      chip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBs(w); } });
 
       if (chipColors.length > 1) {
         chip.style.border = '2px solid transparent';
@@ -2489,6 +2497,24 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeBs();
 });
 
+// ── FONT SIZE ─────────────────────────────────────────────────
+const FONT_SIZES = ['sm','md','lg','xl'];
+const FONT_LABELS = {'sm':'small','md':'medium','lg':'large','xl':'x-large'};
+let fontSize = localStorage.getItem('lf-fontsize') || 'lg';
+
+function applyFontSize(size) {
+  fontSize = size;
+  document.documentElement.setAttribute('data-size', size);
+  localStorage.setItem('lf-fontsize', size);
+  const btn = document.getElementById('fontBtn');
+  if (btn) btn.textContent = 'text: ' + FONT_LABELS[size];
+}
+
+function cycleFontSize() {
+  const idx = FONT_SIZES.indexOf(fontSize);
+  applyFontSize(FONT_SIZES[(idx + 1) % FONT_SIZES.length]);
+}
+
 (function boot() {
   // init deck state
   decks         = load('lf-decks', []);
@@ -2498,6 +2524,7 @@ document.addEventListener('keydown', e => {
 
   // theme
   document.body.className = theme;
+  applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
 
   // language
