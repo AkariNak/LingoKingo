@@ -14,15 +14,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root[data-x]{--r:0}
+/* ── THEMES ── */
 html{overflow-x:hidden;width:100%;font-size:16px}
 html[data-size="sm"]{font-size:14px}
 html[data-size="md"]{font-size:16px}
 html[data-size="lg"]{font-size:19px}
 html[data-size="xl"]{font-size:23px}
-body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s;overflow-x:hidden;width:100%;position:relative}
+body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s}
 body.dark {--bg:#0e0e12;--sf:#16161c;--sf2:#1e1e28;--sf3:#26263a;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.15);--tx:#f0eee8;--mu:#888894;--su:#55555f;--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28);background:var(--bg);color:var(--tx)}
 body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);--tx:#1c1a16;--mu:#6a6760;--su:#a09d96;--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28);background:var(--bg);color:var(--tx)}
 .surface{background:var(--sf)}
@@ -212,7 +212,6 @@ input[type="text"]::placeholder{color:var(--su)}
   input[type="text"]{width:100%}
   #tabBar{top:76px}
 }
-
 </style>
 </head>
 <body class="dark">
