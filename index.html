@@ -109,8 +109,8 @@ input[type="text"]::placeholder{color:var(--su)}
 .chip{display:flex;flex-direction:column;gap:2px;background:var(--sf);border:1px solid var(--bd);border-radius:6px;padding:7px 11px 8px;cursor:pointer;user-select:none;transition:background .12s,border-color .12s;animation:cin .14s ease both;position:relative}
 .chip:hover{background:var(--sf2);border-color:var(--bd2)}
 .chip.on{background:var(--acc-bg);border-width:1.5px}
-.chip-kr{font-family:'Noto Sans KR',sans-serif;font-size:.98rem;font-weight:500;line-height:1.2}
-.chip-ro{font-size:.58rem;color:var(--mu)}
+.chip-kr{font-family:'Noto Sans KR',sans-serif;font-size:.98rem;font-weight:500;line-height:1.2;color:var(--tx)}
+.chip-ro{font-size:.58rem;color:var(--su)}
 .reg-badge{font-size:.55rem;padding:1px 6px;border-radius:99px;border:1px solid;letter-spacing:.05em;white-space:nowrap;align-self:flex-start}
 
 /* ── DECK PANEL ── */
@@ -207,8 +207,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .ex-pre{font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;white-space:pre-wrap;color:var(--tx)}
 
 /* ── RESPONSIVE ── */
-@media(max-width:600px){
-  #hdr,#tabBar,.ctrl,.deck-panel{padding-left:1rem;padding-right:1rem}
+
   #wordSections{padding:1rem 1rem .5rem}
   input[type="text"]{width:100%}
   #tabBar{top:76px}
@@ -255,8 +254,7 @@ input[type="text"]::placeholder{color:var(--su)}
 
 /* ── TAB BODY ── */
 .tab-body{padding:1.5rem 2rem;width:100%}
-@media(max-width:600px){
-  .tab-body{padding:1rem .75rem}
+
   .sit-row{padding:.6rem .75rem .5rem}
 }
 
@@ -271,6 +269,81 @@ input[type="text"]::placeholder{color:var(--su)}
 .cwb-char{font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:5px 8px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .1s;min-width:34px;text-align:center}
 .cwb-char:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}
 .cwb-section-label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);padding:.4rem 0 .2rem;width:100%}
+
+/* ── MOBILE ── */
+@media(max-width:700px){
+  .ctrl{overflow:hidden}
+  #filtersRow{flex-direction:column;align-items:stretch}
+  #filtersRow input{width:100%!important}
+  /* header */
+  #hdr{padding:.85rem 1rem .75rem;gap:.5rem}
+  .logo svg{width:34px;height:34px}
+  .logo-en{font-size:1.3rem}
+  .logo-sub{display:none}
+  .hdr-r{gap:.5rem}
+  #themeBtn{padding:4px 9px;font-size:.65rem}
+  .lang-btn{padding:4px 8px;font-size:.65rem}
+
+  /* tabs */
+  #tabBar{padding:0 .5rem;top:68px;overflow-x:auto;gap:0}
+  .tab-btn{padding:.6rem .75rem;font-size:.7rem;white-space:nowrap}
+  #fontBtn{padding:.6rem .6rem;font-size:.65rem}
+
+  /* script filters */
+  #scriptFilters{padding:5px .75rem;gap:5px;overflow-x:auto;flex-wrap:nowrap}
+  .script-btn{font-size:.65rem;padding:3px 8px;flex-shrink:0}
+
+  /* controls */
+  .ctrl{padding:.6rem .75rem}
+  .sit-row{padding:.6rem .75rem .5rem;gap:5px;overflow-x:auto;flex-wrap:nowrap}
+  .sit-pill{font-size:.65rem;padding:4px 9px;flex-shrink:0}
+  .sit-add-all{font-size:.65rem;padding:4px 9px;flex-shrink:0}
+  .ctrl-row{gap:5px}
+  input[type="text"]{font-size:.75rem;padding:6px 10px;width:100%}
+  .gbtn{font-size:.62rem;padding:4px 9px}
+  .ubtn{font-size:.62rem;padding:4px 8px}
+
+  /* word sections */
+  #wordSections{padding:.75rem .75rem .5rem}
+  .sec-hdr{padding:.65rem .9rem}
+  .sec-body{padding:.65rem .9rem .85rem;gap:5px}
+
+  /* chips — bigger tap targets */
+  .chip{padding:8px 10px 9px;min-width:60px}
+  .chip-kr{font-size:1.05rem}
+  .chip-ro{font-size:.6rem}
+
+  /* deck panel */
+  .deck-panel{padding:.9rem .75rem 1.5rem}
+  .deck-hdr{flex-wrap:wrap;gap:6px}
+  .deck-acts{gap:5px}
+  .abtn{font-size:.68rem;padding:6px 11px}
+
+  /* study modal */
+  #studyModal{padding:1.1rem}
+  .fc-kr{font-size:2.2rem}
+  .fc-meaning{font-size:1.1rem}
+
+  /* practice */
+  .exercise-card{padding:1.1rem}
+  .ex-english{font-size:1rem}
+  .choice-btn,.block-btn{font-size:.72rem;padding:6px 11px}
+
+  /* grammar */
+  .grammar-hdr{padding:.75rem .9rem}
+  .grammar-body{padding:.75rem .9rem 1rem}
+
+  /* custom word builder */
+  #customWordModal{padding:1rem}
+  .cwb-char{font-size:.82rem;padding:4px 6px;min-width:30px}
+}
+
+@media(max-width:400px){
+  .chip{padding:7px 8px}
+  .chip-kr{font-size:.95rem}
+  #tabBar{top:62px}
+  .tab-btn{padding:.55rem .6rem;font-size:.65rem}
+}
 </style>
 </head>
 <body class="dark">
@@ -1321,6 +1394,7 @@ const JAPANESE_WORDS = [
   {kr:"ワ",ro:"wa",meaning:"wa",example:"ワイン — wine",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ヲ",ro:"wo",meaning:"wo (rare)",example:"(rare in katakana)",pos:"katakana",freq:8,register:"neutral",script:"katakana"},
   {kr:"ン",ro:"n",meaning:"n (nasal)",example:"パン — bread",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"チュ",ro:"chu",meaning:"chu (chi + u combination)",example:"チュートリアル — tutorial",pos:"katakana",freq:8,register:"neutral",script:"katakana"},
   // HIRAGANA ACCENTS
   {kr:"が",ro:"ga",meaning:"ga (voiced か)",example:"がっこう — school",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぎ",ro:"gi",meaning:"gi",example:"ぎんこう — bank",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
