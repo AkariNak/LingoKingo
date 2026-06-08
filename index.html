@@ -1984,7 +1984,29 @@ function renderDeckSwitcher() {
       btn.appendChild(dot); btn.appendChild(lbl); btn.appendChild(ct);
       btn.onclick = () => { activeDeckIdx = i === activeDeckIdx ? -1 : i; saveDeckState(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); };
       btn.oncontextmenu = e => showDeckCtxMenu(e, i);
-      sw.appendChild(btn);
+
+      // row with arrows on left
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:4px';
+      const arrowWrap = document.createElement('div');
+      arrowWrap.style.cssText = 'display:flex;flex-direction:column;gap:1px;flex-shrink:0;margin-right:4px';
+      if (i > 0) {
+        const up = document.createElement('button');
+        up.textContent = '↑';
+        up.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:#fff;line-height:1';
+        up.onclick = ev => { ev.stopPropagation(); moveDeck(i, i-1); };
+        arrowWrap.appendChild(up);
+      }
+      if (i < decks.length - 1) {
+        const dn = document.createElement('button');
+        dn.textContent = '↓';
+        dn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:#fff;line-height:1';
+        dn.onclick = ev => { ev.stopPropagation(); moveDeck(i, i+1); };
+        arrowWrap.appendChild(dn);
+      }
+      row.appendChild(arrowWrap);
+      row.appendChild(btn);
+      sw.appendChild(row);
     });
   }
 
@@ -2241,17 +2263,20 @@ let selectedBlocks = [];
 let answered       = false;
 
 function renderPractice(container) {
-  container.innerHTML = `
-    <div class="ctrl">
-      <div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
-        <span class="ctrl-label">exercise type:</span>
-        ${['all','particle','conjugate','build','fill'].map(t =>
-          `<button class="gbtn${practiceFilter===t?' on':''}" onclick="setPracticeFilter('${t}')">${t}</button>`
-        ).join('')}
-      </div>
-    </div>
-    <div id="practiceArea" style="padding:1.5rem 2rem"></div>
-  `;
+  const ctrl = document.createElement('div');
+  ctrl.className = 'ctrl';
+  ctrl.innerHTML = `<div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
+    <span class="ctrl-label">exercise type:</span>
+    ${['all','particle','conjugate','build','fill'].map(t =>
+      `<button class="gbtn${practiceFilter===t?' on':''}" onclick="setPracticeFilter('${t}')">${t}</button>`
+    ).join('')}
+  </div>`;
+  const area = document.createElement('div');
+  area.id = 'practiceArea';
+  area.style.cssText = 'padding:1.5rem 2rem';
+  container.innerHTML = '';
+  container.appendChild(ctrl);
+  container.appendChild(area);
   loadPracticeQueue();
   showNextExercise();
 }
