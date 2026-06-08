@@ -2022,6 +2022,7 @@ function vocabInit() {
   activeDeckIdx = load('lf-activeDeck', -1);
   if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
   curGrouping   = load('lf-grouping', 'pos');
+  if (!GROUPINGS[curGrouping]) curGrouping = 'pos';
 }
 
 let openSecs = {};
@@ -2077,6 +2078,13 @@ const GROUPINGS = {
     key: w => deckColorFor(w.kr) ? 'in a deck' : 'not in deck',
     order: () => ['in a deck','not in deck'],
     color: k => k==='in a deck' ? '#c8a87a' : '#888'
+  },
+  script: {
+    label: 'by script',
+    key: w => w.script || w.pos,
+    order: () => ['hiragana','katakana','kanji','hiragana_d','katakana_d','expression','verb','adjective','noun','adverb','pronoun','particle'],
+    displayName: k => ({'hiragana_d':'hiragana accents','katakana_d':'katakana accents'}[k] || k),
+    color: k => ({'hiragana':'#7ac8a0','katakana':'#7a8cc8','kanji':'#c87aa8','hiragana_d':'#7ac8c8','katakana_d':'#c8c87a',verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
   }
 };
 
@@ -2175,6 +2183,7 @@ function renderWordGrid() {
 
   const rawSearch = document.getElementById('searchInput2') || document.getElementById('searchInput');
   const search = (rawSearch?.value || '').toLowerCase().trim();
+  if (!GROUPINGS[curGrouping]) curGrouping = 'pos';
   const cfg = GROUPINGS[curGrouping];
   const words = LANGS[curLang].words;
 
@@ -2211,7 +2220,7 @@ function renderWordGrid() {
     const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
 
     const left = document.createElement('div'); left.className = 'sec-left';
-    const nm = document.createElement('span'); nm.className = 'sec-name'; nm.style.color = color; nm.textContent = key;
+    const nm = document.createElement('span'); nm.className = 'sec-name'; nm.style.color = color; nm.textContent = (cfg.displayName ? cfg.displayName(key) : key);
     const ct = document.createElement('span'); ct.className = 'sec-count'; ct.textContent = wds.length;
     left.appendChild(nm); left.appendChild(ct);
     if (selCount) { const sl = document.createElement('span'); sl.className = 'sec-sel'; sl.textContent = selCount+' in deck'; left.appendChild(sl); }
@@ -2834,6 +2843,7 @@ function showFeedback(correct, ex) {
   decks         = load('lf-decks', []);
   activeDeckIdx = load('lf-activeDeck', -1);
   curGrouping   = load('lf-grouping', 'pos');
+  if (!GROUPINGS[curGrouping]) curGrouping = 'pos';
   if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
 
   document.body.className = theme;
