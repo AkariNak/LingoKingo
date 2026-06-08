@@ -79,7 +79,8 @@ input[type="text"]:focus{border-color:var(--acc)}
 input[type="text"]::placeholder{color:var(--su)}
 
 /* ── BUTTONS ── */
-.gbtn,.ubtn,.abtn{font-family:'DM Mono',monospace;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s;letter-spacing:.03em}
+.gbtn,
+.gbtn,.ubtn,.abtn,.dbtn,.sit-pill,
 .gbtn{font-size:.67rem;padding:5px 12px;border-radius:99px}
 .ubtn{font-size:.68rem;padding:5px 11px;border-radius:6px}
 .abtn{font-size:.72rem;padding:7px 15px;border-radius:6px;color:var(--tx)}
@@ -119,7 +120,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .deck-title{font-family:'DM Serif Display',serif;font-size:1.05rem}
 .deck-acts{display:flex;gap:7px}
 .deck-switcher{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.85rem}
-.dbtn{font-family:'DM Mono',monospace;font-size:.68rem;padding:5px 11px 5px 8px;border-radius:99px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em}
+
 .dbtn.dactive{border-color:var(--dc);color:var(--dc)}
 .dbtn:hover{border-color:var(--acc);color:var(--acc)}
 .ddot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -214,13 +215,13 @@ input[type="text"]::placeholder{color:var(--su)}
 }
 
 /* ── SCRIPT FILTER BUTTONS ── */
-.script-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--bd2);background:none;color:var(--tx);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+
 .script-btn:hover{border-color:var(--acc);color:var(--acc)}
 .script-btn.script-on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:500}
 
 /* ── SITUATION PILLS ── */
 .sit-row{display:flex;flex-wrap:wrap;gap:7px;padding:.85rem 1rem .6rem;border-bottom:1px solid var(--bd);width:100%;box-sizing:border-box;align-items:center}
-.sit-pill{font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:99px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s;white-space:nowrap}
+
 .sit-pill:hover{border-color:var(--sc,var(--acc));color:var(--sc,var(--acc))}
 .sit-pill.sit-active{background:var(--sc,var(--acc));border-color:var(--sc,var(--acc));color:#fff;font-weight:500}
 .sit-add-all{margin-left:auto;font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 12px;border-radius:99px;border:1px solid var(--acc);background:none;color:var(--acc);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
