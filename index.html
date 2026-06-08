@@ -265,7 +265,7 @@ input[type="text"]::placeholder{color:var(--su)}
 #customWordOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;padding:1rem}
 #customWordOverlay.open{display:flex}
 #customWordModal{background:var(--sf);border:1px solid var(--bd2);border-radius:12px;width:100%;max-width:540px;padding:1.4rem;display:flex;flex-direction:column;gap:.85rem;max-height:90vh;overflow-y:auto}
-.cwb-display{font-family:'Noto Sans KR',sans-serif;font-size:2rem;font-weight:500;min-height:52px;padding:.5rem 1rem;background:var(--sf2);border:1px solid var(--bd2);border-radius:8px;letter-spacing:.1em;color:var(--tx);text-align:center}
+.cwb-display{font-family:'Noto Sans KR',sans-serif;font-size:2rem;font-weight:500;min-height:52px;padding:.5rem 1rem;background:var(--sf2);border:1px solid var(--bd2);border-radius:8px;letter-spacing:.1em;color:var(--tx);text-align:center;display:flex;align-items:center;justify-content:center;word-break:break-all}
 .cwb-alpha{display:flex;flex-wrap:wrap;gap:4px;padding:.5rem 0}
 .cwb-char{font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:5px 8px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .1s;min-width:34px;text-align:center}
 .cwb-char:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}
@@ -358,7 +358,7 @@ input[type="text"]::placeholder{color:var(--su)}
       <button class="m-close" onclick="closeCustomWord()">✕</button>
     </div>
     <div style="font-size:.72rem;color:var(--mu)">click letters to build a word, then fill in the meaning and save it to a deck</div>
-    <div class="cwb-display" id="cwbDisplay">tap letters below →</div>
+    <div class="cwb-display" id="cwbDisplay"></div>
     <div style="display:flex;gap:6px;align-items:center">
       <input id="cwbRo" type="text" placeholder="romanization (e.g. annyeong)" style="flex:1"/>
       <input id="cwbMeaning" type="text" placeholder="meaning" style="flex:1"/>
@@ -3100,7 +3100,7 @@ let cwbCustomWords = []; // saved custom words
 
 function openCustomWord() {
   cwbText = '';
-  document.getElementById('cwbDisplay').textContent = 'tap letters below →';
+  document.getElementById('cwbDisplay').textContent = '';
   document.getElementById('cwbRo').value = '';
   document.getElementById('cwbMeaning').value = '';
   buildCwbAlpha();
@@ -3126,7 +3126,7 @@ function buildCwbAlpha() {
       btn.textContent = ch;
       btn.onclick = () => {
         cwbText += ch;
-        document.getElementById('cwbDisplay').textContent = cwbText || 'tap letters below →';
+        document.getElementById('cwbDisplay').textContent = cwbText;
       };
       container.appendChild(btn);
     });
@@ -3138,12 +3138,12 @@ function cwbBackspace() {
   const chars = [...cwbText];
   chars.pop();
   cwbText = chars.join('');
-  document.getElementById('cwbDisplay').textContent = cwbText || 'tap letters below →';
+  document.getElementById('cwbDisplay').textContent = cwbText;
 }
 
 function cwbClear() {
   cwbText = '';
-  document.getElementById('cwbDisplay').textContent = 'tap letters below →';
+  document.getElementById('cwbDisplay').textContent = '';
 }
 
 function cwbAddSpace() {
@@ -3185,7 +3185,7 @@ function cwbSave() {
 
   // Reset and keep open for more words
   cwbText = '';
-  document.getElementById('cwbDisplay').textContent = 'tap letters below →';
+  document.getElementById('cwbDisplay').textContent = '';
   document.getElementById('cwbRo').value = '';
   document.getElementById('cwbMeaning').value = '';
 
@@ -3209,13 +3209,8 @@ document.addEventListener('keydown', e => {
   applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
 
-  // If coming from a broken session where practice had no exercises,
-  // reset tab to vocab so user isn't stuck
-  // Force clear any broken session state
-  localStorage.removeItem('lf-lang');
-  localStorage.removeItem('lf-tab');
-  localStorage.removeItem('lf-grouping');
-  const savedLang = 'korean';
+  const _rawLang = localStorage.getItem('lf-lang') || 'korean';
+  const savedLang = LANGS[_rawLang] ? _rawLang : 'korean';
   curLang = savedLang;
   const L = LANGS[savedLang];
   document.getElementById('langFlag').textContent  = L.flag;
