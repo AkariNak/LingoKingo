@@ -285,6 +285,8 @@ input[type="text"]::placeholder{color:var(--su)}
     <button class="script-btn" data-script="hiragana" onclick="toggleScript('hiragana')">hiragana</button>
     <button class="script-btn" data-script="katakana"  onclick="toggleScript('katakana')">katakana</button>
     <button class="script-btn" data-script="kanji"     onclick="toggleScript('kanji')">kanji</button>
+    <button class="script-btn" data-script="hiragana_d" onclick="toggleScript('hiragana_d')">hiragana accents</button>
+    <button class="script-btn" data-script="katakana_d" onclick="toggleScript('katakana_d')">katakana accents</button>
   </div>
   <button id="fontBtn" onclick="cycleFontSize()" aria-label="change font size" style="margin-left:auto">text: large</button>
 </div>
@@ -1832,6 +1834,7 @@ const GROUPINGS = {
     label:'by script',
     key: w => w.script || w.pos,
     order: () => ['hiragana','katakana','kanji','hiragana_d','katakana_d','expression','verb','adjective','noun','adverb','pronoun','particle'],
+    displayName: k => ({'hiragana_d':'hiragana accents','katakana_d':'katakana accents'}[k] || k),
     color: k => ({'hiragana':'#7ac8a0','katakana':'#7a8cc8','kanji':'#c87aa8','hiragana_d':'#7ac8c8','katakana_d':'#c8c87a',verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
   },
   pos: {
@@ -1910,6 +1913,17 @@ function addDeck(name) {
   activeDeckIdx = decks.length - 1;
   saveDeckState();
 }
+function moveDeck(from, to) {
+  const deck = decks.splice(from, 1)[0];
+  decks.splice(to, 0, deck);
+  if (activeDeckIdx === from) activeDeckIdx = to;
+  else if (activeDeckIdx === to) activeDeckIdx = from;
+  saveDeckState();
+  renderDeckSwitcher();
+  renderDeckChips();
+  renderWordGrid();
+}
+
 function deleteDeck(idx) {
   decks.splice(idx,1);
   if (activeDeckIdx >= decks.length) activeDeckIdx = decks.length - 1;
@@ -2110,6 +2124,7 @@ function renderWordGrid() {
     const wds = groups[key];
     const isOpen = !!openSecs[key];
     const color = (window._sitTierColors && window._sitTierColors[key]) ? window._sitTierColors[key] : cfg.color(key);
+    const displayKey = cfg.displayName ? cfg.displayName(key) : key;
     const selCount = wds.filter(w => deckColorFor(w.kr)).length;
 
     const sec = document.createElement('div'); sec.className = 'sec';
@@ -2228,6 +2243,24 @@ function renderDeckSwitcher() {
       btn.onclick = () => { activeDeckIdx = i === activeDeckIdx ? -1 : i; saveDeckState(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); };
       btn.oncontextmenu = e => showDeckCtxMenu(e, i);
       btn.title = 'tap to select · right-click to rename or delete';
+
+      // reorder buttons
+      if (i > 0) {
+        const up = document.createElement('button');
+        up.textContent = '↑';
+        up.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.7rem;padding:0 2px;color:var(--mu);flex-shrink:0;line-height:1';
+        up.title = 'move up';
+        up.onclick = ev => { ev.stopPropagation(); moveDeck(i, i-1); };
+        sw.appendChild(up);
+      }
+      if (i < decks.length - 1) {
+        const dn = document.createElement('button');
+        dn.textContent = '↓';
+        dn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.7rem;padding:0 2px;color:var(--mu);flex-shrink:0;line-height:1';
+        dn.title = 'move down';
+        dn.onclick = ev => { ev.stopPropagation(); moveDeck(i, i+1); };
+        sw.appendChild(dn);
+      }
       sw.appendChild(btn);
     });
   }
@@ -3050,8 +3083,8 @@ const PREMADE_DECKS = {
     {name:'Essential Kanji', color:'#c87aa8', filter: w => w.pos === 'kanji'},
   ],
   japanese_dakuten: [
-    {name:'Hiragana Accents ゛゜', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
-    {name:'Katakana Accents ゛゜', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
+    {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
+    {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
   ],
 };
 
