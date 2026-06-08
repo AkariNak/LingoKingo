@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Recall</title>
+<title>Recall — Language Flashcards</title>
+<meta name="description" content="Learn Korean, Italian, and Japanese with flashcards, practice exercises, grammar notes, and situation-based vocabulary. Free, no account needed."/>
+<meta property="og:title" content="Recall — Language Flashcards"/>
+<meta property="og:description" content="Learn Korean, Italian, and Japanese with flashcards and grammar drills. Free."/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#0e0e12"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Crect x='10' y='10' width='52' height='52' rx='8' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='1.5'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
-<style>
+<
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root[data-x]{--r:0} /* placeholder */
 
@@ -247,7 +252,27 @@ input[type="text"]::placeholder{color:var(--su)}
   .logo svg{width:34px !important;height:34px !important}
 }
 
+--bg);cursor:pointer;font-weight:500}
+.obtn:hover{opacity:.85}
+.obtn-ghost{font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 14px;border-radius:6px;background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer}
+.obtn-accent{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:none;border:1px solid var(--acc);color:var(--acc);cursor:pointer;font-weight:500}
+.obtn-accent:hover{background:var(--acc);color:var(--bg)}
+.obtn-ghost:hover{color:var(--tx);border-color:var(--tx)}
+@media(max-width:600px){
+  #hdr{padding:.85rem .85rem .75rem}
+  #tabBar,.ctrl,.deck-panel{padding-left:.75rem;padding-right:.75rem}
+  #wordSections{padding:.75rem .75rem .5rem}
+  input[type="text"]{width:100%}
+  #tabBar{top:68px}
+  .sit-row{padding:.6rem .75rem .5rem}
+  .tab-body{padding:1rem .75rem}
+  .logo-en{font-size:1.3rem !important}
+  .logo svg{width:34px !important;height:34px !important}
+}
+
 </style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
 </head>
 <body class="dark">
 
@@ -339,6 +364,7 @@ input[type="text"]::placeholder{color:var(--su)}
     <span>🇯🇵</span><span>Japanese</span><span class="lang-script">日本語</span>
   </div>
 </div>
+
 <script>
 // ═══════════════════════════════════════════════════════════════
 // DATA
@@ -1214,121 +1240,13 @@ const GRAMMAR = {
   ]
 };
 
-// ── GRAMMAR RENDERER ─────────────────────────────────────────────────────────
-
-function renderGrammar(container) {
-  const notes = (GRAMMAR[curLang]) || [];
-  container.innerHTML = '';
-
-  if (!notes || notes.length === 0) {
-    container.innerHTML = '<div class="empty-msg">Grammar notes coming soon.</div>';
-    return;
-  }
-
-  const wrap = document.createElement('div');
-  wrap.className = 'tab-body';
-  wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
-
-  const intro = document.createElement('div');
-  intro.className = 't-muted';
-  intro.style.cssText = 'font-size:.75rem;padding-bottom:.5rem;';
-  intro.textContent = notes.length + ' grammar topics — click any card to expand';
-  wrap.appendChild(intro);
-
-  const levelColors = ['#7ac8a0','#c8a87a','#c87aa8'];
-  const levelLabels = ['beginner','intermediate','advanced'];
-
-  notes.forEach(function(note) {
-    const card = document.createElement('div');
-    card.className = 'grammar-card surface';
-
-    const hdr = document.createElement('div');
-    hdr.className = 'grammar-hdr';
-
-    const left = document.createElement('div');
-    left.className = 'grammar-left';
-
-    const lvl = document.createElement('span');
-    lvl.className = 'grammar-level';
-    lvl.style.color = levelColors[(note.level||1)-1];
-    lvl.textContent = levelLabels[(note.level||1)-1];
-
-    const title = document.createElement('div');
-    title.className = 'grammar-title';
-    title.textContent = note.title;
-
-    const shortEl = document.createElement('div');
-    shortEl.className = 'grammar-short t-muted';
-    shortEl.textContent = note.short;
-
-    left.appendChild(lvl);
-    left.appendChild(title);
-    left.appendChild(shortEl);
-
-    const chev = document.createElement('span');
-    chev.className = 'sec-chev';
-    chev.textContent = '▾';
-
-    hdr.appendChild(left);
-    hdr.appendChild(chev);
-
-    const body = document.createElement('div');
-    body.className = 'grammar-body';
-    body.style.display = 'none';
-
-    const bodyText = document.createElement('div');
-    bodyText.className = 'grammar-text';
-    bodyText.textContent = note.body;
-
-    const exBox = document.createElement('div');
-    exBox.className = 'grammar-example';
-    exBox.innerHTML = '<div class="ex-label t-muted">example</div><pre class="ex-pre">' + note.example + '</pre>';
-
-    const speakBtn = document.createElement('button');
-    speakBtn.className = 'ubtn';
-    speakBtn.style.marginTop = '8px';
-    speakBtn.textContent = '▶ hear example';
-    speakBtn.onclick = function() {
-      var firstLine = note.example.split('\n')[0].split('→')[0].trim();
-      speak(firstLine, curLang);
-    };
-
-    body.appendChild(bodyText);
-    body.appendChild(exBox);
-    body.appendChild(speakBtn);
-
-    hdr.onclick = function() {
-      var open = body.style.display === 'none';
-      body.style.display = open ? 'block' : 'none';
-      chev.textContent = open ? '▴' : '▾';
-      card.classList.toggle('grammar-open', open);
-    };
-
-    card.appendChild(hdr);
-    card.appendChild(body);
-    wrap.appendChild(card);
-  });
-
-  container.appendChild(wrap);
-}
-
-
-// ═══════════════════════════════════════════════════════════════
-// SHARED STATE & UTILITIES
-// ═══════════════════════════════════════════════════════════════
-function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
-function load(key, def) { try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : def; } catch(e) { return def; } }
-
 const JAPANESE_WORDS = [
-
-  // ══════════════════════════════════════════════
-  //  HIRAGANA — character recognition
-  // ══════════════════════════════════════════════
-  {kr:"あ",ro:"a",meaning:"a (ah)",example:"あ！— Ah!",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"い",ro:"i",meaning:"i (ee)",example:"いいえ — no",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"う",ro:"u",meaning:"u (oo)",example:"うみ — sea",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"え",ro:"e",meaning:"e (eh)",example:"えき — train station",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"お",ro:"o",meaning:"o (oh)",example:"おかあさん — mother",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  // HIRAGANA
+  {kr:"あ",ro:"a",meaning:"a",example:"あ！— Ah!",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"い",ro:"i",meaning:"i",example:"いいえ — no",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"う",ro:"u",meaning:"u",example:"うみ — sea",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"え",ro:"e",meaning:"e",example:"えき — station",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"お",ro:"o",meaning:"o",example:"おかあさん — mother",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"か",ro:"ka",meaning:"ka",example:"かさ — umbrella",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"き",ro:"ki",meaning:"ki",example:"きた — north",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"く",ro:"ku",meaning:"ku",example:"くに — country",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
@@ -1348,17 +1266,17 @@ const JAPANESE_WORDS = [
   {kr:"に",ro:"ni",meaning:"ni",example:"にわ — garden",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ぬ",ro:"nu",meaning:"nu",example:"ぬの — cloth",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ね",ro:"ne",meaning:"ne",example:"ねこ — cat",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"の",ro:"no",meaning:"no (possessive particle)",example:"わたしのほん — my book",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"は",ro:"ha/wa",meaning:"ha (or wa as topic particle)",example:"はな — flower / は = topic marker",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"の",ro:"no",meaning:"no (possessive)",example:"わたしのほん — my book",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"は",ro:"ha/wa",meaning:"ha (topic particle when wa)",example:"はな — flower",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ひ",ro:"hi",meaning:"hi",example:"ひと — person",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ふ",ro:"fu",meaning:"fu",example:"ふゆ — winter",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"へ",ro:"he/e",meaning:"he (or e as direction particle)",example:"へや — room",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"へ",ro:"he/e",meaning:"he (direction particle when e)",example:"へや — room",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ほ",ro:"ho",meaning:"ho",example:"ほし — star",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ま",ro:"ma",meaning:"ma",example:"まち — town",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"み",ro:"mi",meaning:"mi",example:"みず — water",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"む",ro:"mu",meaning:"mu",example:"むし — insect",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"め",ro:"me",meaning:"me",example:"め — eye",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"も",ro:"mo",meaning:"mo (also/too particle)",example:"わたしも — me too",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"も",ro:"mo",meaning:"mo (also/too)",example:"わたしも — me too",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"や",ro:"ya",meaning:"ya",example:"やま — mountain",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"ゆ",ro:"yu",meaning:"yu",example:"ゆき — snow",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"よ",ro:"yo",meaning:"yo",example:"よる — night",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
@@ -1369,11 +1287,8 @@ const JAPANESE_WORDS = [
   {kr:"ろ",ro:"ro",meaning:"ro",example:"ろうか — hallway",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"わ",ro:"wa",meaning:"wa",example:"わたし — I/me",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
   {kr:"を",ro:"wo/o",meaning:"wo (object particle)",example:"ほんをよむ — read a book",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"ん",ro:"n",meaning:"n (nasal)",example:"パン — bread (ends in ん)",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
-
-  // ══════════════════════════════════════════════
-  //  KATAKANA — character recognition
-  // ══════════════════════════════════════════════
+  {kr:"ん",ro:"n",meaning:"n (nasal)",example:"パン — bread",pos:"hiragana",freq:10,register:"neutral",script:"hiragana"},
+  // KATAKANA
   {kr:"ア",ro:"a",meaning:"a",example:"アイスクリーム — ice cream",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"イ",ro:"i",meaning:"i",example:"インターネット — internet",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ウ",ro:"u",meaning:"u",example:"ウイルス — virus",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
@@ -1393,7 +1308,7 @@ const JAPANESE_WORDS = [
   {kr:"チ",ro:"chi",meaning:"chi",example:"チケット — ticket",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ツ",ro:"tsu",meaning:"tsu",example:"ツアー — tour",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"テ",ro:"te",meaning:"te",example:"テレビ — television",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
-  {kr:"ト",ro:"to",meaning:"to",example:"トイレ — toilet/bathroom",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
+  {kr:"ト",ro:"to",meaning:"to",example:"トイレ — bathroom",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ナ",ro:"na",meaning:"na",example:"ナイフ — knife",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ニ",ro:"ni",meaning:"ni",example:"ニュース — news",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ヌ",ro:"nu",meaning:"nu",example:"ヌードル — noodle",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
@@ -1418,205 +1333,35 @@ const JAPANESE_WORDS = [
   {kr:"レ",ro:"re",meaning:"re",example:"レストラン — restaurant",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ロ",ro:"ro",meaning:"ro",example:"ロボット — robot",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
   {kr:"ワ",ro:"wa",meaning:"wa",example:"ワイン — wine",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
-  {kr:"ヲ",ro:"wo",meaning:"wo",example:"(rare in katakana)",pos:"katakana",freq:8,register:"neutral",script:"katakana"},
+  {kr:"ヲ",ro:"wo",meaning:"wo (rare)",example:"(rare in katakana)",pos:"katakana",freq:8,register:"neutral",script:"katakana"},
   {kr:"ン",ro:"n",meaning:"n (nasal)",example:"パン — bread",pos:"katakana",freq:10,register:"neutral",script:"katakana"},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY — expressions & greetings
-  // ══════════════════════════════════════════════
-  {kr:"こんにちは",ro:"konnichiwa",meaning:"hello / good afternoon",example:"こんにちは！ — Hello!",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport"]},
-  {kr:"おはようございます",ro:"ohayou gozaimasu",meaning:"good morning (formal)",example:"おはようございます — Good morning",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting"]},
-  {kr:"おはよう",ro:"ohayou",meaning:"good morning (casual)",example:"おはよう！ — Morning!",pos:"expression",freq:9,register:"casual",script:"hiragana",sit:["meeting"]},
-  {kr:"こんばんは",ro:"konbanwa",meaning:"good evening",example:"こんばんは — Good evening",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","restaurant"]},
-  {kr:"さようなら",ro:"sayounara",meaning:"goodbye (formal/permanent)",example:"さようなら — Goodbye",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting"]},
-  {kr:"じゃあね",ro:"jaa ne",meaning:"see you / bye (casual)",example:"じゃあね！ — See ya!",pos:"expression",freq:9,register:"casual",script:"hiragana",sit:["meeting"]},
-  {kr:"ありがとうございます",ro:"arigatou gozaimasu",meaning:"thank you (formal)",example:"ありがとうございます — Thank you very much",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","food","shopping","restaurant","airport"]},
-  {kr:"ありがとう",ro:"arigatou",meaning:"thank you (casual)",example:"ありがとう！ — Thanks!",pos:"expression",freq:10,register:"casual",script:"hiragana",sit:["meeting","food","shopping"]},
-  {kr:"すみません",ro:"sumimasen",meaning:"excuse me / I'm sorry",example:"すみません、どこですか？ — Excuse me, where is it?",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around","shopping","restaurant"]},
-  {kr:"ごめんなさい",ro:"gomen nasai",meaning:"I'm sorry (sincere apology)",example:"ごめんなさい — I'm so sorry",pos:"expression",freq:9,register:"neutral",script:"hiragana",sit:["meeting"]},
-  {kr:"はい",ro:"hai",meaning:"yes",example:"はい、そうです — Yes, that's right",pos:"expression",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"いいえ",ro:"iie",meaning:"no",example:"いいえ、ちがいます — No, that's wrong",pos:"expression",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"そうです",ro:"sou desu",meaning:"that's right / yes it is",example:"そうです！ — That's right!",pos:"expression",freq:9,register:"formal",script:"hiragana"},
-  {kr:"わかりました",ro:"wakarimashita",meaning:"I understand / got it",example:"わかりました — Understood",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","airport"]},
-  {kr:"わかりません",ro:"wakarimasen",meaning:"I don't understand",example:"すみません、わかりません — Sorry, I don't understand",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around"]},
-  {kr:"いただきます",ro:"itadakimasu",meaning:"let's eat (said before meals)",example:"いただきます！ — Let's eat!",pos:"expression",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"ごちそうさまでした",ro:"gochisousama deshita",meaning:"thank you for the meal",example:"ごちそうさまでした — That was delicious",pos:"expression",freq:8,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"おねがいします",ro:"onegai shimasu",meaning:"please (request)",example:"みずをおねがいします — Water please",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant","shopping","airport"]},
-  {kr:"大丈夫です",ro:"daijoubu desu",meaning:"it's okay / I'm fine",example:"大丈夫です — I'm okay",pos:"expression",freq:9,register:"neutral",script:"kanji",sit:["meeting","emergency"]},
-  {kr:"よろしくおねがいします",ro:"yoroshiku onegai shimasu",meaning:"nice to meet you / please treat me well",example:"よろしくおねがいします — Nice to meet you",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting"]},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY — pronouns & particles
-  // ══════════════════════════════════════════════
-  {kr:"わたし",ro:"watashi",meaning:"I / me (neutral)",example:"わたしはがくせいです — I am a student",pos:"pronoun",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"ぼく",ro:"boku",meaning:"I / me (male, casual)",example:"ぼくはたなかです — I am Tanaka",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
-  {kr:"あなた",ro:"anata",meaning:"you (avoid in conversation — use name instead)",example:"あなたのなまえは？— What is your name?",pos:"pronoun",freq:7,register:"neutral",script:"hiragana"},
-  {kr:"かれ",ro:"kare",meaning:"he / him / boyfriend",example:"かれはやさしい — He is kind",pos:"pronoun",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"かのじょ",ro:"kanojo",meaning:"she / her / girlfriend",example:"かのじょはかわいい — She is cute",pos:"pronoun",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"みんな",ro:"minna",meaning:"everyone / all",example:"みんなでいこう — Let's all go together",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
-  {kr:"は",ro:"wa",meaning:"topic marker particle",example:"わたしはがくせいです — I (topic) am a student",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"が",ro:"ga",meaning:"subject marker particle",example:"ねこがいます — There is a cat",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"を",ro:"wo/o",meaning:"object marker particle",example:"ほんをよみます — I read a book",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"に",ro:"ni",meaning:"to / at / for (direction/time)",example:"がっこうにいく — go to school",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"で",ro:"de",meaning:"at / by / with (location of action / means)",example:"バスでいく — go by bus",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"の",ro:"no",meaning:"possessive / connecting particle",example:"わたしのほん — my book",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"も",ro:"mo",meaning:"also / too",example:"わたしもすきです — I like it too",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"か",ro:"ka",meaning:"question marker (turns sentence into question)",example:"これはほんですか？— Is this a book?",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY — nouns
-  // ══════════════════════════════════════════════
-  {kr:"なまえ",ro:"namae",meaning:"name",example:"なまえはなんですか？— What is your name?",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["meeting"]},
-  {kr:"ひと",ro:"hito",meaning:"person / people",example:"あのひとはだれですか？— Who is that person?",pos:"noun",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"とも/ともだち",ro:"tomodachi",meaning:"friend",example:"ともだちとあそぶ — play with a friend",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["meeting","dating"]},
-  {kr:"せんせい",ro:"sensei",meaning:"teacher",example:"せんせいにきく — ask the teacher",pos:"noun",freq:9,register:"formal",script:"hiragana"},
-  {kr:"がくせい",ro:"gakusei",meaning:"student",example:"わたしはがくせいです — I am a student",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"みず",ro:"mizu",meaning:"water",example:"みずをください — water please",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"ごはん",ro:"gohan",meaning:"rice / meal",example:"ごはんをたべる — eat a meal",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"おかね",ro:"okane",meaning:"money",example:"おかねがありません — I don't have money",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
-  {kr:"じかん",ro:"jikan",meaning:"time",example:"じかんがありません — I don't have time",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
-  {kr:"まち",ro:"machi",meaning:"town / city",example:"このまちがすき — I like this town",pos:"noun",freq:8,register:"neutral",script:"hiragana",sit:["getting_around"]},
-  {kr:"えき",ro:"eki",meaning:"train station",example:"えきはどこですか？— Where is the station?",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
-  {kr:"でんしゃ",ro:"densha",meaning:"train",example:"でんしゃにのる — ride the train",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["getting_around"]},
-  {kr:"バス",ro:"basu",meaning:"bus",example:"バスをまつ — wait for the bus",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["getting_around"]},
-  {kr:"タクシー",ro:"takushii",meaning:"taxi",example:"タクシーをよぶ — call a taxi",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["getting_around"]},
-  {kr:"くうこう",ro:"kuukou",meaning:"airport",example:"くうこうにいく — go to the airport",pos:"noun",freq:8,register:"neutral",script:"hiragana",sit:["airport"]},
-  {kr:"ホテル",ro:"hoteru",meaning:"hotel",example:"ホテルはどこですか？— Where is the hotel?",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["airport","getting_around"]},
-  {kr:"レストラン",ro:"resutoran",meaning:"restaurant",example:"レストランにいく — go to a restaurant",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
-  {kr:"トイレ",ro:"toire",meaning:"toilet / bathroom",example:"トイレはどこですか？— Where is the bathroom?",pos:"noun",freq:10,register:"neutral",script:"katakana",sit:["airport","getting_around","restaurant"]},
-  {kr:"びょういん",ro:"byouin",meaning:"hospital",example:"びょういんにいく — go to the hospital",pos:"noun",freq:7,register:"neutral",script:"hiragana",sit:["emergency"]},
-  {kr:"けいさつ",ro:"keisatsu",meaning:"police",example:"けいさつをよぶ — call the police",pos:"noun",freq:6,register:"neutral",script:"hiragana",sit:["emergency"]},
-  {kr:"にほん",ro:"nihon",meaning:"Japan",example:"にほんにいきたい — I want to go to Japan",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"にほんご",ro:"nihongo",meaning:"Japanese language",example:"にほんごをべんきょうする — study Japanese",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"コーヒー",ro:"koohii",meaning:"coffee",example:"コーヒーをください — coffee please",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
-  {kr:"ビール",ro:"biiru",meaning:"beer",example:"ビールをください — beer please",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["food","restaurant"]},
-  {kr:"すし",ro:"sushi",meaning:"sushi",example:"すしがたべたい — I want to eat sushi",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"ラーメン",ro:"raamen",meaning:"ramen",example:"ラーメンをたのむ — order ramen",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY — adjectives
-  // ══════════════════════════════════════════════
-  {kr:"おおきい",ro:"ookii",meaning:"big / large",example:"おおきいいぬ — a big dog",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"ちいさい",ro:"chiisai",meaning:"small / little",example:"ちいさいねこ — a small cat",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"たかい",ro:"takai",meaning:"expensive / tall / high",example:"たかいかばん — an expensive bag",pos:"adjective",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
-  {kr:"やすい",ro:"yasui",meaning:"cheap / inexpensive",example:"やすいです — it's cheap",pos:"adjective",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
-  {kr:"おいしい",ro:"oishii",meaning:"delicious",example:"おいしい！— Delicious!",pos:"adjective",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"かわいい",ro:"kawaii",meaning:"cute / adorable",example:"かわいいねこ — cute cat",pos:"adjective",freq:9,register:"casual",script:"hiragana",sit:["dating","shopping"]},
-  {kr:"かっこいい",ro:"kakkoii",meaning:"cool / stylish",example:"かっこいい！ — So cool!",pos:"adjective",freq:8,register:"casual",script:"hiragana",sit:["dating"]},
-  {kr:"むずかしい",ro:"muzukashii",meaning:"difficult",example:"にほんごはむずかしい — Japanese is difficult",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"やさしい",ro:"yasashii",meaning:"easy / kind / gentle",example:"やさしいひと — a kind person",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"たのしい",ro:"tanoshii",meaning:"fun / enjoyable",example:"たのしい！— Fun!",pos:"adjective",freq:9,register:"casual",script:"hiragana"},
-  {kr:"すごい",ro:"sugoi",meaning:"amazing / wow / incredible",example:"すごい！— Wow / Amazing!",pos:"adjective",freq:9,register:"casual",script:"hiragana",sit:["dating","meeting"]},
-  {kr:"いい",ro:"ii",meaning:"good / fine / nice",example:"いいですね — That's nice",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"わるい",ro:"warui",meaning:"bad",example:"わるいひと — a bad person",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"あたらしい",ro:"atarashii",meaning:"new",example:"あたらしいほん — a new book",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"ふるい",ro:"furui",meaning:"old (things, not people)",example:"ふるいいえ — an old house",pos:"adjective",freq:7,register:"neutral",script:"hiragana"},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY — verbs
-  // ══════════════════════════════════════════════
-  {kr:"います",ro:"imasu",meaning:"to exist / to be (living things)",example:"ねこがいます — There is a cat",pos:"verb",freq:10,register:"formal",script:"hiragana"},
-  {kr:"あります",ro:"arimasu",meaning:"to exist / to be (non-living things)",example:"ほんがあります — There is a book",pos:"verb",freq:10,register:"formal",script:"hiragana"},
-  {kr:"いきます",ro:"ikimasu",meaning:"to go",example:"がっこうにいきます — I go to school",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["airport","getting_around"]},
-  {kr:"きます",ro:"kimasu",meaning:"to come",example:"きてください — Please come",pos:"verb",freq:10,register:"formal",script:"hiragana"},
-  {kr:"たべます",ro:"tabemasu",meaning:"to eat",example:"すしをたべます — I eat sushi",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"のみます",ro:"nomimasu",meaning:"to drink",example:"みずをのみます — I drink water",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"みます",ro:"mimasu",meaning:"to see / watch",example:"えいがをみます — I watch a movie",pos:"verb",freq:10,register:"formal",script:"hiragana"},
-  {kr:"ききます",ro:"kikimasu",meaning:"to listen / hear / ask",example:"おんがくをききます — I listen to music",pos:"verb",freq:9,register:"formal",script:"hiragana"},
-  {kr:"はなします",ro:"hanashimasu",meaning:"to speak / talk",example:"にほんごではなします — I speak Japanese",pos:"verb",freq:10,register:"formal",script:"hiragana"},
-  {kr:"わかります",ro:"wakarimasu",meaning:"to understand",example:"わかります — I understand",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around"]},
-  {kr:"かいます",ro:"kaimasu",meaning:"to buy",example:"これをかいます — I'll buy this",pos:"verb",freq:9,register:"formal",script:"hiragana",sit:["shopping"]},
-  {kr:"かえります",ro:"kaerimasu",meaning:"to return / go home",example:"うちにかえります — I'll go home",pos:"verb",freq:9,register:"formal",script:"hiragana"},
-  {kr:"ねます",ro:"nemasu",meaning:"to sleep",example:"はやくねます — I'll sleep early",pos:"verb",freq:9,register:"formal",script:"hiragana"},
-  {kr:"おきます",ro:"okimasu",meaning:"to wake up / get up",example:"はやくおきます — I wake up early",pos:"verb",freq:8,register:"formal",script:"hiragana"},
-  {kr:"べんきょうします",ro:"benkyou shimasu",meaning:"to study",example:"にほんごをべんきょうします — I study Japanese",pos:"verb",freq:9,register:"formal",script:"hiragana"},
-  {kr:"すきです",ro:"suki desu",meaning:"to like / to love",example:"にほんごがすきです — I like Japanese",pos:"verb",freq:10,register:"neutral",script:"hiragana",sit:["dating","meeting"]},
-  {kr:"すみません",ro:"sumimasen",meaning:"excuse me / sorry (also a verb use)",example:"すみません！— Excuse me!",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["airport","getting_around","shopping","restaurant"]},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY — adverbs & useful words
-  // ══════════════════════════════════════════════
-  {kr:"とても",ro:"totemo",meaning:"very / extremely",example:"とてもおいしい — very delicious",pos:"adverb",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"すごく",ro:"sugoku",meaning:"very / really (casual)",example:"すごくかわいい — really cute",pos:"adverb",freq:9,register:"casual",script:"hiragana"},
-  {kr:"ちょっと",ro:"chotto",meaning:"a little / just a moment",example:"ちょっとまって — wait a moment",pos:"adverb",freq:10,register:"casual",script:"hiragana",sit:["meeting","getting_around"]},
-  {kr:"もう",ro:"mou",meaning:"already / anymore",example:"もうたべました — I already ate",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"まだ",ro:"mada",meaning:"still / not yet",example:"まだです — not yet",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"いつも",ro:"itsumo",meaning:"always",example:"いつもありがとう — thank you as always",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"たぶん",ro:"tabun",meaning:"probably / maybe",example:"たぶんいきます — I'll probably go",pos:"adverb",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"どこ",ro:"doko",meaning:"where",example:"どこですか？— Where is it?",pos:"adverb",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
-  {kr:"なに/なん",ro:"nani/nan",meaning:"what",example:"なんですか？— What is it?",pos:"adverb",freq:10,register:"neutral",script:"hiragana"},
-  {kr:"いつ",ro:"itsu",meaning:"when",example:"いつきますか？— When are you coming?",pos:"adverb",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"なぜ/どうして",ro:"naze/doushite",meaning:"why",example:"どうしてですか？— Why?",pos:"adverb",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"どうぞ",ro:"douzo",meaning:"please / go ahead / here you go",example:"どうぞ — Please / Go ahead",pos:"adverb",freq:9,register:"formal",script:"hiragana",sit:["meeting","food","shopping"]},
-  {kr:"いくら",ro:"ikura",meaning:"how much",example:"いくらですか？— How much is it?",pos:"adverb",freq:9,register:"neutral",script:"hiragana",sit:["shopping","food","restaurant"]},
-
-  // ══════════════════════════════════════════════
-  //  KANJI — essential characters
-  // ══════════════════════════════════════════════
-  {kr:"日",ro:"nichi/hi",meaning:"sun / day / Japan",example:"日本 (nihon) — Japan",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"本",ro:"hon/moto",meaning:"book / origin / Japan",example:"本を読む — read a book",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"人",ro:"jin/hito",meaning:"person / people",example:"日本人 (nihonjin) — Japanese person",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"大",ro:"dai/oo",meaning:"big / large / great",example:"大学 (daigaku) — university",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"小",ro:"shou/chii",meaning:"small / little",example:"小学校 (shougakkou) — elementary school",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
-  {kr:"山",ro:"san/yama",meaning:"mountain",example:"富士山 (fujisan) — Mt. Fuji",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
-  {kr:"川",ro:"kawa/gawa",meaning:"river",example:"川のそば — by the river",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
-  {kr:"水",ro:"sui/mizu",meaning:"water",example:"水をください — water please",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["food","restaurant"]},
-  {kr:"火",ro:"ka/hi",meaning:"fire",example:"火曜日 (kayoubi) — Tuesday",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
-  {kr:"木",ro:"moku/ki",meaning:"tree / wood",example:"木曜日 (mokuyoubi) — Thursday",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
-  {kr:"金",ro:"kin/kana",meaning:"gold / money / Friday",example:"お金 (okane) — money",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["shopping"]},
-  {kr:"土",ro:"do/tsuchi",meaning:"earth / soil / Saturday",example:"土曜日 (doyoubi) — Saturday",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
-  {kr:"月",ro:"getsu/tsuki",meaning:"moon / month / Monday",example:"月曜日 (getsuyoubi) — Monday",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"年",ro:"nen/toshi",meaning:"year",example:"今年 (kotoshi) — this year",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"上",ro:"jou/ue",meaning:"up / above / on top",example:"上に — on top",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"下",ro:"ka/shita",meaning:"down / below / under",example:"下に — below",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"中",ro:"chuu/naka",meaning:"middle / inside / China",example:"中に入る — enter inside",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"食",ro:"shoku/ta",meaning:"eat / food",example:"食べる (taberu) — to eat",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["food","restaurant"]},
-  {kr:"飲",ro:"in/no",meaning:"drink",example:"飲む (nomu) — to drink",pos:"kanji",freq:9,register:"neutral",script:"kanji",sit:["food","restaurant"]},
-  {kr:"見",ro:"ken/mi",meaning:"see / look / watch",example:"見る (miru) — to see",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"言",ro:"gen/i",meaning:"say / word / language",example:"言う (iu) — to say",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"行",ro:"kou/i",meaning:"go",example:"行く (iku) — to go",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["airport","getting_around"]},
-  {kr:"来",ro:"rai/ku",meaning:"come",example:"来る (kuru) — to come",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"好",ro:"kou/su",meaning:"like / fond of",example:"好き (suki) — to like",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["dating"]},
-  {kr:"友",ro:"yuu/tomo",meaning:"friend",example:"友達 (tomodachi) — friend",pos:"kanji",freq:9,register:"neutral",script:"kanji",sit:["meeting","dating"]},
-  {kr:"学",ro:"gaku/mana",meaning:"study / learn",example:"学校 (gakkou) — school",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"語",ro:"go/kata",meaning:"language / word",example:"日本語 (nihongo) — Japanese",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"何",ro:"nani/nan",meaning:"what",example:"何ですか？ — What is it?",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"今",ro:"kon/ima",meaning:"now / present",example:"今日 (kyou) — today",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"私",ro:"watashi",meaning:"I / me",example:"私は学生です — I am a student",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-
-  // ══════════════════════════════════════════════
-  //  HIRAGANA DAKUTEN (voiced) ゛
-  // ══════════════════════════════════════════════
+  // HIRAGANA ACCENTS
   {kr:"が",ro:"ga",meaning:"ga (voiced か)",example:"がっこう — school",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぎ",ro:"gi",meaning:"gi",example:"ぎんこう — bank",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぐ",ro:"gu",meaning:"gu",example:"ぐるぐる — round and round",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-  {kr:"げ",ro:"ge",meaning:"ge",example:"げんき — healthy/energetic",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-  {kr:"ご",ro:"go",meaning:"go",example:"ごはん — meal/rice",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
+  {kr:"げ",ro:"ge",meaning:"ge",example:"げんき — energetic",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
+  {kr:"ご",ro:"go",meaning:"go",example:"ごはん — meal",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ざ",ro:"za",meaning:"za (voiced さ)",example:"ざっし — magazine",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"じ",ro:"ji",meaning:"ji",example:"じかん — time",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-  {kr:"ず",ro:"zu",meaning:"zu",example:"ずっと — all along/always",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
+  {kr:"ず",ro:"zu",meaning:"zu",example:"ずっと — always",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぜ",ro:"ze",meaning:"ze",example:"ぜんぶ — everything",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぞ",ro:"zo",meaning:"zo",example:"ぞう — elephant",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"だ",ro:"da",meaning:"da (voiced た)",example:"だいがく — university",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-  {kr:"ぢ",ro:"di/ji",meaning:"di (rare, same sound as じ)",example:"はなぢ — nosebleed",pos:"hiragana_d",freq:7,register:"neutral",script:"hiragana_d"},
-  {kr:"づ",ro:"du/zu",meaning:"du (rare, same sound as ず)",example:"つづく — to continue",pos:"hiragana_d",freq:7,register:"neutral",script:"hiragana_d"},
+  {kr:"ぢ",ro:"di/ji",meaning:"di (rare)",example:"はなぢ — nosebleed",pos:"hiragana_d",freq:7,register:"neutral",script:"hiragana_d"},
+  {kr:"づ",ro:"du/zu",meaning:"du (rare)",example:"つづく — to continue",pos:"hiragana_d",freq:7,register:"neutral",script:"hiragana_d"},
   {kr:"で",ro:"de",meaning:"de (voiced て)",example:"でんしゃ — train",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-  {kr:"ど",ro:"do",meaning:"do",example:"どうぞ — please/go ahead",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
+  {kr:"ど",ro:"do",meaning:"do",example:"どうぞ — go ahead",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ば",ro:"ba",meaning:"ba (voiced は)",example:"ばんごはん — dinner",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"び",ro:"bi",meaning:"bi",example:"びじゅつ — art",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぶ",ro:"bu",meaning:"bu",example:"ぶどう — grapes",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"べ",ro:"be",meaning:"be",example:"べんきょう — studying",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぼ",ro:"bo",meaning:"bo",example:"ぼく — I (male casual)",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-  // ── Handakuten (semi-voiced) ゜ ──
-  {kr:"ぱ",ro:"pa",meaning:"pa (semi-voiced は)",example:"パン — bread (also in katakana)",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
+  {kr:"ぱ",ro:"pa",meaning:"pa (semi-voiced)",example:"パン — bread",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぴ",ro:"pi",meaning:"pi",example:"ぴかぴか — sparkling",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぷ",ro:"pu",meaning:"pu",example:"プール — pool",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぺ",ro:"pe",meaning:"pe",example:"ペン — pen",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
   {kr:"ぽ",ro:"po",meaning:"po",example:"ぽかぽか — warm and cozy",pos:"hiragana_d",freq:10,register:"neutral",script:"hiragana_d"},
-
-  // ══════════════════════════════════════════════
-  //  KATAKANA DAKUTEN (voiced) ゛
-  // ══════════════════════════════════════════════
+  // KATAKANA ACCENTS
   {kr:"ガ",ro:"ga",meaning:"ga",example:"ガム — gum",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ギ",ro:"gi",meaning:"gi",example:"ギター — guitar",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"グ",ro:"gu",meaning:"gu",example:"グループ — group",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
@@ -1628,8 +1373,8 @@ const JAPANESE_WORDS = [
   {kr:"ゼ",ro:"ze",meaning:"ze",example:"ゼロ — zero",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ゾ",ro:"zo",meaning:"zo",example:"ゾーン — zone",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ダ",ro:"da",meaning:"da",example:"ダンス — dance",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
-  {kr:"ヂ",ro:"di",meaning:"di (rare)",example:"(rare in katakana)",pos:"katakana_d",freq:6,register:"neutral",script:"katakana_d"},
-  {kr:"ヅ",ro:"du",meaning:"du (rare)",example:"(rare in katakana)",pos:"katakana_d",freq:6,register:"neutral",script:"katakana_d"},
+  {kr:"ヂ",ro:"di",meaning:"di (rare)",example:"(rare)",pos:"katakana_d",freq:6,register:"neutral",script:"katakana_d"},
+  {kr:"ヅ",ro:"du",meaning:"du (rare)",example:"(rare)",pos:"katakana_d",freq:6,register:"neutral",script:"katakana_d"},
   {kr:"デ",ro:"de",meaning:"de",example:"デート — date",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ド",ro:"do",meaning:"do",example:"ドア — door",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"バ",ro:"ba",meaning:"ba",example:"バス — bus",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
@@ -1637,56 +1382,127 @@ const JAPANESE_WORDS = [
   {kr:"ブ",ro:"bu",meaning:"bu",example:"ブルー — blue",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ベ",ro:"be",meaning:"be",example:"ベッド — bed",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ボ",ro:"bo",meaning:"bo",example:"ボール — ball",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
-  // ── Katakana Handakuten ゜ ──
   {kr:"パ",ro:"pa",meaning:"pa",example:"パーティー — party",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ピ",ro:"pi",meaning:"pi",example:"ピアノ — piano",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"プ",ro:"pu",meaning:"pu",example:"プール — pool",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ペ",ro:"pe",meaning:"pe",example:"ペン — pen",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
   {kr:"ポ",ro:"po",meaning:"po",example:"ポスト — mailbox",pos:"katakana_d",freq:10,register:"neutral",script:"katakana_d"},
-
-  // ══════════════════════════════════════════════
-  //  VOCABULARY using dakuten characters
-  // ══════════════════════════════════════════════
-  {kr:"げんき",ro:"genki",meaning:"healthy / energetic / fine",example:"げんきですか？— Are you well?",pos:"adjective",freq:10,register:"neutral",script:"hiragana",sit:["meeting"]},
-  {kr:"ごはん",ro:"gohan",meaning:"meal / rice",example:"ごはんをたべよう — Let's eat",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"でんしゃ",ro:"densha",meaning:"train",example:"でんしゃにのる — ride the train",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["getting_around"]},
-  {kr:"どうぞ",ro:"douzo",meaning:"please / go ahead / here you go",example:"どうぞ！ — Go ahead!",pos:"expression",freq:9,register:"formal",script:"hiragana"},
-  {kr:"ざっし",ro:"zasshi",meaning:"magazine",example:"ざっしをよむ — read a magazine",pos:"noun",freq:7,register:"neutral",script:"hiragana"},
-  {kr:"じかん",ro:"jikan",meaning:"time",example:"じかんがない — I have no time",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
-  {kr:"ずっと",ro:"zutto",meaning:"all along / always / continuously",example:"ずっとすきだった — I always liked you",pos:"adverb",freq:9,register:"casual",script:"hiragana",sit:["dating"]},
-  {kr:"ぜんぶ",ro:"zenbu",meaning:"everything / all",example:"ぜんぶたべた — I ate everything",pos:"adverb",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"だいがく",ro:"daigaku",meaning:"university",example:"だいがくにいく — go to university",pos:"noun",freq:8,register:"neutral",script:"hiragana"},
-  {kr:"どこ",ro:"doko",meaning:"where",example:"どこにいますか？— Where are you?",pos:"adverb",freq:10,register:"neutral",script:"hiragana",sit:["getting_around","airport"]},
-  {kr:"ばんごはん",ro:"bangohan",meaning:"dinner",example:"ばんごはんをたべる — eat dinner",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
-  {kr:"べんきょう",ro:"benkyou",meaning:"studying",example:"にほんごをべんきょうする — study Japanese",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"ぼく",ro:"boku",meaning:"I / me (male casual)",example:"ぼくはがくせいだ — I'm a student",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
-  {kr:"ゲーム",ro:"geemu",meaning:"game",example:"ゲームをする — play a game",pos:"noun",freq:8,register:"neutral",script:"katakana"},
-  {kr:"ギター",ro:"gitaa",meaning:"guitar",example:"ギターをひく — play guitar",pos:"noun",freq:7,register:"neutral",script:"katakana"},
-  {kr:"ジュース",ro:"juusu",meaning:"juice",example:"ジュースをのむ — drink juice",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["food","restaurant"]},
-  {kr:"ダンス",ro:"dansu",meaning:"dance",example:"ダンスをおどる — dance",pos:"noun",freq:8,register:"neutral",script:"katakana"},
-  {kr:"デート",ro:"deeto",meaning:"date (romantic)",example:"デートにいく — go on a date",pos:"noun",freq:8,register:"casual",script:"katakana",sit:["dating"]},
-  {kr:"バス",ro:"basu",meaning:"bus",example:"バスにのる — ride the bus",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["getting_around"]},
-  {kr:"ビール",ro:"biiru",meaning:"beer",example:"ビールをください — beer please",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["restaurant","food"]},
-  {kr:"ベッド",ro:"beddo",meaning:"bed",example:"ベッドでねる — sleep in bed",pos:"noun",freq:7,register:"neutral",script:"katakana"},
-  {kr:"ボール",ro:"booru",meaning:"ball",example:"ボールをなげる — throw a ball",pos:"noun",freq:7,register:"neutral",script:"katakana"},
-  {kr:"パーティー",ro:"paatii",meaning:"party",example:"パーティーにいく — go to a party",pos:"noun",freq:8,register:"casual",script:"katakana",sit:["dating","meeting"]},
-  {kr:"ピアノ",ro:"piano",meaning:"piano",example:"ピアノをひく — play piano",pos:"noun",freq:7,register:"neutral",script:"katakana"},
-  {kr:"プール",ro:"puuru",meaning:"swimming pool",example:"プールでおよぐ — swim in the pool",pos:"noun",freq:7,register:"neutral",script:"katakana"},
-  {kr:"ペン",ro:"pen",meaning:"pen",example:"ペンをかして — lend me your pen",pos:"noun",freq:7,register:"neutral",script:"katakana"},
-
-  // ══════════════════════════════════════════════
-  //  mosi mosi? by 楽音 (Sasane) — song vocab
-  // ══════════════════════════════════════════════
-  {kr:"けんぱ",ro:"kenpa",meaning:"hopscotch hop-step / skipping along",example:"けんぱけんぱで1000メーター — hopping 1000 meters to reach you",pos:"expression",freq:5,register:"casual",script:"hiragana",sit:["dating"]},
-  {kr:"シクシク",ro:"shikushiku",meaning:"sobbing / whimpering (onomatopoeia)",example:"シクシク 孤独なエリア — quietly sobbing in a lonely place",pos:"expression",freq:5,register:"casual",script:"katakana_d",sit:["dating"]},
-  {kr:"電波",ro:"denpa",meaning:"radio wave / signal / (slang) eccentric / weird in a cute way",example:"電波 電波の怪電波 — signal, signal, a strange signal",pos:"noun",freq:6,register:"casual",script:"kanji",sit:["dating"]},
-  {kr:"怪電波",ro:"kaidenpa",meaning:"mysterious signal / strange frequency",example:"電波の怪電波 — a mysterious radio wave",pos:"noun",freq:4,register:"casual",script:"kanji"},
-  {kr:"交信中",ro:"koushinchuu",meaning:"communicating / in contact / transmitting",example:"宇宙に夢中で交信中 — frantically transmitting into space",pos:"expression",freq:4,register:"neutral",script:"kanji"},
-  {kr:"圏外",ro:"kengai",meaning:"out of range / no signal",example:"あっ圏外 — oh, no signal",pos:"noun",freq:6,register:"neutral",script:"kanji"},
-  {kr:"孤独",ro:"kodoku",meaning:"loneliness / isolation",example:"孤独なエリア — a lonely area",pos:"noun",freq:7,register:"neutral",script:"kanji",sit:["dating"]},
-  {kr:"波長",ro:"hachou",meaning:"wavelength / being on the same wavelength",example:"波長が合う — our wavelengths match",pos:"noun",freq:6,register:"neutral",script:"kanji",sit:["dating"]},
-  {kr:"夢中",ro:"muchuu",meaning:"absorbed / obsessed / head over heels",example:"宇宙に夢中で — completely absorbed in space",pos:"adjective",freq:7,register:"casual",script:"kanji",sit:["dating"]},
-  {kr:"出会う",ro:"deau",meaning:"to meet / to encounter",example:"あなたに出会うの — meeting you",pos:"verb",freq:8,register:"neutral",script:"kanji",sit:["dating","meeting"]},
+  // KANJI
+  {kr:"日",ro:"nichi/hi",meaning:"sun / day / Japan",example:"日本 (nihon) — Japan",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"本",ro:"hon/moto",meaning:"book / origin",example:"本を読む — read a book",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"人",ro:"jin/hito",meaning:"person",example:"日本人 — Japanese person",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"大",ro:"dai/oo",meaning:"big / great",example:"大学 — university",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"小",ro:"shou/chii",meaning:"small",example:"小学校 — elementary school",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"山",ro:"san/yama",meaning:"mountain",example:"富士山 — Mt. Fuji",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"川",ro:"kawa",meaning:"river",example:"川のそば — by the river",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
+  {kr:"水",ro:"sui/mizu",meaning:"water",example:"水をください — water please",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["food","restaurant"]},
+  {kr:"火",ro:"ka/hi",meaning:"fire / Tuesday",example:"火曜日 — Tuesday",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"木",ro:"moku/ki",meaning:"tree / Thursday",example:"木曜日 — Thursday",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
+  {kr:"金",ro:"kin",meaning:"gold / money / Friday",example:"お金 — money",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["shopping"]},
+  {kr:"土",ro:"do/tsuchi",meaning:"earth / Saturday",example:"土曜日 — Saturday",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
+  {kr:"月",ro:"getsu/tsuki",meaning:"moon / month / Monday",example:"月曜日 — Monday",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"年",ro:"nen/toshi",meaning:"year",example:"今年 — this year",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"上",ro:"jou/ue",meaning:"up / above",example:"上に — on top",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"下",ro:"ka/shita",meaning:"down / below",example:"下に — below",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"中",ro:"chuu/naka",meaning:"middle / inside",example:"中に — inside",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"食",ro:"shoku/ta",meaning:"eat / food",example:"食べる — to eat",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["food","restaurant"]},
+  {kr:"飲",ro:"in/no",meaning:"drink",example:"飲む — to drink",pos:"kanji",freq:9,register:"neutral",script:"kanji",sit:["food","restaurant"]},
+  {kr:"見",ro:"ken/mi",meaning:"see / look",example:"見る — to see",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"言",ro:"gen/i",meaning:"say / word",example:"言う — to say",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"行",ro:"kou/i",meaning:"go",example:"行く — to go",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["airport","getting_around"]},
+  {kr:"来",ro:"rai/ku",meaning:"come",example:"来る — to come",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"好",ro:"kou/su",meaning:"like",example:"好き — to like",pos:"kanji",freq:10,register:"neutral",script:"kanji",sit:["dating"]},
+  {kr:"友",ro:"yuu/tomo",meaning:"friend",example:"友達 — friend",pos:"kanji",freq:9,register:"neutral",script:"kanji",sit:["meeting"]},
+  {kr:"学",ro:"gaku/mana",meaning:"study / learn",example:"学校 — school",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"語",ro:"go/kata",meaning:"language",example:"日本語 — Japanese",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"何",ro:"nani/nan",meaning:"what",example:"何ですか？— What is it?",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"今",ro:"kon/ima",meaning:"now / present",example:"今日 — today",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"私",ro:"watashi",meaning:"I / me",example:"私は学生です — I am a student",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  // VOCABULARY
+  {kr:"こんにちは",ro:"konnichiwa",meaning:"hello",example:"こんにちは！",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport"]},
+  {kr:"ありがとうございます",ro:"arigatou gozaimasu",meaning:"thank you (formal)",example:"ありがとうございます",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","food","shopping","restaurant","airport"]},
+  {kr:"ありがとう",ro:"arigatou",meaning:"thank you (casual)",example:"ありがとう！",pos:"expression",freq:10,register:"casual",script:"hiragana",sit:["meeting","food","shopping"]},
+  {kr:"すみません",ro:"sumimasen",meaning:"excuse me / sorry",example:"すみません、どこですか？",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around","shopping","restaurant"]},
+  {kr:"はい",ro:"hai",meaning:"yes",example:"はい、そうです",pos:"expression",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"いいえ",ro:"iie",meaning:"no",example:"いいえ、ちがいます",pos:"expression",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"わかりました",ro:"wakarimashita",meaning:"I understand",example:"わかりました",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","airport"]},
+  {kr:"わかりません",ro:"wakarimasen",meaning:"I don't understand",example:"わかりません",pos:"expression",freq:9,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around"]},
+  {kr:"おねがいします",ro:"onegai shimasu",meaning:"please (request)",example:"みずをおねがいします",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant","shopping","airport"]},
+  {kr:"いただきます",ro:"itadakimasu",meaning:"let's eat",example:"いただきます！",pos:"expression",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"ごちそうさまでした",ro:"gochisousama deshita",meaning:"thanks for the meal",example:"ごちそうさまでした",pos:"expression",freq:8,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"よろしくおねがいします",ro:"yoroshiku onegai shimasu",meaning:"nice to meet you",example:"よろしくおねがいします",pos:"expression",freq:10,register:"formal",script:"hiragana",sit:["meeting"]},
+  {kr:"大丈夫です",ro:"daijoubu desu",meaning:"it's okay / I'm fine",example:"大丈夫です",pos:"expression",freq:9,register:"neutral",script:"kanji",sit:["meeting","emergency"]},
+  {kr:"わたし",ro:"watashi",meaning:"I / me",example:"わたしはがくせいです",pos:"pronoun",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ぼく",ro:"boku",meaning:"I / me (male casual)",example:"ぼくはがくせいだ",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
+  {kr:"みんな",ro:"minna",meaning:"everyone",example:"みんなでいこう",pos:"pronoun",freq:9,register:"casual",script:"hiragana"},
+  {kr:"は",ro:"wa",meaning:"topic marker particle",example:"わたしはがくせいです",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"が",ro:"ga",meaning:"subject marker",example:"ねこがいます",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"を",ro:"wo/o",meaning:"object marker",example:"ほんをよみます",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"に",ro:"ni",meaning:"to / at",example:"がっこうにいく",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"で",ro:"de",meaning:"at / by (action location/means)",example:"バスでいく",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"の",ro:"no",meaning:"possessive particle",example:"わたしのほん — my book",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"も",ro:"mo",meaning:"also / too",example:"わたしもすきです",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"か",ro:"ka",meaning:"question marker",example:"これはほんですか？",pos:"particle",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"みず",ro:"mizu",meaning:"water",example:"みずをください",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"ごはん",ro:"gohan",meaning:"rice / meal",example:"ごはんをたべる",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"えき",ro:"eki",meaning:"train station",example:"えきはどこですか？",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"でんしゃ",ro:"densha",meaning:"train",example:"でんしゃにのる",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["getting_around"]},
+  {kr:"くうこう",ro:"kuukou",meaning:"airport",example:"くうこうにいく",pos:"noun",freq:8,register:"neutral",script:"hiragana",sit:["airport"]},
+  {kr:"トイレ",ro:"toire",meaning:"bathroom",example:"トイレはどこですか？",pos:"noun",freq:10,register:"neutral",script:"katakana",sit:["airport","getting_around","restaurant"]},
+  {kr:"ホテル",ro:"hoteru",meaning:"hotel",example:"ホテルはどこですか？",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["airport","getting_around"]},
+  {kr:"レストラン",ro:"resutoran",meaning:"restaurant",example:"レストランにいく",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"コーヒー",ro:"koohii",meaning:"coffee",example:"コーヒーをください",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"ビール",ro:"biiru",meaning:"beer",example:"ビールをください",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"すし",ro:"sushi",meaning:"sushi",example:"すしがたべたい",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"ラーメン",ro:"raamen",meaning:"ramen",example:"ラーメンをたのむ",pos:"noun",freq:9,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"バス",ro:"basu",meaning:"bus",example:"バスをまつ",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["getting_around"]},
+  {kr:"タクシー",ro:"takushii",meaning:"taxi",example:"タクシーをよぶ",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["getting_around"]},
+  {kr:"びょういん",ro:"byouin",meaning:"hospital",example:"びょういんにいく",pos:"noun",freq:7,register:"neutral",script:"hiragana",sit:["emergency"]},
+  {kr:"けいさつ",ro:"keisatsu",meaning:"police",example:"けいさつをよぶ",pos:"noun",freq:6,register:"neutral",script:"hiragana",sit:["emergency"]},
+  {kr:"おかね",ro:"okane",meaning:"money",example:"おかねがありません",pos:"noun",freq:9,register:"neutral",script:"hiragana",sit:["shopping"]},
+  {kr:"じかん",ro:"jikan",meaning:"time",example:"じかんがありません",pos:"noun",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"にほん",ro:"nihon",meaning:"Japan",example:"にほんにいきたい",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"にほんご",ro:"nihongo",meaning:"Japanese language",example:"にほんごをべんきょうする",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
+  {kr:"おおきい",ro:"ookii",meaning:"big",example:"おおきいいぬ",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ちいさい",ro:"chiisai",meaning:"small",example:"ちいさいねこ",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"おいしい",ro:"oishii",meaning:"delicious",example:"おいしい！",pos:"adjective",freq:10,register:"neutral",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"かわいい",ro:"kawaii",meaning:"cute",example:"かわいいねこ",pos:"adjective",freq:9,register:"casual",script:"hiragana",sit:["dating","shopping"]},
+  {kr:"かっこいい",ro:"kakkoii",meaning:"cool",example:"かっこいい！",pos:"adjective",freq:8,register:"casual",script:"hiragana",sit:["dating"]},
+  {kr:"むずかしい",ro:"muzukashii",meaning:"difficult",example:"にほんごはむずかしい",pos:"adjective",freq:8,register:"neutral",script:"hiragana"},
+  {kr:"たのしい",ro:"tanoshii",meaning:"fun",example:"たのしい！",pos:"adjective",freq:9,register:"casual",script:"hiragana"},
+  {kr:"すごい",ro:"sugoi",meaning:"amazing / wow",example:"すごい！",pos:"adjective",freq:9,register:"casual",script:"hiragana",sit:["dating","meeting"]},
+  {kr:"いい",ro:"ii",meaning:"good",example:"いいですね",pos:"adjective",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"げんき",ro:"genki",meaning:"healthy / energetic",example:"げんきですか？",pos:"adjective",freq:10,register:"neutral",script:"hiragana",sit:["meeting"]},
+  {kr:"います",ro:"imasu",meaning:"to exist (living things)",example:"ねこがいます",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"あります",ro:"arimasu",meaning:"to exist (non-living)",example:"ほんがあります",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"いきます",ro:"ikimasu",meaning:"to go",example:"がっこうにいきます",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"きます",ro:"kimasu",meaning:"to come",example:"きてください",pos:"verb",freq:10,register:"formal",script:"hiragana"},
+  {kr:"たべます",ro:"tabemasu",meaning:"to eat",example:"すしをたべます",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"のみます",ro:"nomimasu",meaning:"to drink",example:"みずをのみます",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["food","restaurant"]},
+  {kr:"わかります",ro:"wakarimasu",meaning:"to understand",example:"わかります",pos:"verb",freq:10,register:"formal",script:"hiragana",sit:["meeting","airport","getting_around"]},
+  {kr:"かいます",ro:"kaimasu",meaning:"to buy",example:"これをかいます",pos:"verb",freq:9,register:"formal",script:"hiragana",sit:["shopping"]},
+  {kr:"すきです",ro:"suki desu",meaning:"to like / to love",example:"にほんごがすきです",pos:"verb",freq:10,register:"neutral",script:"hiragana",sit:["dating","meeting"]},
+  {kr:"とても",ro:"totemo",meaning:"very",example:"とてもおいしい",pos:"adverb",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"ちょっと",ro:"chotto",meaning:"a little / just a moment",example:"ちょっとまって",pos:"adverb",freq:10,register:"casual",script:"hiragana",sit:["meeting","getting_around"]},
+  {kr:"どこ",ro:"doko",meaning:"where",example:"どこですか？",pos:"adverb",freq:10,register:"neutral",script:"hiragana",sit:["airport","getting_around"]},
+  {kr:"なに",ro:"nani",meaning:"what",example:"なんですか？",pos:"adverb",freq:10,register:"neutral",script:"hiragana"},
+  {kr:"いくら",ro:"ikura",meaning:"how much",example:"いくらですか？",pos:"adverb",freq:9,register:"neutral",script:"hiragana",sit:["shopping","food","restaurant"]},
+  {kr:"どうぞ",ro:"douzo",meaning:"please / go ahead",example:"どうぞ！",pos:"adverb",freq:9,register:"formal",script:"hiragana",sit:["meeting","food","shopping"]},
+  {kr:"ずっと",ro:"zutto",meaning:"all along / always",example:"ずっとすきだった",pos:"adverb",freq:9,register:"casual",script:"hiragana",sit:["dating"]},
+  {kr:"ゲーム",ro:"geemu",meaning:"game",example:"ゲームをする",pos:"noun",freq:8,register:"neutral",script:"katakana"},
+  {kr:"ギター",ro:"gitaa",meaning:"guitar",example:"ギターをひく",pos:"noun",freq:7,register:"neutral",script:"katakana"},
+  {kr:"ジュース",ro:"juusu",meaning:"juice",example:"ジュースをのむ",pos:"noun",freq:8,register:"neutral",script:"katakana",sit:["food","restaurant"]},
+  {kr:"デート",ro:"deeto",meaning:"date (romantic)",example:"デートにいく",pos:"noun",freq:8,register:"casual",script:"katakana",sit:["dating"]},
+  {kr:"パーティー",ro:"paatii",meaning:"party",example:"パーティーにいく",pos:"noun",freq:8,register:"casual",script:"katakana",sit:["dating","meeting"]},
+  // mosi mosi? song words
+  {kr:"けんぱ",ro:"kenpa",meaning:"hopscotch hop-step",example:"けんぱけんぱで1000メーター",pos:"expression",freq:5,register:"casual",script:"hiragana",sit:["dating"]},
+  {kr:"シクシク",ro:"shikushiku",meaning:"sobbing / whimpering",example:"シクシク 孤独なエリア",pos:"expression",freq:5,register:"casual",script:"katakana_d",sit:["dating"]},
+  {kr:"電波",ro:"denpa",meaning:"radio wave / signal / eccentric",example:"電波 電波の怪電波",pos:"noun",freq:6,register:"casual",script:"kanji",sit:["dating"]},
+  {kr:"怪電波",ro:"kaidenpa",meaning:"mysterious signal",example:"電波の怪電波",pos:"noun",freq:4,register:"casual",script:"kanji"},
+  {kr:"圏外",ro:"kengai",meaning:"out of range / no signal",example:"あっ圏外",pos:"noun",freq:6,register:"neutral",script:"kanji"},
+  {kr:"孤独",ro:"kodoku",meaning:"loneliness",example:"孤独なエリア",pos:"noun",freq:7,register:"neutral",script:"kanji",sit:["dating"]},
+  {kr:"夢中",ro:"muchuu",meaning:"absorbed / head over heels",example:"宇宙に夢中で",pos:"adjective",freq:7,register:"casual",script:"kanji",sit:["dating"]},
+  {kr:"出会う",ro:"deau",meaning:"to meet / encounter",example:"あなたに出会うの",pos:"verb",freq:8,register:"neutral",script:"kanji",sit:["dating","meeting"]},
 ];
 
 const LANGS = {
@@ -1725,1087 +1541,7 @@ const SITUATIONS = [
 ];
 let activeSituation = null;
 
-let curLang = 'korean';
-let curTab  = 'vocab';
-let theme   = localStorage.getItem('lf-theme') || 'dark';
-
-function toggleTheme() {
-  theme = theme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('lf-theme', theme);
-  document.body.className = theme;
-  applyFontSize(fontSize);
-  document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
-}
-
-function switchLang(lang) {
-  curLang = lang;
-  localStorage.setItem('lf-lang', lang);
-  const L = LANGS[lang];
-  document.getElementById('langFlag').textContent   = L.flag;
-  document.getElementById('langLabel').textContent  = L.label;
-  // logoScript is the tagline, not language-specific
-  const srch = document.getElementById('searchInput');
-  if (srch) srch.placeholder = L.placeholder;
-  document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === lang));
-  document.getElementById('langMenu').classList.remove('open');
-  openSecs = {};
-  activeSituation = null;
-  // default to script grouping for Japanese
-  if (lang === 'japanese' && curGrouping === 'pos') { curGrouping = 'script'; save('lf-grouping','script'); }
-  if (lang !== 'japanese' && curGrouping === 'script') { curGrouping = 'pos'; save('lf-grouping','pos'); }
-  showScriptFilters(lang === 'japanese');
-  renderTab(curTab);
-}
-
-function toggleLangMenu() {
-  const menu = document.getElementById('langMenu');
-  const btn  = document.getElementById('langBtn');
-  const open = menu.classList.contains('open');
-  if (open) {
-    menu.classList.remove('open');
-    return;
-  }
-  const r = btn.getBoundingClientRect();
-  menu.style.top  = (r.bottom + 6) + 'px';
-  menu.style.right = (window.innerWidth - r.right) + 'px';
-  menu.classList.add('open');
-}
-document.addEventListener('click', e => {
-  const btn  = document.getElementById('langBtn');
-  const menu = document.getElementById('langMenu');
-  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) menu.classList.remove('open');
-});
-
-function switchTab(tab) {
-  curTab = tab;
-  localStorage.setItem('lf-tab', tab);
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === tab);
-    b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false');
-  });
-  renderTab(tab);
-}
-
-function renderTab(tab) {
-  const main = document.getElementById('mainContent');
-  if (!main) return;
-  main.innerHTML = '';
-  if (tab === 'vocab')    renderVocab(main);
-  if (tab === 'practice') renderPractice(main);
-  if (tab === 'grammar')  renderGrammar(main);
-}
-
-function speak(text, lang) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang === 'korean' ? 'ko-KR' : lang === 'japanese' ? 'ja-JP' : 'it-IT';
-  u.rate = 0.85;
-  window.speechSynthesis.speak(u);
-}
-
-function shuffle(arr) {
-  const a = arr.slice();
-  for (let i = a.length-1; i>0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-  return a;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// VOCABULARY TAB
-// ═══════════════════════════════════════════════════════════════
-// ── VOCABULARY TAB ────────────────────────────────────────────────────────────
-
-// Deck state — initialized in vocabInit() after all scripts load
-let decks        = [];
-let activeDeckIdx = -1;
-
-// deck state initialized in boot()
-
-let openSecs = {};
-
-const POS_ORDER = ['expression','verb','adjective','noun','adverb','pronoun','particle','hiragana','katakana','kanji','hiragana_d','katakana_d'];
-const PALETTE   = ['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#7ac8c8','#c8c87a','#c87a7a','#a87ac8'];
-
-const GROUPINGS = {
-  script: {
-    label:'by script',
-    key: w => w.script || w.pos,
-    order: () => ['hiragana','katakana','kanji','hiragana_d','katakana_d','expression','verb','adjective','noun','adverb','pronoun','particle'],
-    displayName: k => ({'hiragana_d':'hiragana accents','katakana_d':'katakana accents'}[k] || k),
-    color: k => ({'hiragana':'#7ac8a0','katakana':'#7a8cc8','kanji':'#c87aa8','hiragana_d':'#7ac8c8','katakana_d':'#c8c87a',verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
-  },
-  pos: {
-    label:'part of speech',
-    key: w => w.pos,
-    order: () => POS_ORDER,
-    color: k => ({verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a',hiragana:'#7ac8a0',katakana:'#7a8cc8',kanji:'#c87aa8'}[k]||'#888')
-  },
-  register: {
-    label:'formality',
-    key: w => w.register || 'neutral',
-    order: () => ['formal','neutral','casual'],
-    color: k => ({formal:'#7a8cc8',neutral:'#7ac8a0',casual:'#c8a87a'}[k]||'#888')
-  },
-  most_common: {
-    label:'most common first',
-    key: w => w.freq>=10?'essential':w.freq>=8?'very common':w.freq>=6?'common':w.freq>=4?'uncommon':'rare',
-    order: () => ['essential','very common','common','uncommon','rare'],
-    color: () => '#7ac8a0'
-  },
-  least_common: {
-    label:'least common first',
-    key: w => w.freq>=10?'essential':w.freq>=8?'very common':w.freq>=6?'common':w.freq>=4?'uncommon':'rare',
-    order: () => ['rare','uncommon','common','very common','essential'],
-    color: () => '#c87a7a'
-  },
-  shortest: {
-    label:'shortest first',
-    key: w => { const l=w.kr.length; return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'; },
-    order: () => ['1 char','2 chars','3 chars','4 chars','5+ chars'],
-    color: () => '#7ac8c8'
-  },
-  longest: {
-    label:'longest first',
-    key: w => { const l=w.kr.length; return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'; },
-    order: () => ['5+ chars','4 chars','3 chars','2 chars','1 char'],
-    color: () => '#c87aa8'
-  },
-  a_z: {
-    label:'a → z',
-    key: w => w.ro[0].toUpperCase(),
-    order: keys => keys.slice().sort(),
-    color: () => '#7a8cc8'
-  },
-  in_deck: {
-    label:'in my deck',
-    key: w => deckColorFor(w.kr) ? 'in a deck' : 'not in deck',
-    order: () => ['in a deck','not in deck'],
-    color: k => k==='in a deck' ? '#c8a87a' : '#888'
-  }
-};
-
-let curGrouping = 'pos';
-
-// Deck helpers
-function deckColorFor(kr) {
-  // returns first color (for backward compat single-color uses)
-  for (let i=0;i<decks.length;i++) { if (decks[i].words[kr]) return decks[i].color; }
-  return null;
-}
-function deckColorsFor(kr) {
-  // returns all colors for a word across all decks
-  return decks.filter(d => d.words[kr]).map(d => d.color);
-}
-function deckIdxFor(kr) {
-  for (let i=0;i<decks.length;i++) { if (decks[i].words[kr]) return i; }
-  return -1;
-}
-function nextDeckColor() {
-  const used = decks.map(d=>d.color);
-  for (let c of PALETTE) { if (!used.includes(c)) return c; }
-  return PALETTE[decks.length % PALETTE.length];
-}
-function addDeck(name) {
-  decks.push({name, color:nextDeckColor(), words:{}});
-  activeDeckIdx = decks.length - 1;
-  saveDeckState();
-}
-function moveDeck(from, to) {
-  const deck = decks.splice(from, 1)[0];
-  decks.splice(to, 0, deck);
-  if (activeDeckIdx === from) activeDeckIdx = to;
-  else if (activeDeckIdx === to) activeDeckIdx = from;
-  saveDeckState();
-  renderDeckSwitcher();
-  renderDeckChips();
-  renderWordGrid();
-}
-
-function deleteDeck(idx) {
-  decks.splice(idx,1);
-  if (activeDeckIdx >= decks.length) activeDeckIdx = decks.length - 1;
-  saveDeckState();
-}
-function saveDeckState() {
-  save('lf-decks', decks);
-  save('lf-activeDeck', activeDeckIdx);
-}
-
-// ── RENDER VOCAB TAB ──────────────────────────────────────────────────────────
-function renderVocab(container) {
-  const words = LANGS[curLang].words;
-
-  // Show onboarding banner if first visit for this language
-  const seenKey = 'lf-seen-' + curLang;
-  const isFirstVisit = !localStorage.getItem(seenKey);
-  container.innerHTML = `<div class="ctrl">
-      <div class="sit-row" id="sitRow"></div>
-      <div class="ctrl-row filters-row" id="filtersRow" style="display:none">
-        <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
-        <div id="groupBar"></div>
-        <button class="ubtn" onclick="vocabExpandAll()">expand all</button>
-        <button class="ubtn" onclick="vocabCollapseAll()">collapse all</button>
-      </div>
-      <div class="ctrl-row" style="margin-top:4px">
-        <button class="ubtn filters-toggle" id="filtersToggle" onclick="toggleFilters()">more filters ▾</button>
-        <input id="searchInput2" type="text" placeholder="${LANGS[curLang].placeholder}" style="flex:1;min-width:0;width:0" />
-      </div>
-    </div>
-    <div id="wordSections"></div>
-    <div id="deckPanel" class="deck-panel surface">
-      <div class="deck-hdr">
-        <span class="deck-title">your deck</span>
-        <div class="deck-acts">
-          <button class="abtn danger" onclick="clearActiveDeck()">remove all</button>
-          <button class="abtn accent" onclick="openStudy()">study deck →</button>
-        </div>
-      </div>
-      <div id="deckSwitcher" class="deck-switcher"></div>
-      <div id="deckChips"></div>
-    </div>
-  `;
-
-  document.getElementById('searchInput2').oninput = renderWordGrid;
-  if (isFirstVisit) {
-    const banner = buildOnboardBanner();
-    container.insertBefore(banner, container.firstChild);
-  }
-  buildSitPills();
-  buildGroupBtns();
-  renderWordGrid();
-  renderDeckSwitcher();
-  renderDeckChips();
-}
-
-function buildSitPills() {
-  const row = document.getElementById('sitRow');
-  if (!row) return;
-  row.innerHTML = '';
-
-  // "all situations" pill
-  const allBtn = document.createElement('button');
-  allBtn.className = 'sit-pill' + (activeSituation === 'all' ? ' sit-active' : '');
-  allBtn.textContent = 'all situations';
-  allBtn.style.setProperty('--sc', '#c8a87a');
-  allBtn.onclick = () => {
-    activeSituation = activeSituation === 'all' ? null : 'all';
-    openSecs = {};
-    buildSitPills();
-    renderWordGrid();
-  };
-  row.appendChild(allBtn);
-
-  SITUATIONS.forEach(s => {
-    const btn = document.createElement('button');
-    btn.className = 'sit-pill' + (activeSituation === s.key ? ' sit-active' : '');
-    btn.textContent = s.label;
-    btn.style.setProperty('--sc', s.color);
-    btn.onclick = () => {
-      activeSituation = activeSituation === s.key ? null : s.key;
-      openSecs = {};
-      buildSitPills();
-      renderWordGrid();
-    };
-    row.appendChild(btn);
-  });
-
-  // "add all to deck" button — only shown when a situation is active
-  if (activeSituation) {
-    const words = LANGS[curLang].words;
-    const sitWords = activeSituation === 'all'
-      ? words.filter(w => w.sit && w.sit.length > 0)
-      : words.filter(w => w.sit && w.sit.includes(activeSituation));
-
-    const addAll = document.createElement('button');
-    addAll.className = 'sit-add-all';
-    addAll.textContent = 'add all to deck →';
-    addAll.onclick = () => {
-      if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
-        // no deck selected — open bottom sheet to create one, then add all
-        const name = prompt('Name your new deck (all ' + sitWords.length + ' words will be added):','');
-        if (!name || !name.trim()) return;
-        addDeck(name.trim());
-        sitWords.forEach(w => decks[decks.length-1].words[w.kr] = true);
-        saveDeckState(); buildSitPills(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
-        return;
-      }
-      const deck = decks[activeDeckIdx];
-      sitWords.forEach(w => deck.words[w.kr] = true);
-      saveDeckState(); buildSitPills(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
-    };
-    row.appendChild(addAll);
-  }
-}
-
-function toggleFilters() {
-  const row = document.getElementById('filtersRow');
-  const btn = document.getElementById('filtersToggle');
-  const open = row.style.display === 'flex';
-  row.style.display = open ? 'none' : 'flex';
-  btn.textContent = open ? 'more filters ▾' : 'hide filters ▴';
-}
-
-function buildGroupBtns() {
-  const bar = document.getElementById('groupBar');
-  if (!bar) return;
-  bar.innerHTML = '';
-  Object.entries(GROUPINGS).forEach(([key, cfg]) => {
-    const btn = document.createElement('button');
-    btn.className = 'gbtn' + (key === curGrouping ? ' on' : '');
-    btn.textContent = cfg.label;
-    btn.onclick = () => { curGrouping = key; save('lf-grouping', key); openSecs = {}; buildGroupBtns(); renderWordGrid(); };
-    bar.appendChild(btn);
-  });
-}
-
-function renderWordGrid() {
-  const container = document.getElementById('wordSections');
-  if (!container) return;
-
-  const rawSearch = document.getElementById('searchInput2') || document.getElementById('searchInput');
-  const search = (rawSearch?.value || '').toLowerCase().trim();
-  const cfg = GROUPINGS[curGrouping];
-  const words = LANGS[curLang].words;
-
-  let filtered = words.filter(w => {
-    if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
-    if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
-    if (activeScripts.size > 0) {
-      // when script filter is on, show ONLY pure alphabet characters (pos === script name)
-      // not vocabulary words that happen to use that script
-      const scriptPoses = new Set(['hiragana','katakana','kanji','hiragana_d','katakana_d']);
-      if (scriptPoses.has(w.pos)) {
-        // it's a character card — show only if its script is selected
-        if (!activeScripts.has(w.pos)) return false;
-      } else {
-        // it's a vocabulary word — hide when any script filter is active
-        return false;
-      }
-    }
-    if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
-    return true;
-  });
-
-  let groups = {}, allKeys, ordered;
-
-  if (activeSituation) {
-    // When a situation is active, group by priority tier and auto-open all
-    const tierKey = w => w.freq >= 9 ? 'say this first' : w.freq >= 7 ? 'essential' : 'good to know';
-    const tierOrder = ['say this first', 'essential', 'good to know'];
-    const tierColors = {'say this first':'#7ac8a0','essential':'#c8a87a','good to know':'#888894'};
-    filtered.sort((a,b) => b.freq - a.freq);
-    filtered.forEach(w => { const k = tierKey(w); if (!groups[k]) groups[k]=[]; groups[k].push(w); });
-    allKeys = tierOrder;
-    ordered = tierOrder.filter(k => groups[k]?.length > 0);
-    ordered.forEach(k => openSecs[k] = true);
-    // override color for section rendering
-    window._sitTierColors = tierColors;
-  } else {
-    window._sitTierColors = null;
-    filtered.forEach(w => { const k = cfg.key(w); if (!groups[k]) groups[k]=[]; groups[k].push(w); });
-    allKeys = Object.keys(groups);
-    ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
-    if (search) ordered.forEach(k => openSecs[k] = true);
-  // auto-open first section only the very first time each language is viewed
-  if (!window._firstOpenDone) window._firstOpenDone = {};
-  if (Object.keys(openSecs).length === 0 && ordered.length > 0 && !window._firstOpenDone[curLang]) {
-    openSecs[ordered[0]] = true;
-    window._firstOpenDone[curLang] = true;
-  }
-  }
-
-  container.innerHTML = '';
-  if (ordered.length === 0) { container.innerHTML = '<div class="empty-msg">no words match</div>'; return; }
-
-  ordered.forEach(key => {
-    const wds = groups[key];
-    const isOpen = !!openSecs[key];
-    const color = (window._sitTierColors && window._sitTierColors[key]) ? window._sitTierColors[key] : cfg.color(key);
-    const displayKey = cfg.displayName ? cfg.displayName(key) : key;
-    const selCount = wds.filter(w => deckColorFor(w.kr)).length;
-
-    const sec = document.createElement('div'); sec.className = 'sec';
-    const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
-
-    const left = document.createElement('div'); left.className = 'sec-left';
-    const nm = document.createElement('span'); nm.className = 'sec-name'; nm.style.color = color; nm.textContent = (cfg.displayName ? cfg.displayName(key) : key);
-    const ct = document.createElement('span'); ct.className = 'sec-count'; ct.textContent = wds.length;
-    left.appendChild(nm); left.appendChild(ct);
-    if (selCount) { const sl = document.createElement('span'); sl.className = 'sec-sel'; sl.textContent = selCount+' in deck'; left.appendChild(sl); }
-
-    const chev = document.createElement('span'); chev.className = 'sec-chev'; chev.textContent = isOpen ? '▴' : '▾';
-    hdr.appendChild(left); hdr.appendChild(chev);
-
-    const body = document.createElement('div'); body.className = 'sec-body'; body.style.display = isOpen ? 'flex' : 'none';
-
-    wds.forEach((w, i) => {
-      const chip = document.createElement('div');
-      chip.className = 'chip' + (deckColorsFor(w.kr).length > 0 ? ' on' : '');
-      const chipColors = deckColorsFor(w.kr);
-      const chipColor  = chipColors[0] || null;
-      chip.style.animationDelay = Math.min(i * 0.008, 0.2) + 's';
-      chip.title = w.meaning + ' — ' + w.example;
-      chip.setAttribute('role', 'button');
-      chip.setAttribute('tabindex', '0');
-      chip.setAttribute('aria-label', w.kr + ', ' + w.ro + ', ' + w.meaning);
-      chip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openBs(w); } });
-
-      if (chipColors.length > 1) {
-        chip.style.border = '2px solid transparent';
-        chip.style.backgroundImage = 'linear-gradient(' + chip.style.background + ',var(--sf)),linear-gradient(135deg,' + chipColors.join(',') + ')';
-        chip.style.backgroundOrigin = 'border-box';
-        chip.style.backgroundClip = 'padding-box,border-box';
-      } else if (chipColor) {
-        chip.style.borderColor = chipColor;
-      }
-
-      const regColor = {formal:'#7a8cc8',casual:'#c8a87a',neutral:'transparent'}[w.register||'neutral'];
-      const dotsHtml = chipColors.map(c =>
-        '<span style="width:6px;height:6px;border-radius:50%;background:' + c + ';flex-shrink:0;display:inline-block"></span>'
-      ).join('');
-
-      chip.innerHTML =
-        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px">' +
-          '<span class="chip-kr"' + (chipColor ? ' style="color:' + chipColor + '"' : '') + '>' + w.kr + '</span>' +
-          '<div style="display:flex;align-items:center;gap:3px">' +
-            (chipColors.length > 1 ? dotsHtml : '') +
-            (w.register && w.register !== 'neutral' ? '<span class="reg-badge" style="background:' + regColor + '20;color:' + regColor + ';border-color:' + regColor + '40">' + w.register + '</span>' : '') +
-          '</div>' +
-        '</div>' +
-        '<span class="chip-ro">' + w.ro + '</span>';
-            chip.onclick = () => openBs(w);
-      chip.oncontextmenu = e => { e.preventDefault(); openBs(w); };
-
-      body.appendChild(chip);
-    });
-
-    const toggle = () => {
-      const open = sec.classList.toggle('open');
-      body.style.display = open ? 'flex' : 'none';
-      chev.textContent = open ? '▴' : '▾';
-      if (open) openSecs[key] = true; else delete openSecs[key];
-    };
-    hdr.onclick = toggle;
-    if (isOpen) sec.classList.add('open');
-
-    sec.appendChild(hdr); sec.appendChild(body);
-    container.appendChild(sec);
-  });
-}
-
-function vocabExpandAll() {
-  const words = LANGS[curLang].words;
-  words.forEach(w => openSecs[GROUPINGS[curGrouping].key(w)] = true);
-  renderWordGrid();
-}
-function vocabCollapseAll() { openSecs = {}; renderWordGrid(); }
-
-// Deck operations
-function toggleWordInDeck(w) {
-  if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
-    // flash hint
-    const panel = document.getElementById('deckPanel');
-    if (panel) { panel.style.outline = '2px solid var(--acc)'; setTimeout(()=>panel.style.outline='',800); }
-    return;
-  }
-  const d = decks[activeDeckIdx].words;
-  if (d[w.kr]) delete d[w.kr]; else d[w.kr] = true;
-  saveDeckState();
-  renderDeckChips();
-  renderWordGrid();
-}
-
-
-
-function renderDeckSwitcher() {
-  const sw = document.getElementById('deckSwitcher');
-  if (!sw) return;
-  sw.innerHTML = '';
-
-  if (decks.length === 0) {
-    sw.innerHTML = '<span class="empty-deck">right-click any word to create your first deck</span>';
-  } else {
-    decks.forEach((deck, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'dbtn' + (i === activeDeckIdx ? ' dactive' : '');
-      btn.style.setProperty('--dc', deck.color);
-
-      const dot = document.createElement('span'); dot.className = 'ddot'; dot.style.background = deck.color;
-      const lbl = document.createElement('span'); lbl.textContent = deck.name;
-      const ct  = document.createElement('span'); ct.className = 'dct';
-      const wc  = Object.keys(deck.words).length;
-      if (wc > 0) ct.textContent = wc;
-
-      btn.appendChild(dot); btn.appendChild(lbl); btn.appendChild(ct);
-      btn.onclick = () => { activeDeckIdx = i === activeDeckIdx ? -1 : i; saveDeckState(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); };
-      btn.oncontextmenu = e => showDeckCtxMenu(e, i);
-      btn.title = 'tap to select · right-click to rename or delete';
-
-      // wrap in row with arrows
-      const row = document.createElement('div');
-      row.style.cssText = 'display:flex;align-items:center;gap:4px';
-      const arrowWrap = document.createElement('div');
-      arrowWrap.style.cssText = 'display:flex;flex-direction:column;gap:1px;flex-shrink:0;margin-right:6px';
-      if (i > 0) {
-        const up = document.createElement('button');
-        up.textContent = '↑';
-        up.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:var(--mu);line-height:1';
-        up.title = 'move up';
-        up.onclick = ev => { ev.stopPropagation(); moveDeck(i, i-1); };
-        arrowWrap.appendChild(up);
-      }
-      if (i < decks.length - 1) {
-        const dn = document.createElement('button');
-        dn.textContent = '↓';
-        dn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:var(--mu);line-height:1';
-        dn.title = 'move down';
-        dn.onclick = ev => { ev.stopPropagation(); moveDeck(i, i+1); };
-        arrowWrap.appendChild(dn);
-      }
-      row.appendChild(arrowWrap);
-      row.appendChild(btn);
-      sw.appendChild(row);
-    });
-  }
-
-  // + new deck button
-  const add = document.createElement('button');
-  add.className = 'dbtn'; add.style.cssText='--dc:#7ac8a0;color:#7ac8a0;border-color:rgba(122,200,160,.3)';
-  add.textContent = '+ new deck';
-  add.onclick = () => { const n = prompt('Name your new deck:',''); if (n?.trim()) { addDeck(n.trim()); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); }};
-  sw.appendChild(add);
-
-  // premade deck button
-  const premadeKeys = {korean:['korean'], japanese:['japanese_hiragana','japanese_katakana','japanese_kanji']};
-  if (premadeKeys[curLang]) {
-    const pb = document.createElement('button');
-    pb.className = 'dbtn';
-    pb.style.cssText = 'color:var(--acc);border-color:var(--acc-bd)';
-    pb.textContent = curLang === 'japanese' ? '★ alphabet + accent decks' : '★ starter decks';
-    pb.title = curLang === 'japanese' ? 'Add hiragana, katakana and kanji decks' : 'Add Korean Essentials, K-pop & Survival decks';
-    pb.onclick = () => {
-      if (curLang === 'japanese') addPremadeDeckJapaneseAll();
-      else premadeKeys[curLang].forEach(k => addPremadeDeck(k));
-    };
-    sw.appendChild(pb);
-  }
-
-  // update badge
-  const badge = document.getElementById('deckBadge');
-  if (badge) badge.textContent = activeDeckIdx >= 0 ? Object.keys(decks[activeDeckIdx]?.words||{}).length : '0';
-}
-
-function renderDeckChips() {
-  const c = document.getElementById('deckChips');
-  if (!c) return;
-  const badge = document.getElementById('deckBadge');
-
-  if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
-  
-    c.innerHTML = '<span class="empty-deck">select or create a deck, then click words to add them</span>';
-    return;
-  }
-  const deck = decks[activeDeckIdx];
-  const keys = Object.keys(deck.words);
-
-
-  if (keys.length === 0) {
-    c.innerHTML = `<span class="empty-deck">left-click words to add to <strong style="color:${deck.color}">${deck.name}</strong></span>`;
-    return;
-  }
-  c.innerHTML = '';
-  keys.forEach(kr => {
-    const w = LANGS[curLang].words.find(x => x.kr === kr) || {kr, ro:'', meaning:''};
-    const chip = document.createElement('div'); chip.className = 'dchip';
-    chip.style.cssText = `border-color:${deck.color};color:${deck.color}`;
-    chip.innerHTML = `${w.kr} <span class="dchip-ro">${w.ro}</span><button class="dchip-x">×</button>`;
-    chip.querySelector('button').onclick = () => { delete deck.words[kr]; saveDeckState(); renderDeckChips(); renderWordGrid(); };
-    c.appendChild(chip);
-  });
-}
-
-function clearActiveDeck() {
-  if (activeDeckIdx < 0) return;
-  decks[activeDeckIdx].words = {};
-  saveDeckState(); renderDeckChips(); renderWordGrid();
-}
-
-// Context menus
-let ctxMenu = null;
-function removeCtxMenu() { if (ctxMenu) { ctxMenu.remove(); ctxMenu = null; } }
-document.addEventListener('click', removeCtxMenu);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') removeCtxMenu(); });
-
-function makeMenu(isDark) {
-  const m = document.createElement('div');
-  m.style.cssText = 'position:fixed;z-index:9999;border-radius:9px;overflow:hidden;min-width:170px;box-shadow:0 8px 32px rgba(0,0,0,.4)';
-  m.style.background = isDark ? '#1e1e28' : '#fff';
-  m.style.border     = isDark ? '1px solid rgba(255,255,255,.14)' : '1px solid rgba(0,0,0,.14)';
-  return m;
-}
-function menuRow(menu, label, color, fn, isDark) {
-  const row = document.createElement('div');
-  row.style.cssText = 'padding:8px 13px;font-size:.74rem;cursor:pointer;font-family:DM Mono,monospace;display:flex;align-items:center;gap:8px;';
-  row.style.color = color || (isDark ? '#f0eee8' : '#1c1a16');
-  row.textContent = label;
-  row.onmouseenter = () => row.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)';
-  row.onmouseleave = () => row.style.background = '';
-  row.onclick = e => { e.stopPropagation(); removeCtxMenu(); fn(); };
-  menu.appendChild(row);
-}
-function positionMenu(menu, e) {
-  menu.style.left = e.clientX + 'px'; menu.style.top = e.clientY + 'px';
-  document.body.appendChild(menu); ctxMenu = menu;
-  const r = menu.getBoundingClientRect();
-  if (r.right  > window.innerWidth  - 8) menu.style.left = (e.clientX - r.width)  + 'px';
-  if (r.bottom > window.innerHeight - 8) menu.style.top  = (e.clientY - r.height) + 'px';
-}
-
-function showWordCtxMenu(e, w) {
-  e.preventDefault(); removeCtxMenu();
-  const isDark = document.body.classList.contains('dark');
-  const menu = makeMenu(isDark);
-
-  // word header
-  const hd = document.createElement('div');
-  hd.style.cssText = 'padding:8px 13px 4px;font-family:Noto Sans KR,sans-serif;font-size:.9rem;font-weight:500;';
-  hd.style.color = isDark ? '#f0eee8' : '#1c1a16';
-  hd.textContent = w.kr + ' — ' + w.ro;
-  menu.appendChild(hd);
-
-  // speak button
-  const speakRow = document.createElement('div');
-  speakRow.style.cssText = 'padding:4px 13px 8px;font-size:.68rem;cursor:pointer;display:flex;align-items:center;gap:6px;';
-  speakRow.style.color = isDark ? '#7ac8a0' : '#1a7a4a';
-  speakRow.innerHTML = '▶ listen';
-  speakRow.onclick = e => { e.stopPropagation(); speak(w.kr, curLang); };
-  menu.appendChild(speakRow);
-
-  // divider
-  const d1 = document.createElement('div');
-  d1.style.cssText = 'border-top:1px solid;margin:2px 0;';
-  d1.style.borderColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.08)';
-  menu.appendChild(d1);
-
-  // deck header
-  const dh = document.createElement('div');
-  dh.style.cssText = 'padding:5px 13px 3px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;';
-  dh.style.color = isDark ? '#55555f' : '#a09d96';
-  dh.textContent = 'add to deck';
-  menu.appendChild(dh);
-
-  if (decks.length === 0) {
-    const none = document.createElement('div');
-    none.style.cssText = 'padding:5px 13px 7px;font-size:.72rem;';
-    none.style.color = isDark ? '#55555f' : '#a09d96';
-    none.textContent = 'no decks yet';
-    menu.appendChild(none);
-  } else {
-    decks.forEach((deck, i) => {
-      const inThis = !!deck.words[w.kr];
-      const row = document.createElement('div');
-      row.style.cssText = 'padding:7px 13px;font-size:.74rem;cursor:pointer;display:flex;align-items:center;gap:9px;font-family:DM Mono,monospace;';
-      row.style.color = isDark ? '#f0eee8' : '#1c1a16';
-      const dot = document.createElement('span');
-      dot.style.cssText = `width:9px;height:9px;border-radius:50%;flex-shrink:0;border:2px solid ${deck.color};`;
-      if (inThis) dot.style.background = deck.color;
-      const lbl = document.createElement('span'); lbl.style.flex='1'; lbl.textContent = deck.name + (inThis ? ' ✓' : '');
-      row.appendChild(dot); row.appendChild(lbl);
-      row.onmouseenter = () => row.style.background = isDark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)';
-      row.onmouseleave = () => row.style.background = '';
-      row.onclick = ev => {
-        ev.stopPropagation();
-        decks.forEach(d => delete d.words[w.kr]);
-        if (!inThis) deck.words[w.kr] = true;
-        saveDeckState(); removeCtxMenu(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
-      };
-      menu.appendChild(row);
-    });
-  }
-
-  // divider + new deck
-  const d2 = document.createElement('div');
-  d2.style.cssText = 'border-top:1px solid;margin:3px 0;';
-  d2.style.borderColor = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.08)';
-  menu.appendChild(d2);
-  menuRow(menu, '+ new deck', isDark ? '#7ac8a0' : '#1a7a4a', () => {
-    const n = prompt('Name your new deck:', '');
-    if (n?.trim()) {
-      addDeck(n.trim());
-      decks[decks.length-1].words[w.kr] = true;
-      saveDeckState(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
-    }
-  }, isDark);
-
-  positionMenu(menu, e);
-}
-
-function showDeckCtxMenu(e, idx) {
-  e.preventDefault(); removeCtxMenu();
-  const isDark = document.body.classList.contains('dark');
-  const deck = decks[idx];
-  const menu = makeMenu(isDark);
-
-  const hd = document.createElement('div');
-  hd.style.cssText = 'padding:7px 13px 5px;font-size:.65rem;letter-spacing:.08em;font-weight:500;text-transform:uppercase;';
-  hd.style.color = deck.color; hd.textContent = deck.name;
-  menu.appendChild(hd);
-
-  menuRow(menu, 'rename', null, () => {
-    const n = prompt('Rename deck:', deck.name);
-    if (n?.trim()) { deck.name = n.trim(); saveDeckState(); renderDeckSwitcher(); }
-  }, isDark);
-  menuRow(menu, 'delete deck', '#c87a7a', () => {
-    if (confirm(`Delete "${deck.name}"? Words will not be deleted.`)) { deleteDeck(idx); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); }
-  }, isDark);
-
-  positionMenu(menu, e);
-}
-
-// ── STUDY MODE ────────────────────────────────────────────────────────────────
-let studyList = [], sIdx = 0, sFlip = false;
-
-function openStudy() {
-  if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
-    alert('Select a deck first.'); return;
-  }
-  const keys = Object.keys(decks[activeDeckIdx].words);
-  if (keys.length === 0) { alert(`${decks[activeDeckIdx].name} has no words yet.`); return; }
-  studyList = shuffle(keys.map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean));
-  sIdx = 0; sFlip = false;
-  renderStudyCard();
-  document.getElementById('studyOverlay')?.classList.add('open');
-}
-function closeStudy() { document.getElementById('studyOverlay')?.classList.remove('open'); }
-function overlayClick(e) { if (e.target.id === 'studyOverlay') closeStudy(); }
-
-function renderStudyCard() {
-  const w = studyList[sIdx];
-  const front = document.getElementById('cFront');
-  const back  = document.getElementById('cBack');
-  if (!front || !back) return;
-  front.innerHTML = `
-    <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
-    <div class="fc-kr">${w.kr}</div>
-    <div class="fc-ro">${w.ro}</div>
-    <div class="fc-pos">${w.pos}</div>
-    ${w.register && w.register !== 'neutral' ? `<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>` : ''}
-  `;
-  back.innerHTML = `
-    <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
-    <div class="fc-meaning">${w.meaning}</div>
-    <div class="fc-ex">${w.example}</div>
-  `;
-  document.getElementById('fcard')?.classList.remove('flip');
-  sFlip = false;
-}
-
-function flipCard()  { sFlip = !sFlip; document.getElementById('fcard')?.classList.toggle('flip', sFlip); }
-function nextCard()  {
-  sIdx++;
-  if (sIdx >= studyList.length) {
-    const last = studyList[studyList.length-1];
-    studyList = shuffle(studyList);
-    if (studyList[0]?.kr === last?.kr && studyList.length > 1) { [studyList[0],studyList[1]] = [studyList[1],studyList[0]]; }
-    sIdx = 0;
-  }
-  renderStudyCard();
-}
-function reshuffleStudy() {
-  const cur = studyList[sIdx];
-  studyList = shuffle(studyList);
-  if (studyList[0]?.kr === cur?.kr && studyList.length > 1) { [studyList[0],studyList[1]] = [studyList[1],studyList[0]]; }
-  sIdx = 0; renderStudyCard();
-}
-
-document.addEventListener('keydown', e => {
-  if (!document.getElementById('studyOverlay')?.classList.contains('open')) return;
-  if (e.key === 'Escape')     closeStudy();
-  if (e.key === 'ArrowRight') nextCard();
-  if (e.key === ' ')          { e.preventDefault(); flipCard(); }
-});
-
-
-// ═══════════════════════════════════════════════════════════════
-// PRACTICE TAB
-// ═══════════════════════════════════════════════════════════════
-// ── PRACTICE TAB ──────────────────────────────────────────────────────────────
-
-let practiceQueue  = [];
-let practiceIdx    = 0;
-let practiceScore  = {correct:0, total:0};
-let practiceFilter = 'all'; // 'all' | 'particle' | 'conjugate' | 'build' | 'fill'
-let selectedBlocks = [];
-let answered       = false;
-
-function renderPractice(container) {
-  // Show onboarding banner if first visit for this language
-  const seenKey = 'lf-seen-' + curLang;
-  const isFirstVisit = !localStorage.getItem(seenKey);
-
-  container.innerHTML = `
-    
-    <div class="ctrl">
-      <div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
-        <span class="ctrl-label">exercise type:</span>
-        ${['all','particle','conjugate','build','fill'].map(t =>
-          `<button class="gbtn${practiceFilter===t?' on':''}" onclick="setPracticeFilter('${t}')">${t}</button>`
-        ).join('')}
-      </div>
-    </div>
-    <div id="practiceArea" class="tab-body"></div>
-  `;
-  loadPracticeQueue();
-  showNextExercise();
-}
-
-function setPracticeFilter(f) {
-  practiceFilter = f;
-  document.querySelectorAll('#practiceArea').forEach(el=>el.innerHTML='');
-  document.querySelectorAll('.gbtn').forEach(b => b.classList.toggle('on', b.textContent === f));
-  loadPracticeQueue();
-  showNextExercise();
-}
-
-function loadPracticeQueue() {
-  const s = LANGS[curLang].sentences; const all = (typeof s === 'function' ? s() : s) || [];
-  let filtered = practiceFilter === 'all' ? all : all.filter(s => s.type === practiceFilter);
-  if (filtered.length === 0) filtered = all;
-  practiceQueue = shuffle(filtered);
-  practiceIdx   = 0;
-}
-
-function showNextExercise() {
-  if (practiceQueue.length === 0) {
-    document.getElementById('practiceArea').innerHTML = '<div class="empty-msg">No exercises available for this language yet.</div>';
-    return;
-  }
-  if (practiceIdx >= practiceQueue.length) {
-    practiceIdx = 0;
-    practiceQueue = shuffle(practiceQueue);
-  }
-  const ex = practiceQueue[practiceIdx];
-  answered = false;
-  selectedBlocks = [];
-
-  const area = document.getElementById('practiceArea');
-  if (!area) return;
-
-  area.innerHTML = '';
-
-  // score strip
-  const score = document.createElement('div');
-  score.className = 'practice-score';
-  score.innerHTML = `<span class="score-num">${practiceScore.correct}/${practiceScore.total}</span><span class="score-lbl">correct</span><button class="ubtn" style="margin-left:auto" onclick="practiceScore={correct:0,total:0};showNextExercise()">reset</button>`;
-  area.appendChild(score);
-
-  // exercise card
-  const card = document.createElement('div');
-  card.className = 'exercise-card surface';
-
-  // type + level badge
-  const meta = document.createElement('div');
-  meta.className = 'ex-meta';
-  const typeColors = {particle:'#7ac8a0',conjugate:'#7a8cc8',build:'#c8a87a',fill:'#c87aa8'};
-  meta.innerHTML = `<span class="ex-type" style="color:${typeColors[ex.type]||'#888'}">${ex.type}</span><span class="ex-level">level ${ex.level}</span>`;
-  card.appendChild(meta);
-
-  // english meaning
-  const eng = document.createElement('div');
-  eng.className = 'ex-english';
-  eng.textContent = ex.english;
-  card.appendChild(eng);
-
-  // base form if conjugation
-  if (ex.baseForm) {
-    const bf = document.createElement('div');
-    bf.className = 'ex-base';
-    bf.textContent = `base: ${ex.baseForm}`;
-    card.appendChild(bf);
-  }
-
-  // prompt
-  const prompt = document.createElement('div');
-  prompt.className = 'ex-prompt';
-  prompt.id = 'exPrompt';
-  card.appendChild(prompt);
-
-  // answer area
-  const ansArea = document.createElement('div');
-  ansArea.className = 'ex-answer-area';
-  ansArea.id = 'ansArea';
-  card.appendChild(ansArea);
-
-  // choices / blocks
-  const choicesDiv = document.createElement('div');
-  choicesDiv.className = 'ex-choices';
-  choicesDiv.id = 'choicesDiv';
-  card.appendChild(choicesDiv);
-
-  // feedback
-  const feedback = document.createElement('div');
-  feedback.className = 'ex-feedback';
-  feedback.id = 'exFeedback';
-  feedback.style.display = 'none';
-  card.appendChild(feedback);
-
-  // next button
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'abtn accent';
-  nextBtn.style.cssText = 'width:100%;margin-top:1rem;display:none';
-  nextBtn.id = 'exNextBtn';
-  nextBtn.textContent = 'next exercise →';
-  nextBtn.onclick = () => { practiceIdx++; showNextExercise(); };
-  card.appendChild(nextBtn);
-
-  area.appendChild(card);
-
-  // Render by type
-  if (ex.type === 'build') renderBuildExercise(ex);
-  else renderChoiceExercise(ex);
-}
-
-function renderChoiceExercise(ex) {
-  const prompt = document.getElementById('exPrompt');
-  prompt.innerHTML = ex.prompt.replace('___', '<span class="blank">___</span>');
-
-  const choices = document.getElementById('choicesDiv');
-  choices.innerHTML = '';
-  const shuffled = shuffle(ex.choices);
-  shuffled.forEach(c => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = c;
-    btn.onclick = () => submitChoiceAnswer(c, ex);
-    choices.appendChild(btn);
-  });
-}
-
-function submitChoiceAnswer(chosen, ex) {
-  if (answered) return;
-  answered = true;
-  practiceScore.total++;
-  const correct = chosen === ex.answer;
-  if (correct) practiceScore.correct++;
-
-  // highlight choices
-  document.querySelectorAll('.choice-btn').forEach(btn => {
-    if (btn.textContent === ex.answer) btn.classList.add('correct');
-    else if (btn.textContent === chosen && !correct) btn.classList.add('wrong');
-    btn.onclick = null;
-  });
-
-  // show filled prompt
-  const prompt = document.getElementById('exPrompt');
-  prompt.innerHTML = ex.prompt.replace('___', `<span class="answer-fill" style="color:${correct?'#7ac8a0':'#c87a7a'}">${chosen}</span>`);
-
-  showFeedback(correct, ex);
-}
-
-function renderBuildExercise(ex) {
-  const prompt = document.getElementById('exPrompt');
-  prompt.innerHTML = '<span style="opacity:.5;font-size:.75rem">arrange the blocks in the correct order:</span>';
-
-  const ansArea = document.getElementById('ansArea');
-  ansArea.innerHTML = '<div class="build-slots" id="buildSlots"><span class="slot-hint">tap blocks below to build the sentence</span></div>';
-
-  const choices = document.getElementById('choicesDiv');
-  choices.innerHTML = '';
-
-  // only show the correct blocks + 2-3 distractors
-  const toShow = shuffle(ex.blocks);
-  toShow.forEach(block => {
-    const btn = document.createElement('button');
-    btn.className = 'block-btn';
-    btn.textContent = block;
-    btn.dataset.word = block;
-    btn.onclick = () => selectBlock(btn, block, ex);
-    choices.appendChild(btn);
-  });
-}
-
-function selectBlock(btn, block, ex) {
-  if (answered) return;
-  if (btn.disabled) return;
-
-  btn.disabled = true;
-  btn.style.opacity = '0.35';
-  selectedBlocks.push(block);
-
-  const slots = document.getElementById('buildSlots');
-  // remove hint
-  slots.querySelector('.slot-hint')?.remove();
-
-  const chip = document.createElement('span');
-  chip.className = 'placed-block';
-  chip.textContent = block;
-  chip.onclick = () => {
-    // allow removing last placed block
-    if (answered) return;
-    const idx = selectedBlocks.lastIndexOf(block);
-    if (idx >= 0) {
-      selectedBlocks.splice(idx, 1);
-      chip.remove();
-      btn.disabled = false;
-      btn.style.opacity = '1';
-      if (slots.children.length === 0) slots.innerHTML = '<span class="slot-hint">tap blocks below to build the sentence</span>';
-    }
-  };
-  slots.appendChild(chip);
-
-  // auto-check when enough blocks placed
-  if (selectedBlocks.length === ex.answer.length) {
-    setTimeout(() => checkBuildAnswer(ex), 300);
-  }
-}
-
-function checkBuildAnswer(ex) {
-  if (answered && selectedBlocks.length < ex.answer.length) return;
-  answered = true;
-  practiceScore.total++;
-
-  const correct = selectedBlocks.join('|') === ex.answer.join('|');
-  if (correct) practiceScore.correct++;
-
-  document.querySelectorAll('.placed-block').forEach((chip, i) => {
-    chip.style.color = correct ? '#7ac8a0' : (chip.textContent === ex.answer[i] ? '#7ac8a0' : '#c87a7a');
-  });
-
-  if (!correct) {
-    const slots = document.getElementById('buildSlots');
-    const ans = document.createElement('div');
-    ans.style.cssText = 'margin-top:8px;font-size:.75rem;color:#7ac8a0';
-    ans.textContent = '✓ ' + ex.answer.join(' ');
-    slots.parentNode.insertBefore(ans, slots.nextSibling);
-  }
-
-  showFeedback(correct, ex);
-}
-
-function showFeedback(correct, ex) {
-  const fb = document.getElementById('exFeedback');
-  fb.style.display = 'block';
-  fb.className = 'ex-feedback ' + (correct ? 'fb-correct' : 'fb-wrong');
-  fb.innerHTML = `
-    <div class="fb-result">${correct ? '✓ correct' : '✗ not quite'}</div>
-    <div class="fb-explanation">${ex.explanation}</div>
-  `;
-
-  // update score display
-  const sn = document.querySelector('.score-num');
-  if (sn) sn.textContent = `${practiceScore.correct}/${practiceScore.total}`;
-
-  document.getElementById('exNextBtn').style.display = 'block';
-}
-
-
-// ═══════════════════════════════════════════════════════════════
-// GRAMMAR TAB
-// ═══════════════════════════════════════════════════════════════
-// ── GRAMMAR DATA ──────────────────────────────────────────────────────────────
+// ── GRAMMAR RENDERER ─────────────────────────────────────────────────────────
 
 function renderGrammar(container) {
   const notes = (GRAMMAR[curLang]) || [];
