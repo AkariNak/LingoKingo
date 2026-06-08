@@ -258,7 +258,9 @@ input[type="text"]::placeholder{color:var(--su)}
   .tab-body{padding:1rem .75rem}
   .sit-row{padding:.6rem .75rem .5rem}
 }
-</style>
+
+#fontBtn{font-family:'DM Mono',monospace;font-size:.75rem;padding:.7rem 1rem;border:none;background:none;color:var(--mu);cursor:pointer;transition:color .15s;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;line-height:1}
+#fontBtn:hover{color:var(--acc)}</style>
 </head>
 <body class="dark">
 
@@ -2937,12 +2939,11 @@ function showFeedback(correct, ex) {
 
   // If coming from a broken session where practice had no exercises,
   // reset tab to vocab so user isn't stuck
-  const _savedLang = localStorage.getItem('lf-lang') || 'korean';
-  const savedLang = LANGS[_savedLang] ? _savedLang : 'korean';
-  if (savedLang !== _savedLang) {
-    localStorage.removeItem('lf-lang');
-    localStorage.removeItem('lf-tab');
-  }
+  // Force clear any broken session state
+  localStorage.removeItem('lf-lang');
+  localStorage.removeItem('lf-tab');
+  localStorage.removeItem('lf-grouping');
+  const savedLang = 'korean';
   curLang = savedLang;
   const L = LANGS[savedLang];
   document.getElementById('langFlag').textContent  = L.flag;
