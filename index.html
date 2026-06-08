@@ -1644,6 +1644,7 @@ function switchLang(lang) {
   document.getElementById('langMenu').classList.remove('open');
   openSecs = {};
   activeSituation = null;
+  window._hasRenderedOnce = false;
   // default to script grouping for Japanese
   if (lang === 'japanese' && curGrouping === 'pos') { curGrouping = 'script'; save('lf-grouping','script'); }
   if (lang !== 'japanese' && curGrouping === 'script') { curGrouping = 'pos'; save('lf-grouping','pos'); }
@@ -1980,9 +1981,10 @@ function renderWordGrid() {
     allKeys = Object.keys(groups);
     ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
     if (search) ordered.forEach(k => openSecs[k] = true);
-  // auto-open first section if nothing is open (first load feel)
-  if (Object.keys(openSecs).length === 0 && ordered.length > 0) {
+  // auto-open first section only on very first load (not on every re-render)
+  if (Object.keys(openSecs).length === 0 && ordered.length > 0 && !window._hasRenderedOnce) {
     openSecs[ordered[0]] = true;
+    window._hasRenderedOnce = true;
   }
   }
 
