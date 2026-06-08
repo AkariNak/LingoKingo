@@ -1955,7 +1955,18 @@ function renderWordGrid() {
   let filtered = words.filter(w => {
     if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
     if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
-    if (activeScripts.size > 0 && !activeScripts.has(w.script || '')) return false;
+    if (activeScripts.size > 0) {
+      // when script filter is on, show ONLY pure alphabet characters (pos === script name)
+      // not vocabulary words that happen to use that script
+      const scriptPoses = new Set(['hiragana','katakana','kanji']);
+      if (scriptPoses.has(w.pos)) {
+        // it's a character card — show only if its script is selected
+        if (!activeScripts.has(w.pos)) return false;
+      } else {
+        // it's a vocabulary word — hide when any script filter is active
+        return false;
+      }
+    }
     if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
     return true;
   });
