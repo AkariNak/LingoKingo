@@ -4,27 +4,24 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Recall — Language Flashcards</title>
-<meta name="description" content="Learn Korean, Italian, and Japanese with flashcards, practice exercises, grammar notes, and situation-based vocabulary. Free, no account needed."/>
+<meta name="description" content="Learn Korean, Italian, and Japanese with flashcards, practice exercises, and grammar notes. Free, no account needed."/>
 <meta property="og:title" content="Recall — Language Flashcards"/>
-<meta property="og:description" content="Learn Korean, Italian, and Japanese with flashcards and grammar drills. Free."/>
 <meta property="og:type" content="website"/>
 <meta name="theme-color" content="#0e0e12"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Serif+Display:ital@0;1&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root[data-x]{--r:0} /* placeholder */
 
 /* ── THEMES ── */
-html{overflow-x:hidden;width:100%;font-size:16px}
-html[data-size="sm"]{font-size:14px}
-html[data-size="md"]{font-size:16px}
-html[data-size="lg"]{font-size:19px}
-html[data-size="xl"]{font-size:23px}body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s;overflow-x:hidden;width:100%;position:relative}
-body.dark {--bg:#0e0e12;--sf:#16161c;--sf2:#1e1e28;--sf3:#26263a;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.15);--tx:#f0eee8;--mu:#a8a8b4;--su:#55555f;--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28);background:var(--bg);color:var(--tx)}
-body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);--tx:#1c1a16;--mu:#5a5754;--su:#a09d96;--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28);background:var(--bg);color:var(--tx)}
+body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s}
+body.dark {--bg:#0e0e12;--sf:#16161c;--sf2:#1e1e28;--sf3:#26263a;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.15);--tx:#f0eee8;--mu:#888894;--su:#55555f;--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28);background:var(--bg);color:var(--tx)}
+body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);--tx:#1c1a16;--mu:#6a6760;--su:#a09d96;--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28);background:var(--bg);color:var(--tx)}
 .surface{background:var(--sf)}
 .t-muted{color:var(--mu)}
 .t-subtle{color:var(--su)}
@@ -34,18 +31,18 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 ::-webkit-scrollbar-thumb{background:var(--sf3);border-radius:3px}
 
 /* ── HEADER ── */
-#hdr{padding:1rem 1rem .85rem;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:.5rem;position:sticky;top:0;z-index:100;background:var(--bg);transition:background .2s;min-width:0;max-width:100%;box-sizing:border-box}
+#hdr{padding:1.4rem 2rem 1rem;border-bottom:1px solid var(--bd);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:.75rem;position:sticky;top:0;z-index:100;background:var(--bg);transition:background .2s}
 .logo-kr{font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:.78rem;color:var(--acc);letter-spacing:.15em;display:block}
 .logo-en{font-family:'DM Serif Display',serif;font-size:1.7rem;line-height:1;display:block}
 .logo-sub{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;margin-top:3px;display:block;color:var(--su)}
-.hdr-r{display:flex;align-items:center;gap:.75rem;flex-wrap:nowrap;flex-shrink:0}
+.hdr-r{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap}
 
 /* Language switcher */
 .lang-wrap{position:relative}
 .lang-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 11px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em}
 .lang-btn:hover{border-color:var(--acc);color:var(--acc)}
 .lang-chev{font-size:.55rem;opacity:.5}
-.lang-menu{display:none;position:fixed;border-radius:8px;overflow:hidden;min-width:170px;z-index:9999;background:var(--sf2);border:1px solid var(--bd2);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.lang-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;border-radius:8px;overflow:hidden;min-width:160px;z-index:300;background:var(--sf2);border:1px solid var(--bd2);box-shadow:0 8px 28px rgba(0,0,0,.3)}
 .lang-menu.open{display:block}
 .lang-option{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.74rem;color:var(--tx);transition:background .12s}
 .lang-option:hover{background:var(--sf3)}
@@ -57,36 +54,31 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 #themeBtn:hover{border-color:var(--acc);color:var(--acc)}
 
 /* Deck badge */
-
-
-
+.deck-lbl{font-size:.7rem;color:var(--mu)}
+#deckBadge{background:var(--acc);color:var(--bg);font-weight:500;padding:2px 9px;border-radius:99px;font-size:.7rem;min-width:24px;text-align:center;display:inline-block;transition:transform .15s}
+#deckBadge.pop{transform:scale(1.35)}
 
 /* ── TABS ── */
-#tabBar{display:flex;gap:0;border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:85px;z-index:90;padding:0 1rem;transition:background .2s;width:100%;box-sizing:border-box;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}#tabBar::-webkit-scrollbar{display:none}
+#tabBar{display:flex;gap:0;border-bottom:1px solid var(--bd);background:var(--bg);position:sticky;top:85px;z-index:90;padding:0 2rem;transition:background .2s}
 .tab-btn{font-family:'DM Mono',monospace;font-size:.75rem;padding:.7rem 1.1rem;border:none;background:none;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.04em}
 .tab-btn:hover{color:var(--tx)}
 .tab-btn.active{color:var(--acc);border-bottom-color:var(--acc)}
-.script-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--bd2);background:none;color:var(--mu);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.script-btn:hover{border-color:var(--acc);color:var(--acc)}
-.script-btn.script-on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:500}
-#fontBtn{font-family:'DM Mono',monospace;font-size:.8rem;padding:.7rem 1rem;border:none;background:none;color:var(--mu);cursor:pointer;transition:color .15s;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;line-height:1}
-#fontBtn:hover{color:var(--acc)}
 
 /* ── CONTROLS ── */
-.ctrl{padding:.85rem 2rem;border-bottom:1px solid var(--bd);background:var(--bg);transition:background .2s;width:100%;box-sizing:border-box}
+.ctrl{padding:.85rem 2rem;border-bottom:1px solid var(--bd);background:var(--bg);transition:background .2s}
 .ctrl-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
 .ctrl-row:last-child{margin-bottom:0}
 .ctrl-label{font-size:.68rem;color:var(--mu);white-space:nowrap}
 .ctrl-row2{margin-top:2px}
-input[type="text"]{background:var(--sf);border:1px solid var(--bd2);border-radius:6px;color:var(--tx);font-family:'DM Mono',monospace;font-size:.78rem;padding:7px 13px;width:260px;max-width:100%;outline:none;transition:border-color .2s}
+input[type="text"]{background:var(--sf);border:1px solid var(--bd2);border-radius:6px;color:var(--tx);font-family:'DM Mono',monospace;font-size:.78rem;padding:7px 13px;width:260px;outline:none;transition:border-color .2s}
 input[type="text"]:focus{border-color:var(--acc)}
 input[type="text"]::placeholder{color:var(--su)}
 
 /* ── BUTTONS ── */
 .gbtn,.ubtn,.abtn{font-family:'DM Mono',monospace;border:1px solid var(--bd2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;letter-spacing:.03em}
-.gbtn{font-size:.75rem;padding:5px 12px;border-radius:99px}
-.ubtn{font-size:.75rem;padding:5px 11px;border-radius:6px}
-.abtn{font-size:.8rem;padding:7px 15px;border-radius:6px;color:var(--tx)}
+.gbtn{font-size:.67rem;padding:5px 12px;border-radius:99px}
+.ubtn{font-size:.68rem;padding:5px 11px;border-radius:6px}
+.abtn{font-size:.72rem;padding:7px 15px;border-radius:6px;color:var(--tx)}
 .gbtn:hover,.ubtn:hover,.abtn:hover{border-color:var(--acc);color:var(--acc)}
 .gbtn:active,.ubtn:active,.abtn:active{transform:scale(.97)}
 .gbtn.on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:500}
@@ -96,7 +88,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .abtn.danger:hover{background:rgba(200,122,122,.08);border-color:#c87a7a}
 
 /* ── WORD SECTIONS ── */
-#wordSections{padding:1rem 2rem .5rem;display:flex;flex-direction:column;gap:7px;width:100%;box-sizing:border-box}
+#wordSections{padding:1rem 2rem .5rem;display:flex;flex-direction:column;gap:7px}
 .sec{border:1px solid var(--bd);border-radius:10px;overflow:hidden;transition:border-color .15s}
 .sec:hover{border-color:var(--bd2)}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;cursor:pointer;background:var(--sf);transition:background .15s;user-select:none}
@@ -114,15 +106,15 @@ input[type="text"]::placeholder{color:var(--su)}
 .chip:hover{background:var(--sf2);border-color:var(--bd2)}
 .chip.on{background:var(--acc-bg);border-width:1.5px}
 .chip-kr{font-family:'Noto Sans KR',sans-serif;font-size:.98rem;font-weight:500;line-height:1.2}
-.chip-ro{font-size:.7rem;color:var(--tx);opacity:.75}
+.chip-ro{font-size:.58rem;color:var(--mu)}
 .reg-badge{font-size:.55rem;padding:1px 6px;border-radius:99px;border:1px solid;letter-spacing:.05em;white-space:nowrap;align-self:flex-start}
 
 /* ── DECK PANEL ── */
-.deck-panel{border-top:1px solid var(--bd);padding:1.2rem 2rem 2rem;margin-top:.5rem;width:100%;box-sizing:border-box}
+.deck-panel{border-top:1px solid var(--bd);padding:1.2rem 2rem 2rem;margin-top:.5rem}
 .deck-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 .deck-title{font-family:'DM Serif Display',serif;font-size:1.05rem}
 .deck-acts{display:flex;gap:7px}
-.deck-switcher{display:flex;flex-direction:column;gap:5px;margin-bottom:.85rem}
+.deck-switcher{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.85rem}
 .dbtn{font-family:'DM Mono',monospace;font-size:.68rem;padding:5px 11px 5px 8px;border-radius:99px;border:1px solid var(--bd2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em}
 .dbtn.dactive{border-color:var(--dc);color:var(--dc)}
 .dbtn:hover{border-color:var(--acc);color:var(--acc)}
@@ -133,24 +125,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .dchip-ro{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--mu)}
 .dchip-x{background:none;border:none;cursor:pointer;font-size:12px;padding:0 2px;color:var(--mu);transition:color .12s}
 .dchip-x:hover{color:#c87a7a}
-.empty-deck{font-size:.8rem;color:var(--mu)}
-.tab-body{padding:1.5rem 2rem;width:100%}
-.sit-row{display:flex;flex-wrap:wrap;gap:7px;padding:.85rem 1rem .6rem;border-bottom:1px solid var(--bd);width:100%;box-sizing:border-box;align-items:center}
-.sit-pill{font-family:"DM Mono",monospace;font-size:.8rem;padding:6px 14px;border-radius:99px;border:1px solid rgba(128,128,128,.2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;letter-spacing:.02em;white-space:nowrap}
-.sit-pill:hover{border-color:var(--sc);color:var(--sc)}
-.sit-pill.sit-active{background:var(--sc);border-color:var(--sc);color:#fff;font-weight:500}
-.filters-toggle{white-space:nowrap}
-.sit-add-all{margin-left:auto;font-family:'DM Mono',monospace;font-size:.7rem;padding:6px 14px;border-radius:99px;border:1px solid var(--acc);background:none;color:var(--acc);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.sit-add-all:hover{background:var(--acc);color:var(--bg)}
-#bottomSheet{background:var(--sf)}
-.bs-deck-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:background .12s;border:none;width:100%;text-align:left;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--tx);background:none}
-.bs-deck-row:hover,.bs-deck-row:active{background:var(--sf2)}
-.bs-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.bs-check{margin-left:auto;color:var(--acc);font-size:1rem}
-.chip-dots{display:flex;align-items:center;gap:2px;flex-shrink:0}
-.chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.filters-row{flex-wrap:wrap;gap:7px;padding-top:6px}
-.exercise-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem;margin-bottom:1rem}
+.empty-deck{font-size:.7rem;color:var(--su)}
 .empty-msg{padding:2.5rem 0;text-align:center;font-size:.78rem;color:var(--su)}
 
 /* ── STUDY MODAL ── */
@@ -184,7 +159,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .practice-score{display:flex;align-items:center;gap:8px;padding:.5rem 0 1rem;font-size:.75rem;color:var(--mu)}
 .score-num{font-size:1.1rem;font-weight:500;color:var(--tx)}
 .score-lbl{color:var(--su)}
-/* exercise-card defined above */
+.exercise-card{border:1px solid var(--bd);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem}
 .ex-meta{display:flex;align-items:center;gap:10px}
 .ex-type{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
 .ex-level{font-size:.65rem;color:var(--su);background:var(--sf2);border:1px solid var(--bd);border-radius:99px;padding:2px 8px}
@@ -199,7 +174,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .placed-block{display:inline-flex;align-items:center;padding:5px 10px;background:var(--sf3);border-radius:6px;font-size:.85rem;cursor:pointer;border:1px solid var(--bd2);transition:background .1s}
 .placed-block:hover{background:var(--sf);opacity:.8}
 .ex-choices{display:flex;flex-wrap:wrap;gap:7px}
-.choice-btn,.block-btn{font-family:'DM Mono',monospace;font-size:.85rem;padding:7px 14px;border-radius:8px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s}
+.choice-btn,.block-btn{font-family:'DM Mono',monospace;font-size:.78rem;padding:7px 14px;border-radius:8px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s}
 .choice-btn:hover,.block-btn:hover{border-color:var(--acc);color:var(--acc)}
 .choice-btn.correct{border-color:#7ac8a0;color:#7ac8a0;background:rgba(122,200,160,.1)}
 .choice-btn.wrong{border-color:#c87a7a;color:#c87a7a;background:rgba(200,122,122,.1)}
@@ -220,7 +195,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .grammar-left{display:flex;flex-direction:column;gap:3px;flex:1}
 .grammar-level{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;font-weight:500}
 .grammar-title{font-size:.9rem;font-weight:500;color:var(--tx)}
-.grammar-short{font-size:.8rem;margin-top:1px}
+.grammar-short{font-size:.72rem;margin-top:1px}
 .grammar-body{padding:1rem 1.2rem 1.2rem;border-top:1px solid var(--bd);background:var(--bg)}
 .grammar-text{font-size:.78rem;line-height:1.75;color:var(--mu);white-space:pre-wrap;margin-bottom:1rem}
 .grammar-example{background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:.85rem 1rem;margin-bottom:.5rem}
@@ -228,51 +203,14 @@ input[type="text"]::placeholder{color:var(--su)}
 .ex-pre{font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;white-space:pre-wrap;color:var(--tx)}
 
 /* ── RESPONSIVE ── */
-.onboard-banner{background:linear-gradient(135deg,var(--sf2),var(--sf));border-bottom:1px solid var(--bd);padding:1.25rem 2rem}
-.onboard-inner{max-width:680px}
-.onboard-tag{display:inline-block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-family:'DM Mono',monospace;margin-bottom:.4rem}
-.onboard-title{display:block;font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--tx);margin-bottom:.4rem}
-.onboard-desc{display:block;font-size:.78rem;color:var(--mu);line-height:1.65;margin-bottom:.85rem;max-width:560px}
-.onboard-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.obtn{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:var(--acc);border:none;color:var(--bg);cursor:pointer;font-weight:500}
-.obtn:hover{opacity:.85}
-.obtn-ghost{font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 14px;border-radius:6px;background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer}
-.obtn-accent{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:none;border:1px solid var(--acc);color:var(--acc);cursor:pointer;font-weight:500}
-.obtn-accent:hover{background:var(--acc);color:var(--bg)}
-.obtn-ghost:hover{color:var(--tx);border-color:var(--tx)}
 @media(max-width:600px){
-  #hdr{padding:.85rem .85rem .75rem}
-  #tabBar,.ctrl,.deck-panel{padding-left:.75rem;padding-right:.75rem}
-  #wordSections{padding:.75rem .75rem .5rem}
+  #hdr,#tabBar,.ctrl,.deck-panel{padding-left:1rem;padding-right:1rem}
+  #wordSections{padding:1rem 1rem .5rem}
   input[type="text"]{width:100%}
-  #tabBar{top:68px}
-  .sit-row{padding:.6rem .75rem .5rem}
-  .tab-body{padding:1rem .75rem}
-  .logo-en{font-size:1.3rem !important}
-  .logo svg{width:34px !important;height:34px !important}
-}
-
---bg);cursor:pointer;font-weight:500}
-.obtn:hover{opacity:.85}
-.obtn-ghost{font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 14px;border-radius:6px;background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer}
-.obtn-accent{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:none;border:1px solid var(--acc);color:var(--acc);cursor:pointer;font-weight:500}
-.obtn-accent:hover{background:var(--acc);color:var(--bg)}
-.obtn-ghost:hover{color:var(--tx);border-color:var(--tx)}
-@media(max-width:600px){
-  #hdr{padding:.85rem .85rem .75rem}
-  #tabBar,.ctrl,.deck-panel{padding-left:.75rem;padding-right:.75rem}
-  #wordSections{padding:.75rem .75rem .5rem}
-  input[type="text"]{width:100%}
-  #tabBar{top:68px}
-  .sit-row{padding:.6rem .75rem .5rem}
-  .tab-body{padding:1rem .75rem}
-  .logo-en{font-size:1.3rem !important}
-  .logo svg{width:34px !important;height:34px !important}
+  #tabBar{top:76px}
 }
 
 </style>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'%3E%3Crect width='72' height='72' rx='14' fill='%23c8a87a'/%3E%3Ctext x='36' y='50' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='600' fill='white'%3ER%3C/text%3E%3C/svg%3E"/>
 </head>
 <body class="dark">
 
@@ -295,10 +233,8 @@ input[type="text"]::placeholder{color:var(--su)}
         <span id="langLabel">Korean</span>
         <span class="lang-chev">▾</span>
       </button>
-
     </div>
     <button id="themeBtn" onclick="toggleTheme()">light mode</button>
-
   </div>
 </div>
 
@@ -307,9 +243,9 @@ input[type="text"]::placeholder{color:var(--su)}
   <button class="tab-btn" data-tab="practice" onclick="switchTab('practice')">practice</button>
   <button class="tab-btn" data-tab="grammar"  onclick="switchTab('grammar')">grammar</button>
   <div id="scriptFilters" style="display:none;align-items:center;gap:4px;padding:0 6px">
-    <button class="script-btn" data-script="hiragana" onclick="toggleScript('hiragana')">hiragana</button>
-    <button class="script-btn" data-script="katakana"  onclick="toggleScript('katakana')">katakana</button>
-    <button class="script-btn" data-script="kanji"     onclick="toggleScript('kanji')">kanji</button>
+    <button class="script-btn" data-script="hiragana"   onclick="toggleScript('hiragana')">hiragana</button>
+    <button class="script-btn" data-script="katakana"   onclick="toggleScript('katakana')">katakana</button>
+    <button class="script-btn" data-script="kanji"      onclick="toggleScript('kanji')">kanji</button>
     <button class="script-btn" data-script="hiragana_d" onclick="toggleScript('hiragana_d')">hiragana accents</button>
     <button class="script-btn" data-script="katakana_d" onclick="toggleScript('katakana_d')">katakana accents</button>
   </div>
@@ -366,9 +302,7 @@ input[type="text"]::placeholder{color:var(--su)}
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════════════════════════
+// ── DATA ──────────────────────────────────────────────────────────────────────
 // ── KOREAN WORD LIST ──────────────────────────────────────────────────────────
 // register: 'formal' | 'casual' | 'neutral'
 // pos: verb | noun | adjective | adverb | pronoun | particle | expression
@@ -381,95 +315,95 @@ const KOREAN_WORDS = [
   {kr:"느껴",ro:"neukkyeo",meaning:"feeling / I feel",example:"뭔가 느껴 — I feel something",pos:"verb",freq:7,register:"casual"},
   {kr:"자꾸",ro:"jakku",meaning:"repeatedly / keeps happening",example:"자꾸 생각나 — keeps coming to mind",pos:"adverb",freq:7,register:"neutral"},
   {kr:"끌려",ro:"kkeullyeo",meaning:"being pulled / attracted",example:"네게 끌려 — being pulled toward you",pos:"verb",freq:6,register:"casual"},
-  {kr:"설레",ro:"seolle",meaning:"heart fluttering / excited feeling",example:"설레는 기분 — a heart-fluttering feeling",pos:"verb",freq:6,register:"casual",sit:["dating"]},
-  {kr:"떨려",ro:"tteollyeo",meaning:"trembling / heart racing",example:"심장이 떨려 — my heart is trembling",pos:"verb",freq:6,register:"casual",sit:["dating"]},
+  {kr:"설레",ro:"seolle",meaning:"heart fluttering / excited feeling",example:"설레는 기분 — a heart-fluttering feeling",pos:"verb",freq:6,register:"casual"},
+  {kr:"떨려",ro:"tteollyeo",meaning:"trembling / heart racing",example:"심장이 떨려 — my heart is trembling",pos:"verb",freq:6,register:"casual"},
   {kr:"자석",ro:"jaseok",meaning:"magnet",example:"자석처럼 끌려 — pulled like a magnet",pos:"noun",freq:4,register:"neutral"},
   {kr:"순간",ro:"sungan",meaning:"moment / instant",example:"그 순간 — that moment",pos:"noun",freq:8,register:"neutral"},
   {kr:"가까이",ro:"gakkai",meaning:"close / near",example:"가까이 와 — come closer",pos:"adverb",freq:7,register:"neutral"},
   {kr:"바라봐",ro:"barabwa",meaning:"look at / gaze at",example:"나를 바라봐 — look at me",pos:"verb",freq:6,register:"casual"},
   {kr:"심장",ro:"simjang",meaning:"heart (organ) / heartbeat",example:"심장이 뛰어 — my heart is beating",pos:"noun",freq:6,register:"neutral"},
   {kr:"머릿속",ro:"meoritssok",meaning:"inside one's head / mind",example:"머릿속이 복잡해 — my head is a mess",pos:"noun",freq:5,register:"neutral"},
-  {kr:"두근두근",ro:"dugeundugeun",meaning:"thump-thump (heartbeat sound)",example:"두근두근 떨려 — thump thump I'm trembling",pos:"expression",freq:4,register:"casual",sit:["dating"]},
+  {kr:"두근두근",ro:"dugeundugeun",meaning:"thump-thump (heartbeat sound)",example:"두근두근 떨려 — thump thump I'm trembling",pos:"expression",freq:4,register:"casual"},
   {kr:"뻔해",ro:"ppeonhae",meaning:"obvious / predictable",example:"너무 뻔해 — so obvious",pos:"adjective",freq:5,register:"casual"},
   {kr:"온통",ro:"ontong",meaning:"entirely / all over",example:"온통 너야 — it's all you",pos:"adverb",freq:5,register:"neutral"},
   {kr:"멈춰",ro:"meomchwo",meaning:"stop / halt",example:"멈춰 서 — stop right there",pos:"verb",freq:6,register:"casual"},
   {kr:"달라",ro:"dalla",meaning:"different / unlike",example:"뭔가 달라 — something's different",pos:"adjective",freq:7,register:"casual"},
   {kr:"그냥",ro:"geunyang",meaning:"just / simply / without reason",example:"그냥 좋아 — I just like it",pos:"adverb",freq:9,register:"casual"},
-  {kr:"왠지",ro:"waenji",meaning:"for some reason / somehow",example:"왠지 좋아 — I like it for some reason",pos:"adverb",freq:7,register:"casual",sit:["dating"]},
+  {kr:"왠지",ro:"waenji",meaning:"for some reason / somehow",example:"왠지 좋아 — I like it for some reason",pos:"adverb",freq:7,register:"casual"},
   {kr:"처음",ro:"cheoeum",meaning:"first time / beginning",example:"처음 만났을 때 — when we first met",pos:"noun",freq:8,register:"neutral"},
   // ── Pronouns ──
-  {kr:"나",ro:"na",meaning:"I / me",example:"나 배고파 — I'm hungry",pos:"pronoun",freq:10,register:"casual",sit:["meeting","dating"]},
-  {kr:"저",ro:"jeo",meaning:"I / me (humble)",example:"저는 학생이에요 — I am a student",pos:"pronoun",freq:9,register:"formal",sit:["meeting"]},
-  {kr:"너",ro:"neo",meaning:"you",example:"너 어디 가? — where are you going?",pos:"pronoun",freq:10,register:"casual",sit:["meeting","dating"]},
+  {kr:"나",ro:"na",meaning:"I / me",example:"나 배고파 — I'm hungry",pos:"pronoun",freq:10,register:"casual"},
+  {kr:"저",ro:"jeo",meaning:"I / me (humble)",example:"저는 학생이에요 — I am a student",pos:"pronoun",freq:9,register:"formal"},
+  {kr:"너",ro:"neo",meaning:"you",example:"너 어디 가? — where are you going?",pos:"pronoun",freq:10,register:"casual"},
   {kr:"당신",ro:"dangsin",meaning:"you (written/formal)",example:"당신을 사랑해요 — I love you",pos:"pronoun",freq:6,register:"formal"},
-  {kr:"우리",ro:"uri",meaning:"we / our",example:"우리 같이 가자 — let's go together",pos:"pronoun",freq:10,register:"neutral",sit:["meeting","dating"]},
+  {kr:"우리",ro:"uri",meaning:"we / our",example:"우리 같이 가자 — let's go together",pos:"pronoun",freq:10,register:"neutral"},
   {kr:"그",ro:"geu",meaning:"he / that",example:"그 사람 — that person",pos:"pronoun",freq:8,register:"neutral"},
   {kr:"그녀",ro:"geunyeo",meaning:"she / her",example:"그녀는 예뻐 — she is pretty",pos:"pronoun",freq:7,register:"neutral"},
   {kr:"누구",ro:"nugu",meaning:"who",example:"누구야? — who is it?",pos:"pronoun",freq:9,register:"neutral"},
   {kr:"뭐",ro:"mwo",meaning:"what (casual)",example:"뭐 해? — what are you doing?",pos:"pronoun",freq:10,register:"casual"},
   {kr:"무엇",ro:"mueot",meaning:"what (formal)",example:"무엇을 원하세요? — what would you like?",pos:"pronoun",freq:8,register:"formal"},
   // ── Greetings & expressions ──
-  {kr:"안녕하세요",ro:"annyeonghaseyo",meaning:"hello (standard polite)",example:"안녕하세요, 처음 뵙겠습니다 — hello, nice to meet you",pos:"expression",freq:10,register:"formal",sit:["meeting"]},
-  {kr:"안녕",ro:"annyeong",meaning:"hi / bye (casual)",example:"안녕! 잘 지냈어? — hey! have you been well?",pos:"expression",freq:10,register:"casual",sit:["meeting"]},
-  {kr:"감사합니다",ro:"gamsahamnida",meaning:"thank you (formal)",example:"도와주셔서 감사합니다 — thank you for your help",pos:"expression",freq:10,register:"formal",sit:["restaurant"]},
-  {kr:"고마워",ro:"gomawo",meaning:"thanks (casual)",example:"고마워, 진짜 — thanks, seriously",pos:"expression",freq:9,register:"casual",sit:["food","shopping","meeting"]},
-  {kr:"죄송합니다",ro:"joesonghamnida",meaning:"I'm sorry (formal)",example:"늦어서 죄송합니다 — I'm sorry for being late",pos:"expression",freq:9,register:"formal",sit:["emergency","meeting"]},
-  {kr:"미안해",ro:"mianhae",meaning:"sorry (casual)",example:"미안해, 내 잘못이야 — sorry, it's my fault",pos:"expression",freq:9,register:"casual",sit:["meeting","dating"]},
-  {kr:"괜찮아요",ro:"gwaenchanayo",meaning:"it's okay (polite)",example:"괜찮아요, 걱정 마세요 — it's okay, don't worry",pos:"expression",freq:9,register:"formal",sit:["meeting"]},
-  {kr:"괜찮아",ro:"gwaenchana",meaning:"it's okay / I'm fine (casual)",example:"괜찮아? — are you okay?",pos:"expression",freq:9,register:"casual",sit:["meeting","dating"]},
+  {kr:"안녕하세요",ro:"annyeonghaseyo",meaning:"hello (standard polite)",example:"안녕하세요, 처음 뵙겠습니다 — hello, nice to meet you",pos:"expression",freq:10,register:"formal"},
+  {kr:"안녕",ro:"annyeong",meaning:"hi / bye (casual)",example:"안녕! 잘 지냈어? — hey! have you been well?",pos:"expression",freq:10,register:"casual"},
+  {kr:"감사합니다",ro:"gamsahamnida",meaning:"thank you (formal)",example:"도와주셔서 감사합니다 — thank you for your help",pos:"expression",freq:10,register:"formal"},
+  {kr:"고마워",ro:"gomawo",meaning:"thanks (casual)",example:"고마워, 진짜 — thanks, seriously",pos:"expression",freq:9,register:"casual"},
+  {kr:"죄송합니다",ro:"joesonghamnida",meaning:"I'm sorry (formal)",example:"늦어서 죄송합니다 — I'm sorry for being late",pos:"expression",freq:9,register:"formal"},
+  {kr:"미안해",ro:"mianhae",meaning:"sorry (casual)",example:"미안해, 내 잘못이야 — sorry, it's my fault",pos:"expression",freq:9,register:"casual"},
+  {kr:"괜찮아요",ro:"gwaenchanayo",meaning:"it's okay (polite)",example:"괜찮아요, 걱정 마세요 — it's okay, don't worry",pos:"expression",freq:9,register:"formal"},
+  {kr:"괜찮아",ro:"gwaenchana",meaning:"it's okay / I'm fine (casual)",example:"괜찮아? — are you okay?",pos:"expression",freq:9,register:"casual"},
   {kr:"맞아요",ro:"majayo",meaning:"that's right (polite)",example:"네, 맞아요 — yes, that's right",pos:"expression",freq:9,register:"formal"},
   {kr:"맞아",ro:"maja",meaning:"that's right (casual)",example:"맞아! 그거야 — that's right! that's it",pos:"expression",freq:9,register:"casual"},
   {kr:"알겠습니다",ro:"algesseumnida",meaning:"I understand (formal)",example:"네, 알겠습니다 — yes, I understand",pos:"expression",freq:8,register:"formal"},
   {kr:"알겠어",ro:"algeseo",meaning:"got it (casual)",example:"알겠어, 그렇게 할게 — got it, I'll do that",pos:"expression",freq:8,register:"casual"},
-  {kr:"대박",ro:"daebak",meaning:"wow / amazing (slang)",example:"대박이야! — that's insane!",pos:"expression",freq:7,register:"casual",sit:["dating"]},
+  {kr:"대박",ro:"daebak",meaning:"wow / amazing (slang)",example:"대박이야! — that's insane!",pos:"expression",freq:7,register:"casual"},
   {kr:"파이팅",ro:"paiting",meaning:"you can do it / fighting",example:"파이팅! 잘 할 수 있어 — you've got this!",pos:"expression",freq:7,register:"casual"},
   {kr:"잠깐만요",ro:"jamkkanmanyo",meaning:"just a moment (polite)",example:"잠깐만요, 확인해볼게요 — one moment, let me check",pos:"expression",freq:8,register:"formal"},
   {kr:"잠깐만",ro:"jamkkanman",meaning:"wait a sec (casual)",example:"잠깐만, 다시 봐봐 — hold on, look again",pos:"expression",freq:8,register:"casual"},
   {kr:"사랑해요",ro:"saranghaeyo",meaning:"I love you (polite)",example:"항상 사랑해요 — I always love you",pos:"expression",freq:9,register:"formal"},
-  {kr:"사랑해",ro:"saranghae",meaning:"I love you (casual)",example:"사랑해, 알지? — I love you, you know that?",pos:"expression",freq:10,register:"casual",sit:["dating"]},
+  {kr:"사랑해",ro:"saranghae",meaning:"I love you (casual)",example:"사랑해, 알지? — I love you, you know that?",pos:"expression",freq:10,register:"casual"},
   {kr:"보고싶어요",ro:"bogosipeoyo",meaning:"I miss you (polite)",example:"많이 보고싶어요 — I miss you a lot",pos:"expression",freq:8,register:"formal"},
-  {kr:"보고싶어",ro:"bogosipeo",meaning:"I miss you (casual)",example:"너무 보고싶어 — I miss you so much",pos:"expression",freq:8,register:"casual",sit:["dating"]},
+  {kr:"보고싶어",ro:"bogosipeo",meaning:"I miss you (casual)",example:"너무 보고싶어 — I miss you so much",pos:"expression",freq:8,register:"casual"},
   {kr:"잘 자요",ro:"jal jayo",meaning:"good night (polite)",example:"잘 자요, 좋은 꿈 꾸세요 — good night, sweet dreams",pos:"expression",freq:8,register:"formal"},
   {kr:"잘 자",ro:"jal ja",meaning:"good night (casual)",example:"잘 자, 내일 봐 — good night, see you tomorrow",pos:"expression",freq:8,register:"casual"},
   // ── Core verbs ──
-  {kr:"가다",ro:"gada",meaning:"to go",example:"학교에 가다 — to go to school",pos:"verb",freq:10,register:"neutral",sit:["getting_around"]},
-  {kr:"오다",ro:"oda",meaning:"to come",example:"집에 와 — come home",pos:"verb",freq:10,register:"neutral",sit:["getting_around"]},
-  {kr:"먹다",ro:"meokda",meaning:"to eat",example:"밥 먹었어? — have you eaten?",pos:"verb",freq:10,register:"neutral",sit:["restaurant","food"]},
-  {kr:"마시다",ro:"masida",meaning:"to drink",example:"물 마셔 — drink some water",pos:"verb",freq:9,register:"neutral",sit:["restaurant","food"]},
+  {kr:"가다",ro:"gada",meaning:"to go",example:"학교에 가다 — to go to school",pos:"verb",freq:10,register:"neutral"},
+  {kr:"오다",ro:"oda",meaning:"to come",example:"집에 와 — come home",pos:"verb",freq:10,register:"neutral"},
+  {kr:"먹다",ro:"meokda",meaning:"to eat",example:"밥 먹었어? — have you eaten?",pos:"verb",freq:10,register:"neutral"},
+  {kr:"마시다",ro:"masida",meaning:"to drink",example:"물 마셔 — drink some water",pos:"verb",freq:9,register:"neutral"},
   {kr:"자다",ro:"jada",meaning:"to sleep",example:"일찍 자 — sleep early",pos:"verb",freq:9,register:"neutral"},
   {kr:"보다",ro:"boda",meaning:"to see / watch",example:"영화 봐 — watch a movie",pos:"verb",freq:10,register:"neutral"},
   {kr:"듣다",ro:"deutda",meaning:"to listen / hear",example:"음악 들어 — listen to music",pos:"verb",freq:9,register:"neutral"},
   {kr:"말하다",ro:"malhada",meaning:"to speak / say",example:"천천히 말해 — speak slowly",pos:"verb",freq:10,register:"neutral"},
-  {kr:"알다",ro:"alda",meaning:"to know",example:"알아? — do you know?",pos:"verb",freq:10,register:"neutral",sit:["meeting","getting_around"]},
-  {kr:"모르다",ro:"moreuda",meaning:"to not know",example:"몰라요 — I don't know",pos:"verb",freq:9,register:"neutral",sit:["emergency"]},
-  {kr:"있다",ro:"itda",meaning:"to exist / have / be (location)",example:"집에 있어 — I'm at home",pos:"verb",freq:10,register:"neutral",sit:["airport","getting_around","food","shopping","meeting"]},
-  {kr:"없다",ro:"eopda",meaning:"to not exist / not have",example:"돈이 없어 — I don't have money",pos:"verb",freq:10,register:"neutral",sit:["airport","getting_around","food","shopping"]},
-  {kr:"좋아하다",ro:"joahada",meaning:"to like",example:"한국 음식 좋아해 — I like Korean food",pos:"verb",freq:10,register:"neutral",sit:["dating"]},
-  {kr:"사랑하다",ro:"saranghada",meaning:"to love",example:"가족을 사랑해 — I love my family",pos:"verb",freq:9,register:"neutral",sit:["dating"]},
-  {kr:"원하다",ro:"wonhada",meaning:"to want",example:"뭘 원해? — what do you want?",pos:"verb",freq:9,register:"neutral",sit:["restaurant","food"]},
+  {kr:"알다",ro:"alda",meaning:"to know",example:"알아? — do you know?",pos:"verb",freq:10,register:"neutral"},
+  {kr:"모르다",ro:"moreuda",meaning:"to not know",example:"몰라요 — I don't know",pos:"verb",freq:9,register:"neutral"},
+  {kr:"있다",ro:"itda",meaning:"to exist / have / be (location)",example:"집에 있어 — I'm at home",pos:"verb",freq:10,register:"neutral"},
+  {kr:"없다",ro:"eopda",meaning:"to not exist / not have",example:"돈이 없어 — I don't have money",pos:"verb",freq:10,register:"neutral"},
+  {kr:"좋아하다",ro:"joahada",meaning:"to like",example:"한국 음식 좋아해 — I like Korean food",pos:"verb",freq:10,register:"neutral"},
+  {kr:"사랑하다",ro:"saranghada",meaning:"to love",example:"가족을 사랑해 — I love my family",pos:"verb",freq:9,register:"neutral"},
+  {kr:"원하다",ro:"wonhada",meaning:"to want",example:"뭘 원해? — what do you want?",pos:"verb",freq:9,register:"neutral"},
   {kr:"생각하다",ro:"saenggakhada",meaning:"to think",example:"어떻게 생각해? — what do you think?",pos:"verb",freq:9,register:"neutral"},
-  {kr:"만나다",ro:"mannada",meaning:"to meet",example:"내일 만나자 — let's meet tomorrow",pos:"verb",freq:9,register:"neutral",sit:["meeting"]},
-  {kr:"기다리다",ro:"gidarida",meaning:"to wait",example:"여기서 기다려 — wait here",pos:"verb",freq:8,register:"neutral",sit:["dating"]},
+  {kr:"만나다",ro:"mannada",meaning:"to meet",example:"내일 만나자 — let's meet tomorrow",pos:"verb",freq:9,register:"neutral"},
+  {kr:"기다리다",ro:"gidarida",meaning:"to wait",example:"여기서 기다려 — wait here",pos:"verb",freq:8,register:"neutral"},
   {kr:"공부하다",ro:"gongbuhada",meaning:"to study",example:"한국어 공부해 — I'm studying Korean",pos:"verb",freq:9,register:"neutral"},
   {kr:"일하다",ro:"ilhada",meaning:"to work",example:"오늘 많이 일했어 — I worked a lot today",pos:"verb",freq:9,register:"neutral"},
   {kr:"살다",ro:"salda",meaning:"to live",example:"서울에 살아 — I live in Seoul",pos:"verb",freq:9,register:"neutral"},
-  {kr:"웃다",ro:"utda",meaning:"to smile / laugh",example:"웃어봐 — try smiling",pos:"verb",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"울다",ro:"ulda",meaning:"to cry",example:"울지 마 — don't cry",pos:"verb",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"주다",ro:"juda",meaning:"to give",example:"나한테 줘 — give it to me",pos:"verb",freq:9,register:"neutral",sit:["restaurant","food"]},
-  {kr:"받다",ro:"batda",meaning:"to receive",example:"선물 받았어 — I received a gift",pos:"verb",freq:9,register:"neutral",sit:["food"]},
-  {kr:"찾다",ro:"chatda",meaning:"to find / look for",example:"뭐 찾아? — what are you looking for?",pos:"verb",freq:8,register:"neutral",sit:["airport","getting_around"]},
+  {kr:"웃다",ro:"utda",meaning:"to smile / laugh",example:"웃어봐 — try smiling",pos:"verb",freq:8,register:"neutral"},
+  {kr:"울다",ro:"ulda",meaning:"to cry",example:"울지 마 — don't cry",pos:"verb",freq:8,register:"neutral"},
+  {kr:"주다",ro:"juda",meaning:"to give",example:"나한테 줘 — give it to me",pos:"verb",freq:9,register:"neutral"},
+  {kr:"받다",ro:"batda",meaning:"to receive",example:"선물 받았어 — I received a gift",pos:"verb",freq:9,register:"neutral"},
+  {kr:"찾다",ro:"chatda",meaning:"to find / look for",example:"뭐 찾아? — what are you looking for?",pos:"verb",freq:8,register:"neutral"},
   {kr:"시작하다",ro:"sijakhada",meaning:"to start",example:"시작하자 — let's start",pos:"verb",freq:8,register:"neutral"},
   {kr:"끝나다",ro:"kkeutnada",meaning:"to end / finish",example:"수업이 끝났어 — class is over",pos:"verb",freq:7,register:"neutral"},
-  {kr:"도와주다",ro:"dowajuda",meaning:"to help",example:"도와줘서 고마워 — thanks for helping",pos:"verb",freq:8,register:"neutral",sit:["emergency"]},
-  {kr:"이해하다",ro:"ihaehada",meaning:"to understand",example:"이해해? — do you understand?",pos:"verb",freq:8,register:"neutral",sit:["emergency"]},
-  {kr:"좋다",ro:"jota",meaning:"to be good / to like",example:"이 노래 좋아 — I like this song",pos:"verb",freq:10,register:"neutral",sit:["meeting","dating"]},
+  {kr:"도와주다",ro:"dowajuda",meaning:"to help",example:"도와줘서 고마워 — thanks for helping",pos:"verb",freq:8,register:"neutral"},
+  {kr:"이해하다",ro:"ihaehada",meaning:"to understand",example:"이해해? — do you understand?",pos:"verb",freq:8,register:"neutral"},
+  {kr:"좋다",ro:"jota",meaning:"to be good / to like",example:"이 노래 좋아 — I like this song",pos:"verb",freq:10,register:"neutral"},
   // ── Adjectives ──
-  {kr:"예쁘다",ro:"yeppeuda",meaning:"pretty / beautiful",example:"너 진짜 예뻐 — you're really pretty",pos:"adjective",freq:9,register:"neutral",sit:["dating"]},
-  {kr:"귀엽다",ro:"gwiyeopda",meaning:"cute",example:"너무 귀여워 — so cute",pos:"adjective",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"멋있다",ro:"meositda",meaning:"cool / stylish",example:"진짜 멋있어 — so cool",pos:"adjective",freq:8,register:"casual",sit:["dating"]},
-  {kr:"크다",ro:"keuda",meaning:"big / tall",example:"키가 커 — you're tall",pos:"adjective",freq:10,register:"neutral",sit:["shopping"]},
-  {kr:"작다",ro:"jakda",meaning:"small / short",example:"키가 작아 — you're short",pos:"adjective",freq:9,register:"neutral",sit:["shopping"]},
-  {kr:"많다",ro:"manta",meaning:"many / a lot",example:"사람이 많아 — there are a lot of people",pos:"adjective",freq:10,register:"neutral",sit:["shopping"]},
+  {kr:"예쁘다",ro:"yeppeuda",meaning:"pretty / beautiful",example:"너 진짜 예뻐 — you're really pretty",pos:"adjective",freq:9,register:"neutral"},
+  {kr:"귀엽다",ro:"gwiyeopda",meaning:"cute",example:"너무 귀여워 — so cute",pos:"adjective",freq:8,register:"neutral"},
+  {kr:"멋있다",ro:"meositda",meaning:"cool / stylish",example:"진짜 멋있어 — so cool",pos:"adjective",freq:8,register:"casual"},
+  {kr:"크다",ro:"keuda",meaning:"big / tall",example:"키가 커 — you're tall",pos:"adjective",freq:10,register:"neutral"},
+  {kr:"작다",ro:"jakda",meaning:"small / short",example:"키가 작아 — you're short",pos:"adjective",freq:9,register:"neutral"},
+  {kr:"많다",ro:"manta",meaning:"many / a lot",example:"사람이 많아 — there are a lot of people",pos:"adjective",freq:10,register:"neutral"},
   {kr:"어렵다",ro:"oryeopda",meaning:"difficult",example:"한국어 어려워 — Korean is difficult",pos:"adjective",freq:8,register:"neutral"},
   {kr:"쉽다",ro:"swipda",meaning:"easy",example:"이건 쉬워 — this is easy",pos:"adjective",freq:8,register:"neutral"},
   {kr:"재미있다",ro:"jaemiitda",meaning:"fun / interesting",example:"진짜 재미있어 — this is really fun",pos:"adjective",freq:8,register:"neutral"},
@@ -478,24 +412,24 @@ const KOREAN_WORDS = [
   {kr:"행복하다",ro:"haengbokhada",meaning:"happy",example:"지금 행복해 — I'm happy right now",pos:"adjective",freq:8,register:"neutral"},
   {kr:"힘들다",ro:"himdeulda",meaning:"hard / exhausting",example:"오늘 진짜 힘들었어 — today was really tough",pos:"adjective",freq:8,register:"neutral"},
   {kr:"바쁘다",ro:"bappeuda",meaning:"busy",example:"요즘 너무 바빠 — I've been so busy lately",pos:"adjective",freq:8,register:"neutral"},
-  {kr:"맛있다",ro:"masitda",meaning:"delicious",example:"진짜 맛있어 — it's so delicious",pos:"adjective",freq:9,register:"neutral",sit:["restaurant","food"]},
+  {kr:"맛있다",ro:"masitda",meaning:"delicious",example:"진짜 맛있어 — it's so delicious",pos:"adjective",freq:9,register:"neutral"},
   {kr:"같다",ro:"gatda",meaning:"same / similar",example:"우리 취향이 같아 — we have the same taste",pos:"adjective",freq:9,register:"neutral"},
   {kr:"다르다",ro:"dareuda",meaning:"different",example:"생각이 달라 — our thoughts are different",pos:"adjective",freq:8,register:"neutral"},
   // ── Adverbs ──
-  {kr:"너무",ro:"neomu",meaning:"so / too / very",example:"너무 좋아 — I love it so much",pos:"adverb",freq:10,register:"casual",sit:["dating"]},
-  {kr:"정말",ro:"jeongmal",meaning:"really / truly",example:"정말이야? — is that true?",pos:"adverb",freq:10,register:"neutral",sit:["dating","meeting"]},
-  {kr:"진짜",ro:"jinjja",meaning:"really / for real (slang)",example:"진짜? — for real?",pos:"adverb",freq:10,register:"casual",sit:["dating","meeting"]},
+  {kr:"너무",ro:"neomu",meaning:"so / too / very",example:"너무 좋아 — I love it so much",pos:"adverb",freq:10,register:"casual"},
+  {kr:"정말",ro:"jeongmal",meaning:"really / truly",example:"정말이야? — is that true?",pos:"adverb",freq:10,register:"neutral"},
+  {kr:"진짜",ro:"jinjja",meaning:"really / for real (slang)",example:"진짜? — for real?",pos:"adverb",freq:10,register:"casual"},
   {kr:"많이",ro:"mani",meaning:"a lot / very much",example:"많이 먹어 — eat a lot",pos:"adverb",freq:10,register:"neutral"},
-  {kr:"빨리",ro:"ppalli",meaning:"quickly / hurry",example:"빨리 와 — come quickly",pos:"adverb",freq:9,register:"neutral",sit:["emergency","getting_around"]},
-  {kr:"천천히",ro:"cheoncheonhi",meaning:"slowly",example:"천천히 말해줘 — please speak slowly",pos:"adverb",freq:8,register:"neutral",sit:["getting_around"]},
+  {kr:"빨리",ro:"ppalli",meaning:"quickly / hurry",example:"빨리 와 — come quickly",pos:"adverb",freq:9,register:"neutral"},
+  {kr:"천천히",ro:"cheoncheonhi",meaning:"slowly",example:"천천히 말해줘 — please speak slowly",pos:"adverb",freq:8,register:"neutral"},
   {kr:"항상",ro:"hangsang",meaning:"always",example:"항상 고마워 — always thankful",pos:"adverb",freq:9,register:"neutral"},
   {kr:"가끔",ro:"gakkeum",meaning:"sometimes",example:"가끔 생각나 — I think of you sometimes",pos:"adverb",freq:8,register:"neutral"},
-  {kr:"지금",ro:"jigeum",meaning:"now",example:"지금 어디야? — where are you now?",pos:"adverb",freq:10,register:"neutral",sit:["airport","getting_around"]},
+  {kr:"지금",ro:"jigeum",meaning:"now",example:"지금 어디야? — where are you now?",pos:"adverb",freq:10,register:"neutral"},
   {kr:"왜",ro:"wae",meaning:"why",example:"왜 그래? — why are you like that?",pos:"adverb",freq:10,register:"neutral"},
-  {kr:"어떻게",ro:"eotteoke",meaning:"how",example:"어떻게 해? — how do I do it?",pos:"adverb",freq:9,register:"neutral",sit:["airport","getting_around"]},
+  {kr:"어떻게",ro:"eotteoke",meaning:"how",example:"어떻게 해? — how do I do it?",pos:"adverb",freq:9,register:"neutral"},
   {kr:"다시",ro:"dasi",meaning:"again",example:"다시 해봐 — try again",pos:"adverb",freq:9,register:"neutral"},
-  {kr:"같이",ro:"gachi",meaning:"together",example:"같이 가자 — let's go together",pos:"adverb",freq:9,register:"casual",sit:["dating"]},
-  {kr:"혼자",ro:"honja",meaning:"alone",example:"혼자 있고 싶어 — I want to be alone",pos:"adverb",freq:8,register:"neutral",sit:["dating"]},
+  {kr:"같이",ro:"gachi",meaning:"together",example:"같이 가자 — let's go together",pos:"adverb",freq:9,register:"casual"},
+  {kr:"혼자",ro:"honja",meaning:"alone",example:"혼자 있고 싶어 — I want to be alone",pos:"adverb",freq:8,register:"neutral"},
   {kr:"아직",ro:"ajik",meaning:"still / not yet",example:"아직 몰라 — I don't know yet",pos:"adverb",freq:8,register:"neutral"},
   {kr:"계속",ro:"gyesok",meaning:"keep going / continuously",example:"계속 해봐 — keep trying",pos:"adverb",freq:8,register:"neutral"},
   {kr:"조금",ro:"jogeum",meaning:"a little",example:"조금만 더 — just a little more",pos:"adverb",freq:9,register:"neutral"},
@@ -513,26 +447,27 @@ const KOREAN_WORDS = [
   {kr:"께",ro:"kke",meaning:"to / from a person (honorific)",example:"선생님께 드렸어요 — I gave it to the teacher",pos:"particle",freq:7,register:"formal"},
   {kr:"처럼",ro:"cheoreum",meaning:"like / resembling",example:"별처럼 빛나 — shining like a star",pos:"particle",freq:7,register:"neutral"},
   // ── Nouns — essential ──
-  {kr:"사람",ro:"saram",meaning:"person / people",example:"좋은 사람이야 — they're a good person",pos:"noun",freq:10,register:"neutral",sit:["meeting"]},
-  {kr:"이름",ro:"ireum",meaning:"name",example:"이름이 뭐야? — what's your name?",pos:"noun",freq:9,register:"neutral",sit:["meeting"]},
+  {kr:"사람",ro:"saram",meaning:"person / people",example:"좋은 사람이야 — they're a good person",pos:"noun",freq:10,register:"neutral"},
+  {kr:"이름",ro:"ireum",meaning:"name",example:"이름이 뭐야? — what's your name?",pos:"noun",freq:9,register:"neutral"},
   {kr:"집",ro:"jip",meaning:"home / house",example:"집에 가고 싶어 — I want to go home",pos:"noun",freq:10,register:"neutral"},
   {kr:"학교",ro:"hakgyo",meaning:"school",example:"학교 어때? — how's school?",pos:"noun",freq:9,register:"neutral"},
-  {kr:"친구",ro:"chingu",meaning:"friend",example:"친구들이랑 놀았어 — hung out with friends",pos:"noun",freq:10,register:"neutral",sit:["meeting","dating"]},
+  {kr:"친구",ro:"chingu",meaning:"friend",example:"친구들이랑 놀았어 — hung out with friends",pos:"noun",freq:10,register:"neutral"},
   {kr:"가족",ro:"gajok",meaning:"family",example:"가족이 최고야 — family is the best",pos:"noun",freq:9,register:"neutral"},
   {kr:"엄마",ro:"eomma",meaning:"mom",example:"엄마한테 물어봐 — ask mom",pos:"noun",freq:9,register:"casual"},
   {kr:"아빠",ro:"appa",meaning:"dad",example:"아빠 닮았어 — you look like your dad",pos:"noun",freq:9,register:"casual"},
-  {kr:"시간",ro:"sigan",meaning:"time",example:"시간이 없어 — I don't have time",pos:"noun",freq:10,register:"neutral",sit:["airport","getting_around","food"]},
-  {kr:"밥",ro:"bap",meaning:"rice / meal / food",example:"밥 먹었어? — have you eaten?",pos:"noun",freq:10,register:"casual",sit:["restaurant","food"]},
-  {kr:"물",ro:"mul",meaning:"water",example:"물 한 잔 줘 — give me a glass of water",pos:"noun",freq:10,register:"neutral",sit:["restaurant","food"]},
-  {kr:"음악",ro:"eumak",meaning:"music",example:"음악 들어? — are you listening to music?",pos:"noun",freq:9,register:"neutral",sit:["restaurant"]},
-  {kr:"노래",ro:"norae",meaning:"song",example:"이 노래 뭐야? — what song is this?",pos:"noun",freq:9,register:"neutral",sit:["restaurant"]},
-  {kr:"마음",ro:"maeum",meaning:"heart / feelings / mind",example:"마음이 따뜻해 — my heart feels warm",pos:"noun",freq:9,register:"neutral",sit:["dating"]},
-  {kr:"사랑",ro:"sarang",meaning:"love",example:"사랑은 어려워 — love is difficult",pos:"noun",freq:10,register:"neutral",sit:["dating"]},
-  {kr:"꿈",ro:"kkum",meaning:"dream",example:"꿈을 포기하지 마 — don't give up on your dream",pos:"noun",freq:7,register:"neutral",sit:["dating"]},
+  {kr:"시간",ro:"sigan",meaning:"time",example:"시간이 없어 — I don't have time",pos:"noun",freq:10,register:"neutral"},
+  {kr:"밥",ro:"bap",meaning:"rice / meal / food",example:"밥 먹었어? — have you eaten?",pos:"noun",freq:10,register:"casual"},
+  {kr:"물",ro:"mul",meaning:"water",example:"물 한 잔 줘 — give me a glass of water",pos:"noun",freq:10,register:"neutral"},
+  {kr:"음악",ro:"eumak",meaning:"music",example:"음악 들어? — are you listening to music?",pos:"noun",freq:9,register:"neutral"},
+  {kr:"노래",ro:"norae",meaning:"song",example:"이 노래 뭐야? — what song is this?",pos:"noun",freq:9,register:"neutral"},
+  {kr:"마음",ro:"maeum",meaning:"heart / feelings / mind",example:"마음이 따뜻해 — my heart feels warm",pos:"noun",freq:9,register:"neutral"},
+  {kr:"사랑",ro:"sarang",meaning:"love",example:"사랑은 어려워 — love is difficult",pos:"noun",freq:10,register:"neutral"},
+  {kr:"꿈",ro:"kkum",meaning:"dream",example:"꿈을 포기하지 마 — don't give up on your dream",pos:"noun",freq:7,register:"neutral"},
   {kr:"오늘",ro:"oneul",meaning:"today",example:"오늘 기분 어때? — how are you feeling today?",pos:"noun",freq:10,register:"neutral"},
   {kr:"내일",ro:"naeil",meaning:"tomorrow",example:"내일 봐 — see you tomorrow",pos:"noun",freq:9,register:"neutral"},
   {kr:"어제",ro:"eoje",meaning:"yesterday",example:"어제 뭐 했어? — what did you do yesterday?",pos:"noun",freq:9,register:"neutral"},
 ];
+
 
 // ── ITALIAN WORD LIST ─────────────────────────────────────────────────────────
 // register: 'formal' | 'casual' | 'neutral'
@@ -540,45 +475,45 @@ const KOREAN_WORDS = [
 
 const ITALIAN_WORDS = [
   // ── Greetings & expressions ──
-  {kr:"buongiorno",ro:"bwon-JOR-no",meaning:"good morning / good day (standard greeting)",example:"Buongiorno, come posso aiutarla? — Good morning, how can I help you?",pos:"expression",freq:10,register:"formal",sit:["meeting"]},
-  {kr:"ciao",ro:"CHOW",meaning:"hi / bye (casual only)",example:"Ciao! Tutto bene? — Hey! Everything good?",pos:"expression",freq:10,register:"casual",sit:["meeting"]},
-  {kr:"buonasera",ro:"bwo-na-SEH-ra",meaning:"good evening",example:"Buonasera, ho una prenotazione — Good evening, I have a reservation",pos:"expression",freq:9,register:"formal",sit:["meeting"]},
-  {kr:"salve",ro:"SAL-veh",meaning:"hello (neutral, safe with strangers)",example:"Salve, mi chiamo Marco — Hello, my name is Marco",pos:"expression",freq:9,register:"neutral",sit:["meeting"]},
-  {kr:"arrivederci",ro:"ar-ree-veh-DAIR-chee",meaning:"goodbye (formal)",example:"Arrivederci, a domani — Goodbye, see you tomorrow",pos:"expression",freq:9,register:"formal",sit:["meeting"]},
-  {kr:"a presto",ro:"a PRES-to",meaning:"see you soon",example:"A presto! — See you soon!",pos:"expression",freq:8,register:"neutral",sit:["meeting"]},
-  {kr:"per favore",ro:"pair fa-VO-reh",meaning:"please (polite request)",example:"Un caffè, per favore — A coffee, please",pos:"expression",freq:10,register:"formal",sit:["restaurant"]},
+  {kr:"buongiorno",ro:"bwon-JOR-no",meaning:"good morning / good day (standard greeting)",example:"Buongiorno, come posso aiutarla? — Good morning, how can I help you?",pos:"expression",freq:10,register:"formal"},
+  {kr:"ciao",ro:"CHOW",meaning:"hi / bye (casual only)",example:"Ciao! Tutto bene? — Hey! Everything good?",pos:"expression",freq:10,register:"casual"},
+  {kr:"buonasera",ro:"bwo-na-SEH-ra",meaning:"good evening",example:"Buonasera, ho una prenotazione — Good evening, I have a reservation",pos:"expression",freq:9,register:"formal"},
+  {kr:"salve",ro:"SAL-veh",meaning:"hello (neutral, safe with strangers)",example:"Salve, mi chiamo Marco — Hello, my name is Marco",pos:"expression",freq:9,register:"neutral"},
+  {kr:"arrivederci",ro:"ar-ree-veh-DAIR-chee",meaning:"goodbye (formal)",example:"Arrivederci, a domani — Goodbye, see you tomorrow",pos:"expression",freq:9,register:"formal"},
+  {kr:"a presto",ro:"a PRES-to",meaning:"see you soon",example:"A presto! — See you soon!",pos:"expression",freq:8,register:"neutral"},
+  {kr:"per favore",ro:"pair fa-VO-reh",meaning:"please (polite request)",example:"Un caffè, per favore — A coffee, please",pos:"expression",freq:10,register:"formal"},
   {kr:"per piacere",ro:"pair pya-CHEH-reh",meaning:"please (slightly more emphatic)",example:"Parla più piano, per piacere — Please speak more slowly",pos:"expression",freq:9,register:"formal"},
-  {kr:"grazie",ro:"GRAT-syeh",meaning:"thank you",example:"Grazie per tutto — Thank you for everything",pos:"expression",freq:10,register:"neutral",sit:["restaurant"]},
-  {kr:"grazie mille",ro:"GRAT-syeh MEEL-leh",meaning:"thank you very much",example:"Grazie mille, sei gentilissimo — Thank you so much, you're very kind",pos:"expression",freq:9,register:"formal",sit:["airport","meeting"]},
-  {kr:"prego",ro:"PREH-go",meaning:"you're welcome / please / go ahead",example:"Prego, si accomodi — Please, have a seat",pos:"expression",freq:10,register:"neutral",sit:["meeting"]},
-  {kr:"mi dispiace",ro:"mee dis-PYA-cheh",meaning:"I'm sorry",example:"Mi dispiace per il ritardo — I'm sorry for the delay",pos:"expression",freq:9,register:"neutral",sit:["meeting","dating"]},
-  {kr:"scusa",ro:"SKOO-za",meaning:"excuse me / sorry (casual)",example:"Scusa, puoi ripetere? — Sorry, can you repeat that?",pos:"expression",freq:9,register:"casual",sit:["airport","getting_around"]},
-  {kr:"mi scusi",ro:"mee SKOO-zee",meaning:"excuse me (formal)",example:"Mi scusi, dov'è la stazione? — Excuse me, where is the station?",pos:"expression",freq:9,register:"formal",sit:["emergency"]},
-  {kr:"non capisco",ro:"non ka-PEES-ko",meaning:"I don't understand",example:"Non capisco, può ripetere? — I don't understand, can you repeat?",pos:"expression",freq:9,register:"neutral",sit:["emergency"]},
-  {kr:"non lo so",ro:"non lo SO",meaning:"I don't know",example:"Non lo so davvero — I really don't know",pos:"expression",freq:9,register:"neutral",sit:["airport","getting_around"]},
-  {kr:"come si dice",ro:"KO-meh see DEE-cheh",meaning:"how do you say",example:"Come si dice 'hello' in italiano? — How do you say hello in Italian?",pos:"expression",freq:8,register:"neutral",sit:["airport"]},
-  {kr:"esatto",ro:"eh-ZAT-to",meaning:"exactly / that's right",example:"Esatto! Hai capito bene — Exactly! You understood well",pos:"expression",freq:8,register:"neutral",sit:["meeting"]},
+  {kr:"grazie",ro:"GRAT-syeh",meaning:"thank you",example:"Grazie per tutto — Thank you for everything",pos:"expression",freq:10,register:"neutral"},
+  {kr:"grazie mille",ro:"GRAT-syeh MEEL-leh",meaning:"thank you very much",example:"Grazie mille, sei gentilissimo — Thank you so much, you're very kind",pos:"expression",freq:9,register:"formal"},
+  {kr:"prego",ro:"PREH-go",meaning:"you're welcome / please / go ahead",example:"Prego, si accomodi — Please, have a seat",pos:"expression",freq:10,register:"neutral"},
+  {kr:"mi dispiace",ro:"mee dis-PYA-cheh",meaning:"I'm sorry",example:"Mi dispiace per il ritardo — I'm sorry for the delay",pos:"expression",freq:9,register:"neutral"},
+  {kr:"scusa",ro:"SKOO-za",meaning:"excuse me / sorry (casual)",example:"Scusa, puoi ripetere? — Sorry, can you repeat that?",pos:"expression",freq:9,register:"casual"},
+  {kr:"mi scusi",ro:"mee SKOO-zee",meaning:"excuse me (formal)",example:"Mi scusi, dov'è la stazione? — Excuse me, where is the station?",pos:"expression",freq:9,register:"formal"},
+  {kr:"non capisco",ro:"non ka-PEES-ko",meaning:"I don't understand",example:"Non capisco, può ripetere? — I don't understand, can you repeat?",pos:"expression",freq:9,register:"neutral"},
+  {kr:"non lo so",ro:"non lo SO",meaning:"I don't know",example:"Non lo so davvero — I really don't know",pos:"expression",freq:9,register:"neutral"},
+  {kr:"come si dice",ro:"KO-meh see DEE-cheh",meaning:"how do you say",example:"Come si dice 'hello' in italiano? — How do you say hello in Italian?",pos:"expression",freq:8,register:"neutral"},
+  {kr:"esatto",ro:"eh-ZAT-to",meaning:"exactly / that's right",example:"Esatto! Hai capito bene — Exactly! You understood well",pos:"expression",freq:8,register:"neutral"},
   {kr:"capisce?",ro:"ka-PEE-sheh",meaning:"do you understand? (formal)",example:"È chiaro? Capisce? — Is it clear? Do you understand?",pos:"expression",freq:8,register:"formal"},
   {kr:"capisci?",ro:"ka-PEE-shee",meaning:"do you understand? (casual)",example:"Capisci cosa intendo? — Do you understand what I mean?",pos:"expression",freq:8,register:"casual"},
   {kr:"dai",ro:"DYE",meaning:"come on / oh come on (interjection)",example:"Dai, non essere così — Come on, don't be like that",pos:"expression",freq:8,register:"casual"},
   {kr:"mamma mia",ro:"MAM-ma MEE-a",meaning:"oh my / goodness (exclamation)",example:"Mamma mia, che fila! — Oh my, what a line!",pos:"expression",freq:7,register:"casual"},
-  {kr:"basta",ro:"BA-sta",meaning:"enough / that's enough",example:"Basta, non ne posso più — Enough, I can't take it anymore",pos:"expression",freq:8,register:"neutral",sit:["restaurant"]},
-  {kr:"andiamo",ro:"an-DYA-mo",meaning:"let's go",example:"Andiamo, è già tardi — Let's go, it's already late",pos:"expression",freq:8,register:"neutral",sit:["airport","getting_around"]},
+  {kr:"basta",ro:"BA-sta",meaning:"enough / that's enough",example:"Basta, non ne posso più — Enough, I can't take it anymore",pos:"expression",freq:8,register:"neutral"},
+  {kr:"andiamo",ro:"an-DYA-mo",meaning:"let's go",example:"Andiamo, è già tardi — Let's go, it's already late",pos:"expression",freq:8,register:"neutral"},
   {kr:"benvenuto",ro:"ben-veh-NOO-to",meaning:"welcome",example:"Benvenuto in Italia! — Welcome to Italy!",pos:"expression",freq:7,register:"neutral"},
   {kr:"buonanotte",ro:"bwo-na-NOT-teh",meaning:"good night",example:"Buonanotte, dormi bene — Good night, sleep well",pos:"expression",freq:8,register:"neutral"},
-  {kr:"ti voglio bene",ro:"tee VOL-yo BEH-neh",meaning:"I love you (affection, family/friends)",example:"Ti voglio bene, mamma — I love you, mom",pos:"expression",freq:9,register:"casual",sit:["dating"]},
-  {kr:"ti amo",ro:"tee A-mo",meaning:"I love you (romantic)",example:"Ti amo con tutto il cuore — I love you with all my heart",pos:"expression",freq:9,register:"casual",sit:["dating"]},
-  {kr:"mi manchi",ro:"mee MAN-kee",meaning:"I miss you",example:"Mi manchi tanto — I miss you so much",pos:"expression",freq:8,register:"casual",sit:["dating"]},
+  {kr:"ti voglio bene",ro:"tee VOL-yo BEH-neh",meaning:"I love you (affection, family/friends)",example:"Ti voglio bene, mamma — I love you, mom",pos:"expression",freq:9,register:"casual"},
+  {kr:"ti amo",ro:"tee A-mo",meaning:"I love you (romantic)",example:"Ti amo con tutto il cuore — I love you with all my heart",pos:"expression",freq:9,register:"casual"},
+  {kr:"mi manchi",ro:"mee MAN-kee",meaning:"I miss you",example:"Mi manchi tanto — I miss you so much",pos:"expression",freq:8,register:"casual"},
   {kr:"in bocca al lupo",ro:"in BOK-ka al LOO-po",meaning:"good luck (literally: in the wolf's mouth)",example:"In bocca al lupo per l'esame! — Good luck on the exam!",pos:"expression",freq:7,register:"neutral"},
   // ── Pronouns ──
-  {kr:"io",ro:"EE-o",meaning:"I / me",example:"Io non lo sapevo — I didn't know that",pos:"pronoun",freq:10,register:"neutral",sit:["meeting"]},
-  {kr:"tu",ro:"TOO",meaning:"you (casual)",example:"Tu cosa fai? — What are you doing?",pos:"pronoun",freq:10,register:"casual",sit:["meeting"]},
+  {kr:"io",ro:"EE-o",meaning:"I / me",example:"Io non lo sapevo — I didn't know that",pos:"pronoun",freq:10,register:"neutral"},
+  {kr:"tu",ro:"TOO",meaning:"you (casual)",example:"Tu cosa fai? — What are you doing?",pos:"pronoun",freq:10,register:"casual"},
   {kr:"lei",ro:"LAY",meaning:"she / you (formal)",example:"Lei è la professoressa? — Are you the professor?",pos:"pronoun",freq:9,register:"formal"},
   {kr:"lui",ro:"LOO-ee",meaning:"he / him",example:"Lui parla troppo — He talks too much",pos:"pronoun",freq:9,register:"neutral"},
   {kr:"noi",ro:"NOY",meaning:"we / us",example:"Noi andiamo al mare — We are going to the sea",pos:"pronoun",freq:9,register:"neutral"},
   {kr:"voi",ro:"VOY",meaning:"you all",example:"Voi venite alla festa? — Are you all coming to the party?",pos:"pronoun",freq:8,register:"neutral"},
   {kr:"loro",ro:"LO-ro",meaning:"they / them",example:"Loro non sanno ancora — They don't know yet",pos:"pronoun",freq:8,register:"neutral"},
-  {kr:"chi",ro:"KEE",meaning:"who",example:"Chi ha detto questo? — Who said that?",pos:"pronoun",freq:9,register:"neutral",sit:["meeting"]},
+  {kr:"chi",ro:"KEE",meaning:"who",example:"Chi ha detto questo? — Who said that?",pos:"pronoun",freq:9,register:"neutral"},
   {kr:"cosa",ro:"KO-za",meaning:"what / thing",example:"Cosa vuoi fare? — What do you want to do?",pos:"pronoun",freq:10,register:"neutral"},
   {kr:"questo",ro:"KWES-to",meaning:"this",example:"Questo è mio — This is mine",pos:"pronoun",freq:9,register:"neutral"},
   {kr:"quello",ro:"KWEL-lo",meaning:"that",example:"Quello mi piace di più — I like that one more",pos:"pronoun",freq:8,register:"neutral"},
@@ -586,46 +521,46 @@ const ITALIAN_WORDS = [
   {kr:"essere",ro:"ES-seh-reh",meaning:"to be",example:"Sono stanco — I am tired",pos:"verb",freq:10,register:"neutral"},
   {kr:"avere",ro:"a-VEH-reh",meaning:"to have",example:"Ho fame — I'm hungry",pos:"verb",freq:10,register:"neutral"},
   {kr:"fare",ro:"FA-reh",meaning:"to do / make",example:"Cosa fai? — What are you doing?",pos:"verb",freq:10,register:"neutral"},
-  {kr:"andare",ro:"an-DA-reh",meaning:"to go",example:"Vado a casa — I'm going home",pos:"verb",freq:10,register:"neutral",sit:["getting_around"]},
-  {kr:"venire",ro:"veh-NEE-reh",meaning:"to come",example:"Vieni con me — Come with me",pos:"verb",freq:10,register:"neutral",sit:["emergency"]},
-  {kr:"volere",ro:"vo-LEH-reh",meaning:"to want",example:"Voglio imparare l'italiano — I want to learn Italian",pos:"verb",freq:10,register:"neutral",sit:["shopping"]},
+  {kr:"andare",ro:"an-DA-reh",meaning:"to go",example:"Vado a casa — I'm going home",pos:"verb",freq:10,register:"neutral"},
+  {kr:"venire",ro:"veh-NEE-reh",meaning:"to come",example:"Vieni con me — Come with me",pos:"verb",freq:10,register:"neutral"},
+  {kr:"volere",ro:"vo-LEH-reh",meaning:"to want",example:"Voglio imparare l'italiano — I want to learn Italian",pos:"verb",freq:10,register:"neutral"},
   {kr:"potere",ro:"po-TEH-reh",meaning:"can / to be able to",example:"Puoi aiutarmi? — Can you help me?",pos:"verb",freq:10,register:"neutral"},
   {kr:"dovere",ro:"do-VEH-reh",meaning:"must / to have to",example:"Devo partire subito — I have to leave immediately",pos:"verb",freq:9,register:"neutral"},
   {kr:"sapere",ro:"sa-PEH-reh",meaning:"to know (facts)",example:"Sai parlare italiano? — Do you know how to speak Italian?",pos:"verb",freq:9,register:"neutral"},
   {kr:"conoscere",ro:"ko-NO-sheh-reh",meaning:"to know (people/places)",example:"Conosci Roma? — Do you know Rome?",pos:"verb",freq:8,register:"neutral"},
   {kr:"dire",ro:"DEE-reh",meaning:"to say / tell",example:"Cosa vuoi dire? — What do you mean?",pos:"verb",freq:10,register:"neutral"},
-  {kr:"parlare",ro:"par-LA-reh",meaning:"to speak / talk",example:"Parla più lentamente — Speak more slowly",pos:"verb",freq:10,register:"neutral",sit:["meeting"]},
-  {kr:"capire",ro:"ka-PEE-reh",meaning:"to understand",example:"Non capisco niente — I don't understand anything",pos:"verb",freq:9,register:"neutral",sit:["meeting","getting_around"]},
+  {kr:"parlare",ro:"par-LA-reh",meaning:"to speak / talk",example:"Parla più lentamente — Speak more slowly",pos:"verb",freq:10,register:"neutral"},
+  {kr:"capire",ro:"ka-PEE-reh",meaning:"to understand",example:"Non capisco niente — I don't understand anything",pos:"verb",freq:9,register:"neutral"},
   {kr:"sentire",ro:"sen-TEE-reh",meaning:"to hear / feel / sense",example:"Senti questa canzone? — Do you hear this song?",pos:"verb",freq:8,register:"neutral"},
   {kr:"vedere",ro:"veh-DEH-reh",meaning:"to see / watch",example:"Ci vediamo domani — We'll see each other tomorrow",pos:"verb",freq:9,register:"neutral"},
   {kr:"guardare",ro:"gwar-DA-reh",meaning:"to look at / watch",example:"Guardiamo un film — Let's watch a film",pos:"verb",freq:8,register:"neutral"},
-  {kr:"mangiare",ro:"man-JA-reh",meaning:"to eat",example:"Ho mangiato troppo — I ate too much",pos:"verb",freq:9,register:"neutral",sit:["restaurant"]},
-  {kr:"bere",ro:"BEH-reh",meaning:"to drink",example:"Vuoi bere qualcosa? — Do you want to drink something?",pos:"verb",freq:9,register:"neutral",sit:["restaurant"]},
+  {kr:"mangiare",ro:"man-JA-reh",meaning:"to eat",example:"Ho mangiato troppo — I ate too much",pos:"verb",freq:9,register:"neutral"},
+  {kr:"bere",ro:"BEH-reh",meaning:"to drink",example:"Vuoi bere qualcosa? — Do you want to drink something?",pos:"verb",freq:9,register:"neutral"},
   {kr:"dormire",ro:"dor-MEE-reh",meaning:"to sleep",example:"Devo dormire — I need to sleep",pos:"verb",freq:9,register:"neutral"},
   {kr:"pensare",ro:"pen-SA-reh",meaning:"to think",example:"Cosa pensi di me? — What do you think of me?",pos:"verb",freq:9,register:"neutral"},
   {kr:"credere",ro:"KREH-deh-reh",meaning:"to believe",example:"Ci credo davvero — I really believe it",pos:"verb",freq:8,register:"neutral"},
   {kr:"amare",ro:"a-MA-reh",meaning:"to love",example:"Amo la musica italiana — I love Italian music",pos:"verb",freq:9,register:"neutral"},
-  {kr:"piacere",ro:"pya-CHEH-reh",meaning:"to like / please",example:"Mi piace molto — I like it a lot",pos:"verb",freq:10,register:"neutral",sit:["dating"]},
-  {kr:"aspettare",ro:"as-pet-TA-reh",meaning:"to wait",example:"Aspetta, arrivo subito — Wait, I'm coming right away",pos:"verb",freq:8,register:"neutral",sit:["emergency"]},
-  {kr:"trovare",ro:"tro-VA-reh",meaning:"to find",example:"Non riesco a trovarlo — I can't find it",pos:"verb",freq:8,register:"neutral",sit:["shopping"]},
+  {kr:"piacere",ro:"pya-CHEH-reh",meaning:"to like / please",example:"Mi piace molto — I like it a lot",pos:"verb",freq:10,register:"neutral"},
+  {kr:"aspettare",ro:"as-pet-TA-reh",meaning:"to wait",example:"Aspetta, arrivo subito — Wait, I'm coming right away",pos:"verb",freq:8,register:"neutral"},
+  {kr:"trovare",ro:"tro-VA-reh",meaning:"to find",example:"Non riesco a trovarlo — I can't find it",pos:"verb",freq:8,register:"neutral"},
   {kr:"dare",ro:"DA-reh",meaning:"to give",example:"Dammi un attimo — Give me a moment",pos:"verb",freq:9,register:"neutral"},
-  {kr:"prendere",ro:"PREN-deh-reh",meaning:"to take / get",example:"Prendo un caffè — I'll have a coffee",pos:"verb",freq:9,register:"neutral",sit:["restaurant"]},
+  {kr:"prendere",ro:"PREN-deh-reh",meaning:"to take / get",example:"Prendo un caffè — I'll have a coffee",pos:"verb",freq:9,register:"neutral"},
   {kr:"uscire",ro:"oo-SHEE-reh",meaning:"to go out",example:"Usciamo stasera? — Shall we go out tonight?",pos:"verb",freq:8,register:"neutral"},
-  {kr:"tornare",ro:"tor-NA-reh",meaning:"to return",example:"Torno fra un'ora — I'll be back in an hour",pos:"verb",freq:8,register:"neutral",sit:["getting_around"]},
+  {kr:"tornare",ro:"tor-NA-reh",meaning:"to return",example:"Torno fra un'ora — I'll be back in an hour",pos:"verb",freq:8,register:"neutral"},
   {kr:"vivere",ro:"VEE-veh-reh",meaning:"to live",example:"Vivo a Milano — I live in Milan",pos:"verb",freq:8,register:"neutral"},
   {kr:"lavorare",ro:"la-vo-RA-reh",meaning:"to work",example:"Lavoro troppo — I work too much",pos:"verb",freq:8,register:"neutral"},
   {kr:"studiare",ro:"stoo-DYA-reh",meaning:"to study",example:"Studio italiano ogni giorno — I study Italian every day",pos:"verb",freq:8,register:"neutral"},
-  {kr:"chiamarsi",ro:"kya-MAR-see",meaning:"to be called / named",example:"Mi chiamo Sofia — My name is Sofia",pos:"verb",freq:9,register:"neutral",sit:["meeting"]},
+  {kr:"chiamarsi",ro:"kya-MAR-see",meaning:"to be called / named",example:"Mi chiamo Sofia — My name is Sofia",pos:"verb",freq:9,register:"neutral"},
   {kr:"capirsi",ro:"ka-PEER-see",meaning:"to understand each other",example:"Ci capiamo bene — We understand each other well",pos:"verb",freq:7,register:"neutral"},
   // ── Adjectives ──
-  {kr:"bello",ro:"BEL-lo",meaning:"beautiful / nice",example:"Che posto bello! — What a beautiful place!",pos:"adjective",freq:10,register:"neutral",sit:["dating"]},
-  {kr:"buono",ro:"BWO-no",meaning:"good / tasty / kind",example:"Sei una persona buona — You are a good person",pos:"adjective",freq:10,register:"neutral",sit:["restaurant"]},
-  {kr:"grande",ro:"GRAN-deh",meaning:"big / great",example:"Hai fatto una cosa grande — You did something great",pos:"adjective",freq:9,register:"neutral",sit:["shopping"]},
-  {kr:"piccolo",ro:"PEE-ko-lo",meaning:"small / little",example:"Un piccolo favore — A small favor",pos:"adjective",freq:9,register:"neutral",sit:["shopping"]},
-  {kr:"nuovo",ro:"NWO-vo",meaning:"new",example:"Un nuovo inizio — A new beginning",pos:"adjective",freq:9,register:"neutral",sit:["shopping"]},
+  {kr:"bello",ro:"BEL-lo",meaning:"beautiful / nice",example:"Che posto bello! — What a beautiful place!",pos:"adjective",freq:10,register:"neutral"},
+  {kr:"buono",ro:"BWO-no",meaning:"good / tasty / kind",example:"Sei una persona buona — You are a good person",pos:"adjective",freq:10,register:"neutral"},
+  {kr:"grande",ro:"GRAN-deh",meaning:"big / great",example:"Hai fatto una cosa grande — You did something great",pos:"adjective",freq:9,register:"neutral"},
+  {kr:"piccolo",ro:"PEE-ko-lo",meaning:"small / little",example:"Un piccolo favore — A small favor",pos:"adjective",freq:9,register:"neutral"},
+  {kr:"nuovo",ro:"NWO-vo",meaning:"new",example:"Un nuovo inizio — A new beginning",pos:"adjective",freq:9,register:"neutral"},
   {kr:"vecchio",ro:"VEK-kyo",meaning:"old",example:"Il mio vecchio quartiere — My old neighborhood",pos:"adjective",freq:8,register:"neutral"},
-  {kr:"felice",ro:"feh-LEE-cheh",meaning:"happy",example:"Sono felice per te — I'm happy for you",pos:"adjective",freq:9,register:"neutral",sit:["dating"]},
-  {kr:"triste",ro:"TREES-teh",meaning:"sad",example:"Perché sei così triste? — Why are you so sad?",pos:"adjective",freq:8,register:"neutral",sit:["dating"]},
+  {kr:"felice",ro:"feh-LEE-cheh",meaning:"happy",example:"Sono felice per te — I'm happy for you",pos:"adjective",freq:9,register:"neutral"},
+  {kr:"triste",ro:"TREES-teh",meaning:"sad",example:"Perché sei così triste? — Why are you so sad?",pos:"adjective",freq:8,register:"neutral"},
   {kr:"stanco",ro:"STAN-ko",meaning:"tired",example:"Sono stanco morto — I'm dead tired",pos:"adjective",freq:8,register:"neutral"},
   {kr:"pronto",ro:"PRON-to",meaning:"ready",example:"Sei pronto per partire? — Are you ready to leave?",pos:"adjective",freq:9,register:"neutral"},
   {kr:"facile",ro:"FA-chee-leh",meaning:"easy",example:"Non è così facile — It's not that easy",pos:"adjective",freq:8,register:"neutral"},
@@ -633,8 +568,8 @@ const ITALIAN_WORDS = [
   {kr:"vero",ro:"VEH-ro",meaning:"true / real",example:"È vero quello che dicono? — Is what they say true?",pos:"adjective",freq:9,register:"neutral"},
   {kr:"stesso",ro:"STES-so",meaning:"same",example:"Abbiamo lo stesso problema — We have the same problem",pos:"adjective",freq:8,register:"neutral"},
   {kr:"bravo",ro:"BRA-vo",meaning:"good / well done / skilled",example:"Sei molto bravo — You're very good",pos:"adjective",freq:9,register:"neutral"},
-  {kr:"simpatico",ro:"seem-PA-tee-ko",meaning:"nice / likeable / funny",example:"È una persona simpatica — They're a likeable person",pos:"adjective",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"carino",ro:"ka-REE-no",meaning:"cute / nice / sweet",example:"Che idea carina! — What a cute idea!",pos:"adjective",freq:8,register:"casual",sit:["dating"]},
+  {kr:"simpatico",ro:"seem-PA-tee-ko",meaning:"nice / likeable / funny",example:"È una persona simpatica — They're a likeable person",pos:"adjective",freq:8,register:"neutral"},
+  {kr:"carino",ro:"ka-REE-no",meaning:"cute / nice / sweet",example:"Che idea carina! — What a cute idea!",pos:"adjective",freq:8,register:"casual"},
   {kr:"occupato",ro:"ok-koo-PA-to",meaning:"busy",example:"Sono molto occupato adesso — I'm very busy right now",pos:"adjective",freq:7,register:"neutral"},
   {kr:"libero",ro:"LEE-beh-ro",meaning:"free / available",example:"Sei libero domani? — Are you free tomorrow?",pos:"adjective",freq:8,register:"neutral"},
   // ── Adverbs ──
@@ -642,39 +577,39 @@ const ITALIAN_WORDS = [
   {kr:"poco",ro:"PO-ko",meaning:"a little / not much",example:"Parlo poco italiano — I speak a little Italian",pos:"adverb",freq:9,register:"neutral"},
   {kr:"troppo",ro:"TROP-po",meaning:"too / too much",example:"È troppo caldo oggi — It's too hot today",pos:"adverb",freq:8,register:"neutral"},
   {kr:"abbastanza",ro:"ab-bas-TAN-tsa",meaning:"enough / quite / fairly",example:"È abbastanza buono — It's quite good",pos:"adverb",freq:8,register:"neutral"},
-  {kr:"subito",ro:"SOO-bee-to",meaning:"right away / immediately",example:"Vengo subito — I'll be right there",pos:"adverb",freq:8,register:"neutral",sit:["emergency"]},
-  {kr:"ancora",ro:"an-KO-ra",meaning:"still / yet / again",example:"Stai ancora qui? — Are you still here?",pos:"adverb",freq:8,register:"neutral",sit:["dating"]},
+  {kr:"subito",ro:"SOO-bee-to",meaning:"right away / immediately",example:"Vengo subito — I'll be right there",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"ancora",ro:"an-KO-ra",meaning:"still / yet / again",example:"Stai ancora qui? — Are you still here?",pos:"adverb",freq:8,register:"neutral"},
   {kr:"già",ro:"JA",meaning:"already",example:"L'ho già visto — I already saw it",pos:"adverb",freq:8,register:"neutral"},
-  {kr:"sempre",ro:"SEM-preh",meaning:"always",example:"Ti penso sempre — I always think about you",pos:"adverb",freq:9,register:"neutral",sit:["dating"]},
-  {kr:"mai",ro:"MY",meaning:"never / ever",example:"Non lo faccio mai — I never do that",pos:"adverb",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"forse",ro:"FOR-seh",meaning:"maybe / perhaps",example:"Forse vengo anch'io — Maybe I'll come too",pos:"adverb",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"insieme",ro:"in-SYEH-meh",meaning:"together",example:"Facciamolo insieme — Let's do it together",pos:"adverb",freq:8,register:"neutral",sit:["dating"]},
-  {kr:"adesso",ro:"a-DES-so",meaning:"now",example:"Adesso capisco tutto — Now I understand everything",pos:"adverb",freq:9,register:"neutral",sit:["getting_around"]},
-  {kr:"dopo",ro:"DO-po",meaning:"after / later",example:"A dopo! — See you later!",pos:"adverb",freq:9,register:"neutral",sit:["getting_around"]},
-  {kr:"prima",ro:"PREE-ma",meaning:"before / first / earlier",example:"Prima di tutto, grazie — First of all, thank you",pos:"adverb",freq:8,register:"neutral",sit:["getting_around"]},
-  {kr:"dove",ro:"DO-veh",meaning:"where",example:"Dove sei? — Where are you?",pos:"adverb",freq:10,register:"neutral",sit:["emergency"]},
-  {kr:"quando",ro:"KWAN-do",meaning:"when",example:"Quando torni? — When are you coming back?",pos:"adverb",freq:9,register:"neutral",sit:["airport","getting_around"]},
-  {kr:"come",ro:"KO-meh",meaning:"how / like / as",example:"Come stai? — How are you?",pos:"adverb",freq:10,register:"neutral",sit:["meeting"]},
+  {kr:"sempre",ro:"SEM-preh",meaning:"always",example:"Ti penso sempre — I always think about you",pos:"adverb",freq:9,register:"neutral"},
+  {kr:"mai",ro:"MY",meaning:"never / ever",example:"Non lo faccio mai — I never do that",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"forse",ro:"FOR-seh",meaning:"maybe / perhaps",example:"Forse vengo anch'io — Maybe I'll come too",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"insieme",ro:"in-SYEH-meh",meaning:"together",example:"Facciamolo insieme — Let's do it together",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"adesso",ro:"a-DES-so",meaning:"now",example:"Adesso capisco tutto — Now I understand everything",pos:"adverb",freq:9,register:"neutral"},
+  {kr:"dopo",ro:"DO-po",meaning:"after / later",example:"A dopo! — See you later!",pos:"adverb",freq:9,register:"neutral"},
+  {kr:"prima",ro:"PREE-ma",meaning:"before / first / earlier",example:"Prima di tutto, grazie — First of all, thank you",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"dove",ro:"DO-veh",meaning:"where",example:"Dove sei? — Where are you?",pos:"adverb",freq:10,register:"neutral"},
+  {kr:"quando",ro:"KWAN-do",meaning:"when",example:"Quando torni? — When are you coming back?",pos:"adverb",freq:9,register:"neutral"},
+  {kr:"come",ro:"KO-meh",meaning:"how / like / as",example:"Come stai? — How are you?",pos:"adverb",freq:10,register:"neutral"},
   {kr:"perché",ro:"pair-KEH",meaning:"why / because",example:"Perché non vieni? — Why aren't you coming?",pos:"adverb",freq:9,register:"neutral"},
-  {kr:"quanto",ro:"KWAN-to",meaning:"how much",example:"Quanto costa? — How much does it cost?",pos:"adverb",freq:9,register:"neutral",sit:["restaurant"]},
+  {kr:"quanto",ro:"KWAN-to",meaning:"how much",example:"Quanto costa? — How much does it cost?",pos:"adverb",freq:9,register:"neutral"},
   {kr:"anche",ro:"AN-keh",meaning:"also / too / even",example:"Anch'io voglio venire — I want to come too",pos:"adverb",freq:9,register:"neutral"},
   {kr:"solo",ro:"SO-lo",meaning:"only / just / alone",example:"Solo un momento — Just a moment",pos:"adverb",freq:9,register:"neutral"},
   // ── Nouns ──
-  {kr:"amore",ro:"a-MO-reh",meaning:"love",example:"L'amore è complicato — Love is complicated",pos:"noun",freq:10,register:"neutral",sit:["dating"]},
+  {kr:"amore",ro:"a-MO-reh",meaning:"love",example:"L'amore è complicato — Love is complicated",pos:"noun",freq:10,register:"neutral"},
   {kr:"amico",ro:"a-MEE-ko",meaning:"friend (m)",example:"Il mio miglior amico — My best friend",pos:"noun",freq:10,register:"neutral"},
   {kr:"casa",ro:"KA-za",meaning:"home / house",example:"A casa mi sento bene — I feel good at home",pos:"noun",freq:10,register:"neutral"},
   {kr:"famiglia",ro:"fa-MEE-lya",meaning:"family",example:"La famiglia è tutto — Family is everything",pos:"noun",freq:9,register:"neutral"},
   {kr:"tempo",ro:"TEM-po",meaning:"time / weather",example:"Non ho tempo — I don't have time",pos:"noun",freq:10,register:"neutral"},
   {kr:"vita",ro:"VEE-ta",meaning:"life",example:"La vita è bella — Life is beautiful",pos:"noun",freq:9,register:"neutral"},
   {kr:"nome",ro:"NO-meh",meaning:"name",example:"Come ti chiami? — What's your name?",pos:"noun",freq:9,register:"neutral"},
-  {kr:"acqua",ro:"AK-kwa",meaning:"water",example:"Un bicchiere d'acqua, per favore — A glass of water, please",pos:"noun",freq:10,register:"neutral",sit:["restaurant"]},
-  {kr:"caffè",ro:"kaf-FEH",meaning:"coffee (espresso)",example:"Un caffè al volo — A quick coffee",pos:"noun",freq:9,register:"neutral",sit:["restaurant"]},
-  {kr:"cibo",ro:"CHEE-bo",meaning:"food",example:"Il cibo italiano è fantastico — Italian food is fantastic",pos:"noun",freq:9,register:"neutral",sit:["restaurant"]},
-  {kr:"cuore",ro:"KWO-reh",meaning:"heart",example:"Parla col cuore — Speak from the heart",pos:"noun",freq:9,register:"neutral",sit:["dating"]},
+  {kr:"acqua",ro:"AK-kwa",meaning:"water",example:"Un bicchiere d'acqua, per favore — A glass of water, please",pos:"noun",freq:10,register:"neutral"},
+  {kr:"caffè",ro:"kaf-FEH",meaning:"coffee (espresso)",example:"Un caffè al volo — A quick coffee",pos:"noun",freq:9,register:"neutral"},
+  {kr:"cibo",ro:"CHEE-bo",meaning:"food",example:"Il cibo italiano è fantastico — Italian food is fantastic",pos:"noun",freq:9,register:"neutral"},
+  {kr:"cuore",ro:"KWO-reh",meaning:"heart",example:"Parla col cuore — Speak from the heart",pos:"noun",freq:9,register:"neutral"},
   {kr:"parola",ro:"pa-RO-la",meaning:"word",example:"Non trovo le parole — I can't find the words",pos:"noun",freq:8,register:"neutral"},
   {kr:"lingua",ro:"LEEN-gwa",meaning:"language / tongue",example:"Imparo la lingua italiana — I'm learning Italian",pos:"noun",freq:8,register:"neutral"},
-  {kr:"musica",ro:"MOO-zee-ka",meaning:"music",example:"La musica mi calma — Music calms me",pos:"noun",freq:9,register:"neutral",sit:["dating"]},
-  {kr:"canzone",ro:"kan-TSO-neh",meaning:"song",example:"Conosci questa canzone? — Do you know this song?",pos:"noun",freq:8,register:"neutral",sit:["dating"]},
+  {kr:"musica",ro:"MOO-zee-ka",meaning:"music",example:"La musica mi calma — Music calms me",pos:"noun",freq:9,register:"neutral"},
+  {kr:"canzone",ro:"kan-TSO-neh",meaning:"song",example:"Conosci questa canzone? — Do you know this song?",pos:"noun",freq:8,register:"neutral"},
   {kr:"città",ro:"cheet-TA",meaning:"city",example:"Che bella città! — What a beautiful city!",pos:"noun",freq:8,register:"neutral"},
   {kr:"ragazzo",ro:"ra-GAT-tso",meaning:"boy / guy / boyfriend",example:"Il mio ragazzo è gentile — My boyfriend is kind",pos:"noun",freq:9,register:"casual"},
   {kr:"ragazza",ro:"ra-GAT-tsa",meaning:"girl / girlfriend",example:"La mia ragazza studia medicina — My girlfriend studies medicine",pos:"noun",freq:9,register:"casual"},
@@ -682,6 +617,7 @@ const ITALIAN_WORDS = [
   {kr:"giorno",ro:"JOR-no",meaning:"day",example:"Buona giornata! — Have a good day!",pos:"noun",freq:10,register:"neutral"},
   {kr:"notte",ro:"NOT-teh",meaning:"night",example:"La notte è silenziosa — The night is quiet",pos:"noun",freq:9,register:"neutral"},
 ];
+
 
 // ── KOREAN SENTENCE EXERCISES ─────────────────────────────────────────────────
 // type: 'particle'   — choose the correct particle
@@ -912,6 +848,7 @@ const KOREAN_SENTENCES = [
   },
 ];
 
+
 // ── ITALIAN SENTENCE EXERCISES ────────────────────────────────────────────────
 
 const ITALIAN_SENTENCES = [
@@ -1132,113 +1069,6 @@ const ITALIAN_SENTENCES = [
   },
 ];
 
-// ── GRAMMAR DATA ──────────────────────────────────────────────────────────────
-
-const GRAMMAR = {
-  korean: [
-    {
-      title: 'Sentence order: SOV',
-      short: 'The verb always goes last',
-      body: 'English is SVO: "I eat rice." Korean is SOV: "I rice eat" (나는 밥을 먹어요). The verb ALWAYS comes at the end. This is the single most important structural rule in Korean — every sentence follows it, no exceptions.',
-      example: '나는 학교에서 한국어를 공부해요.\nI [나는] + at school [학교에서] + Korean [한국어를] + study [공부해요].\n→ "I study Korean at school."',
-      level: 1
-    },
-    {
-      title: 'Particles: the backbone of Korean',
-      short: 'Small tags that show each word\'s job',
-      body: 'Korean doesn\'t rely on word order to show who does what — it uses particles attached to nouns.\n\n은/는 = topic marker ("as for...")\n이/가 = subject marker (who does the action)\n을/를 = object marker (what receives the action)\n에 = to / at (place or time)\n에서 = at (where an action happens)\n도 = also / too\n만 = only\n랑/이랑 = with / and (casual)\n와/과 = with / and (formal)',
-      example: '나는 학교에서 밥을 먹어요.\n나(I) + 는(topic) + 학교(school) + 에서(at) + 밥(rice) + 을(object) + 먹어요(eat).',
-      level: 1
-    },
-    {
-      title: 'Formality: 반말 vs 존댓말',
-      short: 'Korean has two main speech levels',
-      body: 'Korean speakers switch registers constantly based on relationship, age, and situation.\n\n반말 (casual): close friends, younger people, song lyrics\n→ 먹어, 가, 좋아\n\n존댓말 (polite): strangers, elders, at work, meeting someone new\n→ 먹어요, 가요, 좋아요\n\nUsing casual speech with someone you just met is rude. When in doubt, add 요.',
-      example: 'Casual (to a friend): 밥 먹어? — Have you eaten?\nPolite (to a stranger): 식사하셨어요? — Have you had a meal?',
-      level: 1
-    },
-    {
-      title: 'Verb endings: tense',
-      short: 'Present, past, and future',
-      body: 'Present polite: stem + 아요/어요\nPast polite: stem + 았어요/었어요\nFuture polite: stem + ㄹ/을 거예요\n\nVowel harmony rule:\nIf last vowel in stem is ㅏ or ㅗ → use 아요/았어요\nAll other vowels → use 어요/었어요',
-      example: '가다 (go): 가요 / 갔어요 / 갈 거예요\n먹다 (eat): 먹어요 / 먹었어요 / 먹을 거예요\n오다 (come): 와요 / 왔어요 / 올 거예요',
-      level: 2
-    },
-    {
-      title: 'Negation',
-      short: 'Two ways to say "not"',
-      body: '안 + verb (short, casual):\n안 먹어요 = I\'m not eating\n\nVerb stem + 지 않아요 (longer, more formal):\n먹지 않아요 = I don\'t eat\n\nNegative command: verb stem + 지 마(요)\n먹지 마 = don\'t eat\n가지 마세요 = please don\'t go',
-      example: '안 가요 = I\'m not going (casual)\n가지 않아요 = I\'m not going (formal)\n가지 마 = don\'t go (casual command)',
-      level: 2
-    },
-    {
-      title: 'Connecting clauses',
-      short: '"And", "but", "because" in Korean',
-      body: 'Korean connects clauses by changing the first verb ending, not with standalone conjunctions.\n\n"and then" (sequential): verb + 고\n"but": verb + 지만\n"because / so": verb + 아서/어서\n"in order to": verb + (으)러',
-      example: '밥을 먹고 학교에 가요.\n→ I eat and then go to school.\n\n비가 와서 안 갔어요.\n→ Because it rained, I didn\'t go.',
-      level: 3
-    },
-    {
-      title: 'Honorifics',
-      short: 'Speaking respectfully to elders',
-      body: 'Add 시 to the verb stem when the subject is someone respected:\n가다 → 가세요 (you go / please go)\n먹다 → 드세요 (please eat)\n\nSpecial honorific vocabulary:\n먹다 → 드시다 (to eat)\n있다 → 계시다 (to be present)\n이름 → 성함 (name)',
-      example: '선생님, 식사하셨어요?\n→ Teacher, have you had a meal?\n\n(Not: 밥 먹었어요? — too casual for a teacher)',
-      level: 3
-    },
-  ],
-
-  italian: [
-    {
-      title: 'Verb conjugation: the key to Italian',
-      short: 'Endings change for every pronoun',
-      body: 'Italian verbs change their ending to show who is doing the action. This is why Italians often drop the pronoun entirely — the ending already tells you.\n\n-ARE (parlare — to speak):\nparlo, parli, parla, parliamo, parlate, parlano\n\n-ERE (vedere — to see):\nvedo, vedi, vede, vediamo, vedete, vedono\n\n-IRE (dormire — to sleep):\ndormo, dormi, dorme, dormiamo, dormite, dormono\n\nMost important irregulars to memorize first: essere, avere, fare, andare, venire, volere, potere, dovere.',
-      example: 'Parli italiano? → Do you speak Italian?\n(No "tu" needed — "parli" already means "you speak")',
-      level: 1
-    },
-    {
-      title: 'Essere vs Avere',
-      short: 'Two verbs for "to be" and "to have"',
-      body: 'ESSERE (to be) — for identity, nationality, personality, location of places:\nSono stanco = I am tired\nÈ italiana = She is Italian\n\nAVERE (to have) — for possession AND physical/emotional states:\nHo fame = I\'m hungry (lit: I have hunger)\nHo freddo = I\'m cold\nHo paura = I\'m scared\nHo 25 anni = I\'m 25 years old\n\nThis trips up English speakers because Italian uses "have" where English uses "be".',
-      example: 'Sono stanco → I am tired (essere)\nHo sonno → I am sleepy (avere, lit: I have sleepiness)\nHo sete → I am thirsty (avere)',
-      level: 1
-    },
-    {
-      title: 'Adjective agreement',
-      short: 'Adjectives match the noun\'s gender and number',
-      body: 'In Italian, adjectives must agree in gender and number with the noun they describe.\n\n-o/-a/-i/-e pattern (most adjectives):\nun ragazzo bravo (a good boy)\nuna ragazza brava (a good girl)\ndue ragazzi bravi (two good boys)\ndue ragazze brave (two good girls)\n\n-e/-i pattern (adjectives ending in -e):\nun uomo felice / due uomini felici\nuna donna felice / due donne felici',
-      example: 'bello / bella / belli / belle\nÈ un bel ragazzo. → He\'s a handsome guy.\nÈ una bella ragazza. → She\'s a beautiful girl.',
-      level: 1
-    },
-    {
-      title: 'Piacere: "I like" works backwards',
-      short: 'The most confusing construction for English speakers',
-      body: '"Mi piace" literally means "it is pleasing to me." The thing you like is the subject, not you.\n\nmi piace + singular noun or infinitive\nmi piacciono + plural nouns\n\nTo say who likes:\nmi = to me\nti = to you\ngli = to him\nle = to her\nci = to us\nvi = to you all',
-      example: 'Ti piace la musica? → Do you like music?\nMi piacciono i film. → I like films.\nNon mi piace. → I don\'t like it.\nGli piace ballare. → He likes dancing.',
-      level: 2
-    },
-    {
-      title: 'Past tense: Passato Prossimo',
-      short: 'The most common past tense',
-      body: 'Formed with avere or essere + past participle.\n\nParticiples:\n-ARE → -ato (mangiare → mangiato)\n-ERE → -uto (avere → avuto)\n-IRE → -ito (dormire → dormito)\n\nMost verbs use AVERE. But motion and change-of-state verbs use ESSERE:\nandare, venire, arrivare, partire, nascere, morire, restare, diventare...\n\nWith ESSERE the participle agrees with the subject:\nSono andato (m) / Sono andata (f)',
-      example: 'Ho mangiato → I ate (avere)\nSono andato → I went (essere, masculine)\nSiamo arrivati → We arrived (essere, plural)',
-      level: 2
-    },
-    {
-      title: 'Formality: tu vs Lei',
-      short: 'When to be formal',
-      body: 'TU (informal): friends, family, children, peers your age\n→ Come stai? / Parli italiano?\n\nLEI (formal): strangers, elders, in shops and offices\n→ Come sta? / Parla italiano?\nNote: Lei (formal you) uses the same verb form as lei (she).\n\nSALVE is the safe neutral greeting for strangers — neither as casual as ciao nor as stiff as buongiorno.\n\nCIAO is casual only. Don\'t say it to your professor or a shop owner you don\'t know.',
-      example: 'To a friend: Ciao, come stai?\nTo a professor: Buongiorno, come sta?\nIn a shop: Mi scusi, quanto costa questo?',
-      level: 1
-    },
-    {
-      title: 'Articles: il, lo, la, i, gli, le',
-      short: 'Every noun has a gender and needs an article',
-      body: 'Masculine singular:\nil — before most consonants (il ragazzo)\nlo — before s+consonant, z, ps, gn (lo studente)\nl\' — before vowels (l\'amico)\n\nFeminine singular:\nla — before consonants (la ragazza)\nl\' — before vowels (l\'amica)\n\nPlural:\ni / gli (masculine)\nle (feminine)',
-      example: 'il caffè → the coffee\nlo zaino → the backpack\nl\'amore → love\nla musica → the music\ngli amici → the friends',
-      level: 1
-    },
-  ]
-};
 
 const JAPANESE_WORDS = [
   // HIRAGANA
@@ -1505,30 +1335,213 @@ const JAPANESE_WORDS = [
   {kr:"出会う",ro:"deau",meaning:"to meet / encounter",example:"あなたに出会うの",pos:"verb",freq:8,register:"neutral",script:"kanji",sit:["dating","meeting"]},
 ];
 
-const LANGS = {
-  korean: {
-    label:'Korean', script:'한국어', flag:'🇰🇷',
-    placeholder:'search hangul, romanization, or meaning…',
-    words: KOREAN_WORDS,
-    sentences: KOREAN_SENTENCES,
-    grammar: GRAMMAR.korean,
-  },
-  italian: {
-    label:'Italian', script:'Italiano', flag:'🇮🇹',
-    placeholder:'search Italian, pronunciation, or meaning…',
-    words: ITALIAN_WORDS,
-    sentences: ITALIAN_SENTENCES,
-    grammar: GRAMMAR.italian,
-  },
-  japanese: {
-    label:'Japanese', script:'日本語', flag:'🇯🇵',
-    placeholder:'search hiragana, romaji, or meaning…',
-    words: JAPANESE_WORDS,
-    sentences: [],
-    grammar: [],
-  }
+// ── GRAMMAR DATA ──────────────────────────────────────────────────────────────
+
+const GRAMMAR = {
+  korean: [
+    {
+      title: 'Sentence order: SOV',
+      short: 'The verb always goes last',
+      body: 'English is SVO: "I eat rice." Korean is SOV: "I rice eat" (나는 밥을 먹어요). The verb ALWAYS comes at the end. This is the single most important structural rule in Korean — every sentence follows it, no exceptions.',
+      example: '나는 학교에서 한국어를 공부해요.\nI [나는] + at school [학교에서] + Korean [한국어를] + study [공부해요].\n→ "I study Korean at school."',
+      level: 1
+    },
+    {
+      title: 'Particles: the backbone of Korean',
+      short: 'Small tags that show each word\'s job',
+      body: 'Korean doesn\'t rely on word order to show who does what — it uses particles attached to nouns.\n\n은/는 = topic marker ("as for...")\n이/가 = subject marker (who does the action)\n을/를 = object marker (what receives the action)\n에 = to / at (place or time)\n에서 = at (where an action happens)\n도 = also / too\n만 = only\n랑/이랑 = with / and (casual)\n와/과 = with / and (formal)',
+      example: '나는 학교에서 밥을 먹어요.\n나(I) + 는(topic) + 학교(school) + 에서(at) + 밥(rice) + 을(object) + 먹어요(eat).',
+      level: 1
+    },
+    {
+      title: 'Formality: 반말 vs 존댓말',
+      short: 'Korean has two main speech levels',
+      body: 'Korean speakers switch registers constantly based on relationship, age, and situation.\n\n반말 (casual): close friends, younger people, song lyrics\n→ 먹어, 가, 좋아\n\n존댓말 (polite): strangers, elders, at work, meeting someone new\n→ 먹어요, 가요, 좋아요\n\nUsing casual speech with someone you just met is rude. When in doubt, add 요.',
+      example: 'Casual (to a friend): 밥 먹어? — Have you eaten?\nPolite (to a stranger): 식사하셨어요? — Have you had a meal?',
+      level: 1
+    },
+    {
+      title: 'Verb endings: tense',
+      short: 'Present, past, and future',
+      body: 'Present polite: stem + 아요/어요\nPast polite: stem + 았어요/었어요\nFuture polite: stem + ㄹ/을 거예요\n\nVowel harmony rule:\nIf last vowel in stem is ㅏ or ㅗ → use 아요/았어요\nAll other vowels → use 어요/었어요',
+      example: '가다 (go): 가요 / 갔어요 / 갈 거예요\n먹다 (eat): 먹어요 / 먹었어요 / 먹을 거예요\n오다 (come): 와요 / 왔어요 / 올 거예요',
+      level: 2
+    },
+    {
+      title: 'Negation',
+      short: 'Two ways to say "not"',
+      body: '안 + verb (short, casual):\n안 먹어요 = I\'m not eating\n\nVerb stem + 지 않아요 (longer, more formal):\n먹지 않아요 = I don\'t eat\n\nNegative command: verb stem + 지 마(요)\n먹지 마 = don\'t eat\n가지 마세요 = please don\'t go',
+      example: '안 가요 = I\'m not going (casual)\n가지 않아요 = I\'m not going (formal)\n가지 마 = don\'t go (casual command)',
+      level: 2
+    },
+    {
+      title: 'Connecting clauses',
+      short: '"And", "but", "because" in Korean',
+      body: 'Korean connects clauses by changing the first verb ending, not with standalone conjunctions.\n\n"and then" (sequential): verb + 고\n"but": verb + 지만\n"because / so": verb + 아서/어서\n"in order to": verb + (으)러',
+      example: '밥을 먹고 학교에 가요.\n→ I eat and then go to school.\n\n비가 와서 안 갔어요.\n→ Because it rained, I didn\'t go.',
+      level: 3
+    },
+    {
+      title: 'Honorifics',
+      short: 'Speaking respectfully to elders',
+      body: 'Add 시 to the verb stem when the subject is someone respected:\n가다 → 가세요 (you go / please go)\n먹다 → 드세요 (please eat)\n\nSpecial honorific vocabulary:\n먹다 → 드시다 (to eat)\n있다 → 계시다 (to be present)\n이름 → 성함 (name)',
+      example: '선생님, 식사하셨어요?\n→ Teacher, have you had a meal?\n\n(Not: 밥 먹었어요? — too casual for a teacher)',
+      level: 3
+    },
+  ],
+
+  italian: [
+    {
+      title: 'Verb conjugation: the key to Italian',
+      short: 'Endings change for every pronoun',
+      body: 'Italian verbs change their ending to show who is doing the action. This is why Italians often drop the pronoun entirely — the ending already tells you.\n\n-ARE (parlare — to speak):\nparlo, parli, parla, parliamo, parlate, parlano\n\n-ERE (vedere — to see):\nvedo, vedi, vede, vediamo, vedete, vedono\n\n-IRE (dormire — to sleep):\ndormo, dormi, dorme, dormiamo, dormite, dormono\n\nMost important irregulars to memorize first: essere, avere, fare, andare, venire, volere, potere, dovere.',
+      example: 'Parli italiano? → Do you speak Italian?\n(No "tu" needed — "parli" already means "you speak")',
+      level: 1
+    },
+    {
+      title: 'Essere vs Avere',
+      short: 'Two verbs for "to be" and "to have"',
+      body: 'ESSERE (to be) — for identity, nationality, personality, location of places:\nSono stanco = I am tired\nÈ italiana = She is Italian\n\nAVERE (to have) — for possession AND physical/emotional states:\nHo fame = I\'m hungry (lit: I have hunger)\nHo freddo = I\'m cold\nHo paura = I\'m scared\nHo 25 anni = I\'m 25 years old\n\nThis trips up English speakers because Italian uses "have" where English uses "be".',
+      example: 'Sono stanco → I am tired (essere)\nHo sonno → I am sleepy (avere, lit: I have sleepiness)\nHo sete → I am thirsty (avere)',
+      level: 1
+    },
+    {
+      title: 'Adjective agreement',
+      short: 'Adjectives match the noun\'s gender and number',
+      body: 'In Italian, adjectives must agree in gender and number with the noun they describe.\n\n-o/-a/-i/-e pattern (most adjectives):\nun ragazzo bravo (a good boy)\nuna ragazza brava (a good girl)\ndue ragazzi bravi (two good boys)\ndue ragazze brave (two good girls)\n\n-e/-i pattern (adjectives ending in -e):\nun uomo felice / due uomini felici\nuna donna felice / due donne felici',
+      example: 'bello / bella / belli / belle\nÈ un bel ragazzo. → He\'s a handsome guy.\nÈ una bella ragazza. → She\'s a beautiful girl.',
+      level: 1
+    },
+    {
+      title: 'Piacere: "I like" works backwards',
+      short: 'The most confusing construction for English speakers',
+      body: '"Mi piace" literally means "it is pleasing to me." The thing you like is the subject, not you.\n\nmi piace + singular noun or infinitive\nmi piacciono + plural nouns\n\nTo say who likes:\nmi = to me\nti = to you\ngli = to him\nle = to her\nci = to us\nvi = to you all',
+      example: 'Ti piace la musica? → Do you like music?\nMi piacciono i film. → I like films.\nNon mi piace. → I don\'t like it.\nGli piace ballare. → He likes dancing.',
+      level: 2
+    },
+    {
+      title: 'Past tense: Passato Prossimo',
+      short: 'The most common past tense',
+      body: 'Formed with avere or essere + past participle.\n\nParticiples:\n-ARE → -ato (mangiare → mangiato)\n-ERE → -uto (avere → avuto)\n-IRE → -ito (dormire → dormito)\n\nMost verbs use AVERE. But motion and change-of-state verbs use ESSERE:\nandare, venire, arrivare, partire, nascere, morire, restare, diventare...\n\nWith ESSERE the participle agrees with the subject:\nSono andato (m) / Sono andata (f)',
+      example: 'Ho mangiato → I ate (avere)\nSono andato → I went (essere, masculine)\nSiamo arrivati → We arrived (essere, plural)',
+      level: 2
+    },
+    {
+      title: 'Formality: tu vs Lei',
+      short: 'When to be formal',
+      body: 'TU (informal): friends, family, children, peers your age\n→ Come stai? / Parli italiano?\n\nLEI (formal): strangers, elders, in shops and offices\n→ Come sta? / Parla italiano?\nNote: Lei (formal you) uses the same verb form as lei (she).\n\nSALVE is the safe neutral greeting for strangers — neither as casual as ciao nor as stiff as buongiorno.\n\nCIAO is casual only. Don\'t say it to your professor or a shop owner you don\'t know.',
+      example: 'To a friend: Ciao, come stai?\nTo a professor: Buongiorno, come sta?\nIn a shop: Mi scusi, quanto costa questo?',
+      level: 1
+    },
+    {
+      title: 'Articles: il, lo, la, i, gli, le',
+      short: 'Every noun has a gender and needs an article',
+      body: 'Masculine singular:\nil — before most consonants (il ragazzo)\nlo — before s+consonant, z, ps, gn (lo studente)\nl\' — before vowels (l\'amico)\n\nFeminine singular:\nla — before consonants (la ragazza)\nl\' — before vowels (l\'amica)\n\nPlural:\ni / gli (masculine)\nle (feminine)',
+      example: 'il caffè → the coffee\nlo zaino → the backpack\nl\'amore → love\nla musica → the music\ngli amici → the friends',
+      level: 1
+    },
+  ]
 };
 
+// ── GRAMMAR RENDERER ─────────────────────────────────────────────────────────
+
+function renderGrammar(container) {
+  const notes = (GRAMMAR[curLang]) || [];
+  container.innerHTML = '';
+
+  if (!notes || notes.length === 0) {
+    container.innerHTML = '<div class="empty-msg">Grammar notes coming soon.</div>';
+    return;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:1.5rem 2rem;display:flex;flex-direction:column;gap:10px;';
+
+  const intro = document.createElement('div');
+  intro.className = 't-muted';
+  intro.style.cssText = 'font-size:.75rem;padding-bottom:.5rem;';
+  intro.textContent = notes.length + ' grammar topics — click any card to expand';
+  wrap.appendChild(intro);
+
+  const levelColors = ['#7ac8a0','#c8a87a','#c87aa8'];
+  const levelLabels = ['beginner','intermediate','advanced'];
+
+  notes.forEach(function(note) {
+    const card = document.createElement('div');
+    card.className = 'grammar-card surface';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'grammar-hdr';
+
+    const left = document.createElement('div');
+    left.className = 'grammar-left';
+
+    const lvl = document.createElement('span');
+    lvl.className = 'grammar-level';
+    lvl.style.color = levelColors[(note.level||1)-1];
+    lvl.textContent = levelLabels[(note.level||1)-1];
+
+    const title = document.createElement('div');
+    title.className = 'grammar-title';
+    title.textContent = note.title;
+
+    const shortEl = document.createElement('div');
+    shortEl.className = 'grammar-short t-muted';
+    shortEl.textContent = note.short;
+
+    left.appendChild(lvl);
+    left.appendChild(title);
+    left.appendChild(shortEl);
+
+    const chev = document.createElement('span');
+    chev.className = 'sec-chev';
+    chev.textContent = '▾';
+
+    hdr.appendChild(left);
+    hdr.appendChild(chev);
+
+    const body = document.createElement('div');
+    body.className = 'grammar-body';
+    body.style.display = 'none';
+
+    const bodyText = document.createElement('div');
+    bodyText.className = 'grammar-text';
+    bodyText.textContent = note.body;
+
+    const exBox = document.createElement('div');
+    exBox.className = 'grammar-example';
+    exBox.innerHTML = '<div class="ex-label t-muted">example</div><pre class="ex-pre">' + note.example + '</pre>';
+
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'ubtn';
+    speakBtn.style.marginTop = '8px';
+    speakBtn.textContent = '▶ hear example';
+    speakBtn.onclick = function() {
+      var firstLine = note.example.split('\n')[0].split('→')[0].trim();
+      speak(firstLine, curLang);
+    };
+
+    body.appendChild(bodyText);
+    body.appendChild(exBox);
+    body.appendChild(speakBtn);
+
+    hdr.onclick = function() {
+      var open = body.style.display === 'none';
+      body.style.display = open ? 'block' : 'none';
+      chev.textContent = open ? '▴' : '▾';
+      card.classList.toggle('grammar-open', open);
+    };
+
+    card.appendChild(hdr);
+    card.appendChild(body);
+    wrap.appendChild(card);
+  });
+
+  container.appendChild(wrap);
+}
+
+
+// ── SHARED STATE ──────────────────────────────────────────────────────────────
 const SITUATIONS = [
   {key:'airport',       label:'at the airport',   color:'#7a8cc8'},
   {key:'food',          label:'ordering food',     color:'#c8a87a'},
@@ -1541,188 +1554,212 @@ const SITUATIONS = [
 ];
 let activeSituation = null;
 
-let curLang = 'korean';
-let curTab  = 'vocab';
-let theme   = localStorage.getItem('lf-theme') || 'dark';
+let activeScripts = new Set(); // empty = show all
 
-function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
-function load(key, def) { try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : def; } catch(e) { return def; } }
 
-function shuffle(arr) {
-  const a = arr.slice();
-  for (let i = a.length-1; i>0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
+const _savedSize = localStorage.getItem('lf-fontsize'); let fontSize = ['sm','md','lg','xl'].includes(_savedSize) ? _savedSize : 'lg';
+
+const FONT_SIZES = ['sm','md','lg','xl'];
+const FONT_LABELS = {sm:'small',md:'medium',lg:'large',xl:'x-large'};
+
+const PREMADE_DECKS = {
+  korean: [
+    {
+      name:'Korean Essentials',
+      color:'#c8a87a',
+      filter: w => w.freq >= 9 && w.pos !== 'particle'
+    },
+    {
+      name:'K-pop & Texting',
+      color:'#c87aa8',
+      filter: w => w.register === 'casual' || (w.sit && w.sit.includes('dating'))
+    },
+    {
+      name:'Survival Korean',
+      color:'#7ac8a0',
+      filter: w => w.sit && (w.sit.includes('airport') || w.sit.includes('getting_around') || w.sit.includes('emergency'))
+    },
+  ],
+  japanese_hiragana: [
+    {name:'Hiragana (all 46)', color:'#7ac8a0', filter: w => w.pos === 'hiragana'},
+  ],
+  japanese_katakana: [
+    {name:'Katakana (all 46)', color:'#7a8cc8', filter: w => w.pos === 'katakana'},
+  ],
+  japanese_kanji: [
+    {name:'Essential Kanji', color:'#c87aa8', filter: w => w.pos === 'kanji'},
+  ],
+  japanese_dakuten: [
+    {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
+    {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
+  ],
+};
+
+// ── APP CORE ──────────────────────────────────────────────────────────────────
+// ── SHARED STATE & UTILITIES ──────────────────────────────────────────────────
+
+const LANGS = {
+  korean: {
+    label: 'Korean', script: '한국어', flag: '🇰🇷',
+    placeholder: 'search hangul, romanization, or meaning…',
+    words: typeof KOREAN_WORDS !== 'undefined' ? KOREAN_WORDS : [],
+    sentences: () => (typeof KOREAN_SENTENCES !== 'undefined' ? KOREAN_SENTENCES : []),
+    grammar:   () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.korean  : []),
+  },
+  italian: {
+    label: 'Italian', script: 'Italiano', flag: '🇮🇹',
+    placeholder: 'search Italian, pronunciation, or meaning…',
+    words: typeof ITALIAN_WORDS !== 'undefined' ? ITALIAN_WORDS : [],
+    sentences: () => (typeof ITALIAN_SENTENCES !== 'undefined' ? ITALIAN_SENTENCES : []),
+    grammar:   () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.italian : []),
   }
-  return a;
+};
+
+let curLang = localStorage.getItem('lf-lang') || 'korean';
+let curTab  = localStorage.getItem('lf-tab')  || 'vocab';
+
+// ── THEME ──
+let theme = localStorage.getItem('lf-theme') || 'dark';
+
+function applyTheme(t) {
+  document.body.className = t;
+  localStorage.setItem('lf-theme', t);
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = t === 'dark' ? 'light mode' : 'dark mode';
 }
 
-function speak(text, lang) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang === 'korean' ? 'ko-KR' : lang === 'japanese' ? 'ja-JP' : 'it-IT';
-  u.rate = 0.85;
-  window.speechSynthesis.speak(u);
-}
-
-function toggleTheme() {
-  theme = theme === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('lf-theme', theme);
-  document.body.className = theme;
-  applyFontSize(fontSize);
-  document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
-}
-
+// ── LANGUAGE SWITCH ──
 function switchLang(lang) {
   curLang = lang;
   localStorage.setItem('lf-lang', lang);
   const L = LANGS[lang];
-  document.getElementById('langFlag').textContent   = L.flag;
-  document.getElementById('langLabel').textContent  = L.label;
-  const srch = document.getElementById('searchInput2');
+  // update header
+  const flagEl = document.getElementById('langFlag');
+  const lblEl  = document.getElementById('langLabel');
+  if (flagEl) flagEl.textContent = L.flag;
+  if (lblEl)  lblEl.textContent  = L.label;
+  // update search placeholder
+  const srch = document.getElementById('searchInput');
   if (srch) srch.placeholder = L.placeholder;
-  document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === lang));
-  document.getElementById('langMenu').classList.remove('open');
-  openSecs = {};
-  activeSituation = null;
-  if (lang === 'japanese' && curGrouping === 'pos') { curGrouping = 'script'; save('lf-grouping','script'); }
-  if (lang !== 'japanese' && curGrouping === 'script') { curGrouping = 'pos'; save('lf-grouping','pos'); }
-  showScriptFilters(lang === 'japanese');
+  // mark active option
+  document.querySelectorAll('.lang-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.lang === lang);
+  });
+  document.getElementById('langMenu')?.classList.remove('open');
+  // re-render current tab
   renderTab(curTab);
 }
 
 function toggleLangMenu() {
-  const menu = document.getElementById('langMenu');
-  const btn  = document.getElementById('langBtn');
-  const open = menu.classList.contains('open');
-  if (open) { menu.classList.remove('open'); return; }
-  const r = btn.getBoundingClientRect();
-  menu.style.top   = (r.bottom + 6) + 'px';
-  menu.style.right = (window.innerWidth - r.right) + 'px';
-  menu.classList.add('open');
+  document.getElementById('langMenu')?.classList.toggle('open');
 }
+
 document.addEventListener('click', e => {
   const btn  = document.getElementById('langBtn');
   const menu = document.getElementById('langMenu');
-  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) menu.classList.remove('open');
+  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.remove('open');
+  }
 });
 
+// ── TAB ROUTING ──
 function switchTab(tab) {
   curTab = tab;
   localStorage.setItem('lf-tab', tab);
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.tab === tab);
-    b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false');
-  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   renderTab(tab);
 }
 
 function renderTab(tab) {
   const main = document.getElementById('mainContent');
   if (!main) return;
-  main.innerHTML = '';
-  if (tab === 'vocab')    renderVocab(main);
-  if (tab === 'practice') renderPractice(main);
-  if (tab === 'grammar')  renderGrammar(main);
+  if (tab === 'vocab')    { main.innerHTML = ''; renderVocab(main); }
+  if (tab === 'practice') { main.innerHTML = ''; renderPractice(main); }
+  if (tab === 'grammar')  { main.innerHTML = ''; renderGrammar(main); }
 }
 
+// ── SPEECH SYNTHESIS ──
+function speak(text, lang) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang === 'korean' ? 'ko-KR' : 'it-IT';
+  u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
 
-
-let curGrouping = 'pos';
-let openSecs = {};
-
-const POS_ORDER = ['expression','verb','adjective','noun','adverb','pronoun','particle','hiragana','katakana','kanji','hiragana_d','katakana_d'];
-const PALETTE   = ['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#7ac8c8','#c8c87a','#c87a7a','#a87ac8'];
-
-const GROUPINGS = {
-  script: {
-    label:'by script',
-    key: w => w.script || w.pos,
-    order: () => ['hiragana','katakana','kanji','hiragana_d','katakana_d','expression','verb','adjective','noun','adverb','pronoun','particle'],
-    displayName: k => ({'hiragana_d':'hiragana accents','katakana_d':'katakana accents'}[k] || k),
-    color: k => ({'hiragana':'#7ac8a0','katakana':'#7a8cc8','kanji':'#c87aa8','hiragana_d':'#7ac8c8','katakana_d':'#c8c87a',verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
-  },
-  pos: {
-    label:'part of speech',
-    key: w => w.pos,
-    order: () => POS_ORDER,
-    color: k => ({verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a',hiragana:'#7ac8a0',katakana:'#7a8cc8',kanji:'#c87aa8',hiragana_d:'#7ac8c8',katakana_d:'#c8c87a'}[k]||'#888')
-  },
-  register: {
-    label:'formality',
-    key: w => w.register || 'neutral',
-    order: () => ['formal','neutral','casual'],
-    color: k => ({formal:'#7a8cc8',neutral:'#7ac8a0',casual:'#c8a87a'}[k]||'#888')
-  },
-  most_common: {
-    label:'most common first',
-    key: w => w.freq>=10?'essential':w.freq>=8?'very common':w.freq>=6?'common':w.freq>=4?'uncommon':'rare',
-    order: () => ['essential','very common','common','uncommon','rare'],
-    color: () => '#7ac8a0'
-  },
-  least_common: {
-    label:'least common first',
-    key: w => w.freq>=10?'essential':w.freq>=8?'very common':w.freq>=6?'common':w.freq>=4?'uncommon':'rare',
-    order: () => ['rare','uncommon','common','very common','essential'],
-    color: () => '#c87a7a'
-  },
-  shortest: {
-    label:'shortest first',
-    key: w => { const l=w.kr.length; return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'; },
-    order: () => ['1 char','2 chars','3 chars','4 chars','5+ chars'],
-    color: () => '#7ac8c8'
-  },
-  longest: {
-    label:'longest first',
-    key: w => { const l=w.kr.length; return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'; },
-    order: () => ['5+ chars','4 chars','3 chars','2 chars','1 char'],
-    color: () => '#c87aa8'
-  },
-  a_z: {
-    label:'a → z',
-    key: w => w.ro[0].toUpperCase(),
-    order: keys => keys.slice().sort(),
-    color: () => '#7a8cc8'
-  },
-  in_deck: {
-    label:'in my deck',
-    key: w => deckColorFor(w.kr) ? 'in a deck' : 'not in deck',
-    order: () => ['in a deck','not in deck'],
-    color: k => k==='in a deck' ? '#c8a87a' : '#888'
+// ── UTILITIES ──
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-};
-
-
-// ── VOCABULARY TAB ──
-// ── VOCABULARY TAB ────────────────────────────────────────────────────────────
-
-// Deck state — initialized in vocabInit() after all scripts load
-let decks        = [];
-let activeDeckIdx = -1;
-
-
-
-
-// Deck helpers
-function deckColorFor(kr) {
-  for (let i=0;i<decks.length;i++) { if (decks[i].words[kr]) return decks[i].color; }
-  return null;
+  return a;
 }
-function deckIdxFor(kr) {
-  for (let i=0;i<decks.length;i++) { if (decks[i].words[kr]) return i; }
-  return -1;
+
+function save(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
 }
-function nextDeckColor() {
-  const used = decks.map(d=>d.color);
-  for (let c of PALETTE) { if (!used.includes(c)) return c; }
-  return PALETTE[decks.length % PALETTE.length];
+function load(key, def) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch(e) { return def; }
 }
-function addDeck(name) {
-  decks.push({name, color:nextDeckColor(), words:{}});
-  activeDeckIdx = decks.length - 1;
+
+
+// ── EXTRA FEATURES ────────────────────────────────────────────────────────────
+
+
+function addPremadeDeck(key) {
+  const templates = PREMADE_DECKS[key];
+  if (!templates) return;
+  const words = LANGS[curLang].words;
+  let added = 0;
+
+  templates.forEach(template => {
+    // Check if deck with this name already exists
+    const existing = decks.find(d => d.name === template.name);
+    if (existing) {
+      // Just add missing words to it
+      words.filter(template.filter).forEach(w => { existing.words[w.kr] = true; });
+      return;
+    }
+    const deck = {name: template.name, color: template.color, words: {}};
+    words.filter(template.filter).forEach(w => { deck.words[w.kr] = true; });
+    decks.push(deck);
+    activeDeckIdx = decks.length - 1;
+    added++;
+  });
+
   saveDeckState();
+  renderDeckSwitcher();
+  renderDeckChips();
+  renderWordGrid();
+
+  // Show confirmation
+  const msg = added > 0
+    ? templates.map(t => '"' + t.name + '"').join(' and ') + ' added to your decks!'
+    : 'Deck already exists — words updated.';
+  showToast(msg);
 }
+
+function addPremadeDeckJapaneseAll() {
+  ['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten'].forEach(key => addPremadeDeck(key));
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--sf);border:1px solid var(--bd2);border-radius:8px;padding:10px 20px;font-family:DM Mono,monospace;font-size:.78rem;color:var(--tx);z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:opacity .3s;white-space:nowrap';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2800);
+}
+
 function moveDeck(from, to) {
   const deck = decks.splice(from, 1)[0];
   decks.splice(to, 0, deck);
@@ -1731,53 +1768,6 @@ function moveDeck(from, to) {
   saveDeckState();
   renderDeckSwitcher(); renderDeckChips(); renderWordGrid();
 }
-
-function deleteDeck(idx) {
-  decks.splice(idx,1);
-  if (activeDeckIdx >= decks.length) activeDeckIdx = decks.length - 1;
-  saveDeckState();
-}
-function saveDeckState() {
-  save('lf-decks', decks);
-  save('lf-activeDeck', activeDeckIdx);
-}
-
-// ── RENDER VOCAB TAB ──────────────────────────────────────────────────────────
-function renderVocab(container) {
-  const words = LANGS[curLang].words;
-
-  container.innerHTML = `
-    <div class="ctrl">
-      <div class="ctrl-row">
-        <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
-        <div id="groupBar"></div>
-      </div>
-      <div class="ctrl-row ctrl-row2">
-        <button class="ubtn" onclick="vocabExpandAll()">expand all</button>
-        <button class="ubtn" onclick="vocabCollapseAll()">collapse all</button>
-      </div>
-    </div>
-    <div id="wordSections"></div>
-    <div id="deckPanel" class="deck-panel surface">
-      <div class="deck-hdr">
-        <span class="deck-title">your deck</span>
-        <div class="deck-acts">
-          <button class="abtn danger" onclick="clearActiveDeck()">remove all</button>
-          <button class="abtn accent" onclick="openStudy()">study deck →</button>
-        </div>
-      </div>
-      <div id="deckSwitcher" class="deck-switcher"></div>
-      <div id="deckChips"></div>
-    </div>
-  `;
-
-  document.getElementById('searchInput').oninput = renderWordGrid;
-  buildGroupBtns();
-  renderWordGrid();
-  renderDeckSwitcher();
-  renderDeckChips();
-}
-
 
 function buildSitPills() {
   const row = document.getElementById('sitRow');
@@ -1836,6 +1826,316 @@ function toggleFilters() {
   const open = row.style.display === 'flex';
   row.style.display = open ? 'none' : 'flex';
   btn.textContent = open ? 'more filters ▾' : 'hide filters ▴';
+}
+
+function buildOnboardBanner() {
+  const msgs = {
+    korean: {title:'New to Korean?', desc:'Start with essential words — greetings, pronouns, and core verbs. The most common filter shows the most important words first. Or add premade decks instantly.', btn:'show essentials first', fn:'startHereKorean', decks:true, deckKey:'korean'},
+    italian: {title:'New to Italian?', desc:'Begin with greetings and the 8 key irregular verbs — essere, avere, fare, andare, venire, volere, potere, dovere. Everything builds on them.', btn:'show essentials first', fn:'startHereItalian', decks:false},
+    japanese: {title:'New to Japanese?', desc:'Learn hiragana first (46 sounds, ~2 weeks). Then katakana. Vocabulary and kanji come after you can read both. Add all three alphabet decks instantly.', btn:'start with hiragana', fn:'startHereJapanese', decks:true, deckKey:'japanese_all'},
+  };
+  const m = msgs[curLang] || msgs.korean;
+  const div = document.createElement('div');
+  div.className = 'onboard-banner';
+  div.id = 'onboardBanner';
+  div.innerHTML =
+    '<span class="onboard-tag">start here</span>' +
+    '<span class="onboard-title">' + m.title + '</span>' +
+    '<span class="onboard-desc">' + m.desc + '</span>' +
+    '<div class="onboard-actions">' +
+      '<button class="obtn" onclick="window[' + "'"+m.fn+"'" + ']()">' + m.btn + ' →</button>' +
+      '<button class="obtn-ghost" onclick="dismissOnboard()">I already know this</button>' +
+    '</div>';
+  return div;
+}
+
+function dismissOnboard() {
+  localStorage.setItem('lf-seen-' + curLang, '1');
+  const b = document.getElementById('onboardBanner');
+  if (b) b.style.display = 'none';
+}
+
+function startHereKorean() {
+  dismissOnboard();
+  // set to most common filter, open essential section
+  curGrouping = 'most_common';
+  save('lf-grouping', 'most_common');
+  openSecs = {'essential':true};
+  buildGroupBtns();
+  renderWordGrid();
+}
+
+function startHereItalian() {
+  dismissOnboard();
+  curGrouping = 'most_common';
+  save('lf-grouping', 'most_common');
+  openSecs = {'essential':true};
+  buildGroupBtns();
+  renderWordGrid();
+}
+
+function startHereJapanese() {
+  dismissOnboard();
+  curGrouping = 'script';
+  save('lf-grouping', 'script');
+  activeScripts = new Set(['hiragana']);
+  updateScriptBtns();
+  openSecs = {'hiragana':true};
+  buildGroupBtns();
+  renderWordGrid();
+}
+
+function toggleScript(script) {
+  if (activeScripts.has(script)) activeScripts.delete(script);
+  else activeScripts.add(script);
+  updateScriptBtns();
+  renderWordGrid();
+}
+
+function updateScriptBtns() {
+  document.querySelectorAll('.script-btn').forEach(btn => {
+    const s = btn.dataset.script;
+    btn.classList.toggle('script-on', activeScripts.has(s));
+  });
+}
+
+function showScriptFilters(show) {
+  const el = document.getElementById('scriptFilters');
+  if (el) el.style.display = show ? 'flex' : 'none';
+  if (!show) { activeScripts.clear(); updateScriptBtns(); }
+}
+
+function applyFontSize(size) {
+  fontSize = size;
+  document.documentElement.setAttribute('data-size', size);
+  localStorage.setItem('lf-fontsize', size);
+  const btn = document.getElementById('fontBtn');
+  if (btn) btn.textContent = 'text: ' + FONT_LABELS[size];
+}
+
+function cycleFontSize() {
+  const idx = FONT_SIZES.indexOf(fontSize);
+  applyFontSize(FONT_SIZES[(idx + 1) % FONT_SIZES.length]);
+}
+
+function openBs(w) {
+  bsWord = w;
+  const sheet = document.getElementById('bottomSheet');
+  const overlay = document.getElementById('bsOverlay');
+  document.getElementById('bsWord').textContent = w.kr + '  ' + w.ro;
+  document.getElementById('bsMeaning').textContent = w.meaning;
+  renderBsDecks();
+  overlay.style.display = 'block';
+  sheet.style.display = 'block';
+  requestAnimationFrame(() => {
+    sheet.style.transform = 'translateY(0)';
+  });
+}
+
+function closeBs() {
+  document.getElementById('bottomSheet').style.display = 'none';
+  document.getElementById('bsOverlay').style.display = 'none';
+  bsWord = null;
+}
+
+function renderBsDecks() {
+  const container = document.getElementById('bsDecks');
+  container.innerHTML = '';
+
+  if (decks.length === 0) {
+    container.innerHTML = '<div style="padding:8px 14px;font-size:.78rem;color:var(--su)">no decks yet — create one below</div>';
+    return;
+  }
+
+  decks.forEach((deck, i) => {
+    const inDeck = bsWord && !!deck.words[bsWord.kr];
+    const btn = document.createElement('button');
+    btn.className = 'bs-deck-row';
+    btn.innerHTML = `
+      <span class="bs-dot" style="background:${deck.color};border:2px solid ${deck.color}"></span>
+      <span style="flex:1">${deck.name}</span>
+      <span style="font-size:.7rem;color:var(--mu);margin-right:6px">${Object.keys(deck.words).length} words</span>
+      ${inDeck ? '<span class="bs-check">✓</span>' : ''}
+    `;
+    // delete button for mobile
+    const delBtn = document.createElement('button');
+    delBtn.style.cssText = 'background:none;border:none;color:#c87a7a;font-size:.75rem;padding:4px 6px;cursor:pointer;flex-shrink:0;opacity:.7';
+    delBtn.textContent = '✕';
+    delBtn.title = 'delete deck';
+    delBtn.onclick = ev => {
+      ev.stopPropagation();
+      if (!confirm('Delete "' + deck.name + '"? Words will not be deleted.')) return;
+      deleteDeck(i);
+      renderBsDecks();
+      renderDeckSwitcher();
+      renderDeckChips();
+      renderWordGrid();
+    };
+    btn.appendChild(delBtn);
+    btn.onclick = () => {
+      if (!bsWord) return;
+      // toggle this deck independently — don't remove from others
+      if (inDeck) delete deck.words[bsWord.kr];
+      else deck.words[bsWord.kr] = true;
+      saveDeckState();
+      renderBsDecks();
+      renderDeckChips();
+      renderDeckSwitcher();
+      renderWordGrid();
+    };
+    container.appendChild(btn);
+  });
+}
+
+function bsNewDeck() {
+  const name = prompt('Name your new deck:', '');
+  if (!name || !name.trim()) return;
+  addDeck(name.trim());
+  if (bsWord) {
+    decks[decks.length - 1].words[bsWord.kr] = true;
+    saveDeckState();
+  }
+  renderBsDecks();
+  renderDeckChips();
+  renderDeckSwitcher();
+  renderWordGrid();
+}
+
+// ── VOCAB TAB ─────────────────────────────────────────────────────────────────
+// ── VOCABULARY TAB ────────────────────────────────────────────────────────────
+
+// Deck state — initialized in vocabInit() after all scripts load
+let decks        = [];
+let activeDeckIdx = -1;
+
+function vocabInit() {
+  decks         = load('lf-decks', []);
+  activeDeckIdx = load('lf-activeDeck', -1);
+  if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
+  curGrouping   = load('lf-grouping', 'pos');
+}
+
+let openSecs = {};
+
+const POS_ORDER = ['expression','verb','adjective','noun','adverb','pronoun','particle'];
+const PALETTE   = ['#c8a87a','#7ac8a0','#7a8cc8','#c87aa8','#7ac8c8','#c8c87a','#c87a7a','#a87ac8'];
+
+const GROUPINGS = {
+  pos: {
+    label:'part of speech',
+    key: w => w.pos,
+    order: () => POS_ORDER,
+    color: k => ({verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'}[k]||'#888')
+  },
+  register: {
+    label:'formality',
+    key: w => w.register || 'neutral',
+    order: () => ['formal','neutral','casual'],
+    color: k => ({formal:'#7a8cc8',neutral:'#7ac8a0',casual:'#c8a87a'}[k]||'#888')
+  },
+  most_common: {
+    label:'most common first',
+    key: w => w.freq>=10?'essential':w.freq>=8?'very common':w.freq>=6?'common':w.freq>=4?'uncommon':'rare',
+    order: () => ['essential','very common','common','uncommon','rare'],
+    color: () => '#7ac8a0'
+  },
+  least_common: {
+    label:'least common first',
+    key: w => w.freq>=10?'essential':w.freq>=8?'very common':w.freq>=6?'common':w.freq>=4?'uncommon':'rare',
+    order: () => ['rare','uncommon','common','very common','essential'],
+    color: () => '#c87a7a'
+  },
+  shortest: {
+    label:'shortest first',
+    key: w => { const l=w.kr.length; return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'; },
+    order: () => ['1 char','2 chars','3 chars','4 chars','5+ chars'],
+    color: () => '#7ac8c8'
+  },
+  longest: {
+    label:'longest first',
+    key: w => { const l=w.kr.length; return l<=1?'1 char':l<=2?'2 chars':l<=3?'3 chars':l<=4?'4 chars':'5+ chars'; },
+    order: () => ['5+ chars','4 chars','3 chars','2 chars','1 char'],
+    color: () => '#c87aa8'
+  },
+  a_z: {
+    label:'a → z',
+    key: w => w.ro[0].toUpperCase(),
+    order: keys => keys.slice().sort(),
+    color: () => '#7a8cc8'
+  },
+  in_deck: {
+    label:'in my deck',
+    key: w => deckColorFor(w.kr) ? 'in a deck' : 'not in deck',
+    order: () => ['in a deck','not in deck'],
+    color: k => k==='in a deck' ? '#c8a87a' : '#888'
+  }
+};
+
+let curGrouping = 'pos';
+
+// Deck helpers
+function deckColorFor(kr) {
+  for (let i=0;i<decks.length;i++) { if (decks[i].words[kr]) return decks[i].color; }
+  return null;
+}
+function deckIdxFor(kr) {
+  for (let i=0;i<decks.length;i++) { if (decks[i].words[kr]) return i; }
+  return -1;
+}
+function nextDeckColor() {
+  const used = decks.map(d=>d.color);
+  for (let c of PALETTE) { if (!used.includes(c)) return c; }
+  return PALETTE[decks.length % PALETTE.length];
+}
+function addDeck(name) {
+  decks.push({name, color:nextDeckColor(), words:{}});
+  activeDeckIdx = decks.length - 1;
+  saveDeckState();
+}
+function deleteDeck(idx) {
+  decks.splice(idx,1);
+  if (activeDeckIdx >= decks.length) activeDeckIdx = decks.length - 1;
+  saveDeckState();
+}
+function saveDeckState() {
+  save('lf-decks', decks);
+  save('lf-activeDeck', activeDeckIdx);
+}
+
+// ── RENDER VOCAB TAB ──────────────────────────────────────────────────────────
+function renderVocab(container) {
+  const words = LANGS[curLang].words;
+
+  container.innerHTML = `
+    <div class="ctrl">
+      <div class="ctrl-row">
+        <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
+        <div id="groupBar"></div>
+      </div>
+      <div class="ctrl-row ctrl-row2">
+        <button class="ubtn" onclick="vocabExpandAll()">expand all</button>
+        <button class="ubtn" onclick="vocabCollapseAll()">collapse all</button>
+      </div>
+    </div>
+    <div id="wordSections"></div>
+    <div id="deckPanel" class="deck-panel surface">
+      <div class="deck-hdr">
+        <span class="deck-title">your deck</span>
+        <div class="deck-acts">
+          <button class="abtn danger" onclick="clearActiveDeck()">remove all</button>
+          <button class="abtn accent" onclick="openStudy()">study deck →</button>
+        </div>
+      </div>
+      <div id="deckSwitcher" class="deck-switcher"></div>
+      <div id="deckChips"></div>
+    </div>
+  `;
+
+  document.getElementById('searchInput').oninput = renderWordGrid;
+  buildGroupBtns();
+  renderWordGrid();
+  renderDeckSwitcher();
+  renderDeckChips();
 }
 
 function buildGroupBtns() {
@@ -1961,6 +2261,12 @@ function toggleWordInDeck(w) {
   renderWordGrid();
 }
 
+function animateBadge() {
+  const b = document.getElementById('deckBadge');
+  if (!b) return;
+  b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+  setTimeout(() => b.classList.remove('pop'), 200);
+}
 
 function renderDeckSwitcher() {
   const sw = document.getElementById('deckSwitcher');
@@ -1984,29 +2290,7 @@ function renderDeckSwitcher() {
       btn.appendChild(dot); btn.appendChild(lbl); btn.appendChild(ct);
       btn.onclick = () => { activeDeckIdx = i === activeDeckIdx ? -1 : i; saveDeckState(); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); };
       btn.oncontextmenu = e => showDeckCtxMenu(e, i);
-
-      // row with arrows on left
-      const row = document.createElement('div');
-      row.style.cssText = 'display:flex;align-items:center;gap:4px';
-      const arrowWrap = document.createElement('div');
-      arrowWrap.style.cssText = 'display:flex;flex-direction:column;gap:1px;flex-shrink:0;margin-right:4px';
-      if (i > 0) {
-        const up = document.createElement('button');
-        up.textContent = '↑';
-        up.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:#fff;line-height:1';
-        up.onclick = ev => { ev.stopPropagation(); moveDeck(i, i-1); };
-        arrowWrap.appendChild(up);
-      }
-      if (i < decks.length - 1) {
-        const dn = document.createElement('button');
-        dn.textContent = '↓';
-        dn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:#fff;line-height:1';
-        dn.onclick = ev => { ev.stopPropagation(); moveDeck(i, i+1); };
-        arrowWrap.appendChild(dn);
-      }
-      row.appendChild(arrowWrap);
-      row.appendChild(btn);
-      sw.appendChild(row);
+      sw.appendChild(btn);
     });
   }
 
@@ -2252,7 +2536,8 @@ document.addEventListener('keydown', e => {
   if (e.key === ' ')          { e.preventDefault(); flipCard(); }
 });
 
-// ── PRACTICE TAB ──
+
+// ── PRACTICE TAB ──────────────────────────────────────────────────────────────
 // ── PRACTICE TAB ──────────────────────────────────────────────────────────────
 
 let practiceQueue  = [];
@@ -2263,20 +2548,17 @@ let selectedBlocks = [];
 let answered       = false;
 
 function renderPractice(container) {
-  const ctrl = document.createElement('div');
-  ctrl.className = 'ctrl';
-  ctrl.innerHTML = `<div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
-    <span class="ctrl-label">exercise type:</span>
-    ${['all','particle','conjugate','build','fill'].map(t =>
-      `<button class="gbtn${practiceFilter===t?' on':''}" onclick="setPracticeFilter('${t}')">${t}</button>`
-    ).join('')}
-  </div>`;
-  const area = document.createElement('div');
-  area.id = 'practiceArea';
-  area.style.cssText = 'padding:1.5rem 2rem';
-  container.innerHTML = '';
-  container.appendChild(ctrl);
-  container.appendChild(area);
+  container.innerHTML = `
+    <div class="ctrl">
+      <div class="ctrl-row" style="gap:6px;flex-wrap:wrap">
+        <span class="ctrl-label">exercise type:</span>
+        ${['all','particle','conjugate','build','fill'].map(t =>
+          `<button class="gbtn${practiceFilter===t?' on':''}" onclick="setPracticeFilter('${t}')">${t}</button>`
+        ).join('')}
+      </div>
+    </div>
+    <div id="practiceArea" style="padding:1.5rem 2rem"></div>
+  `;
   loadPracticeQueue();
   showNextExercise();
 }
@@ -2290,13 +2572,7 @@ function setPracticeFilter(f) {
 }
 
 function loadPracticeQueue() {
-  // Direct fallback — bypass LANGS lookup in case of any reference issue
-  const sentenceMap = {
-    korean: typeof KOREAN_SENTENCES !== 'undefined' ? KOREAN_SENTENCES : [],
-    italian: typeof ITALIAN_SENTENCES !== 'undefined' ? ITALIAN_SENTENCES : [],
-    japanese: []
-  };
-  const all = sentenceMap[curLang] || [];
+  const s = LANGS[curLang].sentences; const all = (typeof s === 'function' ? s() : s) || [];
   let filtered = practiceFilter === 'all' ? all : all.filter(s => s.type === practiceFilter);
   if (filtered.length === 0) filtered = all;
   practiceQueue = shuffle(filtered);
@@ -2304,10 +2580,8 @@ function loadPracticeQueue() {
 }
 
 function showNextExercise() {
-  const _dbg = document.getElementById('practiceArea');
-  if (_dbg) _dbg.innerHTML = '<div style="padding:1rem;font-size:.75rem;color:#c8a87a">debug: lang=' + curLang + ' qlen=' + practiceQueue.length + ' kr_sent=' + (typeof KOREAN_SENTENCES !== "undefined" ? KOREAN_SENTENCES.length : "UNDEF") + ' it_sent=' + (typeof ITALIAN_SENTENCES !== "undefined" ? ITALIAN_SENTENCES.length : "UNDEF") + '</div>';
   if (practiceQueue.length === 0) {
-    if (_dbg) _dbg.innerHTML += '<div class="empty-msg">No exercises available for this language yet.</div>';
+    document.getElementById('practiceArea').innerHTML = '<div class="empty-msg">No exercises available for this language yet.</div>';
     return;
   }
   if (practiceIdx >= practiceQueue.length) {
@@ -2528,410 +2802,37 @@ function showFeedback(correct, ex) {
   document.getElementById('exNextBtn').style.display = 'block';
 }
 
-// ── GRAMMAR RENDERER ─────────────────────────────────────────────────────────
 
-function renderGrammar(container) {
-  const notes = (GRAMMAR[curLang]) || [];
-  container.innerHTML = '<div style="padding:.5rem 2rem;font-size:.72rem;color:#c8a87a">debug: lang=' + curLang + ' notes=' + notes.length + ' GRAMMAR_defined=' + (typeof GRAMMAR !== "undefined") + ' korean_notes=' + (typeof GRAMMAR !== "undefined" && GRAMMAR.korean ? GRAMMAR.korean.length : "UNDEF") + '</div>';
-
-  if (!notes || notes.length === 0) {
-    container.innerHTML += '<div class="empty-msg">Grammar notes coming soon.</div>';
-    return;
-  }
-
-  const wrap = document.createElement('div');
-  wrap.className = 'tab-body';
-  wrap.style.cssText = 'display:flex;flex-direction:column;gap:10px;';
-
-  const intro = document.createElement('div');
-  intro.className = 't-muted';
-  intro.style.cssText = 'font-size:.75rem;padding-bottom:.5rem;';
-  intro.textContent = notes.length + ' grammar topics — click any card to expand';
-  wrap.appendChild(intro);
-
-  const levelColors = ['#7ac8a0','#c8a87a','#c87aa8'];
-  const levelLabels = ['beginner','intermediate','advanced'];
-
-  notes.forEach(function(note) {
-    const card = document.createElement('div');
-    card.className = 'grammar-card surface';
-
-    const hdr = document.createElement('div');
-    hdr.className = 'grammar-hdr';
-
-    const left = document.createElement('div');
-    left.className = 'grammar-left';
-
-    const lvl = document.createElement('span');
-    lvl.className = 'grammar-level';
-    lvl.style.color = levelColors[(note.level||1)-1];
-    lvl.textContent = levelLabels[(note.level||1)-1];
-
-    const title = document.createElement('div');
-    title.className = 'grammar-title';
-    title.textContent = note.title;
-
-    const shortEl = document.createElement('div');
-    shortEl.className = 'grammar-short t-muted';
-    shortEl.textContent = note.short;
-
-    left.appendChild(lvl);
-    left.appendChild(title);
-    left.appendChild(shortEl);
-
-    const chev = document.createElement('span');
-    chev.className = 'sec-chev';
-    chev.textContent = '▾';
-
-    hdr.appendChild(left);
-    hdr.appendChild(chev);
-
-    const body = document.createElement('div');
-    body.className = 'grammar-body';
-    body.style.display = 'none';
-
-    const bodyText = document.createElement('div');
-    bodyText.className = 'grammar-text';
-    bodyText.textContent = note.body;
-
-    const exBox = document.createElement('div');
-    exBox.className = 'grammar-example';
-    exBox.innerHTML = '<div class="ex-label t-muted">example</div><pre class="ex-pre">' + note.example + '</pre>';
-
-    const speakBtn = document.createElement('button');
-    speakBtn.className = 'ubtn';
-    speakBtn.style.marginTop = '8px';
-    speakBtn.textContent = '▶ hear example';
-    speakBtn.onclick = function() {
-      var firstLine = note.example.split('\n')[0].split('→')[0].trim();
-      speak(firstLine, curLang);
-    };
-
-    body.appendChild(bodyText);
-    body.appendChild(exBox);
-    body.appendChild(speakBtn);
-
-    hdr.onclick = function() {
-      var open = body.style.display === 'none';
-      body.style.display = open ? 'block' : 'none';
-      chev.textContent = open ? '▴' : '▾';
-      card.classList.toggle('grammar-open', open);
-    };
-
-    card.appendChild(hdr);
-    card.appendChild(body);
-    wrap.appendChild(card);
-  });
-
-  container.appendChild(wrap);
-}
-
-
-// ═══════════════════════════════════════════════════════════════
-// BOOT
-// ═══════════════════════════════════════════════════════════════
-// ── BOTTOM SHEET ──────────────────────────────────────────────
-let bsWord = null;
-
-function openBs(w) {
-  bsWord = w;
-  const sheet = document.getElementById('bottomSheet');
-  const overlay = document.getElementById('bsOverlay');
-  document.getElementById('bsWord').textContent = w.kr + '  ' + w.ro;
-  document.getElementById('bsMeaning').textContent = w.meaning;
-  renderBsDecks();
-  overlay.style.display = 'block';
-  sheet.style.display = 'block';
-  requestAnimationFrame(() => {
-    sheet.style.transform = 'translateY(0)';
-  });
-}
-
-function closeBs() {
-  document.getElementById('bottomSheet').style.display = 'none';
-  document.getElementById('bsOverlay').style.display = 'none';
-  bsWord = null;
-}
-
-function renderBsDecks() {
-  const container = document.getElementById('bsDecks');
-  container.innerHTML = '';
-
-  if (decks.length === 0) {
-    container.innerHTML = '<div style="padding:8px 14px;font-size:.78rem;color:var(--su)">no decks yet — create one below</div>';
-    return;
-  }
-
-  decks.forEach((deck, i) => {
-    const inDeck = bsWord && !!deck.words[bsWord.kr];
-    const btn = document.createElement('button');
-    btn.className = 'bs-deck-row';
-    btn.innerHTML = `
-      <span class="bs-dot" style="background:${deck.color};border:2px solid ${deck.color}"></span>
-      <span style="flex:1">${deck.name}</span>
-      <span style="font-size:.7rem;color:var(--mu);margin-right:6px">${Object.keys(deck.words).length} words</span>
-      ${inDeck ? '<span class="bs-check">✓</span>' : ''}
-    `;
-    // delete button for mobile
-    const delBtn = document.createElement('button');
-    delBtn.style.cssText = 'background:none;border:none;color:#c87a7a;font-size:.75rem;padding:4px 6px;cursor:pointer;flex-shrink:0;opacity:.7';
-    delBtn.textContent = '✕';
-    delBtn.title = 'delete deck';
-    delBtn.onclick = ev => {
-      ev.stopPropagation();
-      if (!confirm('Delete "' + deck.name + '"? Words will not be deleted.')) return;
-      deleteDeck(i);
-      renderBsDecks();
-      renderDeckSwitcher();
-      renderDeckChips();
-      renderWordGrid();
-    };
-    btn.appendChild(delBtn);
-    btn.onclick = () => {
-      if (!bsWord) return;
-      // toggle this deck independently — don't remove from others
-      if (inDeck) delete deck.words[bsWord.kr];
-      else deck.words[bsWord.kr] = true;
-      saveDeckState();
-      renderBsDecks();
-      renderDeckChips();
-      renderDeckSwitcher();
-      renderWordGrid();
-    };
-    container.appendChild(btn);
-  });
-}
-
-function bsNewDeck() {
-  const name = prompt('Name your new deck:', '');
-  if (!name || !name.trim()) return;
-  addDeck(name.trim());
-  if (bsWord) {
-    decks[decks.length - 1].words[bsWord.kr] = true;
-    saveDeckState();
-  }
-  renderBsDecks();
-  renderDeckChips();
-  renderDeckSwitcher();
-  renderWordGrid();
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeBs();
-});
-
-// ── SCRIPT FILTER ─────────────────────────────────────────────
-let activeScripts = new Set(); // empty = show all
-
-function toggleScript(script) {
-  if (activeScripts.has(script)) activeScripts.delete(script);
-  else activeScripts.add(script);
-  updateScriptBtns();
-  renderWordGrid();
-}
-
-function updateScriptBtns() {
-  document.querySelectorAll('.script-btn').forEach(btn => {
-    const s = btn.dataset.script;
-    btn.classList.toggle('script-on', activeScripts.has(s));
-  });
-}
-
-function showScriptFilters(show) {
-  const el = document.getElementById('scriptFilters');
-  if (el) el.style.display = show ? 'flex' : 'none';
-  if (!show) { activeScripts.clear(); updateScriptBtns(); }
-}
-
-// ── FONT SIZE ─────────────────────────────────────────────────
-const FONT_SIZES = ['sm','md','lg','xl'];
-const FONT_LABELS = {'sm':'small','md':'medium','lg':'large','xl':'x-large'};
-const _savedSize = localStorage.getItem('lf-fontsize'); let fontSize = ['sm','md','lg','xl'].includes(_savedSize) ? _savedSize : 'lg';
-
-function applyFontSize(size) {
-  fontSize = size;
-  document.documentElement.setAttribute('data-size', size);
-  localStorage.setItem('lf-fontsize', size);
-  const btn = document.getElementById('fontBtn');
-  if (btn) btn.textContent = 'text: ' + FONT_LABELS[size];
-}
-
-function cycleFontSize() {
-  const idx = FONT_SIZES.indexOf(fontSize);
-  applyFontSize(FONT_SIZES[(idx + 1) % FONT_SIZES.length]);
-}
-
-// ── ONBOARDING ──────────────────────────────────────────────
-function buildOnboardBanner() {
-  const msgs = {
-    korean: {title:'New to Korean?', desc:'Start with essential words — greetings, pronouns, and core verbs. The most common filter shows the most important words first. Or add premade decks instantly.', btn:'show essentials first', fn:'startHereKorean', decks:true, deckKey:'korean'},
-    italian: {title:'New to Italian?', desc:'Begin with greetings and the 8 key irregular verbs — essere, avere, fare, andare, venire, volere, potere, dovere. Everything builds on them.', btn:'show essentials first', fn:'startHereItalian', decks:false},
-    japanese: {title:'New to Japanese?', desc:'Learn hiragana first (46 sounds, ~2 weeks). Then katakana. Vocabulary and kanji come after you can read both. Add all three alphabet decks instantly.', btn:'start with hiragana', fn:'startHereJapanese', decks:true, deckKey:'japanese_all'},
-  };
-  const m = msgs[curLang] || msgs.korean;
-  const div = document.createElement('div');
-  div.className = 'onboard-banner';
-  div.id = 'onboardBanner';
-  div.innerHTML =
-    '<span class="onboard-tag">start here</span>' +
-    '<span class="onboard-title">' + m.title + '</span>' +
-    '<span class="onboard-desc">' + m.desc + '</span>' +
-    '<div class="onboard-actions">' +
-      '<button class="obtn" onclick="window[' + "'"+m.fn+"'" + ']()">' + m.btn + ' →</button>' +
-      '<button class="obtn-ghost" onclick="dismissOnboard()">I already know this</button>' +
-    '</div>';
-  return div;
-}
-
-// ── PREMADE DECKS ──────────────────────────────────────────
-const PREMADE_DECKS = {
-  korean: [
-    {
-      name:'Korean Essentials',
-      color:'#c8a87a',
-      filter: w => w.freq >= 9 && w.pos !== 'particle'
-    },
-    {
-      name:'K-pop & Texting',
-      color:'#c87aa8',
-      filter: w => w.register === 'casual' || (w.sit && w.sit.includes('dating'))
-    },
-    {
-      name:'Survival Korean',
-      color:'#7ac8a0',
-      filter: w => w.sit && (w.sit.includes('airport') || w.sit.includes('getting_around') || w.sit.includes('emergency'))
-    },
-  ],
-  japanese_hiragana: [
-    {name:'Hiragana (all 46)', color:'#7ac8a0', filter: w => w.pos === 'hiragana'},
-  ],
-  japanese_katakana: [
-    {name:'Katakana (all 46)', color:'#7a8cc8', filter: w => w.pos === 'katakana'},
-  ],
-  japanese_kanji: [
-    {name:'Essential Kanji', color:'#c87aa8', filter: w => w.pos === 'kanji'},
-  ],
-  japanese_dakuten: [
-    {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
-    {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
-  ],
-};
-
-function addPremadeDeck(key) {
-  const templates = PREMADE_DECKS[key];
-  if (!templates) return;
-  const words = LANGS[curLang].words;
-  let added = 0;
-
-  templates.forEach(template => {
-    // Check if deck with this name already exists
-    const existing = decks.find(d => d.name === template.name);
-    if (existing) {
-      // Just add missing words to it
-      words.filter(template.filter).forEach(w => { existing.words[w.kr] = true; });
-      return;
-    }
-    const deck = {name: template.name, color: template.color, words: {}};
-    words.filter(template.filter).forEach(w => { deck.words[w.kr] = true; });
-    decks.push(deck);
-    activeDeckIdx = decks.length - 1;
-    added++;
-  });
-
-  saveDeckState();
-  renderDeckSwitcher();
-  renderDeckChips();
-  renderWordGrid();
-
-  // Show confirmation
-  const msg = added > 0
-    ? templates.map(t => '"' + t.name + '"').join(' and ') + ' added to your decks!'
-    : 'Deck already exists — words updated.';
-  showToast(msg);
-}
-
-function showToast(msg) {
-  let t = document.getElementById('toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'toast';
-    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--sf);border:1px solid var(--bd2);border-radius:8px;padding:10px 20px;font-family:DM Mono,monospace;font-size:.78rem;color:var(--tx);z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:opacity .3s;white-space:nowrap';
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.opacity = '1';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.style.opacity = '0', 2800);
-}
-
-function dismissOnboard() {
-  localStorage.setItem('lf-seen-' + curLang, '1');
-  const b = document.getElementById('onboardBanner');
-  if (b) b.style.display = 'none';
-}
-
-function startHereKorean() {
-  dismissOnboard();
-  // set to most common filter, open essential section
-  curGrouping = 'most_common';
-  save('lf-grouping', 'most_common');
-  openSecs = {'essential':true};
-  buildGroupBtns();
-  renderWordGrid();
-}
-
-function startHereItalian() {
-  dismissOnboard();
-  curGrouping = 'most_common';
-  save('lf-grouping', 'most_common');
-  openSecs = {'essential':true};
-  buildGroupBtns();
-  renderWordGrid();
-}
-
-function startHereJapanese() {
-  dismissOnboard();
-  curGrouping = 'script';
-  save('lf-grouping', 'script');
-  activeScripts = new Set(['hiragana']);
-  updateScriptBtns();
-  openSecs = {'hiragana':true};
-  buildGroupBtns();
-  renderWordGrid();
-}
-
-function addPremadeDeckJapaneseAll() {
-  ['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten'].forEach(key => addPremadeDeck(key));
-}
 
 (function boot() {
-  // init deck state
   decks         = load('lf-decks', []);
   activeDeckIdx = load('lf-activeDeck', -1);
   curGrouping   = load('lf-grouping', 'pos');
   if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
 
-  // theme
   document.body.className = theme;
   applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
 
-  // language
   const savedLang = localStorage.getItem('lf-lang') || 'korean';
   curLang = savedLang;
   const L = LANGS[savedLang];
+  document.getElementById('langFlag').textContent  = L.flag;
+  document.getElementById('langLabel').textContent = L.label;
+  document.querySelectorAll('.lang-option').forEach(el =>
+    el.classList.toggle('active', el.dataset.lang === savedLang));
   showScriptFilters(savedLang === 'japanese');
-  document.getElementById('langFlag').textContent   = L.flag;
-  document.getElementById('langLabel').textContent  = L.label;
-  // logoScript is the tagline, not language-specific
-  document.querySelectorAll('.lang-option').forEach(el => el.classList.toggle('active', el.dataset.lang === savedLang));
+  if (savedLang === 'japanese' && curGrouping === 'pos') curGrouping = 'script';
 
-  // tab
   const savedTab = localStorage.getItem('lf-tab') || 'vocab';
   curTab = savedTab;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === savedTab));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === savedTab);
+    b.setAttribute('aria-selected', b.dataset.tab === savedTab ? 'true' : 'false');
+  });
   renderTab(savedTab);
 })();
+
 </script>
 </body>
 </html>
