@@ -2290,7 +2290,13 @@ function setPracticeFilter(f) {
 }
 
 function loadPracticeQueue() {
-  const s = LANGS[curLang].sentences; const all = (typeof s === 'function' ? s() : s) || [];
+  // Direct fallback — bypass LANGS lookup in case of any reference issue
+  const sentenceMap = {
+    korean: typeof KOREAN_SENTENCES !== 'undefined' ? KOREAN_SENTENCES : [],
+    italian: typeof ITALIAN_SENTENCES !== 'undefined' ? ITALIAN_SENTENCES : [],
+    japanese: []
+  };
+  const all = sentenceMap[curLang] || [];
   let filtered = practiceFilter === 'all' ? all : all.filter(s => s.type === practiceFilter);
   if (filtered.length === 0) filtered = all;
   practiceQueue = shuffle(filtered);
