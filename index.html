@@ -45,7 +45,7 @@ body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.0
 .lang-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 11px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em}
 .lang-btn:hover{border-color:var(--acc);color:var(--acc)}
 .lang-chev{font-size:.55rem;opacity:.5}
-.lang-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;border-radius:8px;overflow:hidden;min-width:160px;z-index:300;background:var(--sf2);border:1px solid var(--bd2);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.lang-menu{display:none;position:fixed;border-radius:8px;overflow:hidden;min-width:170px;z-index:9999;background:var(--sf2);border:1px solid var(--bd2);box-shadow:0 8px 28px rgba(0,0,0,.35)}
 .lang-menu.open{display:block}
 .lang-option{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.74rem;color:var(--tx);transition:background .12s}
 .lang-option:hover{background:var(--sf3)}
@@ -1662,8 +1662,24 @@ function switchLang(lang) {
   renderTab(curTab);
 }
 
+function toggleTheme() {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('lf-theme', theme);
+  document.body.className = theme;
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.textContent = theme === 'dark' ? 'light mode' : 'dark mode';
+}
+
 function toggleLangMenu() {
-  document.getElementById('langMenu')?.classList.toggle('open');
+  const menu = document.getElementById('langMenu');
+  const btn  = document.getElementById('langBtn');
+  if (!menu || !btn) return;
+  const isOpen = menu.classList.contains('open');
+  if (isOpen) { menu.classList.remove('open'); return; }
+  const r = btn.getBoundingClientRect();
+  menu.style.top   = (r.bottom + 6) + 'px';
+  menu.style.right = (window.innerWidth - r.right) + 'px';
+  menu.classList.add('open');
 }
 
 document.addEventListener('click', e => {
