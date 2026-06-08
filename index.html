@@ -260,7 +260,17 @@ input[type="text"]::placeholder{color:var(--su)}
 }
 
 #fontBtn{font-family:'DM Mono',monospace;font-size:.75rem;padding:.7rem 1rem;border:none;background:none;color:var(--mu);cursor:pointer;transition:color .15s;letter-spacing:.04em;white-space:nowrap;flex-shrink:0;line-height:1}
-#fontBtn:hover{color:var(--acc)}</style>
+#fontBtn:hover{color:var(--acc)}
+/* ── CUSTOM WORD BUILDER ── */
+#customWordOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;padding:1rem}
+#customWordOverlay.open{display:flex}
+#customWordModal{background:var(--sf);border:1px solid var(--bd2);border-radius:12px;width:100%;max-width:540px;padding:1.4rem;display:flex;flex-direction:column;gap:.85rem;max-height:90vh;overflow-y:auto}
+.cwb-display{font-family:'Noto Sans KR',sans-serif;font-size:2rem;font-weight:500;min-height:52px;padding:.5rem 1rem;background:var(--sf2);border:1px solid var(--bd2);border-radius:8px;letter-spacing:.1em;color:var(--tx);text-align:center}
+.cwb-alpha{display:flex;flex-wrap:wrap;gap:4px;padding:.5rem 0}
+.cwb-char{font-family:'Noto Sans KR',sans-serif;font-size:.9rem;padding:5px 8px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf2);color:var(--tx);cursor:pointer;transition:all .1s;min-width:34px;text-align:center}
+.cwb-char:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+.cwb-section-label{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);padding:.4rem 0 .2rem;width:100%}
+</style>
 </head>
 <body class="dark">
 
@@ -338,6 +348,28 @@ input[type="text"]::placeholder{color:var(--su)}
   <div id="bsDecks" style="padding:0 12px 8px;display:flex;flex-direction:column;gap:4px"></div>
   <div style="padding:4px 12px 16px;border-top:1px solid var(--bd);margin-top:4px">
     <button onclick="bsNewDeck()" style="width:100%;padding:12px;border-radius:10px;border:1px dashed var(--bd2);background:none;color:var(--acc);font-family:'DM Mono',monospace;font-size:.8rem;cursor:pointer;text-align:left">+ create new deck</button>
+  </div>
+</div>
+
+<div id="customWordOverlay">
+  <div id="customWordModal">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font-family:'DM Serif Display',serif;font-size:1.05rem">custom word builder</span>
+      <button class="m-close" onclick="closeCustomWord()">✕</button>
+    </div>
+    <div style="font-size:.72rem;color:var(--mu)">click letters to build a word, then fill in the meaning and save it to a deck</div>
+    <div class="cwb-display" id="cwbDisplay">tap letters below →</div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <input id="cwbRo" type="text" placeholder="romanization (e.g. annyeong)" style="flex:1"/>
+      <input id="cwbMeaning" type="text" placeholder="meaning" style="flex:1"/>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="ubtn" onclick="cwbBackspace()">⌫ delete</button>
+      <button class="ubtn" onclick="cwbClear()">clear</button>
+      <button class="ubtn" onclick="cwbAddSpace()">space</button>
+      <button class="abtn accent" style="margin-left:auto" onclick="cwbSave()">save to deck →</button>
+    </div>
+    <div id="cwbAlpha" class="cwb-alpha"></div>
   </div>
 </div>
 
@@ -518,6 +550,46 @@ const KOREAN_WORDS = [
   {kr:"오늘",ro:"oneul",meaning:"today",example:"오늘 기분 어때? — how are you feeling today?",pos:"noun",freq:10,register:"neutral"},
   {kr:"내일",ro:"naeil",meaning:"tomorrow",example:"내일 봐 — see you tomorrow",pos:"noun",freq:9,register:"neutral"},
   {kr:"어제",ro:"eoje",meaning:"yesterday",example:"어제 뭐 했어? — what did you do yesterday?",pos:"noun",freq:9,register:"neutral"},
+
+  // ── Extra Korean ──
+  {kr:"반갑습니다",ro:"bangapseumnida",meaning:"nice to meet you (formal)",example:"처음 뵙겠습니다, 반갑습니다",pos:"expression",freq:9,register:"formal",sit:["meeting"]},
+  {kr:"어서 오세요",ro:"eoseo oseyo",meaning:"welcome! (to a shop/home)",example:"어서 오세요! — Welcome!",pos:"expression",freq:8,register:"formal",sit:["shopping","restaurant"]},
+  {kr:"실례합니다",ro:"sillyehamnida",meaning:"excuse me (formal, to get attention)",example:"실례합니다, 잠깐만요 — Excuse me, one moment",pos:"expression",freq:8,register:"formal",sit:["getting_around","airport"]},
+  {kr:"화이팅",ro:"hwaiting",meaning:"fighting! / you can do it!",example:"화이팅! 잘 할 수 있어 — You've got this!",pos:"expression",freq:7,register:"casual"},
+  {kr:"맞아",ro:"maja",meaning:"that's right / correct",example:"맞아, 그거야! — Right, that's it!",pos:"expression",freq:9,register:"casual"},
+  {kr:"진짜요",ro:"jinjjayo",meaning:"really? / seriously? (polite)",example:"진짜요? 대박이에요 — Really? That's amazing",pos:"expression",freq:8,register:"formal"},
+  {kr:"어떻게 지내세요",ro:"eotteoke jinaeseyo",meaning:"how are you doing? (formal)",example:"요즘 어떻게 지내세요? — How have you been lately?",pos:"expression",freq:8,register:"formal",sit:["meeting"]},
+  {kr:"잘 지내",ro:"jal jinae",meaning:"I'm doing well (casual)",example:"잘 지내, 고마워 — Doing well, thanks",pos:"expression",freq:8,register:"casual",sit:["meeting"]},
+  {kr:"피부",ro:"pibu",meaning:"skin",example:"피부가 좋아요 — You have nice skin",pos:"noun",freq:6,register:"neutral"},
+  {kr:"머리",ro:"meori",meaning:"head / hair",example:"머리가 아파요 — My head hurts",pos:"noun",freq:8,register:"neutral"},
+  {kr:"눈물",ro:"nunmul",meaning:"tears",example:"눈물이 나와 — Tears are falling",pos:"noun",freq:6,register:"neutral",sit:["dating"]},
+  {kr:"기억",ro:"gieok",meaning:"memory",example:"좋은 기억이야 — It's a good memory",pos:"noun",freq:7,register:"neutral"},
+  {kr:"날씨",ro:"nalsi",meaning:"weather",example:"오늘 날씨가 좋아요 — The weather is nice today",pos:"noun",freq:8,register:"neutral"},
+  {kr:"계절",ro:"gyejeol",meaning:"season",example:"봄이 제일 좋아 — I love spring the most",pos:"noun",freq:6,register:"neutral"},
+  {kr:"봄",ro:"bom",meaning:"spring",example:"봄에 꽃이 피어요 — Flowers bloom in spring",pos:"noun",freq:6,register:"neutral"},
+  {kr:"여름",ro:"yeoreum",meaning:"summer",example:"여름에 바다에 가요 — I go to the sea in summer",pos:"noun",freq:6,register:"neutral"},
+  {kr:"가을",ro:"gaeul",meaning:"autumn / fall",example:"가을이 좋아요 — I like autumn",pos:"noun",freq:6,register:"neutral"},
+  {kr:"겨울",ro:"gyeoul",meaning:"winter",example:"겨울에 눈이 와요 — It snows in winter",pos:"noun",freq:6,register:"neutral"},
+  {kr:"나라",ro:"nara",meaning:"country / nation",example:"어느 나라에서 왔어요? — What country are you from?",pos:"noun",freq:7,register:"neutral",sit:["meeting"]},
+  {kr:"언어",ro:"eoneo",meaning:"language",example:"한국어는 어려운 언어야 — Korean is a difficult language",pos:"noun",freq:7,register:"neutral"},
+  {kr:"문화",ro:"munhwa",meaning:"culture",example:"한국 문화가 재미있어요 — Korean culture is interesting",pos:"noun",freq:7,register:"neutral"},
+  {kr:"음식",ro:"eumsik",meaning:"food / dish",example:"이 음식 뭐예요? — What is this dish?",pos:"noun",freq:9,register:"neutral",sit:["restaurant","food"]},
+  {kr:"돈",ro:"don",meaning:"money",example:"돈이 없어요 — I don't have money",pos:"noun",freq:9,register:"neutral",sit:["shopping"]},
+  {kr:"카드",ro:"kadeu",meaning:"card (credit/debit)",example:"카드 되나요? — Do you accept cards?",pos:"noun",freq:8,register:"neutral",sit:["shopping","restaurant"]},
+  {kr:"영수증",ro:"yeongsujeung",meaning:"receipt",example:"영수증 주세요 — Please give me a receipt",pos:"noun",freq:7,register:"neutral",sit:["shopping"]},
+  {kr:"화장실",ro:"hwajangsil",meaning:"bathroom / restroom",example:"화장실이 어디예요? — Where is the bathroom?",pos:"noun",freq:9,register:"neutral",sit:["airport","restaurant","getting_around"]},
+  {kr:"병원",ro:"byeongwon",meaning:"hospital",example:"병원에 가야 해요 — I need to go to the hospital",pos:"noun",freq:7,register:"neutral",sit:["emergency"]},
+  {kr:"약",ro:"yak",meaning:"medicine",example:"약 있어요? — Do you have medicine?",pos:"noun",freq:7,register:"neutral",sit:["emergency"]},
+  {kr:"아프다",ro:"apeuda",meaning:"to be sick / to hurt",example:"배가 아파요 — My stomach hurts",pos:"adjective",freq:8,register:"neutral",sit:["emergency"]},
+  {kr:"도움",ro:"doum",meaning:"help",example:"도움이 필요해요 — I need help",pos:"noun",freq:7,register:"neutral",sit:["emergency"]},
+  {kr:"방향",ro:"banghyang",meaning:"direction",example:"방향을 모르겠어요 — I don't know the direction",pos:"noun",freq:6,register:"neutral",sit:["getting_around"]},
+  {kr:"얼마예요",ro:"eolmayeyo",meaning:"how much is it?",example:"이거 얼마예요? — How much is this?",pos:"expression",freq:9,register:"formal",sit:["shopping","restaurant"]},
+  {kr:"주문",ro:"jumun",meaning:"order (food/items)",example:"주문할게요 — I'll order now",pos:"noun",freq:8,register:"neutral",sit:["restaurant"]},
+  {kr:"계산",ro:"gyesan",meaning:"bill / check / payment",example:"계산해 주세요 — Check please",pos:"noun",freq:8,register:"neutral",sit:["restaurant","shopping"]},
+  {kr:"맵다",ro:"maepda",meaning:"spicy",example:"너무 매워요 — It's too spicy",pos:"adjective",freq:8,register:"neutral",sit:["restaurant","food"]},
+  {kr:"달다",ro:"dalda",meaning:"sweet",example:"너무 달아요 — It's too sweet",pos:"adjective",freq:7,register:"neutral",sit:["food"]},
+  {kr:"짜다",ro:"jjada",meaning:"salty",example:"짜게 해주세요 — Please make it salty",pos:"adjective",freq:7,register:"neutral",sit:["food"]},
+
 ];
 
 
@@ -668,6 +740,37 @@ const ITALIAN_WORDS = [
   {kr:"bambino",ro:"bam-BEE-no",meaning:"child / baby",example:"Che bambino carino! — What a cute child!",pos:"noun",freq:8,register:"neutral"},
   {kr:"giorno",ro:"JOR-no",meaning:"day",example:"Buona giornata! — Have a good day!",pos:"noun",freq:10,register:"neutral"},
   {kr:"notte",ro:"NOT-teh",meaning:"night",example:"La notte è silenziosa — The night is quiet",pos:"noun",freq:9,register:"neutral"},
+
+  // ── Extra Italian ──
+  {kr:"come va?",ro:"KO-meh VA",meaning:"how's it going? (casual)",example:"Ciao! Come va? — Hey! How's it going?",pos:"expression",freq:8,register:"casual",sit:["meeting"]},
+  {kr:"tutto bene",ro:"TOOT-to BEH-neh",meaning:"all good / everything's fine",example:"Tutto bene, grazie — All good, thanks",pos:"expression",freq:8,register:"casual",sit:["meeting"]},
+  {kr:"non c'è problema",ro:"non cheh pro-BLEH-ma",meaning:"no problem",example:"Non c'è problema! — No problem!",pos:"expression",freq:8,register:"neutral",sit:["meeting"]},
+  {kr:"che bello",ro:"keh BEL-lo",meaning:"how beautiful / how nice",example:"Che bello! Mi piace molto — How beautiful! I love it",pos:"expression",freq:8,register:"casual",sit:["dating"]},
+  {kr:"davvero",ro:"dav-VEH-ro",meaning:"really / truly",example:"Davvero? Non ci credo — Really? I can't believe it",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"magari",ro:"ma-GA-ree",meaning:"I wish / maybe / if only",example:"Magari potessi venire — I wish I could come",pos:"adverb",freq:7,register:"casual"},
+  {kr:"perfetto",ro:"pair-FET-to",meaning:"perfect",example:"Perfetto, andiamo! — Perfect, let's go!",pos:"adjective",freq:8,register:"neutral"},
+  {kr:"pazienza",ro:"pa-TSYEN-tsa",meaning:"patience / oh well",example:"Pazienza! — Oh well! / Be patient!",pos:"expression",freq:7,register:"neutral"},
+  {kr:"figurati",ro:"fee-GOO-ra-tee",meaning:"don't mention it / of course (casual)",example:"Grazie mille! — Figurati! — Thank you! — Don't mention it!",pos:"expression",freq:8,register:"casual",sit:["meeting"]},
+  {kr:"in bocca al lupo",ro:"in BOK-ka al LOO-po",meaning:"good luck (lit: in the wolf's mouth)",example:"In bocca al lupo per l'esame! — Good luck on the exam!",pos:"expression",freq:7,register:"neutral"},
+  {kr:"crepi",ro:"KREH-pee",meaning:"response to 'in bocca al lupo' (lit: may it die)",example:"In bocca al lupo! — Crepi! — Good luck! — Thanks!",pos:"expression",freq:6,register:"neutral"},
+  {kr:"allora",ro:"al-LO-ra",meaning:"so / then / well",example:"Allora, che facciamo? — So, what do we do?",pos:"adverb",freq:9,register:"neutral"},
+  {kr:"insomma",ro:"in-SOM-ma",meaning:"in short / I mean / sort of",example:"Insomma, non lo so — I mean, I don't know",pos:"adverb",freq:7,register:"casual"},
+  {kr:"praticamente",ro:"pra-tee-ka-MEN-teh",meaning:"basically / practically",example:"È praticamente finito — It's basically done",pos:"adverb",freq:7,register:"casual"},
+  {kr:"comunque",ro:"ko-MOON-kweh",meaning:"anyway / however / in any case",example:"Comunque, torniamo a noi — Anyway, back to us",pos:"adverb",freq:8,register:"neutral"},
+  {kr:"il conto",ro:"eel KON-to",meaning:"the bill / the check",example:"Posso avere il conto? — Can I have the check?",pos:"noun",freq:9,register:"neutral",sit:["restaurant"]},
+  {kr:"prenotazione",ro:"preh-no-ta-TSYO-neh",meaning:"reservation / booking",example:"Ho una prenotazione — I have a reservation",pos:"noun",freq:8,register:"formal",sit:["restaurant","airport"]},
+  {kr:"bagaglio",ro:"ba-GA-lyo",meaning:"luggage / baggage",example:"Ho perso il bagaglio — I lost my luggage",pos:"noun",freq:7,register:"neutral",sit:["airport"]},
+  {kr:"passaporto",ro:"pas-sa-POR-to",meaning:"passport",example:"Il mio passaporto è scaduto — My passport has expired",pos:"noun",freq:7,register:"neutral",sit:["airport"]},
+  {kr:"biglietto",ro:"beel-YET-to",meaning:"ticket",example:"Vorrei un biglietto per Roma — I'd like a ticket to Rome",pos:"noun",freq:8,register:"neutral",sit:["airport","getting_around"]},
+  {kr:"farmacia",ro:"far-ma-CHEE-a",meaning:"pharmacy",example:"Dov'è la farmacia? — Where is the pharmacy?",pos:"noun",freq:7,register:"neutral",sit:["emergency"]},
+  {kr:"ospedale",ro:"os-peh-DA-leh",meaning:"hospital",example:"Ho bisogno di un ospedale — I need a hospital",pos:"noun",freq:6,register:"neutral",sit:["emergency"]},
+  {kr:"aiuto",ro:"a-YOO-to",meaning:"help!",example:"Aiuto! — Help!",pos:"expression",freq:8,register:"neutral",sit:["emergency"]},
+  {kr:"mi fa male",ro:"mee fa MA-leh",meaning:"it hurts / I'm in pain",example:"Mi fa male la testa — My head hurts",pos:"expression",freq:7,register:"neutral",sit:["emergency"]},
+  {kr:"sconto",ro:"SKON-to",meaning:"discount",example:"C'è uno sconto? — Is there a discount?",pos:"noun",freq:7,register:"neutral",sit:["shopping"]},
+  {kr:"taglia",ro:"TA-lya",meaning:"size (clothing)",example:"Che taglia porti? — What size do you wear?",pos:"noun",freq:7,register:"neutral",sit:["shopping"]},
+  {kr:"spingere",ro:"SPEEN-jeh-reh",meaning:"to push",example:"Spingere — Push (on a door sign)",pos:"verb",freq:6,register:"neutral"},
+  {kr:"tirare",ro:"tee-RA-reh",meaning:"to pull",example:"Tirare — Pull (on a door sign)",pos:"verb",freq:6,register:"neutral"},
+
 ];
 
 
@@ -2210,6 +2313,7 @@ function renderVocab(container) {
       </div>
       <div class="ctrl-row" style="margin-top:4px">
         <button class="ubtn filters-toggle" id="filtersToggle" onclick="toggleFilters()">more filters ▾</button>
+        <button class="ubtn" onclick="openCustomWord()" title="build a custom word from the alphabet">+ custom word</button>
         <input id="searchInput2" type="text" placeholder="${LANGS[curLang].placeholder}" style="flex:1;min-width:0;width:0" />
       </div>
     </div>
@@ -2930,6 +3034,145 @@ function showFeedback(correct, ex) {
   document.getElementById('exNextBtn').style.display = 'block';
 }
 
+
+
+// ── CUSTOM WORD BUILDER ──────────────────────────────────────────────────────
+let cwbText = '';
+
+const CWB_CHARS = {
+  korean: [
+    {label:'vowels', chars:['아','야','어','여','오','요','우','유','으','이','애','에','외','위','와','워','의']},
+    {label:'consonants (initial)', chars:['가','나','다','라','마','바','사','아','자','차','카','타','파','하']},
+    {label:'consonant-vowel pairs', chars:['고','노','도','로','모','보','소','조','초','코','토','포','호','구','누','두','루','무','부','수','주','추','쿠','투','푸','후','기','니','디','리','미','비','시','지','치','키','티','피','히']},
+    {label:'final consonants (받침)', chars:['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ']},
+    {label:'common syllables', chars:['안','는','에','서','를','가','이','한','의','지','그','들','하','도','다','요','게','만','와','수','로','으','나','이다','있','없','해','해요','어요','아요','았','었','겠','세요']},
+  ],
+  italian: [
+    {label:'vowels', chars:['a','e','i','o','u','à','è','ì','ò','ù','é']},
+    {label:'consonants', chars:['b','c','d','f','g','h','l','m','n','p','q','r','s','t','v','z']},
+    {label:'common clusters', chars:['ch','gh','gl','gn','sc','str','sp','st','pr','br','tr','dr','cr','gr','fr']},
+    {label:'common endings', chars:['-are','-ere','-ire','-ato','-ito','-uto','-zione','-mente','-issimo']},
+    {label:'common words', chars:['il','la','lo','i','le','gli','un','una','di','del','della','in','a','e','è','non','mi','ti','si','ci','vi','ho','hai','ha','sei','sono','sono','che','per','con','su','tra','tra']},
+  ],
+  japanese: [
+    {label:'hiragana vowels', chars:['あ','い','う','え','お']},
+    {label:'hiragana k-row', chars:['か','き','く','け','こ']},
+    {label:'hiragana s-row', chars:['さ','し','す','せ','そ']},
+    {label:'hiragana t-row', chars:['た','ち','つ','て','と']},
+    {label:'hiragana n-row', chars:['な','に','ぬ','ね','の','ん']},
+    {label:'hiragana h-row', chars:['は','ひ','ふ','へ','ほ']},
+    {label:'hiragana m-row', chars:['ま','み','む','め','も']},
+    {label:'hiragana y/r/w', chars:['や','ゆ','よ','ら','り','る','れ','ろ','わ','を']},
+    {label:'hiragana accents', chars:['が','ぎ','ぐ','げ','ご','ざ','じ','ず','ぜ','ぞ','だ','で','ど','ば','び','ぶ','べ','ぼ','ぱ','ぴ','ぷ','ぺ','ぽ']},
+    {label:'katakana vowels', chars:['ア','イ','ウ','エ','オ']},
+    {label:'katakana k-row', chars:['カ','キ','ク','ケ','コ']},
+    {label:'katakana s-row', chars:['サ','シ','ス','セ','ソ']},
+    {label:'katakana t-row', chars:['タ','チ','ツ','テ','ト']},
+    {label:'katakana n/h/m', chars:['ナ','ニ','ヌ','ネ','ノ','ハ','ヒ','フ','ヘ','ホ','マ','ミ','ム','メ','モ','ン']},
+    {label:'katakana accents', chars:['ガ','ギ','グ','ゲ','ゴ','ザ','ジ','ズ','ゼ','ゾ','ダ','デ','ド','バ','ビ','ブ','ベ','ボ','パ','ピ','プ','ペ','ポ']},
+  ]
+};
+
+let cwbCustomWords = []; // saved custom words
+
+function openCustomWord() {
+  cwbText = '';
+  document.getElementById('cwbDisplay').textContent = 'tap letters below →';
+  document.getElementById('cwbRo').value = '';
+  document.getElementById('cwbMeaning').value = '';
+  buildCwbAlpha();
+  document.getElementById('customWordOverlay').classList.add('open');
+}
+
+function closeCustomWord() {
+  document.getElementById('customWordOverlay').classList.remove('open');
+}
+
+function buildCwbAlpha() {
+  const container = document.getElementById('cwbAlpha');
+  container.innerHTML = '';
+  const groups = CWB_CHARS[curLang] || CWB_CHARS.korean;
+  groups.forEach(group => {
+    const lbl = document.createElement('div');
+    lbl.className = 'cwb-section-label';
+    lbl.textContent = group.label;
+    container.appendChild(lbl);
+    group.chars.forEach(ch => {
+      const btn = document.createElement('button');
+      btn.className = 'cwb-char';
+      btn.textContent = ch;
+      btn.onclick = () => {
+        cwbText += ch;
+        document.getElementById('cwbDisplay').textContent = cwbText || 'tap letters below →';
+      };
+      container.appendChild(btn);
+    });
+  });
+}
+
+function cwbBackspace() {
+  // Remove last character (handle multi-byte correctly)
+  const chars = [...cwbText];
+  chars.pop();
+  cwbText = chars.join('');
+  document.getElementById('cwbDisplay').textContent = cwbText || 'tap letters below →';
+}
+
+function cwbClear() {
+  cwbText = '';
+  document.getElementById('cwbDisplay').textContent = 'tap letters below →';
+}
+
+function cwbAddSpace() {
+  cwbText += ' ';
+  document.getElementById('cwbDisplay').textContent = cwbText;
+}
+
+function cwbSave() {
+  const word = cwbText.trim();
+  const ro = document.getElementById('cwbRo').value.trim();
+  const meaning = document.getElementById('cwbMeaning').value.trim();
+
+  if (!word) { showToast('Type a word first!'); return; }
+  if (!meaning) { showToast('Add a meaning for the word'); return; }
+
+  // Create custom word object
+  const customWord = {
+    kr: word,
+    ro: ro || word,
+    meaning: meaning,
+    example: word + ' — ' + meaning,
+    pos: 'expression',
+    freq: 7,
+    register: 'neutral',
+    _custom: true
+  };
+
+  // Add to current language words
+  LANGS[curLang].words.push(customWord);
+
+  // Add to active deck if one is selected
+  if (activeDeckIdx >= 0 && activeDeckIdx < decks.length) {
+    decks[activeDeckIdx].words[word] = true;
+    saveDeckState();
+    showToast('"' + word + '" added to ' + decks[activeDeckIdx].name + '!');
+  } else {
+    showToast('"' + word + '" added to vocabulary!');
+  }
+
+  // Reset and keep open for more words
+  cwbText = '';
+  document.getElementById('cwbDisplay').textContent = 'tap letters below →';
+  document.getElementById('cwbRo').value = '';
+  document.getElementById('cwbMeaning').value = '';
+
+  renderWordGrid();
+  renderDeckChips();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeCustomWord();
+});
 
 
 (function boot() {
