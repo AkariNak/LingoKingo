@@ -2304,8 +2304,10 @@ function loadPracticeQueue() {
 }
 
 function showNextExercise() {
+  const _dbg = document.getElementById('practiceArea');
+  if (_dbg) _dbg.innerHTML = '<div style="padding:1rem;font-size:.75rem;color:#c8a87a">debug: lang=' + curLang + ' qlen=' + practiceQueue.length + ' kr_sent=' + (typeof KOREAN_SENTENCES !== "undefined" ? KOREAN_SENTENCES.length : "UNDEF") + ' it_sent=' + (typeof ITALIAN_SENTENCES !== "undefined" ? ITALIAN_SENTENCES.length : "UNDEF") + '</div>';
   if (practiceQueue.length === 0) {
-    document.getElementById('practiceArea').innerHTML = '<div class="empty-msg">No exercises available for this language yet.</div>';
+    if (_dbg) _dbg.innerHTML += '<div class="empty-msg">No exercises available for this language yet.</div>';
     return;
   }
   if (practiceIdx >= practiceQueue.length) {
@@ -2530,10 +2532,10 @@ function showFeedback(correct, ex) {
 
 function renderGrammar(container) {
   const notes = (GRAMMAR[curLang]) || [];
-  container.innerHTML = '';
+  container.innerHTML = '<div style="padding:.5rem 2rem;font-size:.72rem;color:#c8a87a">debug: lang=' + curLang + ' notes=' + notes.length + ' GRAMMAR_defined=' + (typeof GRAMMAR !== "undefined") + ' korean_notes=' + (typeof GRAMMAR !== "undefined" && GRAMMAR.korean ? GRAMMAR.korean.length : "UNDEF") + '</div>';
 
   if (!notes || notes.length === 0) {
-    container.innerHTML = '<div class="empty-msg">Grammar notes coming soon.</div>';
+    container.innerHTML += '<div class="empty-msg">Grammar notes coming soon.</div>';
     return;
   }
 
