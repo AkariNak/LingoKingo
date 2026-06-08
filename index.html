@@ -117,7 +117,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .deck-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 .deck-title{font-family:'DM Serif Display',serif;font-size:1.05rem}
 .deck-acts{display:flex;gap:7px}
-.deck-switcher{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.85rem}
+.deck-switcher{display:flex;flex-direction:column;gap:5px;margin-bottom:.85rem}
 .dbtn{font-family:'DM Mono',monospace;font-size:.68rem;padding:5px 11px 5px 8px;border-radius:99px;border:1px solid var(--bd2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;letter-spacing:.03em}
 .dbtn.dactive{border-color:var(--dc);color:var(--dc)}
 .dbtn:hover{border-color:var(--acc);color:var(--acc)}
@@ -2244,24 +2244,30 @@ function renderDeckSwitcher() {
       btn.oncontextmenu = e => showDeckCtxMenu(e, i);
       btn.title = 'tap to select · right-click to rename or delete';
 
-      // reorder buttons
+      // wrap in row with arrows
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:4px';
+      row.appendChild(btn);
+      const arrowWrap = document.createElement('div');
+      arrowWrap.style.cssText = 'display:flex;flex-direction:column;gap:1px;flex-shrink:0;margin-left:auto';
       if (i > 0) {
         const up = document.createElement('button');
         up.textContent = '↑';
-        up.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.7rem;padding:0 2px;color:var(--mu);flex-shrink:0;line-height:1';
+        up.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:var(--mu);line-height:1';
         up.title = 'move up';
         up.onclick = ev => { ev.stopPropagation(); moveDeck(i, i-1); };
-        sw.appendChild(up);
+        arrowWrap.appendChild(up);
       }
       if (i < decks.length - 1) {
         const dn = document.createElement('button');
         dn.textContent = '↓';
-        dn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.7rem;padding:0 2px;color:var(--mu);flex-shrink:0;line-height:1';
+        dn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:.65rem;padding:1px 5px;color:var(--mu);line-height:1';
         dn.title = 'move down';
         dn.onclick = ev => { ev.stopPropagation(); moveDeck(i, i+1); };
-        sw.appendChild(dn);
+        arrowWrap.appendChild(dn);
       }
-      sw.appendChild(btn);
+      row.appendChild(arrowWrap);
+      sw.appendChild(row);
     });
   }
 
