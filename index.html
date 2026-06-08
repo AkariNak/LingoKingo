@@ -235,6 +235,7 @@ input[type="text"]::placeholder{color:var(--su)}
       </button>
     </div>
     <button id="themeBtn" onclick="toggleTheme()">light mode</button>
+    <button onclick="localStorage.clear();location.reload()" style="font-family:'DM Mono',monospace;font-size:.6rem;padding:4px 8px;border-radius:4px;border:1px solid var(--bd2);background:none;color:var(--su);cursor:pointer;letter-spacing:.03em" title="clear session and reload">reset</button>
   </div>
 </div>
 
@@ -2839,8 +2840,14 @@ function showFeedback(correct, ex) {
   applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
 
+  // If coming from a broken session where practice had no exercises,
+  // reset tab to vocab so user isn't stuck
   const _savedLang = localStorage.getItem('lf-lang') || 'korean';
   const savedLang = LANGS[_savedLang] ? _savedLang : 'korean';
+  if (savedLang !== _savedLang) {
+    localStorage.removeItem('lf-lang');
+    localStorage.removeItem('lf-tab');
+  }
   curLang = savedLang;
   const L = LANGS[savedLang];
   document.getElementById('langFlag').textContent  = L.flag;
@@ -2850,7 +2857,9 @@ function showFeedback(correct, ex) {
   showScriptFilters(savedLang === 'japanese');
   if (savedLang === 'japanese' && curGrouping === 'pos') curGrouping = 'script';
 
-  const savedTab = localStorage.getItem('lf-tab') || 'vocab';
+  const _savedTab = localStorage.getItem('lf-tab') || 'vocab';
+  // Japanese has no practice/grammar - default to vocab
+  const savedTab = (savedLang === 'japanese' && (_savedTab === 'practice' || _savedTab === 'grammar')) ? 'vocab' : _savedTab;
   curTab = savedTab;
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === savedTab);
