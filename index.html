@@ -1864,7 +1864,7 @@ function buildSitPills() {
   allBtn.style.setProperty('--sc', '#c8a87a');
   allBtn.onclick = () => {
     activeSituation = activeSituation === 'all' ? null : 'all';
-    openSecs = {}; buildSitPills(); renderWordGrid();
+    buildSitPills(); renderWordGrid();
   };
   row.appendChild(allBtn);
 
@@ -1875,7 +1875,7 @@ function buildSitPills() {
     btn.style.setProperty('--sc', s.color);
     btn.onclick = () => {
       activeSituation = activeSituation === s.key ? null : s.key;
-      openSecs = {}; buildSitPills(); renderWordGrid();
+      buildSitPills(); renderWordGrid();
     };
     row.appendChild(btn);
   });
@@ -2262,12 +2262,14 @@ function renderWordGrid() {
   const cfg = GROUPINGS[curGrouping];
   const words = LANGS[curLang].words;
 
-  let filtered = words.filter(w =>
-    !search ||
-    w.kr.includes(search) ||
-    w.ro.toLowerCase().includes(search) ||
-    w.meaning.toLowerCase().includes(search)
-  );
+  let filtered = words.filter(w => {
+    // situation filter
+    if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
+    if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
+    // search filter
+    if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
+    return true;
+  });
 
   const groups = {};
   filtered.forEach(w => { const k = cfg.key(w); if (!groups[k]) groups[k]=[]; groups[k].push(w); });
@@ -2275,6 +2277,10 @@ function renderWordGrid() {
   const ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
   if (search) ordered.forEach(k => openSecs[k] = true);
 
+  // auto-open all sections when situation is active
+  if (activeSituation) {
+    ordered.forEach(k => openSecs[k] = true);
+  }
   // auto-open first section on first visit per language
   if (!window._firstOpenDone) window._firstOpenDone = {};
   if (Object.keys(openSecs).length === 0 && ordered.length > 0 && !window._firstOpenDone[curLang]) {
