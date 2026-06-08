@@ -18,8 +18,8 @@ html[data-size="sm"]{font-size:14px}
 html[data-size="md"]{font-size:16px}
 html[data-size="lg"]{font-size:19px}
 html[data-size="xl"]{font-size:23px}body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s;overflow-x:hidden;width:100%;position:relative}
-body.dark {--bg:#0e0e12;--sf:#16161c;--sf2:#1e1e28;--sf3:#26263a;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.15);--tx:#f0eee8;--mu:#888894;--su:#55555f;--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28);background:var(--bg);color:var(--tx)}
-body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);--tx:#1c1a16;--mu:#6a6760;--su:#a09d96;--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28);background:var(--bg);color:var(--tx)}
+body.dark {--bg:#0e0e12;--sf:#16161c;--sf2:#1e1e28;--sf3:#26263a;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.15);--tx:#f0eee8;--mu:#a8a8b4;--su:#55555f;--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28);background:var(--bg);color:var(--tx)}
+body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);--tx:#1c1a16;--mu:#5a5754;--su:#a09d96;--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28);background:var(--bg);color:var(--tx)}
 .surface{background:var(--sf)}
 .t-muted{color:var(--mu)}
 .t-subtle{color:var(--su)}
@@ -109,7 +109,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .chip:hover{background:var(--sf2);border-color:var(--bd2)}
 .chip.on{background:var(--acc-bg);border-width:1.5px}
 .chip-kr{font-family:'Noto Sans KR',sans-serif;font-size:.98rem;font-weight:500;line-height:1.2}
-.chip-ro{font-size:.7rem;color:var(--mu)}
+.chip-ro{font-size:.7rem;color:var(--tx);opacity:.75}
 .reg-badge{font-size:.55rem;padding:1px 6px;border-radius:99px;border:1px solid;letter-spacing:.05em;white-space:nowrap;align-self:flex-start}
 
 /* ── DECK PANEL ── */
@@ -128,7 +128,7 @@ input[type="text"]::placeholder{color:var(--su)}
 .dchip-ro{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--mu)}
 .dchip-x{background:none;border:none;cursor:pointer;font-size:12px;padding:0 2px;color:var(--mu);transition:color .12s}
 .dchip-x:hover{color:#c87a7a}
-.empty-deck{font-size:.8rem;color:var(--su)}
+.empty-deck{font-size:.8rem;color:var(--mu)}
 .tab-body{padding:1.5rem 2rem;width:100%}
 .sit-row{display:flex;flex-wrap:wrap;gap:7px;padding:.85rem 1rem .6rem;border-bottom:1px solid var(--bd);width:100%;box-sizing:border-box;align-items:center}
 .sit-pill{font-family:"DM Mono",monospace;font-size:.8rem;padding:6px 14px;border-radius:99px;border:1px solid rgba(128,128,128,.2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;letter-spacing:.02em;white-space:nowrap}
@@ -2131,7 +2131,7 @@ function renderWordGrid() {
     const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
 
     const left = document.createElement('div'); left.className = 'sec-left';
-    const nm = document.createElement('span'); nm.className = 'sec-name'; nm.style.color = color; nm.textContent = key;
+    const nm = document.createElement('span'); nm.className = 'sec-name'; nm.style.color = color; nm.textContent = (cfg.displayName ? cfg.displayName(key) : key);
     const ct = document.createElement('span'); ct.className = 'sec-count'; ct.textContent = wds.length;
     left.appendChild(nm); left.appendChild(ct);
     if (selCount) { const sl = document.createElement('span'); sl.className = 'sec-sel'; sl.textContent = selCount+' in deck'; left.appendChild(sl); }
@@ -2247,9 +2247,8 @@ function renderDeckSwitcher() {
       // wrap in row with arrows
       const row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:center;gap:4px';
-      row.appendChild(btn);
       const arrowWrap = document.createElement('div');
-      arrowWrap.style.cssText = 'display:flex;flex-direction:column;gap:1px;flex-shrink:0;margin-left:auto';
+      arrowWrap.style.cssText = 'display:flex;flex-direction:column;gap:1px;flex-shrink:0;margin-right:6px';
       if (i > 0) {
         const up = document.createElement('button');
         up.textContent = '↑';
@@ -2267,6 +2266,7 @@ function renderDeckSwitcher() {
         arrowWrap.appendChild(dn);
       }
       row.appendChild(arrowWrap);
+      row.appendChild(btn);
       sw.appendChild(row);
     });
   }
