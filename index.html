@@ -1539,6 +1539,223 @@ const JAPANESE_WORDS = [
   {kr:"出会う",ro:"deau",meaning:"to meet / encounter",example:"あなたに出会うの",pos:"verb",freq:8,register:"neutral",script:"kanji",sit:["dating","meeting"]},
 ];
 
+const JAPANESE_SENTENCES = [
+  // ── PARTICLE exercises ──
+  {
+    type: "particle",
+    english: "I am a student.",
+    prompt: "わたし ___ がくせい です。",
+    answer: "は",
+    choices: ["は","が","を","に"],
+    explanation: "は (wa) is the topic marker. わたしは sets 'I' as the topic of the sentence. It is written は but read wa.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "There is a cat.",
+    prompt: "ねこ ___ います。",
+    answer: "が",
+    choices: ["が","は","を","で"],
+    explanation: "が (ga) is the subject marker — it marks who or what exists or does the action. For existence (います / あります), use が.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "I read a book.",
+    prompt: "ほん ___ よみます。",
+    answer: "を",
+    choices: ["を","が","は","に"],
+    explanation: "を (o) is the object marker — it marks what receives the action. ほんをよみます = I read a book.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "I go to school.",
+    prompt: "がっこう ___ いきます。",
+    answer: "に",
+    choices: ["に","で","を","は"],
+    explanation: "に (ni) marks direction or destination. がっこうに = to school. Use に when going TO a place.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "I study at the library.",
+    prompt: "としょかん ___ べんきょうします。",
+    answer: "で",
+    choices: ["で","に","を","が"],
+    explanation: "で (de) marks where an action takes place. としょかんで = at the library. Use で when an action happens AT a place.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "This is my book.",
+    prompt: "これ は わたし ___ ほん です。",
+    answer: "の",
+    choices: ["の","が","は","を"],
+    explanation: "の (no) is the possessive particle. わたしのほん = my book. の connects two nouns showing ownership.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "I like Japanese too.",
+    prompt: "にほんご ___ すきです。",
+    answer: "も",
+    choices: ["も","は","が","を"],
+    explanation: "も (mo) means also / too. It replaces は or が to add yourself or something to what was already mentioned.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "Are you a student?",
+    prompt: "がくせい です ___？",
+    answer: "か",
+    choices: ["か","は","ね","よ"],
+    explanation: "か (ka) at the end of a polite sentence turns it into a question. No question mark needed — か does the job.",
+    level: 1
+  },
+  {
+    type: "particle",
+    english: "I go to Japan by plane.",
+    prompt: "ひこうき ___ にほん に いきます。",
+    answer: "で",
+    choices: ["で","に","を","が"],
+    explanation: "で (de) also marks the means or method of doing something. ひこうきで = by plane.",
+    level: 2
+  },
+  // ── CONJUGATION exercises ──
+  {
+    type: "conjugate",
+    english: "I eat sushi. (polite present)",
+    baseForm: "たべる",
+    prompt: "すし を ___。",
+    answer: "たべます",
+    choices: ["たべます","たべました","たべません","たべた"],
+    explanation: "Polite present / future: replace る with ます for る-verbs. たべる → たべます.",
+    level: 1
+  },
+  {
+    type: "conjugate",
+    english: "I ate sushi. (polite past)",
+    baseForm: "たべる",
+    prompt: "きのう すし を ___。",
+    answer: "たべました",
+    choices: ["たべます","たべました","たべません","たべた"],
+    explanation: "Polite past: replace ます with ました. たべます → たべました.",
+    level: 1
+  },
+  {
+    type: "conjugate",
+    english: "I don't eat sushi. (polite negative)",
+    baseForm: "たべる",
+    prompt: "すし を ___。",
+    answer: "たべません",
+    choices: ["たべます","たべました","たべません","たべない"],
+    explanation: "Polite negative: replace ます with ません. たべます → たべません.",
+    level: 1
+  },
+  {
+    type: "conjugate",
+    english: "I go to school. (polite present)",
+    baseForm: "いく",
+    prompt: "がっこう に ___。",
+    answer: "いきます",
+    choices: ["いきます","いきました","いきません","いく"],
+    explanation: "く-verbs: remove く, add きます. いく → いきます. This is an irregular pattern — く → き before ます.",
+    level: 1
+  },
+  {
+    type: "conjugate",
+    english: "I understand. (polite present)",
+    baseForm: "わかる",
+    prompt: "にほんご が ___。",
+    answer: "わかります",
+    choices: ["わかります","わかりました","わかりません","わかる"],
+    explanation: "る-verbs ending in a consonant + る: remove る, add ります. わかる → わかります.",
+    level: 2
+  },
+  {
+    type: "conjugate",
+    english: "It is delicious. (negative)",
+    baseForm: "おいしい",
+    prompt: "これ は ___。",
+    answer: "おいしくないです",
+    choices: ["おいしくないです","おいしいじゃない","おいしくありません","おいしいません"],
+    explanation: "い-adjective negative: remove い, add くない. おいしい → おいしくない. Add です for politeness.",
+    level: 2
+  },
+  // ── FILL exercises ──
+  {
+    type: "fill",
+    english: "Where is the bathroom?",
+    prompt: "トイレ は ___ です か？",
+    answer: "どこ",
+    choices: ["どこ","なに","だれ","いつ"],
+    explanation: "どこ means where. トイレはどこですか is one of the most useful phrases in Japan.",
+    level: 1
+  },
+  {
+    type: "fill",
+    english: "What is this?",
+    prompt: "これ は ___ です か？",
+    answer: "なん",
+    choices: ["なん","どこ","だれ","いくら"],
+    explanation: "なん (or なに) means what. Before です, なん is more natural than なに.",
+    level: 1
+  },
+  {
+    type: "fill",
+    english: "How much is it?",
+    prompt: "___ です か？",
+    answer: "いくら",
+    choices: ["いくら","いくつ","なん","どこ"],
+    explanation: "いくら means how much (price). いくつ means how many. For prices, always use いくら.",
+    level: 1
+  },
+  {
+    type: "fill",
+    english: "I don't understand.",
+    prompt: "わかり___。",
+    answer: "ません",
+    choices: ["ません","ます","ました","ない"],
+    explanation: "わかりません = I don't understand. This is the polite negative of わかります. One of the most useful phrases to know.",
+    level: 1
+  },
+  {
+    type: "fill",
+    english: "Please give me water.",
+    prompt: "みず を ___。",
+    answer: "ください",
+    choices: ["ください","おねがい","どうぞ","ちょうだい"],
+    explanation: "ください after を = please give me. みずをください is the standard polite way to order water.",
+    level: 1
+  },
+  // ── BUILD exercises ──
+  {
+    type: "build",
+    english: "I study Japanese every day.",
+    blocks: ["わたし は","まいにち","にほんご を","べんきょうします","がっこう で"],
+    answer: ["わたし は","まいにち","にほんご を","べんきょうします"],
+    explanation: "Japanese word order: Topic (わたしは) → Time (まいにち) → Object (にほんごを) → Verb (べんきょうします). The verb always comes last.",
+    level: 1
+  },
+  {
+    type: "build",
+    english: "I go to school by bus.",
+    blocks: ["わたし は","バス で","がっこう に","いきます","でんしゃ で"],
+    answer: ["わたし は","バス で","がっこう に","いきます"],
+    explanation: "Topic → Means (バスで = by bus) → Destination (がっこうに = to school) → Verb. で marks the means, に marks the destination.",
+    level: 2
+  },
+  {
+    type: "build",
+    english: "Yesterday I ate sushi at a restaurant.",
+    blocks: ["きのう","レストラン で","すし を","たべました","に"],
+    answer: ["きのう","レストラン で","すし を","たべました"],
+    explanation: "Time (きのう = yesterday) → Place (レストランで = at a restaurant) → Object (すしを) → Verb (たべました). Time and place come before the object and verb.",
+    level: 2
+  }
+];
+
 // ── GRAMMAR DATA ──────────────────────────────────────────────────────────────
 
 const GRAMMAR = {
@@ -1644,6 +1861,58 @@ const GRAMMAR = {
       example: 'il caffè → the coffee\nlo zaino → the backpack\nl\'amore → love\nla musica → the music\ngli amici → the friends',
       level: 1
     },
+  ],
+
+  japanese: [
+    {
+      title: "Hiragana & Katakana: the two alphabets",
+      short: "Every sound has a symbol — learn hiragana first",
+      body: "Japanese has three writing systems. Start with hiragana and katakana, each with 46 characters for the same sounds.\n\nHiragana (ひらがな) rounded shapes:\n  native words, verb endings, particles\n\nKatakana (カタカナ) angular shapes:\n  foreign loanwords: コーヒー = coffee, テレビ = TV\n  foreign names and emphasis\n\nThey represent identical sounds. し = シ = shi. The difference is only when to use them.\n\nLearn hiragana first, about 2 weeks at 5 characters per day. Katakana follows quickly since the sounds are already known.",
+      example: "あ い う え お → a i u e o\nア イ ウ エ オ → a i u e o\n\nすし = sushi (hiragana, native word)\nコーヒー = koohii (katakana, from coffee)\nテレビ = terebi (katakana, from TV)",
+      level: 1
+    },
+    {
+      title: "X は Y です — the core sentence",
+      short: "Topic + is = every basic sentence",
+      body: "The most essential Japanese pattern:\n\n  [topic] は [description] です\n\nは (wa) — topic marker, written は, pronounced wa\nです (desu) — polite form of to be\n\nQuestion: add か at the end\nNegative: replace です with じゃないです\n\nWord order: Japanese is SOV. Subject then Object then Verb. The verb always comes last. This is the biggest structural difference from English.",
+      example: "わたし は がくせい です。\n→ I am a student.\n\nこれ は なん です か？\n→ What is this?\n\nわたし は がくせい じゃないです。\n→ I am not a student.",
+      level: 1
+    },
+    {
+      title: "Particles: は が を に で の も か",
+      short: "Small words that show what each word does",
+      body: "Particles attach after nouns to show their role.\n\nは (wa)  topic: as for...\nが (ga)  subject: who does the action\nを (o)   object: what receives the action\nに (ni)  direction or destination: to, at\nで (de)  location of action or means: at, by\nの (no)  possessive: X of Y\nも (mo)  also or too\nか (ka)  question marker\n\nは vs が: は marks your topic. が marks who specifically does something. They often overlap but が is more precise.",
+      example: "ねこ が います。→ There is a cat.\nほん を よみます。→ I read a book.\nがっこう に いきます。→ I go to school.\nバス で いきます。→ I go by bus.\nわたし の ほん。→ My book.\nわたし も すきです。→ I like it too.",
+      level: 1
+    },
+    {
+      title: "Verb endings: ます form",
+      short: "Polite present, past, and negative",
+      body: "Japanese verbs always go at the END of the sentence.\n\nPolite form (〜ます) for strangers and formal situations:\n  Present or future:  たべます (I eat or will eat)\n  Past:              たべました (I ate)\n  Negative:          たべません (I do not eat)\n  Negative past:     たべませんでした (I did not eat)\n\nCasual plain form for friends and family:\n  Present:   たべる\n  Past:      たべた\n  Negative:  たべない\n\nFor adjectives with です:\n  おいしい です — it is delicious\n  おいしかった です — it was delicious\n  おいしくない です — it is not delicious",
+      example: "まいにち にほんご を べんきょうします。\n→ I study Japanese every day.\n\nきのう すし を たべました。\n→ I ate sushi yesterday.\n\nあした いきません。\n→ I am not going tomorrow.",
+      level: 2
+    },
+    {
+      title: "Asking questions",
+      short: "Add か, or use question words",
+      body: "Add か to the end of any polite sentence to make it a question.\n\nStatement to question:\n  がくせい です → がくせい です か？\n\nEssential question words:\n  なに or なん — what\n  どこ — where\n  だれ — who\n  いつ — when\n  どうして — why\n  どう — how\n  いくら — how much\n  いくつ — how many\n\nUnlike English, question words go where the unknown part is in the sentence, not at the start.",
+      example: "これ は なん です か？\n→ What is this?\n\nトイレ は どこ です か？\n→ Where is the bathroom?\n\nいくら です か？\n→ How much is it?\n\nいつ いきます か？\n→ When are you going?",
+      level: 1
+    },
+    {
+      title: "Adjectives: い-type and な-type",
+      short: "Two groups that behave differently",
+      body: "い-adjectives end in い and conjugate directly:\n  おいしい → おいしくない (not delicious)\n  おいしかった → おいしくなかった (was not)\n  Special: いい (good) → よくない (not good)\n\nな-adjectives need な before a noun:\n  すきな たべもの — favorite food\n  すき じゃない — do not like\n\nCommon い-adjectives:\n  おおきい big, ちいさい small, たかい expensive\n  やすい cheap, いい good, むずかしい hard\n  やさしい kind, おいしい delicious, かわいい cute\n\nCommon な-adjectives:\n  すき like, きらい dislike, げんき healthy, ひま free",
+      example: "おおきい いぬ です。→ It is a big dog.\nにほんご が すき です。→ I like Japanese.\nこれ は おいしくない です。→ This is not delicious.",
+      level: 2
+    },
+    {
+      title: "Negation",
+      short: "How to say not in Japanese",
+      body: "Verbs (polite):\n  〜ます → 〜ません\n  〜ました → 〜ませんでした\n\nい-adjectives: remove い, add くない\n  おいしい → おいしくない\n  いい → よくない (irregular, memorize this)\n\nな-adjectives and nouns:\n  〜です → 〜じゃないです\n  がくせい です → がくせい じゃないです\n\nKey negatives to memorize:\n  わかりません — I do not understand\n  しりません — I do not know\n  ありません — there is not or I do not have\n  いません — not here (for people or animals)\n  できません — I cannot do it",
+      example: "にほんご が わかりません。\n→ I do not understand Japanese.\n\nおかね が ありません。\n→ I do not have money.\n\nこれ は おいしくない です。\n→ This is not delicious.",
+      level: 2
+    }
   ]
 };
 
@@ -1827,8 +2096,8 @@ const LANGS = {
     label: 'Japanese', script: '日本語', flag: '🇯🇵',
     placeholder: 'search hiragana, romaji, or meaning…',
     words: typeof JAPANESE_WORDS !== 'undefined' ? JAPANESE_WORDS : [],
-    sentences: () => [],
-    grammar:   () => [],
+    sentences: () => (typeof JAPANESE_SENTENCES !== 'undefined' ? JAPANESE_SENTENCES : []),
+    grammar:   () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.japanese : []),
   }
 };
 
@@ -1849,14 +2118,7 @@ function applyTheme(t) {
 function switchLang(lang) {
   curLang = lang;
   localStorage.setItem('lf-lang', lang);
-  // Japanese has no practice/grammar — go to vocab
-  if (lang === 'japanese' && (curTab === 'practice' || curTab === 'grammar')) {
-    curTab = 'vocab';
-    localStorage.setItem('lf-tab', 'vocab');
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.tab === 'vocab');
-    });
-  }
+  // Japanese now has practice and grammar
   const L = LANGS[lang];
   // update header
   const flagEl = document.getElementById('langFlag');
