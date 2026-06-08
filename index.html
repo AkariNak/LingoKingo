@@ -1749,6 +1749,11 @@ const PREMADE_DECKS = {
     {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
     {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
   ],
+  italian: [
+    {name:'Italian Essentials', color:'#c8a87a', filter: w => w.freq >= 9},
+    {name:'Italian Verbs', color:'#7a8cc8', filter: w => w.pos === 'verb'},
+    {name:'Italian for Travel', color:'#7ac8a0', filter: w => w.sit && (w.sit.includes('airport') || w.sit.includes('getting_around') || w.sit.includes('restaurant') || w.sit.includes('emergency'))},
+  ],
 };
 
 // ── APP CORE ──────────────────────────────────────────────────────────────────
@@ -2520,6 +2525,24 @@ function renderDeckSwitcher() {
   add.textContent = '+ new deck';
   add.onclick = () => { const n = prompt('Name your new deck:',''); if (n?.trim()) { addDeck(n.trim()); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); }};
   sw.appendChild(add);
+
+  // premade decks button
+  const premadeKeys = {
+    korean: ['korean'],
+    italian: ['italian'],
+    japanese: ['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten']
+  };
+  if (premadeKeys[curLang]) {
+    const pb = document.createElement('button');
+    pb.className = 'dbtn';
+    pb.style.cssText = 'color:var(--acc);border-color:var(--acc-bd)';
+    pb.textContent = curLang === 'japanese' ? '★ alphabet + accent decks' : '★ starter decks';
+    pb.onclick = () => {
+      if (curLang === 'japanese') addPremadeDeckJapaneseAll();
+      else premadeKeys[curLang].forEach(k => addPremadeDeck(k));
+    };
+    sw.appendChild(pb);
+  }
 
   // update badge
   const badge = document.getElementById('deckBadge');
