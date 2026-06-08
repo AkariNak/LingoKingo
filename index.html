@@ -22,6 +22,7 @@ html[data-size="sm"]{font-size:14px}
 html[data-size="md"]{font-size:16px}
 html[data-size="lg"]{font-size:19px}
 html[data-size="xl"]{font-size:23px}
+html[data-size="xxl"]{font-size:28px}
 body{font-family:'DM Mono',monospace;min-height:100vh;transition:background .2s,color .2s}
 body.dark {--bg:#0e0e12;--sf:#16161c;--sf2:#1e1e28;--sf3:#26263a;--bd:rgba(255,255,255,.08);--bd2:rgba(255,255,255,.15);--tx:#f0eee8;--mu:#888894;--su:#55555f;--acc:#c8a87a;--acc-bg:rgba(200,168,122,.1);--acc-bd:rgba(200,168,122,.28);background:var(--bg);color:var(--tx)}
 body.light{--bg:#f4f2ed;--sf:#fff;--sf2:#ebe8e2;--sf3:#dedad2;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);--tx:#1c1a16;--mu:#6a6760;--su:#a09d96;--acc:#8c5e20;--acc-bg:rgba(140,94,32,.08);--acc-bd:rgba(140,94,32,.28);background:var(--bg);color:var(--tx)}
@@ -1763,8 +1764,8 @@ let activeScripts = new Set(); // empty = show all
 
 const _savedSize = localStorage.getItem('lf-fontsize'); let fontSize = ['sm','md','lg','xl'].includes(_savedSize) ? _savedSize : 'lg';
 
-const FONT_SIZES = ['sm','md','lg','xl'];
-const FONT_LABELS = {sm:'small',md:'medium',lg:'large',xl:'x-large'};
+const FONT_SIZES = ['sm','md','lg','xl','xxl'];
+const FONT_LABELS = {sm:'small',md:'medium',lg:'large',xl:'x-large',xxl:'xx-large'};
 
 const PREMADE_DECKS = {
   korean: [
@@ -2423,6 +2424,15 @@ function renderWordGrid() {
     // situation filter
     if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
     if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
+    // script filter (hiragana/katakana/kanji buttons)
+    if (activeScripts.size > 0) {
+      const scriptPoses = new Set(['hiragana','katakana','kanji','hiragana_d','katakana_d']);
+      if (scriptPoses.has(w.pos)) {
+        if (!activeScripts.has(w.pos)) return false;
+      } else {
+        return false;
+      }
+    }
     // search filter
     if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
     return true;
