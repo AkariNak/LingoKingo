@@ -1612,6 +1612,13 @@ const LANGS = {
     words: typeof ITALIAN_WORDS !== 'undefined' ? ITALIAN_WORDS : [],
     sentences: () => (typeof ITALIAN_SENTENCES !== 'undefined' ? ITALIAN_SENTENCES : []),
     grammar:   () => (typeof GRAMMAR !== 'undefined' ? GRAMMAR.italian : []),
+  },
+  japanese: {
+    label: 'Japanese', script: '日本語', flag: '🇯🇵',
+    placeholder: 'search hiragana, romaji, or meaning…',
+    words: typeof JAPANESE_WORDS !== 'undefined' ? JAPANESE_WORDS : [],
+    sentences: () => [],
+    grammar:   () => [],
   }
 };
 
@@ -2831,7 +2838,8 @@ function showFeedback(correct, ex) {
   applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent = theme === 'dark' ? 'light mode' : 'dark mode';
 
-  const savedLang = localStorage.getItem('lf-lang') || 'korean';
+  const _savedLang = localStorage.getItem('lf-lang') || 'korean';
+  const savedLang = LANGS[_savedLang] ? _savedLang : 'korean';
   curLang = savedLang;
   const L = LANGS[savedLang];
   document.getElementById('langFlag').textContent  = L.flag;
