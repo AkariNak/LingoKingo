@@ -2104,17 +2104,21 @@ function saveDeckState() {
 
 // ── RENDER VOCAB TAB ──────────────────────────────────────────────────────────
 function renderVocab(container) {
-  const words = LANGS[curLang].words;
+  const seenKey = 'lf-seen-' + curLang;
+  const isFirstVisit = !localStorage.getItem(seenKey);
 
   container.innerHTML = `
     <div class="ctrl">
-      <div class="ctrl-row">
+      <div class="sit-row" id="sitRow"></div>
+      <div class="ctrl-row filters-row" id="filtersRow" style="display:none">
         <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
         <div id="groupBar"></div>
-      </div>
-      <div class="ctrl-row ctrl-row2">
         <button class="ubtn" onclick="vocabExpandAll()">expand all</button>
         <button class="ubtn" onclick="vocabCollapseAll()">collapse all</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:4px">
+        <button class="ubtn filters-toggle" id="filtersToggle" onclick="toggleFilters()">more filters ▾</button>
+        <input id="searchInput2" type="text" placeholder="${LANGS[curLang].placeholder}" style="flex:1;min-width:0;width:0" />
       </div>
     </div>
     <div id="wordSections"></div>
@@ -2131,7 +2135,12 @@ function renderVocab(container) {
     </div>
   `;
 
-  document.getElementById('searchInput').oninput = renderWordGrid;
+  document.getElementById('searchInput2').oninput = renderWordGrid;
+  if (isFirstVisit) {
+    const banner = buildOnboardBanner();
+    container.insertBefore(banner, container.firstChild);
+  }
+  buildSitPills();
   buildGroupBtns();
   renderWordGrid();
   renderDeckSwitcher();
@@ -2155,7 +2164,8 @@ function renderWordGrid() {
   const container = document.getElementById('wordSections');
   if (!container) return;
 
-  const search = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  const rawSearch = document.getElementById('searchInput2') || document.getElementById('searchInput');
+  const search = (rawSearch?.value || '').toLowerCase().trim();
   const cfg = GROUPINGS[curGrouping];
   const words = LANGS[curLang].words;
 
@@ -2171,6 +2181,13 @@ function renderWordGrid() {
   const allKeys = Object.keys(groups);
   const ordered = cfg.order(allKeys).filter(k => groups[k]?.length > 0);
   if (search) ordered.forEach(k => openSecs[k] = true);
+
+  // auto-open first section on first visit per language
+  if (!window._firstOpenDone) window._firstOpenDone = {};
+  if (Object.keys(openSecs).length === 0 && ordered.length > 0 && !window._firstOpenDone[curLang]) {
+    openSecs[ordered[0]] = true;
+    window._firstOpenDone[curLang] = true;
+  }
 
   container.innerHTML = '';
   if (ordered.length === 0) { container.innerHTML = '<div class="empty-msg">no words match</div>'; return; }
