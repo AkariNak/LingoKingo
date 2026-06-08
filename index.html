@@ -242,14 +242,15 @@ input[type="text"]::placeholder{color:var(--su)}
   <button class="tab-btn" data-tab="vocab"    onclick="switchTab('vocab')">vocabulary</button>
   <button class="tab-btn" data-tab="practice" onclick="switchTab('practice')">practice</button>
   <button class="tab-btn" data-tab="grammar"  onclick="switchTab('grammar')">grammar</button>
-  <div id="scriptFilters" style="display:none;align-items:center;gap:4px;padding:0 6px">
-    <button class="script-btn" data-script="hiragana"   onclick="toggleScript('hiragana')">hiragana</button>
-    <button class="script-btn" data-script="katakana"   onclick="toggleScript('katakana')">katakana</button>
-    <button class="script-btn" data-script="kanji"      onclick="toggleScript('kanji')">kanji</button>
-    <button class="script-btn" data-script="hiragana_d" onclick="toggleScript('hiragana_d')">hiragana accents</button>
-    <button class="script-btn" data-script="katakana_d" onclick="toggleScript('katakana_d')">katakana accents</button>
-  </div>
   <button id="fontBtn" onclick="cycleFontSize()" aria-label="change font size" style="margin-left:auto">text: large</button>
+</div>
+
+<div id="scriptFilters" style="display:none;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 1rem;border-bottom:1px solid var(--bd);background:var(--bg)">
+  <button class="script-btn" data-script="hiragana"   onclick="toggleScript('hiragana')">hiragana</button>
+  <button class="script-btn" data-script="katakana"   onclick="toggleScript('katakana')">katakana</button>
+  <button class="script-btn" data-script="kanji"      onclick="toggleScript('kanji')">kanji</button>
+  <button class="script-btn" data-script="hiragana_d" onclick="toggleScript('hiragana_d')">hiragana accents</button>
+  <button class="script-btn" data-script="katakana_d" onclick="toggleScript('katakana_d')">katakana accents</button>
 </div>
 
 <div id="mainContent"></div>
