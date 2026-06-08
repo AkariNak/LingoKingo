@@ -232,6 +232,8 @@ input[type="text"]::placeholder{color:var(--su)}
 .obtn{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:var(--acc);border:none;color:var(--bg);cursor:pointer;font-weight:500}
 .obtn:hover{opacity:.85}
 .obtn-ghost{font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 14px;border-radius:6px;background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer}
+.obtn-accent{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:none;border:1px solid var(--acc);color:var(--acc);cursor:pointer;font-weight:500}
+.obtn-accent:hover{background:var(--acc);color:var(--bg)}
 .obtn-ghost:hover{color:var(--tx);border-color:var(--tx)}
 @media(max-width:600px){
   #hdr{padding:.85rem .85rem .75rem}
@@ -2120,6 +2122,21 @@ function renderDeckSwitcher() {
   add.onclick = () => { const n = prompt('Name your new deck:',''); if (n?.trim()) { addDeck(n.trim()); renderDeckSwitcher(); renderDeckChips(); renderWordGrid(); }};
   sw.appendChild(add);
 
+  // premade deck button
+  const premadeKeys = {korean:['korean'], japanese:['japanese_hiragana','japanese_katakana','japanese_kanji']};
+  if (premadeKeys[curLang]) {
+    const pb = document.createElement('button');
+    pb.className = 'dbtn';
+    pb.style.cssText = 'color:var(--acc);border-color:var(--acc-bd)';
+    pb.textContent = curLang === 'japanese' ? '★ alphabet decks' : '★ starter decks';
+    pb.title = curLang === 'japanese' ? 'Add hiragana, katakana and kanji decks' : 'Add Korean Essentials, K-pop & Survival decks';
+    pb.onclick = () => {
+      if (curLang === 'japanese') addPremadeDeckJapaneseAll();
+      else premadeKeys[curLang].forEach(k => addPremadeDeck(k));
+    };
+    sw.appendChild(pb);
+  }
+
   // update badge
   const badge = document.getElementById('deckBadge');
   if (badge) badge.textContent = activeDeckIdx >= 0 ? Object.keys(decks[activeDeckIdx]?.words||{}).length : '0';
@@ -2868,9 +2885,9 @@ function cycleFontSize() {
 // ── ONBOARDING ──────────────────────────────────────────────
 function buildOnboardBanner() {
   const msgs = {
-    korean: {title:'New to Korean?', desc:'Start with essential words — greetings, pronouns, and core verbs. The most common filter shows the most important words first.', btn:'show essentials first', fn:'startHereKorean'},
-    italian: {title:'New to Italian?', desc:'Begin with greetings and the 8 key irregular verbs — essere, avere, fare, andare, venire, volere, potere, dovere. Everything builds on them.', btn:'show essentials first', fn:'startHereItalian'},
-    japanese: {title:'New to Japanese?', desc:'Learn hiragana first (46 sounds, ~2 weeks). Then katakana. Vocabulary and kanji come after you can read both. Use the script filter buttons above.', btn:'start with hiragana', fn:'startHereJapanese'},
+    korean: {title:'New to Korean?', desc:'Start with essential words — greetings, pronouns, and core verbs. The most common filter shows the most important words first. Or add premade decks instantly.', btn:'show essentials first', fn:'startHereKorean', decks:true, deckKey:'korean'},
+    italian: {title:'New to Italian?', desc:'Begin with greetings and the 8 key irregular verbs — essere, avere, fare, andare, venire, volere, potere, dovere. Everything builds on them.', btn:'show essentials first', fn:'startHereItalian', decks:false},
+    japanese: {title:'New to Japanese?', desc:'Learn hiragana first (46 sounds, ~2 weeks). Then katakana. Vocabulary and kanji come after you can read both. Add all three alphabet decks instantly.', btn:'start with hiragana', fn:'startHereJapanese', decks:true, deckKey:'japanese_all'},
   };
   const m = msgs[curLang] || msgs.korean;
   const div = document.createElement('div');
@@ -2885,6 +2902,95 @@ function buildOnboardBanner() {
       '<button class="obtn-ghost" onclick="dismissOnboard()">I already know this</button>' +
     '</div>';
   return div;
+}
+
+// ── PREMADE DECKS ──────────────────────────────────────────
+const PREMADE_DECKS = {
+  korean: [
+    {
+      name:'Korean Essentials',
+      color:'#c8a87a',
+      filter: w => w.freq >= 9 && w.pos !== 'particle'
+    },
+    {
+      name:'K-pop & Texting',
+      color:'#c87aa8',
+      filter: w => w.register === 'casual' || (w.sit && w.sit.includes('dating'))
+    },
+    {
+      name:'Survival Korean',
+      color:'#7ac8a0',
+      filter: w => w.sit && (w.sit.includes('airport') || w.sit.includes('getting_around') || w.sit.includes('emergency'))
+    },
+  ],
+  japanese_hiragana: [
+    {
+      name:'Hiragana (all 46)',
+      color:'#7ac8a0',
+      filter: w => w.script === 'hiragana' && w.pos === 'hiragana'
+    },
+  ],
+  japanese_katakana: [
+    {
+      name:'Katakana (all 46)',
+      color:'#7a8cc8',
+      filter: w => w.script === 'katakana' && w.pos === 'katakana'
+    },
+  ],
+  japanese_kanji: [
+    {
+      name:'Essential Kanji',
+      color:'#c87aa8',
+      filter: w => w.script === 'kanji' && w.pos === 'kanji'
+    },
+  ],
+};
+
+function addPremadeDeck(key) {
+  const templates = PREMADE_DECKS[key];
+  if (!templates) return;
+  const words = LANGS[curLang].words;
+  let added = 0;
+
+  templates.forEach(template => {
+    // Check if deck with this name already exists
+    const existing = decks.find(d => d.name === template.name);
+    if (existing) {
+      // Just add missing words to it
+      words.filter(template.filter).forEach(w => { existing.words[w.kr] = true; });
+      return;
+    }
+    const deck = {name: template.name, color: template.color, words: {}};
+    words.filter(template.filter).forEach(w => { deck.words[w.kr] = true; });
+    decks.push(deck);
+    activeDeckIdx = decks.length - 1;
+    added++;
+  });
+
+  saveDeckState();
+  renderDeckSwitcher();
+  renderDeckChips();
+  renderWordGrid();
+
+  // Show confirmation
+  const msg = added > 0
+    ? templates.map(t => '"' + t.name + '"').join(' and ') + ' added to your decks!'
+    : 'Deck already exists — words updated.';
+  showToast(msg);
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--sf);border:1px solid var(--bd2);border-radius:8px;padding:10px 20px;font-family:DM Mono,monospace;font-size:.78rem;color:var(--tx);z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:opacity .3s;white-space:nowrap';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2800);
 }
 
 function dismissOnboard() {
@@ -2921,6 +3027,10 @@ function startHereJapanese() {
   openSecs = {'hiragana':true};
   buildGroupBtns();
   renderWordGrid();
+}
+
+function addPremadeDeckJapaneseAll() {
+  ['japanese_hiragana','japanese_katakana','japanese_kanji'].forEach(key => addPremadeDeck(key));
 }
 
 (function boot() {
