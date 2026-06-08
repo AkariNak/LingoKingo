@@ -212,6 +212,52 @@ input[type="text"]::placeholder{color:var(--su)}
   input[type="text"]{width:100%}
   #tabBar{top:76px}
 }
+
+/* ── SCRIPT FILTER BUTTONS ── */
+.script-btn{font-family:'DM Mono',monospace;font-size:.72rem;padding:4px 10px;border-radius:99px;border:1px solid var(--bd2);background:none;color:var(--mu);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.script-btn:hover{border-color:var(--acc);color:var(--acc)}
+.script-btn.script-on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:500}
+
+/* ── SITUATION PILLS ── */
+.sit-row{display:flex;flex-wrap:wrap;gap:7px;padding:.85rem 1rem .6rem;border-bottom:1px solid var(--bd);width:100%;box-sizing:border-box;align-items:center}
+.sit-pill{font-family:'DM Mono',monospace;font-size:.72rem;padding:5px 12px;border-radius:99px;border:1px solid var(--bd2);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sit-pill:hover{border-color:var(--sc,var(--acc));color:var(--sc,var(--acc))}
+.sit-pill.sit-active{background:var(--sc,var(--acc));border-color:var(--sc,var(--acc));color:#fff;font-weight:500}
+.sit-add-all{margin-left:auto;font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 12px;border-radius:99px;border:1px solid var(--acc);background:none;color:var(--acc);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.sit-add-all:hover{background:var(--acc);color:var(--bg)}
+.filters-toggle{white-space:nowrap}
+.filters-row{display:flex;flex-wrap:wrap;gap:7px;padding-top:6px}
+
+/* ── ONBOARDING ── */
+.onboard-banner{background:linear-gradient(135deg,var(--sf2),var(--sf));border-bottom:1px solid var(--bd);padding:1.25rem 2rem}
+.onboard-tag{display:inline-block;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-family:'DM Mono',monospace;margin-bottom:.4rem}
+.onboard-title{display:block;font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--tx);margin-bottom:.4rem}
+.onboard-desc{display:block;font-size:.78rem;color:var(--mu);line-height:1.65;margin-bottom:.85rem;max-width:560px}
+.onboard-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.obtn{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:var(--acc);border:none;color:var(--bg);cursor:pointer;font-weight:500}
+.obtn:hover{opacity:.85}
+.obtn-ghost{font-family:'DM Mono',monospace;font-size:.72rem;padding:8px 14px;border-radius:6px;background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer}
+.obtn-ghost:hover{color:var(--tx);border-color:var(--tx)}
+.obtn-accent{font-family:'DM Mono',monospace;font-size:.75rem;padding:8px 16px;border-radius:6px;background:none;border:1px solid var(--acc);color:var(--acc);cursor:pointer;font-weight:500}
+.obtn-accent:hover{background:var(--acc);color:var(--bg)}
+
+/* ── CHIP DOTS (multi-deck) ── */
+.chip-dots{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ── BOTTOM SHEET ── */
+#bottomSheet{background:var(--sf)}
+.bs-deck-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:background .12s;border:none;width:100%;text-align:left;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--tx);background:none}
+.bs-deck-row:hover,.bs-deck-row:active{background:var(--sf2)}
+.bs-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.bs-check{margin-left:auto;color:var(--acc);font-size:1rem}
+
+/* ── TAB BODY ── */
+.tab-body{padding:1.5rem 2rem;width:100%}
+@media(max-width:600px){
+  .tab-body{padding:1rem .75rem}
+  .sit-row{padding:.6rem .75rem .5rem}
+}
 </style>
 </head>
 <body class="dark">
@@ -1455,7 +1501,7 @@ function renderGrammar(container) {
   container.innerHTML = '';
 
   if (!notes || notes.length === 0) {
-    container.innerHTML = '<div class="empty-msg">Grammar notes coming soon.</div>';
+    container.innerHTML = '<div class="empty-msg">' + (curLang === 'japanese' ? 'Grammar notes for Japanese coming soon. Switch to Korean or Italian for grammar notes.' : 'Grammar notes coming soon.') + '</div>';
     return;
   }
 
@@ -1644,6 +1690,14 @@ function applyTheme(t) {
 function switchLang(lang) {
   curLang = lang;
   localStorage.setItem('lf-lang', lang);
+  // Japanese has no practice/grammar — go to vocab
+  if (lang === 'japanese' && (curTab === 'practice' || curTab === 'grammar')) {
+    curTab = 'vocab';
+    localStorage.setItem('lf-tab', 'vocab');
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === 'vocab');
+    });
+  }
   const L = LANGS[lang];
   // update header
   const flagEl = document.getElementById('langFlag');
