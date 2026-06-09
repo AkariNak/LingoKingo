@@ -2203,6 +2203,7 @@ function switchLang(lang) {
   // reset script filters when switching languages
   activeScripts.clear();
   updateScriptBtns();
+  showScriptFilters(lang === 'japanese');
   // Japanese now has practice and grammar
   const L = LANGS[lang];
   // update header
@@ -2743,6 +2744,7 @@ function renderVocab(container) {
     const banner = buildOnboardBanner();
     container.insertBefore(banner, container.firstChild);
   }
+  showScriptFilters(curLang === 'japanese');
   buildSitPills();
   buildGroupBtns();
   renderWordGrid();
