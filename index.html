@@ -388,6 +388,7 @@ input[type="text"]::placeholder{color:var(--su)}
 </div>
 
 <div id="scriptFilters" style="display:none;flex-wrap:wrap;align-items:center;gap:6px;padding:6px 1rem;border-bottom:1px solid var(--bd);background:var(--bg)">
+  <span style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);flex-shrink:0">alphabet:</span>
   <button class="script-btn" data-script="hiragana"   onclick="toggleScript('hiragana')">hiragana</button>
   <button class="script-btn" data-script="katakana"   onclick="toggleScript('katakana')">katakana</button>
   <button class="script-btn" data-script="kanji"      onclick="toggleScript('kanji')">kanji</button>
@@ -2199,6 +2200,9 @@ function applyTheme(t) {
 function switchLang(lang) {
   curLang = lang;
   localStorage.setItem('lf-lang', lang);
+  // reset script filters when switching languages
+  activeScripts.clear();
+  updateScriptBtns();
   // Japanese now has practice and grammar
   const L = LANGS[lang];
   // update header
@@ -2774,13 +2778,13 @@ function renderWordGrid() {
     if (activeSituation === 'all' && !(w.sit && w.sit.length > 0)) return false;
     if (activeSituation && activeSituation !== 'all' && !(w.sit && w.sit.includes(activeSituation))) return false;
     // script filter (hiragana/katakana/kanji buttons)
+    const _alphaPoses = new Set(['hiragana','katakana','kanji','hiragana_d','katakana_d']);
     if (activeScripts.size > 0) {
-      const scriptPoses = new Set(['hiragana','katakana','kanji','hiragana_d','katakana_d']);
-      if (scriptPoses.has(w.pos)) {
-        if (!activeScripts.has(w.pos)) return false;
-      } else {
-        return false;
-      }
+      // alphabet button active: show only those alphabet chars
+      if (!activeScripts.has(w.pos)) return false;
+    } else if (curLang === 'japanese') {
+      // no script filter active: hide alphabet — show vocab only
+      if (_alphaPoses.has(w.pos)) return false;
     }
     // search filter
     if (search && !w.kr.includes(search) && !w.ro.toLowerCase().includes(search) && !w.meaning.toLowerCase().includes(search)) return false;
@@ -3625,7 +3629,7 @@ document.addEventListener('keydown', e => {
   document.querySelectorAll('.lang-option').forEach(el =>
     el.classList.toggle('active', el.dataset.lang === savedLang));
   showScriptFilters(savedLang === 'japanese');
-  if (savedLang === 'japanese' && curGrouping === 'pos') curGrouping = 'script';
+  // keep pos grouping for Japanese (vocab view by default)
 
   const _savedTab = localStorage.getItem('lf-tab') || 'vocab';
   // Japanese has no practice/grammar - default to vocab
