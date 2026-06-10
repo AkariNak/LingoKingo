@@ -79,14 +79,15 @@ input[type="text"]:focus{border-color:var(--acc)}
 input[type="text"]::placeholder{color:var(--su)}
 
 /* ── BUTTONS ── */
-.gbtn,.ubtn,.abtn,.dbtn,.sit-pill,.script-btn,#fontBtn{border-radius:6px;margin-left:auto;padding:.6rem .9rem}
+.gbtn,.ubtn,.abtn,.dbtn,.sit-pill,.script-btn,#fontBtn{font-family:'DM Mono',monospace;background:var(--sf2);border:1px solid var(--bd2);color:var(--tx);cursor:pointer;transition:all .15s;letter-spacing:.03em}
 .gbtn{font-size:.67rem;padding:5px 12px;border-radius:99px}
 .ubtn{font-size:.68rem;padding:5px 11px;border-radius:6px}
 .abtn{font-size:.72rem;padding:7px 15px;border-radius:6px}
 .dbtn{font-size:.68rem;padding:5px 11px 5px 8px;border-radius:99px;display:flex;align-items:center;gap:6px}
 .sit-pill{font-size:.72rem;padding:5px 12px;border-radius:99px;white-space:nowrap}
 .script-btn{font-size:.72rem;padding:4px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
-.gbtn:hover,.ubtn:hover,.abtn:hover,.dbtn:hover,.sit-pill:hover,.script-btn:hover{border-color:var(--acc);color:var(--acc)}
+#fontBtn{font-size:.75rem;padding:.6rem .9rem;border-radius:6px;margin-left:auto;letter-spacing:.04em;white-space:nowrap}
+.gbtn:hover,.ubtn:hover,.abtn:hover,.dbtn:hover,.sit-pill:hover,.script-btn:hover,#fontBtn:hover{border-color:var(--acc);color:var(--acc)}
 .gbtn:active,.ubtn:active,.abtn:active{transform:scale(.97)}
 .gbtn.on,.script-btn.script-on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:500}
 .sit-pill:hover{border-color:var(--sc,var(--acc));color:var(--sc,var(--acc))}
@@ -96,6 +97,8 @@ input[type="text"]::placeholder{color:var(--su)}
 .abtn.accent:hover{opacity:.85;color:var(--bg)}
 .abtn.danger{color:#c87a7a;border-color:rgba(200,122,122,.3);background:transparent}
 .abtn.danger:hover{background:rgba(200,122,122,.08);border-color:#c87a7a}
+.sit-add-all{font-family:'DM Mono',monospace;font-size:.7rem;padding:5px 12px;border-radius:99px;border:1px solid var(--acc);background:transparent;color:var(--acc);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.sit-add-all:hover{background:var(--acc);color:var(--bg)}
 
 /* ── WORD SECTIONS ── */
 #wordSections{padding:1rem 2rem .5rem;display:flex;flex-direction:column;gap:7px}
