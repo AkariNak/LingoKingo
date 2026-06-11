@@ -1892,6 +1892,40 @@ const JAPANESE_SENTENCES = [
   }
 ];
 
+
+// ── SONGS DATA ────────────────────────────────────────────────────────────────
+const SONGS = [
+  {
+    id: "yofukashi",
+    lang: "japanese",
+    title: "よふかしのうた",
+    titleRo: "Yofukashi no Uta",
+    artist: "YOASOBI (Ayase)",
+    color: "#a87ac8",
+    desc: "The kanji in this song get crushed hard at tempo. Each one has two readings — on'yomi (Chinese origin) and kun'yomi (Japanese origin). Which one you hear depends on context.",
+    words: [
+      {kr:"照",ro:"しょう / て-る",meaning:"to shine / illuminate",lyric:"照らしてって",lyricRo:"terashitette",note:"Written: te·ra·shi·te·tte — sung fast: trashte-tte. The ra nearly vanishes at tempo. This kanji gives the song its signature crushed sound.",crush:true},
+      {kr:"目",ro:"もく / め",meaning:"eye / eyes",lyric:"目を奪って",lyricRo:"me wo ubatte",note:"One beat, hard to crush further. The 目 stays clean — all the compression happens in 奪って after it.",crush:false},
+      {kr:"奪",ro:"だつ / うば-う",meaning:"to snatch / steal / captivate",lyric:"目を奪ってブルーライト",lyricRo:"me wo ubatte buruu raito",note:"目を奪う means your eyes are stolen — something so beautiful you cannot look away. At speed: ubatte with middle syllables swallowed.",crush:true},
+      {kr:"夜",ro:"や / よる",meaning:"night",lyric:"よふかしのうた",lyricRo:"yofukashi no uta",note:"よふかし = 夜更かし — 夜 (yo, night) + 更かし (staying up late). The kanji drops よる to just よ to flow into the compound.",crush:false},
+      {kr:"俺",ro:"おれ",meaning:"I / me (masculine casual)",lyric:"俺達の夜は忙しい",lyricRo:"oretachi no yoru wa isogashii",note:"Rough masculine first person. No on'yomi — purely Japanese in origin. Gives the lyrics a street-level late-night voice.",crush:false},
+      {kr:"達",ro:"たつ / たち",meaning:"plural marker for people",lyric:"俺達",lyricRo:"oretachi",note:"Always attached to a person word. 俺達 = us lot. Carries a sense of a specific group — not just multiple people but us.",crush:false},
+      {kr:"忙",ro:"ぼう / いそが-しい",meaning:"busy",lyric:"俺達の夜は忙しい",lyricRo:"oretachi no yoru wa isogashii",note:"Five syllables in kun'yomi. At full tempo the い at the end evaporates — isogashi or even sogashi. The compression fits the meaning.",crush:true},
+      {kr:"鬼",ro:"き / おに",meaning:"demon / ogre / authority figure",lyric:"さぁ鬼の居ぬ間に",lyricRo:"saa oni no inu ma ni",note:"Culturally loaded — a horned demon from folklore, but here it means the adults, the rules, the daylight world. While the demon is away.",crush:false},
+      {kr:"居",ro:"きょ / い-る",meaning:"to be present (animate)",lyric:"鬼の居ぬ間に",lyricRo:"oni no inu ma ni",note:"居ぬ uses archaic ぬ — literary negative of ない — giving it a proverb-like folkloric weight. 居る is for living things only, not objects.",crush:false},
+      {kr:"間",ro:"かん・けん / ま・あいだ",meaning:"interval / space / while",lyric:"鬼の居ぬ間に",lyricRo:"oni no inu ma ni",note:"One of the most flexible kanji — reads ま here, かん in 時間, あいだ in 間に合う. Same kanji, completely different sound every time.",crush:false},
+      {kr:"大",ro:"だい・たい / おお-きい",meaning:"big / great (shifts in compound)",lyric:"大人達の子守唄",lyricRo:"otonatachi no komoriuta",note:"大 alone = ookii. In 大人 it becomes just o — one beat — and the whole word shifts into a different register. Must be learned as a whole word.",crush:false},
+      {kr:"人",ro:"じん・にん / ひと",meaning:"person (shifts in compound)",lyric:"大人達の子守唄",lyricRo:"otonatachi no komoriuta",note:"Reads hito alone, jin in some compounds, nin in others, tona in 大人. No single rule predicts which — compounds must be learned individually.",crush:false},
+      {kr:"血",ro:"けつ / ち",meaning:"blood",lyric:"血走った red eyes",lyricRo:"chihashitta red eyes",note:"Short, sharp — one beat as chi. 血走った = bloodshot, like red eyes from staying up all night. The image of exhausted adults vs the energy of youth.",crush:false},
+      {kr:"走",ro:"そう / はし-る",meaning:"to run",lyric:"血走った",lyricRo:"chihashitta",note:"In 血走った the hashi from 走る gets compressed. Written: chi·ha·shi·t·ta — sung: chihashitta feels like chi-hashta. The middle syllable softens.",crush:true},
+      {kr:"連",ro:"れん / つ-れる",meaning:"to connect / take along",lyric:"連れ去って midnight",lyricRo:"tsuresatte midnight",note:"連れ去って = take me away. 連 means bringing someone with you, 去 means leaving. Together: whisk someone into the night. 5 written beats to 3 sung.",crush:true},
+      {kr:"去",ro:"きょ・こ / さ-る",meaning:"to leave / depart",lyric:"連れ去って",lyricRo:"tsuresatte",note:"In 連れ去って the 去 reads as sa — just one beat absorbed into the flow. Alone it reads saru. Carries finality — not just moving but leaving something behind.",crush:true},
+      {kr:"表",ro:"ひょう / おもて",meaning:"surface / front / public face",lyric:"ネオンサインが呼ぶ表裏",lyricRo:"neon sain ga yobu hyouri",note:"表 alone = omote (3 beats). In 表裏 shifts entirely to on'yomi = hyouri (2 beats). The neon sign calling you toward both faces of the night.",crush:false},
+      {kr:"裏",ro:"り / うら",meaning:"back / reverse / hidden side",lyric:"ネオンサインが呼ぶ表裏",lyricRo:"neon sain ga yobu hyouri",note:"裏 alone = ura (2 beats). In 表裏 = ri — one beat. Front and back. Day and night. What is shown and what is real.",crush:false}
+    ]
+  }
+];
+
 // ── GRAMMAR DATA ──────────────────────────────────────────────────────────────
 
 const GRAMMAR = {
