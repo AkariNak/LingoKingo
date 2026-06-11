@@ -386,6 +386,7 @@ input[type="text"]::placeholder{color:var(--su)}
   <button class="tab-btn" data-tab="vocab"    onclick="switchTab('vocab')">vocabulary</button>
   <button class="tab-btn" data-tab="practice" onclick="switchTab('practice')">practice</button>
   <button class="tab-btn" data-tab="grammar"  onclick="switchTab('grammar')">grammar</button>
+  <button class="tab-btn" data-tab="songs"    onclick="switchTab('songs')">songs</button>
   <button id="fontBtn" onclick="cycleFontSize()" aria-label="change font size">text: large</button>
 </div>
 
@@ -2327,6 +2328,7 @@ function renderTab(tab) {
   if (tab === 'vocab')    { main.innerHTML = ''; renderVocab(main); }
   if (tab === 'practice') { main.innerHTML = ''; renderPractice(main); }
   if (tab === 'grammar')  { main.innerHTML = ''; renderGrammar(main); }
+  if (tab === 'songs')    { main.innerHTML = ''; renderSongs(main); }
 }
 
 // ── SPEECH SYNTHESIS ──
