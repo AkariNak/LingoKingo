@@ -1460,8 +1460,8 @@ const JAPANESE_WORDS = [
   // KANJI
   {kr:"日",ro:"nichi/hi",meaning:"sun / day / Japan",example:"日本 (nihon) — Japan",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
   {kr:"本",ro:"hon/moto",meaning:"book / origin",example:"本を読む — read a book",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"人",ro:"jin/hito",meaning:"person",example:"日本人 — Japanese person",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
-  {kr:"大",ro:"dai/oo",meaning:"big / great",example:"大学 — university",pos:"kanji",freq:10,register:"neutral",script:"kanji"},
+  {kr:"人",ro:"じん・にん / ひと",meaning:"person (shifts in compound)",example:"大人 = otona, 外国人 = gaikokujin",pos:"kanji",freq:10,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"大",ro:"だい・たい / おお-きい",meaning:"big / great (shifts in compound)",example:"大人 = otona — adult (irregular reading)",pos:"kanji",freq:10,register:"neutral",script:"kanji",song:"yofukashi"},
   {kr:"小",ro:"shou/chii",meaning:"small",example:"小学校 — elementary school",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
   {kr:"山",ro:"san/yama",meaning:"mountain",example:"富士山 — Mt. Fuji",pos:"kanji",freq:9,register:"neutral",script:"kanji"},
   {kr:"川",ro:"kawa",meaning:"river",example:"川のそば — by the river",pos:"kanji",freq:8,register:"neutral",script:"kanji"},
@@ -1616,13 +1616,13 @@ const JAPANESE_WORDS = [
   // ── yofukashi-themed vocab ──
   {kr:"夜ふかし",ro:"yofukashi",meaning:"staying up late",example:"夜ふかしをした — I stayed up late",pos:"noun",freq:7,register:"casual",script:"kanji",sit:["dating"]},
   {kr:"うた",ro:"uta",meaning:"song",example:"うたをうたう — to sing a song",pos:"noun",freq:9,register:"neutral",script:"hiragana"},
-  {kr:"夜",ro:"yoru",meaning:"night",example:"夜がふけた — the night grew late",pos:"noun",freq:9,register:"neutral",script:"kanji",sit:["dating"]},
+  {kr:"夜",ro:"や / よる",meaning:"night",example:"よふかし = 夜更かし — staying up late at night",pos:"noun",freq:9,register:"neutral",script:"kanji",sit:["dating"],song:"yofukashi"},
   {kr:"俺達",ro:"oretachi",meaning:"we / us (masculine casual)",example:"俺達でやろう — let's do it ourselves",pos:"pronoun",freq:7,register:"casual",script:"kanji"},
   {kr:"忙しい",ro:"isogashii",meaning:"busy",example:"忙しいな — I'm so busy",pos:"adjective",freq:8,register:"neutral",script:"kanji"},
   {kr:"なんせ",ro:"nanse",meaning:"after all / anyway / because",example:"なんせむりだ — it's just impossible",pos:"adverb",freq:6,register:"casual",script:"hiragana"},
-  {kr:"鬼",ro:"oni",meaning:"demon / ogre / monster",example:"鬼のようにつよい — strong as a demon",pos:"noun",freq:7,register:"neutral",script:"kanji"},
+  {kr:"鬼",ro:"き / おに",meaning:"demon / ogre / authority figure",example:"鬼の居ぬ間に — while the demon is away",pos:"noun",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
   {kr:"居ぬ",ro:"inu",meaning:"is not there / has left (archaic)",example:"もうここに居ぬ — no longer here",pos:"expression",freq:5,register:"neutral",script:"kanji"},
-  {kr:"間",ro:"ma",meaning:"interval / space / while",example:"少しの間 — for a little while",pos:"noun",freq:8,register:"neutral",script:"kanji"},
+  {kr:"間",ro:"かん・けん / ま・あいだ",meaning:"interval / space / while",example:"鬼の居ぬ間に — in that interval",pos:"noun",freq:8,register:"neutral",script:"kanji",song:"yofukashi"},
   {kr:"お前",ro:"omae",meaning:"you (masculine casual / blunt)",example:"お前はだれだ — who are you",pos:"pronoun",freq:7,register:"casual",script:"kanji",sit:["dating"]},
   {kr:"光",ro:"hikari",meaning:"light",example:"光がさす — light shines through",pos:"noun",freq:8,register:"neutral",script:"kanji",sit:["dating"]},
   {kr:"踊る",ro:"odoru",meaning:"to dance",example:"いっしょにおどろう — let's dance together",pos:"verb",freq:8,register:"neutral",script:"kanji",sit:["dating"]},
@@ -1632,7 +1632,7 @@ const JAPANESE_WORDS = [
   {kr:"声",ro:"koe",meaning:"voice",example:"きみの声 — your voice",pos:"noun",freq:8,register:"neutral",script:"kanji",sit:["dating"]},
   {kr:"赤",ro:"aka",meaning:"red",example:"赤いそら — red sky",pos:"noun",freq:7,register:"neutral",script:"kanji"},
   {kr:"青",ro:"ao",meaning:"blue / green",example:"青いそら — blue sky",pos:"noun",freq:8,register:"neutral",script:"kanji"},
-  {kr:"目",ro:"me",meaning:"eye / eyes",example:"目があう — our eyes meet",pos:"noun",freq:9,register:"neutral",script:"kanji",sit:["dating"]},
+  {kr:"目",ro:"もく / め",meaning:"eye / eyes",example:"目を奪って — your eyes are stolen",pos:"noun",freq:9,register:"neutral",script:"kanji",sit:["dating"],song:"yofukashi"},
 
   // ── よふかしのうた lyrics vocab ──
   {kr:"照らす",ro:"terasu",meaning:"to illuminate / to light up",example:"月が照らす — the moon lights up the night",pos:"verb",freq:7,register:"neutral",script:"kanji",sit:["dating"]},
@@ -1645,11 +1645,24 @@ const JAPANESE_WORDS = [
   {kr:"表裏",ro:"hyouri",meaning:"two sides / front and back / duplicity",example:"表裏がある — has two faces",pos:"noun",freq:6,register:"neutral",script:"kanji"},
   {kr:"連れ去る",ro:"tsuresaru",meaning:"to take away / carry off",example:"連れ去って — take me away",pos:"verb",freq:6,register:"neutral",script:"kanji",sit:["dating"]},
   {kr:"血走った",ro:"chihashitta",meaning:"bloodshot (eyes)",example:"血走った目 — bloodshot red eyes",pos:"expression",freq:5,register:"neutral",script:"kanji"},
-  {kr:"血",ro:"chi",meaning:"blood",example:"血がでる — blood flows",pos:"noun",freq:7,register:"neutral",script:"kanji"},
+  {kr:"血",ro:"けつ / ち",meaning:"blood",example:"血走った — bloodshot eyes",pos:"noun",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
   {kr:"大人",ro:"otona",meaning:"adult / grown-up",example:"大人になる — to become an adult",pos:"noun",freq:9,register:"neutral",script:"kanji"},
   {kr:"子守唄",ro:"komoriuta",meaning:"lullaby",example:"子守唄をうたう — to sing a lullaby",pos:"noun",freq:6,register:"neutral",script:"kanji",sit:["dating"]},
   {kr:"さぁ",ro:"saa",meaning:"come on / well then / now then",example:"さぁいこう！ — come on let's go!",pos:"expression",freq:8,register:"casual",script:"hiragana"},
   {kr:"連れ",ro:"tsure",meaning:"companion / someone taken along",example:"連れていって — take me with you",pos:"noun",freq:7,register:"neutral",script:"kanji",sit:["dating"]},
+
+  // ── よふかしのうた kanji ──
+  {kr:"照",ro:"しょう / て-る",meaning:"to shine / illuminate",example:"照らす — to light up",pos:"kanji",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"奪",ro:"だつ / うば-う",meaning:"to snatch / steal away / captivate",example:"目を奪う — to steal the eye",pos:"kanji",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"俺",ro:"おれ",meaning:"I / me (masculine casual)",example:"俺達 — we / us guys",pos:"kanji",freq:7,register:"casual",script:"kanji",song:"yofukashi"},
+  {kr:"達",ro:"たつ / たち",meaning:"plural marker for people",example:"俺達 — us, 大人達 — adults",pos:"kanji",freq:8,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"忙",ro:"ぼう / いそが-しい",meaning:"busy",example:"忙しい — busy",pos:"kanji",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"居",ro:"きょ / い-る",meaning:"to exist / to be present (animate)",example:"居る — to be here (for living things)",pos:"kanji",freq:8,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"走",ro:"そう / はし-る",meaning:"to run",example:"血走った — bloodshot",pos:"kanji",freq:8,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"連",ro:"れん / つ-れる",meaning:"to connect / take along",example:"連れ去って — take me away",pos:"kanji",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"去",ro:"きょ / さ-る",meaning:"to leave / to depart",example:"連れ去る — to whisk away",pos:"kanji",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"表",ro:"ひょう / おもて",meaning:"surface / front / public face",example:"表裏 — two sides",pos:"kanji",freq:8,register:"neutral",script:"kanji",song:"yofukashi"},
+  {kr:"裏",ro:"り / うら",meaning:"back / reverse / hidden side",example:"表裏 — front and back",pos:"kanji",freq:7,register:"neutral",script:"kanji",song:"yofukashi"},
   // mosi mosi? song words
   {kr:"けんぱ",ro:"kenpa",meaning:"hopscotch hop-step",example:"けんぱけんぱで1000メーター",pos:"expression",freq:5,register:"casual",script:"hiragana",sit:["dating"]},
   {kr:"シクシク",ro:"shikushiku",meaning:"sobbing / whimpering",example:"シクシク 孤独なエリア",pos:"expression",freq:5,register:"casual",script:"katakana_d",sit:["dating"]},
@@ -2188,6 +2201,9 @@ const PREMADE_DECKS = {
   japanese_dakuten: [
     {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
     {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
+  ],
+  japanese_yofukashi: [
+    {name:'よふかしのうた', color:'#a87ac8', filter: w => w.song === 'yofukashi'},
   ],
   italian: [
     {name:'Italian Essentials', color:'#c8a87a', filter: w => w.freq >= 9},
@@ -2983,7 +2999,7 @@ function renderDeckSwitcher() {
   const premadeKeys = {
     korean: ['korean'],
     italian: ['italian'],
-    japanese: ['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten']
+    japanese: ['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi']
   };
   if (premadeKeys[curLang]) {
     const pb = document.createElement('button');
@@ -3649,6 +3665,175 @@ function cwbSave() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeCustomWord();
 });
+
+
+// ── SONGS TAB ─────────────────────────────────────────────────────────────────
+function renderSongs(container) {
+  const langSongs = SONGS.filter(s => !s.lang || s.lang === curLang);
+
+  if (langSongs.length === 0) {
+    container.innerHTML = '<div class="empty-msg">No songs yet for this language. Switch to Japanese to see よふかしのうた.</div>';
+    return;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:1.5rem 2rem;display:flex;flex-direction:column;gap:1.5rem';
+
+  langSongs.forEach(song => {
+    // Song header card
+    const songCard = document.createElement('div');
+    songCard.style.cssText = 'border:1px solid var(--bd2);border-radius:12px;overflow:hidden';
+
+    // Song title bar
+    const titleBar = document.createElement('div');
+    titleBar.style.cssText = `background:linear-gradient(135deg,${song.color}22,${song.color}11);border-bottom:1px solid ${song.color}44;padding:1.1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap`;
+
+    const titleLeft = document.createElement('div');
+    const titleEl = document.createElement('div');
+    titleEl.style.cssText = "font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--tx)";
+    titleEl.textContent = song.title;
+    const subtitleEl = document.createElement('div');
+    subtitleEl.style.cssText = 'font-size:.72rem;color:var(--mu);margin-top:2px';
+    subtitleEl.textContent = song.titleRo + ' · ' + song.artist;
+    titleLeft.appendChild(titleEl);
+    titleLeft.appendChild(subtitleEl);
+
+    // Add all to deck button
+    const addAllBtn = document.createElement('button');
+    addAllBtn.className = 'abtn accent';
+    addAllBtn.textContent = '+ add all to deck';
+    addAllBtn.onclick = () => addSongToDeck(song);
+
+    titleBar.appendChild(titleLeft);
+    titleBar.appendChild(addAllBtn);
+    songCard.appendChild(titleBar);
+
+    // Song description
+    const descEl = document.createElement('div');
+    descEl.style.cssText = 'padding:.85rem 1.4rem;font-size:.75rem;color:var(--mu);line-height:1.7;border-bottom:1px solid var(--bd)';
+    descEl.textContent = song.desc;
+    songCard.appendChild(descEl);
+
+    // Kanji cards grid
+    const grid = document.createElement('div');
+    grid.style.cssText = 'padding:1rem 1.2rem;display:flex;flex-direction:column;gap:8px';
+
+    song.words.forEach(w => {
+      const word = LANGS[curLang]?.words.find(x => x.kr === w.kr);
+      const inDeck = word && deckColorFor(w.kr);
+
+      const row = document.createElement('div');
+      row.style.cssText = `border:1px solid ${inDeck ? song.color : 'var(--bd)'};border-radius:10px;overflow:hidden;transition:border-color .15s;background:var(--sf)`;
+
+      const rowHdr = document.createElement('div');
+      rowHdr.style.cssText = 'display:flex;align-items:center;gap:12px;padding:.7rem 1rem;cursor:pointer';
+
+      // Kanji big
+      const kanjiEl = document.createElement('span');
+      kanjiEl.style.cssText = `font-family:'Noto Sans KR',sans-serif;font-size:1.8rem;font-weight:500;color:${inDeck ? song.color : 'var(--tx)'};min-width:2.5rem;text-align:center`;
+      kanjiEl.textContent = w.kr;
+
+      // Middle info
+      const info = document.createElement('div');
+      info.style.cssText = 'flex:1;min-width:0';
+      const readings = document.createElement('div');
+      readings.style.cssText = 'font-size:.7rem;color:var(--acc);letter-spacing:.04em';
+      readings.textContent = w.ro;
+      const meaning = document.createElement('div');
+      meaning.style.cssText = 'font-size:.82rem;color:var(--tx);margin-top:1px';
+      meaning.textContent = w.meaning;
+      const lyricEl = document.createElement('div');
+      lyricEl.style.cssText = 'font-size:.68rem;color:var(--mu);margin-top:2px;font-style:italic';
+      lyricEl.textContent = w.lyric + '  —  ' + w.lyricRo;
+      info.appendChild(readings);
+      info.appendChild(meaning);
+      info.appendChild(lyricEl);
+
+      // Right side: crush badge + add button + speak
+      const right = document.createElement('div');
+      right.style.cssText = 'display:flex;align-items:center;gap:8px;flex-shrink:0';
+
+      if (w.crush) {
+        const crushBadge = document.createElement('span');
+        crushBadge.style.cssText = 'font-size:.58rem;padding:2px 7px;border-radius:99px;border:1px solid rgba(200,122,122,.4);color:#c87a7a;letter-spacing:.06em;white-space:nowrap';
+        crushBadge.textContent = 'crushes';
+        crushBadge.title = 'This kanji gets compressed in fast singing';
+        right.appendChild(crushBadge);
+      }
+
+      const speakBtn = document.createElement('button');
+      speakBtn.className = 'ubtn';
+      speakBtn.textContent = '▶';
+      speakBtn.onclick = e => { e.stopPropagation(); speak(w.kr, 'japanese'); };
+      right.appendChild(speakBtn);
+
+      const addBtn = document.createElement('button');
+      addBtn.className = 'abtn' + (inDeck ? ' accent' : '');
+      addBtn.style.cssText = inDeck ? `background:${song.color};border-color:${song.color}` : '';
+      addBtn.textContent = inDeck ? '✓ in deck' : '+ deck';
+      addBtn.onclick = e => {
+        e.stopPropagation();
+        if (word) {
+          toggleWordInDeck(word);
+          renderSongs(container);
+        } else {
+          showToast(w.kr + ' — add via vocabulary tab');
+        }
+      };
+      right.appendChild(addBtn);
+
+      rowHdr.appendChild(kanjiEl);
+      rowHdr.appendChild(info);
+      rowHdr.appendChild(right);
+
+      // Expandable note
+      const noteEl = document.createElement('div');
+      noteEl.style.cssText = 'display:none;padding:.6rem 1rem .8rem;font-size:.74rem;color:var(--mu);line-height:1.75;border-top:1px solid var(--bd);background:var(--sf2)';
+      noteEl.textContent = w.note;
+
+      const chevEl = document.createElement('span');
+      chevEl.style.cssText = 'font-size:.6rem;color:var(--su);flex-shrink:0';
+      chevEl.textContent = '▾';
+      rowHdr.appendChild(chevEl);
+
+      let open = false;
+      rowHdr.onclick = () => {
+        open = !open;
+        noteEl.style.display = open ? 'block' : 'none';
+        chevEl.textContent = open ? '▴' : '▾';
+      };
+
+      row.appendChild(rowHdr);
+      row.appendChild(noteEl);
+      grid.appendChild(row);
+    });
+
+    songCard.appendChild(grid);
+    wrap.appendChild(songCard);
+  });
+
+  container.appendChild(wrap);
+}
+
+function addSongToDeck(song) {
+  if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
+    // Create a new deck named after the song
+    const n = prompt('Name for new deck:', song.title);
+    if (!n || !n.trim()) return;
+    addDeck(n.trim());
+    // set color to song color
+    decks[decks.length-1].color = song.color;
+  }
+  const idx = activeDeckIdx >= 0 ? activeDeckIdx : decks.length - 1;
+  let added = 0;
+  song.words.forEach(w => {
+    const word = LANGS[curLang]?.words.find(x => x.kr === w.kr);
+    if (word) { decks[idx].words[w.kr] = true; added++; }
+  });
+  saveDeckState();
+  showToast('Added ' + added + ' words to "' + decks[idx].name + '"');
+  renderSongs(document.getElementById('mainContent'));
+}
 
 
 (function boot() {
