@@ -2891,30 +2891,90 @@ function saveDeckState() {
 
 // ── RENDER VOCAB TAB ──────────────────────────────────────────────────────────
 function renderVocab(container) {
-  const seenKey = 'lf-seen-' + curLang;
-  const isFirstVisit = !localStorage.getItem(seenKey);
+  container.innerHTML = '';
 
-  container.innerHTML = `
-    <div class="ctrl">
-      <div class="sit-row" id="sitRow"></div>
-      <div class="ctrl-row" style="margin-top:4px;flex-wrap:wrap;gap:6px">
-        <input id="searchInput2" type="text" placeholder="${LANGS[curLang].placeholder}" style="flex:1;min-width:140px" />
-        <button class="ubtn filters-toggle" id="filtersToggle" onclick="toggleFilters()">more filters ▾</button>
-        <button class="ubtn" onclick="openCustomWord()" title="build a custom word from the alphabet">+ custom word</button>
-      </div>
-      <div class="ctrl-row filters-row" id="filtersRow" style="display:none;flex-wrap:wrap;gap:6px;margin-top:4px">
-        <div id="groupBar" style="display:flex;flex-wrap:wrap;gap:5px"></div>
-        <button class="ubtn" onclick="vocabExpandAll()">expand all</button>
-        <button class="ubtn" onclick="vocabCollapseAll()">collapse all</button>
+  // ctrl bar
+  const ctrl = document.createElement('div');
+  ctrl.className = 'ctrl';
+
+  const sitRow = document.createElement('div');
+  sitRow.className = 'sit-row';
+  sitRow.id = 'sitRow';
+  ctrl.appendChild(sitRow);
+
+  const mainRow = document.createElement('div');
+  mainRow.className = 'ctrl-row';
+  mainRow.style.cssText = 'margin-top:4px;flex-wrap:wrap;gap:6px';
+
+  const searchInput = document.createElement('input');
+  searchInput.type = 'text';
+  searchInput.id = 'searchInput2';
+  searchInput.placeholder = LANGS[curLang].placeholder;
+  searchInput.style.cssText = 'flex:1;min-width:140px';
+  searchInput.oninput = renderWordGrid;
+  mainRow.appendChild(searchInput);
+
+  const filtersBtn = document.createElement('button');
+  filtersBtn.className = 'ubtn filters-toggle';
+  filtersBtn.id = 'filtersToggle';
+  filtersBtn.textContent = 'more filters ▾';
+  filtersBtn.onclick = toggleFilters;
+  mainRow.appendChild(filtersBtn);
+
+  const customBtn = document.createElement('button');
+  customBtn.className = 'ubtn';
+  customBtn.textContent = '+ custom word';
+  customBtn.onclick = openCustomWord;
+  mainRow.appendChild(customBtn);
+  ctrl.appendChild(mainRow);
+
+  const filtersRow = document.createElement('div');
+  filtersRow.className = 'ctrl-row filters-row';
+  filtersRow.id = 'filtersRow';
+  filtersRow.style.cssText = 'display:none;flex-wrap:wrap;gap:6px;margin-top:4px';
+
+  const groupBar = document.createElement('div');
+  groupBar.id = 'groupBar';
+  groupBar.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px';
+  filtersRow.appendChild(groupBar);
+
+  const expandBtn = document.createElement('button');
+  expandBtn.className = 'ubtn';
+  expandBtn.textContent = 'expand all';
+  expandBtn.onclick = vocabExpandAll;
+  filtersRow.appendChild(expandBtn);
+
+  const collapseBtn = document.createElement('button');
+  collapseBtn.className = 'ubtn';
+  collapseBtn.textContent = 'collapse all';
+  collapseBtn.onclick = vocabCollapseAll;
+  filtersRow.appendChild(collapseBtn);
+  ctrl.appendChild(filtersRow);
+
+  container.appendChild(ctrl);
+
+  // word sections
+  const wordSections = document.createElement('div');
+  wordSections.id = 'wordSections';
+  container.appendChild(wordSections);
+
+  // deck panel
+  const deckPanel = document.createElement('div');
+  deckPanel.id = 'deckPanel';
+  deckPanel.className = 'deck-panel surface';
+  deckPanel.innerHTML = `
+    <div class="deck-hdr">
+      <span class="deck-title">your deck</span>
+      <div class="deck-acts">
+        <button class="abtn danger" onclick="clearActiveDeck()">remove all</button>
+        <button class="abtn accent" onclick="openStudy()">study deck →</button>
       </div>
     </div>
+    <div id="deckSwitcher" class="deck-switcher"></div>
+    <div id="deckChips"></div>
   `;
+  container.appendChild(deckPanel);
 
-  document.getElementById('searchInput2').oninput = renderWordGrid;
-  if (isFirstVisit) {
-    const banner = buildOnboardBanner();
-    container.insertBefore(banner, container.firstChild);
-  }
   showScriptFilters(curLang === 'japanese');
   buildSitPills();
   buildGroupBtns();
@@ -2940,7 +3000,8 @@ function buildGroupBtns() {
 }
 
 function renderWordGrid() {
-  const container = document.getElementById('wordSections');
+  const container = document.getElementById('wordSections')
+    || document.getElementById('mainContent')?.querySelector('#wordSections');
   if (!container) return;
 
   const rawSearch = document.getElementById('searchInput2') || document.getElementById('searchInput');
