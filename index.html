@@ -2978,11 +2978,9 @@ function renderWordGrid() {
   if (activeSituation) {
     ordered.forEach(k => openSecs[k] = true);
   }
-  // auto-open first section on first visit per language
-  if (!window._firstOpenDone) window._firstOpenDone = {};
-  if (Object.keys(openSecs).length === 0 && ordered.length > 0 && !window._firstOpenDone[curLang]) {
+  // auto-open first section if nothing is open
+  if (Object.keys(openSecs).length === 0 && ordered.length > 0) {
     openSecs[ordered[0]] = true;
-    window._firstOpenDone[curLang] = true;
   }
 
   container.innerHTML = '';
