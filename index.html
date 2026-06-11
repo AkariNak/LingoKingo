@@ -2884,29 +2884,16 @@ function renderVocab(container) {
   container.innerHTML = `
     <div class="ctrl">
       <div class="sit-row" id="sitRow"></div>
-      <div class="ctrl-row filters-row" id="filtersRow" style="display:none">
-        <input id="searchInput" type="text" placeholder="${LANGS[curLang].placeholder}" />
-        <div id="groupBar"></div>
+      <div class="ctrl-row" style="margin-top:4px;flex-wrap:wrap;gap:6px">
+        <input id="searchInput2" type="text" placeholder="${LANGS[curLang].placeholder}" style="flex:1;min-width:140px" />
+        <button class="ubtn filters-toggle" id="filtersToggle" onclick="toggleFilters()">more filters ▾</button>
+        <button class="ubtn" onclick="openCustomWord()" title="build a custom word from the alphabet">+ custom word</button>
+      </div>
+      <div class="ctrl-row filters-row" id="filtersRow" style="display:none;flex-wrap:wrap;gap:6px;margin-top:4px">
+        <div id="groupBar" style="display:flex;flex-wrap:wrap;gap:5px"></div>
         <button class="ubtn" onclick="vocabExpandAll()">expand all</button>
         <button class="ubtn" onclick="vocabCollapseAll()">collapse all</button>
       </div>
-      <div class="ctrl-row" style="margin-top:4px">
-        <button class="ubtn filters-toggle" id="filtersToggle" onclick="toggleFilters()">more filters ▾</button>
-        <button class="ubtn" onclick="openCustomWord()" title="build a custom word from the alphabet">+ custom word</button>
-        <input id="searchInput2" type="text" placeholder="${LANGS[curLang].placeholder}" style="flex:1;min-width:0;width:0" />
-      </div>
-    </div>
-    <div id="wordSections"></div>
-    <div id="deckPanel" class="deck-panel surface">
-      <div class="deck-hdr">
-        <span class="deck-title">your deck</span>
-        <div class="deck-acts">
-          <button class="abtn danger" onclick="clearActiveDeck()">remove all</button>
-          <button class="abtn accent" onclick="openStudy()">study deck →</button>
-        </div>
-      </div>
-      <div id="deckSwitcher" class="deck-switcher"></div>
-      <div id="deckChips"></div>
     </div>
   `;
 
@@ -2928,6 +2915,9 @@ function buildGroupBtns() {
   if (!bar) return;
   bar.innerHTML = '';
   Object.entries(GROUPINGS).forEach(([key, cfg]) => {
+    // fewest_strokes and script only make sense for Japanese
+    if (key === 'fewest_strokes' && curLang !== 'japanese') return;
+    if (key === 'script' && curLang !== 'japanese') return;
     const btn = document.createElement('button');
     btn.className = 'gbtn' + (key === curGrouping ? ' on' : '');
     btn.textContent = cfg.label;
