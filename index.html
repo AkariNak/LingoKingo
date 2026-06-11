@@ -3983,7 +3983,9 @@ function renderSongs(container) {
     songCard.appendChild(body);
 
     // Toggle collapse
-    let isOpen = true;
+    let isOpen = false;
+    body.style.display = 'none';
+    chevron.textContent = '▾';
     titleBar.onclick = e => {
       if (e.target === addAllBtn || addAllBtn.contains(e.target)) return;
       isOpen = !isOpen;
