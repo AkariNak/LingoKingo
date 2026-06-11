@@ -2366,6 +2366,11 @@ function switchLang(lang) {
   activeScripts.clear();
   updateScriptBtns();
   showScriptFilters(lang === 'japanese');
+  // reset japanese-only groupings when switching away
+  if (lang !== 'japanese' && (curGrouping === 'fewest_strokes' || curGrouping === 'script')) {
+    curGrouping = 'pos';
+    save('lf-grouping', 'pos');
+  }
   // Japanese now has practice and grammar
   const L = LANGS[lang];
   // update header
@@ -2772,6 +2777,11 @@ function vocabInit() {
   if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
   curGrouping   = load('lf-grouping', 'pos');
   if (!GROUPINGS[curGrouping]) curGrouping = 'pos';
+  // japanese-only groupings not valid for other languages
+  const _bootLang = localStorage.getItem('lf-lang') || 'korean';
+  if (_bootLang !== 'japanese' && (curGrouping === 'fewest_strokes' || curGrouping === 'script')) {
+    curGrouping = 'pos';
+  }
 }
 
 let openSecs = {};
@@ -2955,7 +2965,7 @@ function renderWordGrid() {
   });
 
   // apply grouping-level filter (e.g. fewest_strokes only shows kanji with stroke data)
-  if (cfg.filter) filtered = filtered.filter(cfg.filter);
+  if (cfg.filter && curLang === 'japanese') filtered = filtered.filter(cfg.filter);
 
   const groups = {};
   filtered.forEach(w => { const k = cfg.key(w); if (!k) return; if (!groups[k]) groups[k]=[]; groups[k].push(w); });
@@ -3996,6 +4006,11 @@ function addSongToDeck(song) {
   activeDeckIdx = load('lf-activeDeck', -1);
   curGrouping   = load('lf-grouping', 'pos');
   if (!GROUPINGS[curGrouping]) curGrouping = 'pos';
+  // japanese-only groupings not valid for other languages
+  const _bootLang = localStorage.getItem('lf-lang') || 'korean';
+  if (_bootLang !== 'japanese' && (curGrouping === 'fewest_strokes' || curGrouping === 'script')) {
+    curGrouping = 'pos';
+  }
   if (activeDeckIdx >= decks.length) activeDeckIdx = -1;
 
   document.body.className = theme;
