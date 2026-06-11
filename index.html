@@ -3831,8 +3831,37 @@ function renderSongs(container) {
 
       // Expandable note
       const noteEl = document.createElement('div');
-      noteEl.style.cssText = 'display:none;padding:.55rem .9rem .7rem;font-size:.72rem;color:var(--mu);line-height:1.75;border-top:1px solid var(--bd);background:var(--sf2)';
-      noteEl.textContent = w.note;
+      noteEl.style.cssText = 'display:none;padding:.7rem .9rem .85rem;border-top:1px solid var(--bd);background:var(--sf2)';
+
+      // Parse readings from ro field: "on / kun" format
+      const roParts = w.ro.split(' / ');
+      const kunReading = roParts.length > 1 ? roParts[1].replace(/-/g,'') : roParts[0].replace(/-/g,'');
+      const onReading  = roParts.length > 1 ? roParts[0] : null;
+      // kun reading: remove okurigana marker (e.g. て-る → てる, うば-う → うばう)
+      const kunClean = kunReading.split('・')[0]; // take first if multiple
+      // romaji approximation for kun reading (just show the hiragana)
+
+      const fields = [
+        {label:'read', value: kunClean + (kunClean !== kunReading ? '  (' + kunReading + ')' : '')},
+      ];
+      if (onReading) fields.push({label:"also written as", value: onReading + " in compounds (on'yomi)"});
+      fields.push({label:'meaning', value: w.meaning});
+      fields.push({label:'in the song', value: w.lyric + ' — ' + w.lyricRo});
+      if (w.note) fields.push({label:'note', value: w.note});
+
+      fields.forEach(f => {
+        const line = document.createElement('div');
+        line.style.cssText = 'display:flex;gap:8px;font-size:.72rem;line-height:1.7;padding:1px 0';
+        const lbl = document.createElement('span');
+        lbl.style.cssText = 'color:var(--acc);flex-shrink:0;min-width:90px;font-size:.65rem;letter-spacing:.05em;text-transform:uppercase;padding-top:1px';
+        lbl.textContent = f.label;
+        const val = document.createElement('span');
+        val.style.cssText = "color:var(--tx);font-family:'Noto Sans KR',sans-serif";
+        val.textContent = f.value;
+        line.appendChild(lbl);
+        line.appendChild(val);
+        noteEl.appendChild(line);
+      });
 
       let noteOpen = false;
       rowHdr.onclick = () => {
