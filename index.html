@@ -2052,6 +2052,8 @@ const SONGS = [
     ]
   }];
 
+const KANJI_MEANINGS = {"可": "can / possible / acceptable", "愛": "love / affection", "私": "I / private / personal", "嫉": "jealousy / envy", "妬": "envy / jealousy", "痛": "pain / hurt / ache", "好": "like / fond of", "大": "big / great / grand", "化": "change / transform / disguise", "粧": "adorn / makeup", "日": "sun / day / Japan", "傘": "umbrella / parasol", "幸": "happiness / fortune / luck", "努": "strive / effort", "力": "power / strength / force", "尊": "revere / precious / noble", "女": "woman / female", "子": "child / small / suffix", "干": "interfere / dry / stem", "渉": "ford / cross / involve", "類": "kind / type / similar", "陰": "shade / shadow / negative", "口": "mouth / opening / speak", "前": "front / before / previous", "髪": "hair (of head)", "趣": "taste / elegance / interest", "味": "flavor / taste / experience", "変": "change / strange / unusual", "者": "person / one who", "理": "reason / logic / truth", "不": "not / un- / negative prefix", "尽": "exhaust / use up / all", "我": "I / self / ego", "慢": "pride / boast / slow", "自": "self / oneself", "分": "part / minute / understand", "方": "direction / person / way", "切": "cut / important / dear", "磨": "polish / grind / improve", "照": "shine / illuminate / compare", "目": "eye / look / see", "奪": "snatch / take away", "夜": "night", "俺": "I / me (rough masculine)", "達": "reach / attain / plural marker", "忙": "busy / hurried", "鬼": "demon / ogre / fierce", "居": "be present / exist (animate)", "間": "interval / space / between", "走": "run / flee", "連": "connect / take along / link", "去": "leave / go away / past", "表": "surface / front / express", "裏": "back / reverse / inside", "血": "blood", "無": "nothing / without / nothingness", "敵": "enemy / opponent / rival", "顔": "face / expression", "秘": "secret / hidden / mysterious", "密": "dense / secret / close", "完": "complete / finish / perfect", "璧": "jade / flawless", "天": "heaven / sky / divine", "才": "talent / ability / genius", "嘘": "lie / falsehood", "瞳": "pupil / eye (poetic)", "虜": "captive / prisoner / charmed", "星": "star / celebrity", "弱": "weak / feeble", "点": "point / dot / score", "汗": "sweat / perspiration", "瞼": "eyelid", "荒": "rough / wild / waste", "隠": "hide / conceal", "崇": "revere / worship", "堕": "fall / degenerate", "積": "pile up / accumulate", "願": "wish / pray / request", "淡": "light / faint / pale", "燦": "brilliant / radiant", "特": "special / particular", "全": "whole / complete / all", "最": "most / extreme / utmost", "欲": "desire / greed / want", "月": "moon / month", "光": "light / shine / glory", "人": "person / people / human", "電": "electricity / lightning", "波": "wave / ripple", "笑": "laugh / smile", "本": "book / origin / main", "水": "water", "火": "fire", "木": "tree / wood", "金": "gold / money / Friday", "土": "earth / soil / Saturday", "山": "mountain", "川": "river", "年": "year", "上": "up / above / top", "下": "down / below / under", "中": "middle / inside / center", "食": "eat / food", "飲": "drink", "見": "see / look / show", "言": "say / word / speak", "行": "go / conduct / row", "来": "come / future / since", "友": "friend / companion", "学": "study / learn", "語": "language / word / story", "何": "what / how many", "今": "now / present / current"};
+
 // ── GRAMMAR DATA ──────────────────────────────────────────────────────────────
 
 const GRAMMAR = {
@@ -4053,6 +4055,17 @@ function renderSongs(container) {
       if (onReading) fields.push({label:"also written as", value: onReading + " in compounds (on'yomi)"});
       fields.push({label:'meaning', value: w.meaning});
       fields.push({label:'in the song', value: w.lyric + ' — ' + w.lyricRo});
+      // kanji breakdown — show what each individual kanji means
+      const _kanjiChars = w.kr.match(/[一-鿿]/g);
+      if (_kanjiChars && _kanjiChars.length > 1) {
+        const _parts = _kanjiChars.map(k => {
+          const m = KANJI_MEANINGS[k];
+          return m ? k + ' = ' + m : null;
+        }).filter(Boolean);
+        if (_parts.length > 0) {
+          fields.push({label:'kanji parts', value: _parts.join('  ·  ')});
+        }
+      }
       if (w.note) fields.push({label:'note', value: w.note});
 
       fields.forEach(f => {
