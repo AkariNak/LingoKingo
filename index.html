@@ -1098,6 +1098,16 @@ const KOREAN_SENTENCES = [
     explanation:'"어디" = where. Like 왜, it comes before the verb.',
     level:1
   },
+
+  // ── formal to casual ──
+  {type:'formal_casual',english:'Formal: I eat rice. Make it casual.',formal:'밥을 먹어요.',answer:'밥을 먹어.',choices:['밥을 먹어.','밥을 먹다.','밥을 먹었어.','밥 먹어요?'],explanation:'Remove 요 to make polite casual. 먹어요 → 먹어. Use with close friends or younger people.',level:1},
+  {type:'formal_casual',english:'Formal: I do not know. Make it casual.',formal:'모릅니다.',answer:'몰라.',choices:['몰라.','모릅니다.','모르다.','몰랐어.'],explanation:'모릅니다 is very formal. 몰라요 is polite. 몰라 is casual. With friends it sounds natural.',level:1},
+  {type:'formal_casual',english:'Formal: I went. Make it casual.',formal:'갔습니다.',answer:'갔어.',choices:['갔어.','갔어요.','가요.','갔다.'],explanation:'았/었습니다 → 았/었어. 갔습니다 → 갔어. 습니다 is reserved for presentations and formal situations.',level:2},
+  {type:'formal_casual',english:'Formal: It is not. Make it casual.',formal:'아니에요.',answer:'아니야.',choices:['아니야.','아니에요.','아니다.','아닌데.'],explanation:'에요/이에요 → 야/이야. 아니에요 → 아니야. One of the most common casual endings.',level:1},
+  // ── sentence output ──
+  {type:'output',english:'How are you? (casual)',answer:'잘 지내?',hint:'잘 = well · 지내 = living/doing',explanation:'잘 지내? is the casual way to ask how someone is doing. Literally: are you living well?',level:1},
+  {type:'output',english:'I like Japanese food.',answer:'일본 음식을 좋아해.',hint:'일본 = Japan · 음식 = food · 좋아해 = I like',explanation:'Subject 나는 is dropped — implied in casual Korean. Very natural.',level:1},
+  {type:'output',english:'Where are you going? (casual)',answer:'어디 가?',hint:'어디 = where · 가 = go',explanation:'어디에 가? becomes 어디 가? in fast speech — the particle 에 drops completely.',level:1},
 ];
 
 
@@ -1319,6 +1329,14 @@ const ITALIAN_SENTENCES = [
     explanation:'Time words (domani) come first. Cities use "a" (vado a Roma), countries use "in" (vado in Italia).',
     level:2
   },
+
+  // ── formal to casual ──
+  {type:'formal_casual',english:'Formal: How are you? Make it casual.',formal:'Come sta?',answer:'Come stai?',choices:['Come stai?','Come sta?','Come siete?','Stai bene?'],explanation:'Come sta? uses Lei (formal). Come stai? uses tu (casual). The verb changes: sta → stai. Always use stai with friends.',level:1},
+  {type:'formal_casual',english:'Formal: Do you speak Italian? Make it casual.',formal:'Parla italiano?',answer:'Parli italiano?',choices:['Parli italiano?','Parla italiano?','Parlate italiano?','Parli bene?'],explanation:'Parla = Lei form. Parli = tu form. -ARE verbs: Lei=-a, tu=-i.',level:1},
+  {type:'formal_casual',english:'Formal: Excuse me. Make it casual.',formal:'Mi scusi.',answer:'Scusa.',choices:['Scusa.','Mi scusi.','Scusate.','Prego.'],explanation:'Mi scusi is formal (Lei). Scusa is casual (tu). Use scusa with friends and people your age.',level:1},
+  // ── sentence output ──
+  {type:'output',english:'I want a coffee.',answer:'Voglio un caffè.',hint:'voglio = I want · un = a · caffè = coffee',explanation:'Voglio is the io form of volere. No subject pronoun needed — the verb ending already shows it.',level:1},
+  {type:'output',english:'Where is the bathroom?',answer:"Dov'è il bagno?",hint:'dove = where · è = is · il bagno = the bathroom',explanation:"Dov'è is a contraction of dove + è. One of the most useful phrases in Italy.",level:1},
 ];
 
 
@@ -1717,257 +1735,43 @@ const JAPANESE_WORDS = [
 
 const JAPANESE_SENTENCES = [
   // ── PARTICLE exercises ──
-  {
-    type: "particle",
-    english: "I am a student.",
-    prompt: "わたし ___ がくせい です。",
-    answer: "は",
-    choices: ["は","が","を","に"],
-    explanation: "は (wa) is the topic marker. わたしは sets 'I' as the topic of the sentence. It is written は but read wa.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "There is a cat.",
-    prompt: "ねこ ___ います。",
-    answer: "が",
-    choices: ["が","は","を","で"],
-    explanation: "が (ga) is the subject marker — it marks who or what exists or does the action. For existence (います / あります), use が.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "I read a book.",
-    prompt: "ほん ___ よみます。",
-    answer: "を",
-    choices: ["を","が","は","に"],
-    explanation: "を (o) is the object marker — it marks what receives the action. ほんをよみます = I read a book.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "I go to school.",
-    prompt: "がっこう ___ いきます。",
-    answer: "に",
-    choices: ["に","で","を","は"],
-    explanation: "に (ni) marks direction or destination. がっこうに = to school. Use に when going TO a place.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "I study at the library.",
-    prompt: "としょかん ___ べんきょうします。",
-    answer: "で",
-    choices: ["で","に","を","が"],
-    explanation: "で (de) marks where an action takes place. としょかんで = at the library. Use で when an action happens AT a place.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "This is my book.",
-    prompt: "これ は わたし ___ ほん です。",
-    answer: "の",
-    choices: ["の","が","は","を"],
-    explanation: "の (no) is the possessive particle. わたしのほん = my book. の connects two nouns showing ownership.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "I like Japanese too.",
-    prompt: "にほんご ___ すきです。",
-    answer: "も",
-    choices: ["も","は","が","を"],
-    explanation: "も (mo) means also / too. It replaces は or が to add yourself or something to what was already mentioned.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "Are you a student?",
-    prompt: "がくせい です ___？",
-    answer: "か",
-    choices: ["か","は","ね","よ"],
-    explanation: "か (ka) at the end of a polite sentence turns it into a question. No question mark needed — か does the job.",
-    level: 1
-  },
-  {
-    type: "particle",
-    english: "I go to Japan by plane.",
-    prompt: "ひこうき ___ にほん に いきます。",
-    answer: "で",
-    choices: ["で","に","を","が"],
-    explanation: "で (de) also marks the means or method of doing something. ひこうきで = by plane.",
-    level: 2
-  },
+  {type:"particle",english:"I am a student.",prompt:"わたし ___ がくせい です。",answer:"は",choices:["は","が","を","に"],explanation:"は (wa) is the topic marker. わたしは sets I as the topic of the sentence. Written は but read wa.",level:1},
+  {type:"particle",english:"There is a cat.",prompt:"ねこ ___ います。",answer:"が",choices:["が","は","を","で"],explanation:"が (ga) is the subject marker — marks who exists or does the action. For existence (います / あります), use が.",level:1},
+  {type:"particle",english:"I read a book.",prompt:"ほん ___ よみます。",answer:"を",choices:["を","が","は","に"],explanation:"を (o) is the object marker — marks what receives the action. ほんをよみます = I read a book.",level:1},
+  {type:"particle",english:"I go to school.",prompt:"がっこう ___ いきます。",answer:"に",choices:["に","で","を","は"],explanation:"に (ni) marks direction or destination. がっこうに = to school. Use に when going TO a place.",level:1},
+  {type:"particle",english:"I study at the library.",prompt:"としょかん ___ べんきょうします。",answer:"で",choices:["で","に","を","が"],explanation:"で (de) marks where an action takes place. としょかんで = at the library. Use で when an action happens AT a place.",level:1},
+  {type:"particle",english:"This is my book.",prompt:"これ は わたし ___ ほん です。",answer:"の",choices:["の","が","は","を"],explanation:"の (no) is the possessive particle. わたしのほん = my book. の connects two nouns showing ownership.",level:1},
+  {type:"particle",english:"I like Japanese too.",prompt:"にほんご ___ すきです。",answer:"も",choices:["も","は","が","を"],explanation:"も (mo) means also / too. It replaces は or が to add yourself or something to what was already mentioned.",level:1},
+  {type:"particle",english:"Are you a student?",prompt:"がくせい です ___？",answer:"か",choices:["か","は","ね","よ"],explanation:"か (ka) at the end of a polite sentence turns it into a question.",level:1},
+  {type:"particle",english:"I go to Japan by plane.",prompt:"ひこうき ___ にほん に いきます。",answer:"で",choices:["で","に","を","が"],explanation:"で (de) also marks the means of doing something. ひこうきで = by plane.",level:2},
   // ── CONJUGATION exercises ──
-  {
-    type: "conjugate",
-    english: "I eat sushi. (polite present)",
-    baseForm: "たべる",
-    prompt: "すし を ___。",
-    answer: "たべます",
-    choices: ["たべます","たべました","たべません","たべた"],
-    explanation: "Polite present / future: replace る with ます for る-verbs. たべる → たべます.",
-    level: 1
-  },
-  {
-    type: "conjugate",
-    english: "I ate sushi. (polite past)",
-    baseForm: "たべる",
-    prompt: "きのう すし を ___。",
-    answer: "たべました",
-    choices: ["たべます","たべました","たべません","たべた"],
-    explanation: "Polite past: replace ます with ました. たべます → たべました.",
-    level: 1
-  },
-  {
-    type: "conjugate",
-    english: "I don't eat sushi. (polite negative)",
-    baseForm: "たべる",
-    prompt: "すし を ___。",
-    answer: "たべません",
-    choices: ["たべます","たべました","たべません","たべない"],
-    explanation: "Polite negative: replace ます with ません. たべます → たべません.",
-    level: 1
-  },
-  {
-    type: "conjugate",
-    english: "I go to school. (polite present)",
-    baseForm: "いく",
-    prompt: "がっこう に ___。",
-    answer: "いきます",
-    choices: ["いきます","いきました","いきません","いく"],
-    explanation: "く-verbs: remove く, add きます. いく → いきます. This is an irregular pattern — く → き before ます.",
-    level: 1
-  },
-  {
-    type: "conjugate",
-    english: "I understand. (polite present)",
-    baseForm: "わかる",
-    prompt: "にほんご が ___。",
-    answer: "わかります",
-    choices: ["わかります","わかりました","わかりません","わかる"],
-    explanation: "る-verbs ending in a consonant + る: remove る, add ります. わかる → わかります.",
-    level: 2
-  },
-  {
-    type: "conjugate",
-    english: "It is delicious. (negative)",
-    baseForm: "おいしい",
-    prompt: "これ は ___。",
-    answer: "おいしくないです",
-    choices: ["おいしくないです","おいしいじゃない","おいしくありません","おいしいません"],
-    explanation: "い-adjective negative: remove い, add くない. おいしい → おいしくない. Add です for politeness.",
-    level: 2
-  },
+  {type:"conjugate",english:"I eat sushi. (polite present)",baseForm:"たべる",prompt:"すし を ___。",answer:"たべます",choices:["たべます","たべました","たべません","たべた"],explanation:"Polite present / future: replace る with ます for る-verbs. たべる → たべます.",level:1},
+  {type:"conjugate",english:"I ate sushi. (polite past)",baseForm:"たべる",prompt:"きのう すし を ___。",answer:"たべました",choices:["たべます","たべました","たべません","たべた"],explanation:"Polite past: replace ます with ました. たべます → たべました.",level:1},
+  {type:"conjugate",english:"I don't eat sushi. (polite negative)",baseForm:"たべる",prompt:"すし を ___。",answer:"たべません",choices:["たべます","たべました","たべません","たべない"],explanation:"Polite negative: replace ます with ません.",level:1},
+  {type:"conjugate",english:"I go to school. (polite present)",baseForm:"いく",prompt:"がっこう に ___。",answer:"いきます",choices:["いきます","いきました","いきません","いく"],explanation:"く-verbs: remove く, add きます. いく → いきます.",level:1},
+  {type:"conjugate",english:"I understand. (polite present)",baseForm:"わかる",prompt:"にほんご が ___。",answer:"わかります",choices:["わかります","わかりました","わかりません","わかる"],explanation:"わかる → わかります. Remove る, add ります.",level:2},
+  {type:"conjugate",english:"It is not delicious. (negative)",baseForm:"おいしい",prompt:"これ は ___。",answer:"おいしくないです",choices:["おいしくないです","おいしいじゃない","おいしくありません","おいしいません"],explanation:"い-adjective negative: remove い, add くない. おいしい → おいしくない.",level:2},
   // ── FILL exercises ──
-  {
-    type: "fill",
-    english: "Where is the bathroom?",
-    prompt: "トイレ は ___ です か？",
-    answer: "どこ",
-    choices: ["どこ","なに","だれ","いつ"],
-    explanation: "どこ means where. トイレはどこですか is one of the most useful phrases in Japan.",
-    level: 1
-  },
-  {
-    type: "fill",
-    english: "What is this?",
-    prompt: "これ は ___ です か？",
-    answer: "なん",
-    choices: ["なん","どこ","だれ","いくら"],
-    explanation: "なん (or なに) means what. Before です, なん is more natural than なに.",
-    level: 1
-  },
-  {
-    type: "fill",
-    english: "How much is it?",
-    prompt: "___ です か？",
-    answer: "いくら",
-    choices: ["いくら","いくつ","なん","どこ"],
-    explanation: "いくら means how much (price). いくつ means how many. For prices, always use いくら.",
-    level: 1
-  },
-  {
-    type: "fill",
-    english: "I don't understand.",
-    prompt: "わかり___。",
-    answer: "ません",
-    choices: ["ません","ます","ました","ない"],
-    explanation: "わかりません = I don't understand. This is the polite negative of わかります. One of the most useful phrases to know.",
-    level: 1
-  },
-  {
-    type: "fill",
-    english: "Please give me water.",
-    prompt: "みず を ___。",
-    answer: "ください",
-    choices: ["ください","おねがい","どうぞ","ちょうだい"],
-    explanation: "ください after を = please give me. みずをください is the standard polite way to order water.",
-    level: 1
-  },
+  {type:"fill",english:"Where is the bathroom?",prompt:"トイレ は ___ です か？",answer:"どこ",choices:["どこ","なに","だれ","いつ"],explanation:"どこ means where. トイレはどこですか is one of the most useful phrases in Japan.",level:1},
+  {type:"fill",english:"What is this?",prompt:"これ は ___ です か？",answer:"なん",choices:["なん","どこ","だれ","いくら"],explanation:"なん (or なに) means what. Before です, なん is more natural than なに.",level:1},
+  {type:"fill",english:"How much is it?",prompt:"___ です か？",answer:"いくら",choices:["いくら","いくつ","なん","どこ"],explanation:"いくら means how much (price). For prices, always use いくら.",level:1},
+  {type:"fill",english:"I don't understand.",prompt:"わかり___。",answer:"ません",choices:["ません","ます","ました","ない"],explanation:"わかりません = I don't understand. One of the most useful phrases to know.",level:1},
+  {type:"fill",english:"Please give me water.",prompt:"みず を ___。",answer:"ください",choices:["ください","おねがい","どうぞ","ちょうだい"],explanation:"ください after を = please give me. みずをください is standard polite.",level:1},
   // ── BUILD exercises ──
-  {
-    type: "build",
-    english: "I study Japanese every day.",
-    blocks: ["わたし は","まいにち","にほんご を","べんきょうします","がっこう で"],
-    answer: ["わたし は","まいにち","にほんご を","べんきょうします"],
-    explanation: "Japanese word order: Topic (わたしは) → Time (まいにち) → Object (にほんごを) → Verb (べんきょうします). The verb always comes last.",
-    level: 1
-  },
-  {
-    type: "build",
-    english: "I go to school by bus.",
-    blocks: ["わたし は","バス で","がっこう に","いきます","でんしゃ で"],
-    answer: ["わたし は","バス で","がっこう に","いきます"],
-    explanation: "Topic → Means (バスで = by bus) → Destination (がっこうに = to school) → Verb. で marks the means, に marks the destination.",
-    level: 2
-  },
-  {
-    type: "build",
-    english: "Yesterday I ate sushi at a restaurant.",
-    blocks: ["きのう","レストラン で","すし を","たべました","に"],
-    answer: ["きのう","レストラン で","すし を","たべました"],
-    explanation: "Time (きのう = yesterday) → Place (レストランで = at a restaurant) → Object (すしを) → Verb (たべました). Time and place come before the object and verb.",
-    level: 2
-  },
-  {
-    id: "idol",
-    lang: "japanese",
-    title: "アイドル",
-    titleRo: "Idol",
-    artist: "YOASOBI",
-    color: "#c87aa8",
-    desc: "Heavy kanji song about a perfect idol whose love is built on lies. Great for learning emotional and descriptive vocabulary — adjectives, verbs of concealment, and poetic nouns.",
-    words: [
-      {kr:"無敵",ro:"む / むてき",meaning:"invincible / unbeatable",lyric:"無敵の笑顔",lyricRo:"muteki no egao",note:"無 (mu) = nothing/without + 敵 (teki) = enemy. Literally no enemies — invincible. Common in anime and games.",crush:false},
-      {kr:"笑顔",ro:"えがお",meaning:"smile / smiling face",lyric:"笑顔で",lyricRo:"egao de",note:"笑 (wara/sho) = laugh/smile + 顔 (kao/gan) = face. One of the first compound words beginners learn. No on/kun shift — egao every time.",crush:false},
-      {kr:"秘密",ro:"ひみつ",meaning:"secret",lyric:"秘密ミステリアス",lyricRo:"himitsu misuteriasu",note:"Both kanji use their on'yomi — hi + mitsu. 秘 means hidden/secret, 密 means dense/close/secret. Together: deeply hidden thing.",crush:false},
-      {kr:"完璧",ro:"かんぺき",meaning:"perfect / flawless",lyric:"完璧なアイドル",lyricRo:"kanpeki na aidoru",note:"Tricky kanji — 璧 has 17 strokes. On'yomi throughout: kan + peki. Very common word in modern Japanese despite the complex kanji.",crush:false},
-      {kr:"天才",ro:"てんさい",meaning:"genius",lyric:"天才的なアイドル",lyricRo:"tensai-teki na aidoru",note:"天 (heaven/sky) + 才 (talent). Heavenly talent = genius. てんさいてき (-teki suffix) turns it into an adjective meaning genius-like.",crush:false},
-      {kr:"嘘",ro:"うそ",meaning:"lie / falsehood",lyric:"嘘をつく",lyricRo:"uso wo tsuku",note:"嘘をつく is the standard phrase for telling a lie — つく here doesn't mean to attach, it's an idiomatic use. One kanji, reads うそ always.",crush:false},
-      {kr:"瞳",ro:"ひとみ",meaning:"pupil / eye (poetic)",lyric:"その瞳が",lyricRo:"sono hitomi ga",note:"More poetic than 目 (me). 瞳 specifically means the pupil/iris — used in emotional and romantic contexts. Almost always read ひとみ.",crush:false},
-      {kr:"虜",ro:"とりこ",meaning:"captive / completely charmed",lyric:"虜にしていく",lyricRo:"toriko ni shite iku",note:"虜にする means to captivate someone completely — to make them your prisoner emotionally. Strong word used in songs and drama.",crush:false},
-      {kr:"愛",ro:"あい",meaning:"love",lyric:"愛してる",lyricRo:"ai shite ru",note:"The kanji for love. Reads あい in most contexts. 愛してる is the most direct way to say I love you in Japanese — stronger and more serious than 好き.",crush:false},
-      {kr:"嫉妬",ro:"しっと",meaning:"jealousy / envy",lyric:"妬み嫉妬",lyricRo:"netami shitto",note:"Two kanji that both relate to envy — 嫉 and 妨. Both use on'yomi. This is a more literary/intense word than everyday jealousy expressions.",crush:false},
-      {kr:"星",ro:"ほし",meaning:"star",lyric:"一番星の生まれ変わり",lyricRo:"ichiban-boshi no umarekawari",note:"一番星 = the first star of the night / the brightest star. 星 reads ほし alone, but in compounds can shift to せい (星座 = seiza, constellation).",crush:false},
-      {kr:"弱点",ro:"じゃくてん",meaning:"weak point / weakness",lyric:"弱点なんて見当たらない",lyricRo:"jakuten nante mitsukaranai",note:"弱 (weak) + 点 (point). Both on'yomi. じゃくてん is consistent — this compound doesn't shift readings.",crush:false},
-      {kr:"瞼",ro:"まぶた",meaning:"eyelid",lyric:"ルビーを隠したこの瞼",lyricRo:"rubii wo kakushita kono mabuta",note:"One of those kanji that looks impossibly complex but reads as a simple two-beat word. まぶた is kun'yomi. Used poetically here — eyelids hiding rubies.",crush:false},
-      {kr:"荒らす",ro:"あらす",meaning:"to disrupt / dominate / run wild",lyric:"メディアを荒らす",lyricRo:"media wo arasu",note:"荒 means rough/wild. 荒らす = to make something wild, to tear through something. Used for storms destroying things, or an idol dominating media.",crush:false},
-      {kr:"隠す",ro:"かくす",meaning:"to hide / to conceal",lyric:"隠しきるこの秘密",lyricRo:"kakushikiru kono himitsu",note:"隠しきる = to completely hide something, the きる suffix meaning to do something fully/completely. 隠す alone = to hide.",crush:false},
-      {kr:"堕ちる",ro:"おちる",meaning:"to fall / to be captivated",lyric:"また一人堕ちる",lyricRo:"mata hitori ochiru",note:"堕 specifically means to fall morally or emotionally — falling for someone against your will. Different from 落ちる which is just physically falling.",crush:false},
-      {kr:"願う",ro:"ねがう",meaning:"to wish / to hope for",lyric:"本当になることを願う",lyricRo:"hontou ni naru koto wo negau",note:"願 (nega/gan) means wish or prayer. ねがう is the verb form. おねがいします comes from the same kanji — the same feeling of earnest requesting.",crush:false},
-      {kr:"特別",ro:"とくべつ",meaning:"special",lyric:"あの子は特別です",lyricRo:"ano ko wa tokubetsu desu",note:"特 (special/unique) + 別 (separate/different). Both on'yomi. とくべつ is one of the most useful adjectives — you will hear this constantly.",crush:false},
-      {kr:"最強",ro:"さいきょう",meaning:"strongest / most powerful",lyric:"最強で無敵のアイドル",lyricRo:"saikyo de muteki no aidoru",note:"最 = most/extreme (like a superlative prefix) + 強 = strong. さいきょう is hugely popular in anime and games. 最 + anything = the most [thing].",crush:false},
-      {kr:"欲張り",ro:"よくばり",meaning:"greedy / wanting it all",lyric:"欲張りなアイドル",lyricRo:"yokubari na aidoru",note:"欲 = desire/greed + 張り = stretching/pushing. Wanting to grab more than you can hold. Used affectionately here — an idol who wants everything.",crush:false},
-      {kr:"等身大",ro:"とうしんだい",meaning:"life-size / true to oneself",lyric:"等身大でみんなのこと",lyricRo:"toshindai de minna no koto",note:"Originally means life-size (same height as the body). Used figuratively to mean being your natural self without exaggeration. Rare and poetic.",crush:false},
-      {kr:"完全",ro:"かんぜん",meaning:"complete / perfect",lyric:"それは完全なアイ",lyricRo:"sore wa kanzen na ai",note:"完 (complete) + 全 (whole/all). Both on'yomi. かんぜん is more about being whole and complete, while 完璧 (kanpeki) is about being flawless.",crush:false},
-      {kr:"唯一無二",ro:"ゆいいつむに",meaning:"one of a kind / truly unique",lyric:"唯一無二じゃなくちゃ",lyricRo:"yuiitsu muni ja nakucha",note:"Four-kanji compound (yojijukugo). 唯一 = only one + 無二 = no second. No other like it in the world. Literary and dramatic — perfect for idol songs.",crush:false},
-    ]
-  }
+  {type:"build",english:"I study Japanese every day.",blocks:["わたし は","まいにち","にほんご を","べんきょうします","がっこう で"],answer:["わたし は","まいにち","にほんご を","べんきょうします"],explanation:"Topic → Time → Object → Verb. The verb always comes last.",level:1},
+  {type:"build",english:"I go to school by bus.",blocks:["わたし は","バス で","がっこう に","いきます","でんしゃ で"],answer:["わたし は","バス で","がっこう に","いきます"],explanation:"Topic → Means (バスで) → Destination (がっこうに) → Verb.",level:2},
+  {type:"build",english:"Yesterday I ate sushi at a restaurant.",blocks:["きのう","レストラン で","すし を","たべました","に"],answer:["きのう","レストラン で","すし を","たべました"],explanation:"Time → Place → Object → Verb.",level:2},
+  // ── FORMAL TO CASUAL ──
+  {type:"formal_casual",english:"Formal: I eat. Make it casual.",formal:"食べます。",answer:"食べる。",choices:["食べる。","食べます。","食べた。","食べない。"],explanation:"ます → dictionary form in casual speech. 食べます → 食べる.",level:1},
+  {type:"formal_casual",english:"I am doing. Make it casual.",formal:"しています。",answer:"してる。",choices:["してる。","している。","します。","してた。"],explanation:"している → してる. The い drops. Happens with all ている forms.",level:1},
+  {type:"formal_casual",english:"It is not. Make it casual.",formal:"ではありません。",answer:"じゃない。",choices:["じゃない。","ではない。","ありません。","じゃなかった。"],explanation:"ではありません → じゃない. One of the biggest shifts between textbook and real Japanese.",level:1},
+  {type:"formal_casual",english:"I do not know. Make it casual.",formal:"知りません。",answer:"知らない。",choices:["知らない。","知りません。","知らなかった。","分からない。"],explanation:"知りません → 知らない. ません becomes ない in casual speech.",level:1},
+  // ── OUTPUT ──
+  {type:"output",english:"I like cats.",answer:"猫が好きです。",hint:"猫=cat · が=subject · 好きです=like",explanation:"好き is a な-adjective. が marks what is liked.",level:1},
+  {type:"output",english:"Where is the station?",answer:"駅はどこですか？",hint:"駅=station · は=topic · どこ=where",explanation:"Standard polite form. Casual: 駅どこ？",level:1},
+  {type:"output",english:"This is delicious! (casual)",answer:"おいしい！",hint:"おいしい=delicious",explanation:"い-adjectives stand alone as complete sentences in Japanese.",level:1}
 ];
 
-
-// ── SONGS DATA ────────────────────────────────────────────────────────────────
 const SONGS = [
   {
     id: "yofukashi",
@@ -3592,7 +3396,7 @@ function renderPractice(container) {
   lbl.className = 'ctrl-label';
   lbl.textContent = 'exercise type:';
   row.appendChild(lbl);
-  ['all','particle','conjugate','build','fill'].forEach(t => {
+  ['all','particle','conjugate','build','fill','formal_casual','output'].forEach(t => {
     const b = document.createElement('button');
     b.className = 'gbtn' + (practiceFilter === t ? ' on' : '');
     b.textContent = t;
@@ -3712,6 +3516,8 @@ function showNextExercise() {
 
   // Render by type
   if (ex.type === 'build') renderBuildExercise(ex);
+  else if (ex.type === 'formal_casual') renderFormalCasualExercise(ex);
+  else if (ex.type === 'output') renderOutputExercise(ex);
   else renderChoiceExercise(ex);
 }
 
@@ -3830,6 +3636,79 @@ function checkBuildAnswer(ex) {
   }
 
   showFeedback(correct, ex);
+}
+
+
+function renderFormalCasualExercise(ex) {
+  const prompt = document.getElementById('exPrompt');
+  prompt.innerHTML = '';
+  const lbl = document.createElement('span');
+  lbl.style.cssText = 'font-size:.7rem;color:var(--mu);display:block;margin-bottom:6px';
+  lbl.textContent = 'formal version:';
+  const ftxt = document.createElement('span');
+  ftxt.style.fontFamily = 'Noto Sans KR, sans-serif';
+  ftxt.style.fontSize = '1.1rem';
+  ftxt.textContent = ex.formal;
+  prompt.appendChild(lbl);
+  prompt.appendChild(ftxt);
+
+  const choices = document.getElementById('choicesDiv');
+  choices.innerHTML = '';
+  const clbl = document.createElement('div');
+  clbl.style.cssText = 'font-size:.7rem;color:var(--mu);margin-bottom:6px';
+  clbl.textContent = 'casual version:';
+  choices.appendChild(clbl);
+  const shuffled = shuffle(ex.choices);
+  shuffled.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.style.fontFamily = 'Noto Sans KR, sans-serif';
+    btn.textContent = c;
+    btn.onclick = () => submitChoiceAnswer(c, ex);
+    choices.appendChild(btn);
+  });
+}
+
+function renderOutputExercise(ex) {
+  const prompt = document.getElementById('exPrompt');
+  prompt.innerHTML = '<span style="font-size:.7rem;color:var(--mu);display:block;margin-bottom:4px">hint: ' + ex.hint + '</span>';
+
+  const ansArea = document.getElementById('ansArea');
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'type in Japanese...';
+  input.style.width = '100%';
+  input.style.fontFamily = 'Noto Sans KR, sans-serif';
+  input.style.fontSize = '1rem';
+  input.id = 'outputInput';
+  ansArea.appendChild(input);
+
+  const submitBtn = document.createElement('button');
+  submitBtn.className = 'abtn accent';
+  submitBtn.style.marginTop = '8px';
+  submitBtn.textContent = 'check →';
+  submitBtn.onclick = () => {
+    const val = input.value.trim();
+    if (!val) return;
+    const correct = val === ex.answer;
+    const fb = document.getElementById('exFeedback');
+    fb.style.display = 'block';
+    fb.className = 'ex-feedback ' + (correct ? 'fb-correct' : 'fb-wrong');
+    fb.innerHTML = '<div class="fb-result">' + (correct ? '✓ correct' : '✗ not quite') + '</div>'
+      + (!correct ? '<div class="fb-explanation" style="margin-bottom:4px">correct answer: <span style="font-family:Noto Sans KR,sans-serif">' + ex.answer + '</span></div>' : '')
+      + '<div class="fb-explanation">' + ex.explanation + '</div>';
+    practiceScore.total++;
+    if (correct) practiceScore.correct++;
+    const sn = document.querySelector('.score-num');
+    if (sn) sn.textContent = practiceScore.correct + '/' + practiceScore.total;
+    document.getElementById('exNextBtn').style.display = 'block';
+    input.disabled = true;
+    submitBtn.disabled = true;
+  };
+  ansArea.appendChild(submitBtn);
+
+  // Allow enter key
+  input.onkeydown = e => { if (e.key === 'Enter') submitBtn.click(); };
 }
 
 function showFeedback(correct, ex) {
@@ -4374,8 +4253,6 @@ function srsNextCard() {
     b.setAttribute('aria-selected', b.dataset.tab === savedTab ? 'true' : 'false');
   });
   renderTab(savedTab);
-})();
-
-</script>
+})();</script>
 </body>
 </html>
