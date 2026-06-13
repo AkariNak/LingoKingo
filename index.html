@@ -390,6 +390,7 @@ input[type="text"]::placeholder{color:var(--su)}
   <button class="tab-btn" data-tab="practice" onclick="switchTab('practice')">practice</button>
   <button class="tab-btn" data-tab="grammar"  onclick="switchTab('grammar')">grammar</button>
   <button class="tab-btn" data-tab="songs"    onclick="switchTab('songs')">songs</button>
+  <button class="tab-btn" data-tab="progress" onclick="switchTab('progress')">progress</button>
   <button id="fontBtn" onclick="cycleFontSize()" aria-label="change font size">text: large</button>
 </div>
 
@@ -2315,6 +2316,7 @@ function renderTab(tab) {
   if (tab === 'practice') { main.innerHTML = ''; renderPractice(main); }
   if (tab === 'grammar')  { main.innerHTML = ''; renderGrammar(main); }
   if (tab === 'songs')    { main.innerHTML = ''; renderSongs(main); }
+  if (tab === 'progress') { main.innerHTML = ''; renderProgress(main); }
 }
 
 // ── SPEECH SYNTHESIS ──
@@ -3719,6 +3721,9 @@ function showFeedback(correct, ex) {
     <div class="fb-result">${correct ? '✓ correct' : '✗ not quite'}</div>
     <div class="fb-explanation">${ex.explanation}</div>
   `;
+
+  // record for mistake tracking
+  recordAnswer(ex, correct);
 
   // update score display
   const sn = document.querySelector('.score-num');
