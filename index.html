@@ -428,10 +428,10 @@ input[type="text"]::placeholder{color:var(--su)}
     </div>
     <div id="srsControls" style="display:none;flex-direction:column;gap:8px">
       <div style="display:flex;gap:8px">
-        <button class="abtn danger" style="flex:1;font-size:.85rem;padding:10px" onclick="srsAgain()">↺ again</button>
-        <button class="abtn accent" style="flex:1;font-size:.85rem;padding:10px" onclick="srsGood()">✓ good</button>
+        <button class="abtn danger" style="flex:1;font-size:.85rem;padding:10px" onclick="srsAgain()" id="againBtn">↺ again</button>
+        <button class="abtn accent" style="flex:1;font-size:.85rem;padding:10px" onclick="srsGood()" id="goodBtn">✓ good</button>
       </div>
-      <div style="text-align:center;font-size:.65rem;color:var(--mu)">again = review soon · good = see later</div>
+      <div style="text-align:center;font-size:.65rem;color:var(--mu)" id="srsHint">flip the card first</div>
     </div>
   </div>
 </div>
@@ -3277,7 +3277,7 @@ function renderDeckSwitcher() {
   const srsModeBtn = document.createElement('button');
   srsModeBtn.id = 'srsModeBtn';
   srsModeBtn.className = 'abtn' + (srsMode ? ' accent' : '');
-  srsModeBtn.textContent = srsMode ? 'SRS: on' : 'SRS: off';
+  srsModeBtn.textContent = srsMode ? 'smart review: on' : 'smart review: off';
   srsModeBtn.title = 'Toggle spaced repetition mode';
   srsModeBtn.onclick = toggleSRSMode;
   srsWrap.appendChild(srsModeBtn);
@@ -3504,9 +3504,39 @@ function renderStudyCard() {
   `;
   document.getElementById('fcard')?.classList.remove('flip');
   sFlip = false;
+  // Hide again/good until card is flipped
+  const _againBtn = document.getElementById('againBtn');
+  const _goodBtn = document.getElementById('goodBtn');
+  const _hint = document.getElementById('srsHint');
+  if (_againBtn) _againBtn.style.display = 'none';
+  if (_goodBtn) _goodBtn.style.display = 'none';
+  if (_hint) _hint.style.display = 'block';
 }
 
-function flipCard()  { sFlip = !sFlip; document.getElementById('fcard')?.classList.toggle('flip', sFlip); }
+function flipCard() {
+  sFlip = !sFlip;
+  document.getElementById('fcard')?.classList.toggle('flip', sFlip);
+  // Show SRS buttons after flip, with time preview on good button
+  if (sFlip && document.getElementById('srsControls')?.style.display !== 'none') {
+    const againBtn = document.getElementById('againBtn');
+    const goodBtn = document.getElementById('goodBtn');
+    const hint = document.getElementById('srsHint');
+    if (againBtn) againBtn.style.display = 'block';
+    if (goodBtn) {
+      // Calculate what interval "good" would give
+      const w = studyList[sIdx];
+      if (w) {
+        const c = getCard(activeDeckIdx, w.kr);
+        const nextReps = c.reps + 1;
+        const nextInterval = nextReps === 1 ? 1 : nextReps === 2 ? 3 : Math.round(c.interval * c.ease);
+        const label = nextInterval === 1 ? '1 day' : nextInterval + ' days';
+        goodBtn.textContent = '✓ good  ·  ' + label;
+      }
+      goodBtn.style.display = 'block';
+    }
+    if (hint) hint.style.display = 'none';
+  }
+}
 function nextCard()  {
   sIdx++;
   if (sIdx >= studyList.length) {
@@ -4230,7 +4260,7 @@ function toggleSRSMode() {
 function updateSRSBtn() {
   const btn = document.getElementById('srsModeBtn');
   if (!btn) return;
-  btn.textContent = srsMode ? 'SRS: on' : 'SRS: off';
+  btn.textContent = srsMode ? 'smart review: on' : 'smart review: off';
   btn.className = 'abtn' + (srsMode ? ' accent' : '');
 }
 
@@ -4253,7 +4283,14 @@ function openReview() {
   // Show SRS controls
   document.getElementById('srsControls').style.display = 'flex';
   document.getElementById('normalControls').style.display = 'none';
-  document.getElementById('mMeta').textContent = dueKeys.length + ' cards due';
+  document.getElementById('mMeta').textContent = dueKeys.length + ' cards due today';
+  // hide again/good until flip
+  const _ab = document.getElementById('againBtn');
+  const _gb = document.getElementById('goodBtn');
+  const _sh = document.getElementById('srsHint');
+  if (_ab) _ab.style.display = 'none';
+  if (_gb) _gb.style.display = 'none';
+  if (_sh) _sh.style.display = 'block';
 }
 
 function srsGood() {
