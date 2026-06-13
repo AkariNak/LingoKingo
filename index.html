@@ -418,11 +418,20 @@ input[type="text"]::placeholder{color:var(--su)}
         <div class="face back"  id="cBack"></div>
       </div>
     </div>
-    <div class="m-nav">
-      <button class="abtn accent" style="width:100%" onclick="nextCard()">next →</button>
+    <div id="normalControls">
+      <div class="m-nav">
+        <button class="abtn accent" style="width:100%" onclick="nextCard()">next →</button>
+      </div>
+      <div class="m-reshuffle">
+        <button class="abtn" onclick="reshuffleStudy()">↺ reshuffle</button>
+      </div>
     </div>
-    <div class="m-reshuffle">
-      <button class="abtn" onclick="reshuffleStudy()">↺ reshuffle</button>
+    <div id="srsControls" style="display:none;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:8px">
+        <button class="abtn danger" style="flex:1;font-size:.85rem;padding:10px" onclick="srsAgain()">↺ again</button>
+        <button class="abtn accent" style="flex:1;font-size:.85rem;padding:10px" onclick="srsGood()">✓ good</button>
+      </div>
+      <div style="text-align:center;font-size:.65rem;color:var(--mu)">again = review soon · good = see later</div>
     </div>
   </div>
 </div>
@@ -3260,6 +3269,30 @@ function renderDeckSwitcher() {
   // update badge
   const badge = document.getElementById('deckBadge');
   if (badge) badge.textContent = activeDeckIdx >= 0 ? Object.keys(decks[activeDeckIdx]?.words||{}).length : '0';
+
+  // SRS mode toggle + review button
+  const srsWrap = document.createElement('div');
+  srsWrap.style.cssText = 'display:flex;gap:8px;margin-top:6px;align-items:center;flex-wrap:wrap';
+
+  const srsModeBtn = document.createElement('button');
+  srsModeBtn.id = 'srsModeBtn';
+  srsModeBtn.className = 'abtn' + (srsMode ? ' accent' : '');
+  srsModeBtn.textContent = srsMode ? 'SRS: on' : 'SRS: off';
+  srsModeBtn.title = 'Toggle spaced repetition mode';
+  srsModeBtn.onclick = toggleSRSMode;
+  srsWrap.appendChild(srsModeBtn);
+
+  if (srsMode && activeDeckIdx >= 0 && activeDeckIdx < decks.length) {
+    const due = cardsDueToday(activeDeckIdx);
+    const reviewBtn = document.createElement('button');
+    reviewBtn.className = 'abtn accent';
+    reviewBtn.textContent = due > 0 ? 'review (' + due + ' due) →' : 'review (0 due)';
+    reviewBtn.onclick = openReview;
+    if (due === 0) reviewBtn.style.opacity = '0.5';
+    srsWrap.appendChild(reviewBtn);
+  }
+
+  sw.appendChild(srsWrap);
 }
 
 function renderDeckChips() {
@@ -3442,6 +3475,12 @@ function openStudy() {
   sIdx = 0; sFlip = false;
   renderStudyCard();
   document.getElementById('studyOverlay')?.classList.add('open');
+  // show normal controls, hide SRS controls
+  const sc = document.getElementById('srsControls');
+  const nc = document.getElementById('normalControls');
+  if (sc) sc.style.display = 'none';
+  if (nc) nc.style.display = 'block';
+  document.getElementById('mMeta').textContent = keys.length + ' words';
 }
 function closeStudy() { document.getElementById('studyOverlay')?.classList.remove('open'); }
 function overlayClick(e) { if (e.target.id === 'studyOverlay') closeStudy(); }
@@ -4133,6 +4172,125 @@ function addSongToDeck(song) {
 }
 
 
+
+// ── SRS SYSTEM ────────────────────────────────────────────────────────────────
+let srsMode = localStorage.getItem('lf-srs-mode') === 'true';
+let srsData = {};
+try { srsData = JSON.parse(localStorage.getItem('lf-srs-data') || '{}'); } catch(e) { srsData = {}; }
+
+function saveSRS() {
+  localStorage.setItem('lf-srs-data', JSON.stringify(srsData));
+}
+
+function srsKey(deckIdx, kr) {
+  const deck = decks[deckIdx];
+  return (deck ? deck.name : 'deck') + ':' + kr;
+}
+
+function getCard(deckIdx, kr) {
+  const k = srsKey(deckIdx, kr);
+  if (!srsData[k]) srsData[k] = {interval:1, due:0, ease:2.5, reps:0};
+  return srsData[k];
+}
+
+function cardsDueToday(deckIdx) {
+  if (deckIdx < 0 || deckIdx >= decks.length) return 0;
+  const now = Date.now();
+  return Object.keys(decks[deckIdx].words).filter(kr => {
+    const c = getCard(deckIdx, kr);
+    return c.due <= now;
+  }).length;
+}
+
+function reviewAnswer(kr, good) {
+  const k = srsKey(activeDeckIdx, kr);
+  if (!srsData[k]) srsData[k] = {interval:1, due:0, ease:2.5, reps:0};
+  const c = srsData[k];
+  if (good) {
+    c.reps++;
+    c.interval = c.reps === 1 ? 1 : c.reps === 2 ? 3 : Math.round(c.interval * c.ease);
+    c.ease = Math.max(1.3, c.ease + 0.1);
+    c.due = Date.now() + c.interval * 86400000;
+  } else {
+    c.reps = 0;
+    c.interval = 1;
+    c.ease = Math.max(1.3, c.ease - 0.2);
+    c.due = Date.now(); // due again now (later in session)
+  }
+  saveSRS();
+}
+
+function toggleSRSMode() {
+  srsMode = !srsMode;
+  localStorage.setItem('lf-srs-mode', srsMode ? 'true' : 'false');
+  renderDeckSwitcher();
+  updateSRSBtn();
+}
+
+function updateSRSBtn() {
+  const btn = document.getElementById('srsModeBtn');
+  if (!btn) return;
+  btn.textContent = srsMode ? 'SRS: on' : 'SRS: off';
+  btn.className = 'abtn' + (srsMode ? ' accent' : '');
+}
+
+function openReview() {
+  if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) {
+    showToast('Select a deck first.'); return;
+  }
+  const now = Date.now();
+  const dueKeys = Object.keys(decks[activeDeckIdx].words).filter(kr => {
+    return getCard(activeDeckIdx, kr).due <= now;
+  });
+  if (dueKeys.length === 0) {
+    showToast('No cards due for review!'); return;
+  }
+  studyList = dueKeys.map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean);
+  studyList = shuffle(studyList);
+  sIdx = 0; sFlip = false;
+  renderStudyCard();
+  document.getElementById('studyOverlay')?.classList.add('open');
+  // Show SRS controls
+  document.getElementById('srsControls').style.display = 'flex';
+  document.getElementById('normalControls').style.display = 'none';
+  document.getElementById('mMeta').textContent = dueKeys.length + ' cards due';
+}
+
+function srsGood() {
+  const w = studyList[sIdx];
+  if (w) reviewAnswer(w.kr, true);
+  srsNextCard();
+}
+
+function srsAgain() {
+  const w = studyList[sIdx];
+  if (w) {
+    reviewAnswer(w.kr, false);
+    // push to end of queue so it comes back
+    studyList.push(w);
+  }
+  srsNextCard();
+}
+
+function srsNextCard() {
+  sIdx++;
+  // filter out cards that are now not due (got answered correctly)
+  const now = Date.now();
+  while (sIdx < studyList.length) {
+    const w = studyList[sIdx];
+    const c = getCard(activeDeckIdx, w.kr);
+    if (c.due <= now || c.reps === 0) break;
+    sIdx++;
+  }
+  if (sIdx >= studyList.length) {
+    showToast('Review complete!');
+    closeStudy();
+    renderDeckSwitcher();
+    return;
+  }
+  sFlip = false;
+  renderStudyCard();
+}
 
 (function boot() {
   decks         = load('lf-decks', []);
