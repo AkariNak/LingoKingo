@@ -3489,7 +3489,17 @@ function renderStudyCard() {
   const w = studyList[sIdx];
   const front = document.getElementById('cFront');
   const back  = document.getElementById('cBack');
+  const fcard = document.getElementById('fcard');
   if (!front || !back) return;
+  // Instantly snap to front with no animation, then re-enable transition
+  if (fcard) {
+    fcard.style.transition = 'none';
+    fcard.classList.remove('flip');
+    // force reflow so the browser applies the no-transition snap
+    void fcard.offsetWidth;
+    // re-enable the flip animation for next user flip
+    fcard.style.transition = '';
+  }
   front.innerHTML = `
     <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
     <div class="fc-kr">${w.kr}</div>
@@ -3502,7 +3512,6 @@ function renderStudyCard() {
     <div class="fc-meaning">${w.meaning}</div>
     <div class="fc-ex">${w.example}</div>
   `;
-  document.getElementById('fcard')?.classList.remove('flip');
   sFlip = false;
   // Hide again/good until card is flipped
   const _againBtn = document.getElementById('againBtn');
