@@ -178,7 +178,10 @@ function unlockAchievement(id) {
   if (!a) return;
   const el = document.createElement('div');
   el.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--sf);border:1px solid ${a.color};border-radius:12px;padding:12px 20px;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--tx);z-index:9999;box-shadow:0 4px 24px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;min-width:260px;animation:cin .3s ease`;
-  el.innerHTML = `${achievementIcon(a.id,a.color,32)}<div><div style="font-weight:500;color:${a.color};margin-bottom:2px">achievement unlocked</div><div style="font-size:.82rem">${a.name}</div><div style="font-size:.68rem;color:var(--mu)">${a.desc}</div></div>`;
+  // Check if this achievement unlocks any cosmetics
+  const cosmeticUnlock = [...ACCENT_COLORS,...BG_THEMES].find(t=>t.unlock===a.id);
+  const cosmeticNote = cosmeticUnlock ? `<div style="font-size:.62rem;color:${a.color};margin-top:3px;opacity:.85">+ ${cosmeticUnlock.label} unlocked in themes</div>` : '';
+  el.innerHTML = `${achievementIcon(a.id,a.color,32)}<div><div style="font-weight:500;color:${a.color};margin-bottom:2px">achievement unlocked</div><div style="font-size:.82rem">${a.name}</div><div style="font-size:.68rem;color:var(--mu)">${a.desc}</div>${cosmeticNote}</div>`;
   document.body.appendChild(el);
   setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .5s'; setTimeout(() => el.remove(), 500); }, 4000);
 }
@@ -274,6 +277,7 @@ function renderTab(tab) {
   if (tab === 'songs')    renderSongs(main);
   if (tab === 'guide')    renderGuide(main);
   if (tab === 'medals')   renderMedals(main);
+  if (tab === 'themes')   renderThemes(main);
 }
 
 // ── SCRIPT FILTERS ────────────────────────────────────────────────────────────
@@ -817,6 +821,287 @@ function addSongToDeck(song,container){
 }
 
 // ── MEDALS TAB ────────────────────────────────────────────────────────────────
+// ── THEME SYSTEM ──────────────────────────────────────────────────────────────
+const ACCENT_COLORS = [
+  // Tier 1 — unlocked with Week Warrior (streak_7)
+  {id:'acc_default',    label:'Default',       value:'#c8a87a', tier:0, unlock:null},
+  {id:'acc_sakura',     label:'Sakura Pink',   value:'#e8829a', tier:1, unlock:'streak_7'},
+  {id:'acc_indigo',     label:'Indigo',        value:'#6b7fd7', tier:1, unlock:'streak_7'},
+  {id:'acc_matcha',     label:'Matcha Green',  value:'#7ac8a0', tier:1, unlock:'streak_7'},
+  {id:'acc_sunset',     label:'Sunset Orange', value:'#e09060', tier:1, unlock:'streak_7'},
+  {id:'acc_violet',     label:'Violet',        value:'#a87ac8', tier:1, unlock:'streak_7'},
+  {id:'acc_aqua',       label:'Aqua',          value:'#5bc8c8', tier:1, unlock:'streak_7'},
+  {id:'acc_ruby',       label:'Ruby Red',      value:'#c85a5a', tier:1, unlock:'streak_7'},
+  {id:'acc_gold',       label:'Gold',          value:'#d4a820', tier:1, unlock:'streak_7'},
+  // Tier 2 — unlocked with Vocabulary Rich (words_200)
+  {id:'acc_plum',       label:'Plum',          value:'#8b4f8b', tier:2, unlock:'words_200'},
+  {id:'acc_teal',       label:'Teal',          value:'#2a9d8f', tier:2, unlock:'words_200'},
+  {id:'acc_crimson',    label:'Crimson',       value:'#b5173a', tier:2, unlock:'words_200'},
+  {id:'acc_amber',      label:'Amber',         value:'#e0920a', tier:2, unlock:'words_200'},
+  {id:'acc_sky',        label:'Sky Blue',      value:'#4fb3d9', tier:2, unlock:'words_200'},
+  {id:'acc_lavender',   label:'Lavender',      value:'#9b89c8', tier:2, unlock:'words_200'},
+  {id:'acc_forest',     label:'Forest',        value:'#3a7d44', tier:2, unlock:'words_200'},
+  {id:'acc_rose',       label:'Rose',          value:'#d4607a', tier:2, unlock:'words_200'},
+  // Tier 3 — Shield Bearer
+  {id:'acc_shield',     label:'Shield Blue',   value:'#4a8fc8', tier:3, unlock:'shield_used'},
+];
+
+const BG_THEMES = [
+  // Unlocked with Dedicated (streak_14)
+  {
+    id:'theme_paper', label:'Paper', unlock:'streak_14', tier:'standard',
+    desc:'Light, clean, easy on the eyes.',
+    vars:{'--bg':'#f5f0e8','--sf':'#ede8de','--sf2':'#e5dfd4','--tx':'#2a2520','--mu':'#7a7268','--bd':'rgba(42,37,32,.12)','--bd2':'rgba(42,37,32,.2)'},
+  },
+  {
+    id:'theme_midnight', label:'Midnight', unlock:'streak_14', tier:'standard',
+    desc:'Deep navy dark mode.',
+    vars:{'--bg':'#0d1117','--sf':'#161b22','--sf2':'#1c2330','--tx':'#e6edf3','--mu':'#7d8590','--bd':'rgba(240,246,252,.1)','--bd2':'rgba(240,246,252,.2)'},
+  },
+  {
+    id:'theme_sakura_mist', label:'Sakura Mist', unlock:'streak_14', tier:'standard',
+    desc:'Soft pink with warm neutrals.',
+    vars:{'--bg':'#fff0f3','--sf':'#ffe4ea','--sf2':'#ffd6df','--tx':'#3d2030','--mu':'#9a7080','--bd':'rgba(180,80,100,.15)','--bd2':'rgba(180,80,100,.25)'},
+  },
+  {
+    id:'theme_matcha_wash', label:'Matcha Wash', unlock:'streak_14', tier:'standard',
+    desc:'Muted green with earthy tones.',
+    vars:{'--bg':'#f0f4ee','--sf':'#e4ebe0','--sf2':'#d8e2d3','--tx':'#1e2e1a','--mu':'#607060','--bd':'rgba(50,90,40,.15)','--bd2':'rgba(50,90,40,.25)'},
+  },
+  {
+    id:'theme_ink_blue', label:'Ink Blue', unlock:'streak_14', tier:'standard',
+    desc:'Dark indigo with cool grays.',
+    vars:{'--bg':'#0f1524','--sf':'#181f34','--sf2':'#1e2840','--tx':'#dde4f0','--mu':'#6a7a9a','--bd':'rgba(180,200,240,.1)','--bd2':'rgba(180,200,240,.2)'},
+  },
+  {
+    id:'theme_warm_sand', label:'Warm Sand', unlock:'streak_14', tier:'standard',
+    desc:'Tan background with warm text.',
+    vars:{'--bg':'#f2ead8','--sf':'#ebe0c6','--sf2':'#e2d5b4','--tx':'#2e2418','--mu':'#806a50','--bd':'rgba(100,70,30,.15)','--bd2':'rgba(100,70,30,.25)'},
+  },
+  {
+    id:'theme_lavender_fog', label:'Lavender Fog', unlock:'streak_14', tier:'standard',
+    desc:'Light purple with cool grays.',
+    vars:{'--bg':'#f2f0f8','--sf':'#e8e4f4','--sf2':'#ddd8ee','--tx':'#281e3c','--mu':'#7068a0','--bd':'rgba(100,80,160,.15)','--bd2':'rgba(100,80,160,.25)'},
+  },
+  {
+    id:'theme_charcoal', label:'Charcoal', unlock:'streak_14', tier:'standard',
+    desc:'Dark gray, softer than pure black.',
+    vars:{'--bg':'#1a1a1a','--sf':'#242424','--sf2':'#2c2c2c','--tx':'#e8e8e8','--mu':'#888888','--bd':'rgba(255,255,255,.1)','--bd2':'rgba(255,255,255,.18)'},
+  },
+  // Premium — Monthly Master (streak_30)
+  {
+    id:'theme_tokyo_night', label:'Tokyo Night', unlock:'streak_30', tier:'premium',
+    desc:'Deep purple-black with neon traces.',
+    vars:{'--bg':'#1a1b26','--sf':'#24283b','--sf2':'#292e42','--tx':'#c0caf5','--mu':'#565f89','--bd':'rgba(192,202,245,.1)','--bd2':'rgba(192,202,245,.18)'},
+  },
+  {
+    id:'theme_kyoto_garden', label:'Kyoto Garden', unlock:'streak_30', tier:'premium',
+    desc:'Forest greens, wood tones, quiet depth.',
+    vars:{'--bg':'#0e1a12','--sf':'#162218','--sf2':'#1c2c20','--tx':'#d4e8d0','--mu':'#608060','--bd':'rgba(150,220,150,.1)','--bd2':'rgba(150,220,150,.18)'},
+  },
+  {
+    id:'theme_rainy_window', label:'Rainy Window', unlock:'streak_30', tier:'premium',
+    desc:'Slate grays, cool blues, overcast light.',
+    vars:{'--bg':'#1c2028','--sf':'#242a34','--sf2':'#2a303e','--tx':'#b8c4d4','--mu':'#5a6880','--bd':'rgba(180,200,230,.1)','--bd2':'rgba(180,200,230,.18)'},
+  },
+  {
+    id:'theme_study_desk', label:'Study Desk', unlock:'streak_30', tier:'premium',
+    desc:'Warm cream, soft amber, library feel.',
+    vars:{'--bg':'#f8f2e0','--sf':'#f0e8d0','--sf2':'#e8dcc0','--tx':'#28200c','--mu':'#806040','--bd':'rgba(120,80,20,.15)','--bd2':'rgba(120,80,20,.25)'},
+  },
+  {
+    id:'theme_moonlit_ink', label:'Moonlit Ink', unlock:'streak_30', tier:'premium',
+    desc:'Deep black with silver and pale violet.',
+    vars:{'--bg':'#0c0c14','--sf':'#141420','--sf2':'#1a1a28','--tx':'#e0ddf0','--mu':'#706880','--bd':'rgba(200,196,230,.1)','--bd2':'rgba(200,196,230,.18)'},
+  },
+  {
+    id:'theme_lantern_street', label:'Lantern Street', unlock:'streak_30', tier:'premium',
+    desc:'Warm amber-orange glow, deep background.',
+    vars:{'--bg':'#180e06','--sf':'#221408','--sf2':'#2c1a0c','--tx':'#f0d8a8','--mu':'#906040','--bd':'rgba(240,180,80,.1)','--bd2':'rgba(240,180,80,.18)'},
+  },
+  {
+    id:'theme_neon_arcade', label:'Neon Arcade', unlock:'streak_30', tier:'premium',
+    desc:'Dark background, electric highlights.',
+    vars:{'--bg':'#0a0a14','--sf':'#12121e','--sf2':'#181828','--tx':'#f0f0ff','--mu':'#6060a0','--bd':'rgba(120,80,255,.15)','--bd2':'rgba(120,80,255,.25)'},
+  },
+  // Legendary — Diamond Mind (streak_100)
+  {
+    id:'theme_diamond_focus', label:'Diamond Focus', unlock:'streak_100', tier:'legendary',
+    desc:'Earned. Clean, sharp, nothing wasted.',
+    vars:{'--bg':'#080c14','--sf':'#0e1420','--sf2':'#141c2c','--tx':'#eef2ff','--mu':'#6070a0','--bd':'rgba(160,180,240,.12)','--bd2':'rgba(160,180,240,.22)'},
+  },
+];
+
+// Which themes / accents are available given unlocked achievements
+function getUnlockedThemeIds() {
+  const u = getUnlocked();
+  const ids = new Set(['acc_default', 'theme_dark', 'theme_light']); // always available
+  [...ACCENT_COLORS, ...BG_THEMES].forEach(t => {
+    if (!t.unlock || u.includes(t.unlock)) ids.add(t.id);
+  });
+  return ids;
+}
+
+function getActiveAccent() { return localStorage.getItem('lf-accent') || 'acc_default'; }
+function getActiveBgTheme() { return localStorage.getItem('lf-bg-theme') || null; }
+
+function applyAccent(id) {
+  const acc = ACCENT_COLORS.find(a => a.id === id);
+  if (!acc) return;
+  localStorage.setItem('lf-accent', id);
+  document.documentElement.style.setProperty('--acc', acc.value);
+  // Derive border and bg from the accent
+  document.documentElement.style.setProperty('--acc-bd', acc.value + '40');
+  document.documentElement.style.setProperty('--acc-bg', acc.value + '14');
+}
+
+function applyBgTheme(id) {
+  if (!id) { clearBgTheme(); return; }
+  const t = BG_THEMES.find(x => x.id === id);
+  if (!t) return;
+  localStorage.setItem('lf-bg-theme', id);
+  Object.entries(t.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+  // Remove body class dark/light since theme overrides everything
+  document.body.setAttribute('data-custom-theme', id);
+}
+
+function clearBgTheme() {
+  localStorage.removeItem('lf-bg-theme');
+  BG_THEMES.forEach(t => Object.keys(t.vars).forEach(k => document.documentElement.style.removeProperty(k)));
+  document.body.removeAttribute('data-custom-theme');
+}
+
+function applyStoredThemes() {
+  const accentId = getActiveAccent();
+  if (accentId !== 'acc_default') applyAccent(accentId);
+  const bgId = getActiveBgTheme();
+  if (bgId) applyBgTheme(bgId);
+}
+
+// ── THEMES TAB ────────────────────────────────────────────────────────────────
+function renderThemes(container) {
+  container.innerHTML = '';
+  const wrap = document.createElement('div'); wrap.style.cssText = 'padding:1.5rem 2rem;display:flex;flex-direction:column;gap:2rem';
+  const unlockedIds = getUnlockedThemeIds();
+  const activeAccent = getActiveAccent();
+  const activeBg = getActiveBgTheme();
+
+  // ── Accent Colors ──
+  const accentSec = document.createElement('div');
+  const accentTitle = document.createElement('div');
+  accentTitle.innerHTML = '<div style="font-family:\'DM Serif Display\',serif;font-size:1.1rem;color:var(--tx);margin-bottom:.3rem">accent color</div><div style="font-size:.72rem;color:var(--mu);margin-bottom:1rem">changes buttons, links, and highlights throughout the app</div>';
+  accentSec.appendChild(accentTitle);
+
+  const tiers = [
+    {label:'always available', ids: ['acc_default']},
+    {label:'week warrior — 7 day streak', unlock:'streak_7', ids: ACCENT_COLORS.filter(a=>a.tier===1).map(a=>a.id)},
+    {label:'vocabulary rich — 200 words', unlock:'words_200', ids: ACCENT_COLORS.filter(a=>a.tier===2).map(a=>a.id)},
+    {label:'shield bearer — use streak shield', unlock:'shield_used', ids: ACCENT_COLORS.filter(a=>a.tier===3).map(a=>a.id)},
+  ];
+
+  tiers.forEach(tier => {
+    const tierLabel = document.createElement('div');
+    const tierUnlocked = !tier.unlock || unlockedIds.has(tier.ids[0]);
+    tierLabel.style.cssText = `font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${tierUnlocked?'var(--acc)':'var(--mu)'};margin-bottom:.5rem;margin-top:.75rem`;
+    tierLabel.textContent = (tierUnlocked ? '' : '🔒 ') + tier.label;
+    accentSec.appendChild(tierLabel);
+
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px';
+    tier.ids.forEach(id => {
+      const acc = ACCENT_COLORS.find(a => a.id === id); if (!acc) return;
+      const isUnlocked = unlockedIds.has(id);
+      const isActive = activeAccent === id;
+      const btn = document.createElement('button');
+      btn.style.cssText = `display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:8px;border:1.5px solid ${isActive ? acc.value : isUnlocked ? 'var(--bd2)' : 'var(--bd)'};background:${isActive ? acc.value+'18' : 'var(--sf)'};cursor:${isUnlocked?'pointer':'not-allowed'};opacity:${isUnlocked?'1':'.4'};font-family:'DM Mono',monospace;font-size:.72rem;color:${isActive?acc.value:'var(--tx)'};transition:all .15s`;
+      btn.innerHTML = `<span style="width:14px;height:14px;border-radius:50%;background:${acc.value};flex-shrink:0;display:inline-block;${!isUnlocked?'filter:grayscale(1)':''}"></span>${acc.label}${isActive?' ✓':''}`;
+      if (isUnlocked) {
+        btn.onclick = () => { applyAccent(id); renderThemes(container); };
+      }
+      grid.appendChild(btn);
+    });
+    accentSec.appendChild(grid);
+  });
+  wrap.appendChild(accentSec);
+
+  // ── Background Themes ──
+  const bgSec = document.createElement('div');
+  const bgTitle = document.createElement('div');
+  bgTitle.innerHTML = '<div style="font-family:\'DM Serif Display\',serif;font-size:1.1rem;color:var(--tx);margin-bottom:.3rem">background theme</div><div style="font-size:.72rem;color:var(--mu);margin-bottom:.5rem">changes the whole visual feel of the app</div>';
+  bgSec.appendChild(bgTitle);
+
+  // Reset button
+  const resetRow = document.createElement('div'); resetRow.style.cssText = 'margin-bottom:.75rem';
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'ubtn' + (!activeBg ? ' on' : '');
+  resetBtn.textContent = !activeBg ? '✓ default (dark / light)' : 'default (dark / light)';
+  resetBtn.onclick = () => { clearBgTheme(); renderThemes(container); };
+  resetRow.appendChild(resetBtn);
+  bgSec.appendChild(resetRow);
+
+  const bgTierGroups = [
+    {label:'dedicated — 14 day streak', unlock:'streak_14', tier:'standard'},
+    {label:'monthly master — 30 day streak', unlock:'streak_30', tier:'premium'},
+    {label:'diamond mind — 100 day streak', unlock:'streak_100', tier:'legendary'},
+  ];
+
+  bgTierGroups.forEach(tg => {
+    const themes = BG_THEMES.filter(t => t.tier === tg.tier);
+    const tierUnlocked = unlockedIds.has(themes[0]?.id);
+    const tLabel = document.createElement('div');
+    tLabel.style.cssText = `font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${tierUnlocked?'var(--acc)':'var(--mu)'};margin-bottom:.6rem;margin-top:.85rem`;
+    tLabel.textContent = (tierUnlocked ? '' : '🔒 ') + tg.label;
+    bgSec.appendChild(tLabel);
+
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px';
+
+    themes.forEach(t => {
+      const isUnlocked = unlockedIds.has(t.id);
+      const isActive = activeBg === t.id;
+      const bg   = t.vars['--bg']   || '#111';
+      const sf   = t.vars['--sf']   || '#1a1a1a';
+      const tx   = t.vars['--tx']   || '#eee';
+      const mu   = t.vars['--mu']   || '#888';
+      const bd   = t.vars['--bd']   || 'rgba(255,255,255,.1)';
+
+      const card = document.createElement('div');
+      card.style.cssText = `border-radius:10px;overflow:hidden;border:2px solid ${isActive?'var(--acc)':isUnlocked?'var(--bd2)':'var(--bd)'};cursor:${isUnlocked?'pointer':'not-allowed'};opacity:${isUnlocked?'1':'.4'};transition:all .15s`;
+
+      // Mini preview
+      const preview = document.createElement('div');
+      preview.style.cssText = `background:${bg};padding:10px 12px 8px;`;
+      preview.innerHTML = `
+        <div style="background:${sf};border-radius:5px;padding:6px 8px;margin-bottom:5px;border:1px solid ${bd}">
+          <div style="width:60%;height:5px;border-radius:3px;background:${tx};margin-bottom:3px;opacity:.8"></div>
+          <div style="width:40%;height:4px;border-radius:3px;background:${mu}"></div>
+        </div>
+        <div style="display:flex;gap:4px">
+          <div style="flex:1;height:4px;border-radius:2px;background:${mu};opacity:.4"></div>
+          <div style="flex:2;height:4px;border-radius:2px;background:${mu};opacity:.4"></div>
+        </div>`;
+
+      const label = document.createElement('div');
+      label.style.cssText = `padding:6px 10px;background:var(--sf);display:flex;justify-content:space-between;align-items:center`;
+      label.innerHTML = `<span style="font-size:.72rem;font-family:'DM Mono',monospace;color:${isActive?'var(--acc)':'var(--tx)'}">${t.label}</span>${isActive?'<span style="font-size:.65rem;color:var(--acc)">✓</span>':''}`;
+
+      card.appendChild(preview); card.appendChild(label);
+      if (isUnlocked) {
+        card.onclick = () => { applyBgTheme(t.id); renderThemes(container); };
+        card.onmouseenter = () => { if (!isActive) card.style.borderColor = 'var(--acc)'; };
+        card.onmouseleave = () => { if (!isActive) card.style.borderColor = isUnlocked ? 'var(--bd2)' : 'var(--bd)'; };
+      } else {
+        // Show tooltip with unlock condition
+        card.title = 'unlock: ' + tg.label;
+      }
+      grid.appendChild(card);
+    });
+    bgSec.appendChild(grid);
+  });
+  wrap.appendChild(bgSec);
+  container.appendChild(wrap);
+}
+
 function renderMedals(container){
   container.innerHTML='';
   const wrap=document.createElement('div');wrap.style.cssText='padding:1.5rem 2rem';
@@ -829,7 +1114,9 @@ function renderMedals(container){
   ACHIEVEMENTS.forEach(a=>{
     const done=unlocked.includes(a.id);
     const card=document.createElement('div');card.style.cssText=`border:1px solid ${done?a.color+'60':'var(--bd)'};border-radius:10px;padding:.9rem 1rem;background:${done?a.color+'10':'var(--sf)'};display:flex;gap:12px;align-items:flex-start;opacity:${done?'1':'.45'};transition:opacity .2s`;
-    card.innerHTML=`${achievementIcon(a.id,done?a.color:'var(--bd2)',36)}<div style="min-width:0"><div style="font-size:.78rem;font-weight:500;color:${done?a.color:'var(--tx)'};margin-bottom:2px">${a.name}</div><div style="font-size:.65rem;color:var(--mu);line-height:1.5">${a.desc}</div>${done?`<div style="font-size:.6rem;color:${a.color};margin-top:4px;letter-spacing:.06em">✓ unlocked</div>`:''}</div>`;
+    const cosm=[...ACCENT_COLORS,...BG_THEMES].find(t=>t.unlock===a.id);
+    const cosmHtml=cosm?`<div style="font-size:.6rem;color:${done?a.color:'var(--mu)'};margin-top:3px">${done?'+ ':'🔒 '}${cosm.label} — themes tab</div>`:'';
+    card.innerHTML=`${achievementIcon(a.id,done?a.color:'var(--bd2)',36)}<div style="min-width:0"><div style="font-size:.78rem;font-weight:500;color:${done?a.color:'var(--tx)'};margin-bottom:2px">${a.name}</div><div style="font-size:.65rem;color:var(--mu);line-height:1.5">${a.desc}</div>${done?`<div style="font-size:.6rem;color:${a.color};margin-top:4px;letter-spacing:.06em">✓ unlocked</div>`:''}${cosmHtml}</div>`;
     grid.appendChild(card);
   });
   wrap.appendChild(grid);
@@ -1143,12 +1430,17 @@ function showUnknownWordPanel(container, text) {
   if(curLang!=='japanese'&&(curGrouping==='fewest_strokes'||curGrouping==='script'))curGrouping='pos';
   document.body.className=theme;applyFontSize(fontSize);
   document.getElementById('themeBtn').textContent=theme==='dark'?'light mode':'dark mode';
+  applyStoredThemes();
   const L=LANGS[curLang];document.getElementById('langFlag').textContent=L.flag;document.getElementById('langLabel').textContent=L.label;
   document.querySelectorAll('.lang-option').forEach(el=>el.classList.toggle('active',el.dataset.lang===curLang));
   showScriptFilters(curLang==='japanese');
   if(!document.querySelector('[data-tab="medals"]')){
     const tb=document.getElementById('tabBar');const mb=document.createElement('button');mb.className='tab-btn';mb.dataset.tab='medals';mb.textContent='medals';mb.onclick=()=>switchTab('medals');
     tb.insertBefore(mb,document.getElementById('fontBtn'));
+  }
+  if(!document.querySelector('[data-tab="themes"]')){
+    const tb=document.getElementById('tabBar');const thb=document.createElement('button');thb.className='tab-btn';thb.dataset.tab='themes';thb.textContent='themes';thb.onclick=()=>switchTab('themes');
+    tb.insertBefore(thb,document.getElementById('fontBtn'));
   }
   // inject typing mode + romaji toggle buttons into study modal
   const nc=document.getElementById('normalControls');
