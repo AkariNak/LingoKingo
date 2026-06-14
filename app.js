@@ -511,7 +511,18 @@ function showDeckCtxMenu(e,idx){
 }
 
 // ── STUDY MODE ────────────────────────────────────────────────────────────────
-let studyList=[],sIdx=0,sFlip=false,studyTypingMode=false;
+let studyList=[],sIdx=0,sFlip=false;
+// studyMode: 'flip' (default) | 'meaning' (type English) | 'reading' (type romaji)
+let studyMode = localStorage.getItem('lf-study-mode') || 'flip';
+const STUDY_MODES = ['flip','meaning','reading'];
+const STUDY_MODE_LABELS = {flip:'✎ flip', meaning:'✎ type meaning', reading:'✎ type reading'};
+
+function cycleStudyMode(){
+  const idx = STUDY_MODES.indexOf(studyMode);
+  studyMode = STUDY_MODES[(idx+1) % STUDY_MODES.length];
+  localStorage.setItem('lf-study-mode', studyMode);
+  renderStudyCard();
+}
 
 function openStudy(){
   if(activeDeckIdx<0||activeDeckIdx>=decks.length){alert('Select a deck first.');return;}
@@ -533,33 +544,69 @@ function renderStudyCard(){
   const front=document.getElementById('cFront'),back=document.getElementById('cBack'),fcard=document.getElementById('fcard');
   if(!front||!back) return;
   if(fcard){fcard.style.transition='none';fcard.classList.remove('flip');void fcard.offsetWidth;fcard.style.transition='';}
+
+  // always show example on front for context in typing modes
   const roHtml=showRomanization?`<div class="fc-ro">${w.ro}</div>`:'';
-  front.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-kr">${w.kr}</div>${roHtml}<div class="fc-pos">${w.pos}</div>${w.register&&w.register!=='neutral'?`<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>`:''}`;
-  if(studyTypingMode){
-    back.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning" style="font-size:.9rem;margin-bottom:8px">what does this mean?</div>`;
-    const inp=document.createElement('input');inp.type='text';inp.placeholder='type the meaning...';inp.style.cssText='width:85%;padding:8px 12px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf);color:var(--tx);font-family:DM Mono,monospace;font-size:.85rem;text-align:center;outline:none';inp.onfocus=()=>inp.style.borderColor='var(--acc)';
-    const checkBtn=document.createElement('button');checkBtn.className='abtn accent';checkBtn.style.cssText='margin-top:8px;font-size:.78rem';checkBtn.textContent='check →';
-    const result=document.createElement('div');result.style.cssText='margin-top:8px;font-size:.78rem;min-height:20px';
-    checkBtn.onclick=()=>{const val=inp.value.trim().toLowerCase();const target=w.meaning.toLowerCase().split(' — ')[0].split('/')[0].split('(')[0].trim();const correct=val===target||(val.length>1&&target.startsWith(val))||(val.length>2&&target.includes(val))||(target.length>2&&val.includes(target));result.style.color=correct?'#7ac8a0':'#c87a7a';result.textContent=correct?'✓ correct — '+w.meaning:'✗ '+w.meaning;inp.disabled=true;checkBtn.disabled=true;};
-    back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
+  const exHtml=(studyMode!=='flip')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${w.example}</div>`:'';
+  front.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-kr">${w.kr}</div>${roHtml}<div class="fc-pos">${w.pos}</div>${w.register&&w.register!=='neutral'?`<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>`:''}${exHtml}`;
+
+  if(studyMode === 'meaning' || studyMode === 'reading'){
+    const isMeaning = studyMode === 'meaning';
+    const prompt = isMeaning ? 'what does this mean?' : 'how do you read this?';
+    const placeholder = isMeaning ? 'type the meaning...' : 'type the reading...';
+    // Compute targets
+    const getTargets = () => {
+      if(isMeaning){
+        const raw = w.meaning.toLowerCase().split(' — ')[0].split('(')[0].trim();
+        return raw.split(/[\/,]/).map(s=>s.trim()).filter(Boolean);
+      } else {
+        // reading: use first ro value before / or ・ or space
+        const raw = w.ro.toLowerCase().split(' — ')[0].trim();
+        return raw.split(/[\/,・\s]+/).map(s=>s.trim()).filter(Boolean);
+      }
+    };
+    back.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning" style="font-size:.85rem;margin-bottom:8px">${prompt}</div>`;
+    const inp=document.createElement('input');
+    inp.type='text';
+    inp.placeholder=placeholder;
+    inp.style.cssText='width:85%;padding:8px 12px;border-radius:6px;border:1px solid var(--bd2);background:var(--sf);color:var(--tx);font-family:DM Mono,monospace;font-size:.85rem;text-align:center;outline:none';
+    inp.onfocus=()=>inp.style.borderColor='var(--acc)';
+    const checkBtn=document.createElement('button');
+    checkBtn.className='abtn accent';
+    checkBtn.style.cssText='margin-top:8px;font-size:.78rem';
+    checkBtn.textContent='check →';
+    const result=document.createElement('div');
+    result.style.cssText='margin-top:8px;font-size:.78rem;min-height:20px';
+    checkBtn.onclick=()=>{
+      const val=inp.value.trim().toLowerCase();
+      const targets=getTargets();
+      const correct=targets.some(t=>val===t||(val.length>1&&t.startsWith(val))||(val.length>2&&t.includes(val)));
+      result.style.color=correct?'#7ac8a0':'#c87a7a';
+      result.textContent=correct
+        ? '✓ correct — '+(isMeaning?w.meaning:w.ro)
+        : '✗ '+(isMeaning?w.meaning:w.ro);
+      inp.disabled=true;checkBtn.disabled=true;
+    };
+    back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);
+    inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
   } else {
     back.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${w.example}</div>`;
   }
+
   sFlip=false;
   const ab=document.getElementById('againBtn'),gb=document.getElementById('goodBtn'),sh=document.getElementById('srsHint');
   if(ab)ab.style.display='none';if(gb)gb.style.display='none';if(sh)sh.style.display='block';
-  // update toggle buttons in normal controls
   const tmBtn=document.getElementById('typingModeBtn');
-  if(tmBtn){tmBtn.textContent=studyTypingMode?'✎ typing: on':'✎ typing: off';tmBtn.className='abtn'+(studyTypingMode?' accent':'');}
+  if(tmBtn){tmBtn.textContent=STUDY_MODE_LABELS[studyMode];tmBtn.className='abtn'+(studyMode!=='flip'?' accent':'');}
   const roToggle=document.getElementById('studyRoBtn');
   if(roToggle)roToggle.textContent=showRomanization?'hide romaji':'show romaji';
 }
-function toggleStudyTypingMode(){studyTypingMode=!studyTypingMode;renderStudyCard();}
+function toggleStudyTypingMode(){cycleStudyMode();}
 function toggleStudyRo(){showRomanization=!showRomanization;localStorage.setItem('lf-show-ro',showRomanization?'true':'false');renderStudyCard();const b=document.getElementById('roBtn');if(b){b.textContent=showRomanization?'hide romaji':'show romaji';}}
 function flipCard(){
   sFlip=!sFlip;document.getElementById('fcard')?.classList.toggle('flip',sFlip);
   if(sFlip){
-    if(studyTypingMode){const inp=document.querySelector('#cBack input');if(inp)setTimeout(()=>inp.focus(),500);}
+    if(studyMode!=='flip'){const inp=document.querySelector('#cBack input');if(inp)setTimeout(()=>inp.focus(),500);}
     if(document.getElementById('srsControls')?.style.display!=='none'){
       const ab=document.getElementById('againBtn'),gb=document.getElementById('goodBtn'),sh=document.getElementById('srsHint');
       if(ab)ab.style.display='block';
@@ -573,8 +620,8 @@ function reshuffleStudy(){const cur=studyList[sIdx];studyList=shuffle(studyList)
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('studyOverlay')?.classList.contains('open')) return;
   if(e.key==='Escape')closeStudy();
-  if(e.key==='ArrowRight'&&!studyTypingMode)nextCard();
-  if(e.key===' '&&!studyTypingMode){e.preventDefault();flipCard();}
+  if(e.key==='ArrowRight'&&studyMode==='flip')nextCard();
+  if(e.key===' '&&studyMode==='flip'){e.preventDefault();flipCard();}
 });
 
 // ── SRS SYSTEM ────────────────────────────────────────────────────────────────
