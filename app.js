@@ -791,7 +791,7 @@ function renderSongs(container){
     const body=document.createElement('div');body.style.display='none';
     const desc=document.createElement('div');desc.style.cssText='padding:.75rem 1.2rem;font-size:.74rem;color:var(--mu);line-height:1.7;border-bottom:1px solid var(--bd)';desc.textContent=song.desc;body.appendChild(desc);
     const grid=document.createElement('div');grid.style.cssText='padding:.85rem 1rem;display:flex;flex-direction:column;gap:6px';
-    song.words.forEach(w=>{
+    song.words.filter(Boolean).forEach(w=>{
       const wordObj=LANGS[curLang]?.words.find(x=>x.kr===w.kr);const inDeck=wordObj&&deckColorFor(w.kr);
       const row=document.createElement('div');row.className='song-word-row';if(inDeck)row.style.borderColor=song.color;
       const rowHdr=document.createElement('div');rowHdr.style.cssText='display:flex;align-items:center;gap:10px;padding:.6rem .9rem;cursor:pointer';
