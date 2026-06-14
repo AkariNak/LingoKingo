@@ -1003,7 +1003,7 @@ function renderThemes(container) {
     const tierLabel = document.createElement('div');
     const tierUnlocked = !tier.unlock || unlockedIds.has(tier.ids[0]);
     tierLabel.style.cssText = `font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${tierUnlocked?'var(--acc)':'var(--mu)'};margin-bottom:.5rem;margin-top:.75rem`;
-    tierLabel.textContent = (tierUnlocked ? '' : '🔒 ') + tier.label;
+    tierLabel.textContent = tier.label;
     accentSec.appendChild(tierLabel);
 
     const grid = document.createElement('div');
@@ -1050,7 +1050,7 @@ function renderThemes(container) {
     const tierUnlocked = unlockedIds.has(themes[0]?.id);
     const tLabel = document.createElement('div');
     tLabel.style.cssText = `font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${tierUnlocked?'var(--acc)':'var(--mu)'};margin-bottom:.6rem;margin-top:.85rem`;
-    tLabel.textContent = (tierUnlocked ? '' : '🔒 ') + tg.label;
+    tLabel.textContent = tg.label;
     bgSec.appendChild(tLabel);
 
     const grid = document.createElement('div');
@@ -1115,7 +1115,7 @@ function renderMedals(container){
     const done=unlocked.includes(a.id);
     const card=document.createElement('div');card.style.cssText=`border:1px solid ${done?a.color+'60':'var(--bd)'};border-radius:10px;padding:.9rem 1rem;background:${done?a.color+'10':'var(--sf)'};display:flex;gap:12px;align-items:flex-start;opacity:${done?'1':'.45'};transition:opacity .2s`;
     const cosm=[...ACCENT_COLORS,...BG_THEMES].find(t=>t.unlock===a.id);
-    const cosmHtml=cosm?`<div style="font-size:.6rem;color:${done?a.color:'var(--mu)'};margin-top:3px">${done?'+ ':'🔒 '}${cosm.label} — themes tab</div>`:'';
+    const cosmHtml=cosm?`<div style="font-size:.6rem;color:${done?a.color:'var(--mu)'};margin-top:3px">${done?'+ ':''}${cosm.label} — themes tab</div>`:'';
     card.innerHTML=`${achievementIcon(a.id,done?a.color:'var(--bd2)',36)}<div style="min-width:0"><div style="font-size:.78rem;font-weight:500;color:${done?a.color:'var(--tx)'};margin-bottom:2px">${a.name}</div><div style="font-size:.65rem;color:var(--mu);line-height:1.5">${a.desc}</div>${done?`<div style="font-size:.6rem;color:${a.color};margin-top:4px;letter-spacing:.06em">✓ unlocked</div>`:''}${cosmHtml}</div>`;
     grid.appendChild(card);
   });
