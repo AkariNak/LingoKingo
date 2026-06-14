@@ -117,7 +117,7 @@ const ACHIEVEMENTS = [
   {id:'practice_10',  name:'First Steps',      desc:'Complete 10 practice exercises',        color:'#7ac8c8'},
   {id:'practice_100', name:'Sharp Shooter',    desc:'Complete 100 practice exercises',       color:'#c8a87a'},
   {id:'perfect_5',    name:'Perfect Run',      desc:'Get 5 correct in a row',                color:'#c8c87a'},
-  {id:'all_langs',    name:'Polyglot',         desc:'Study all three languages',             color:'#a87ac8'},
+  {id:'all_langs',    name:'Polyglot',         desc:'Study 5 flashcards in all three languages',             color:'#a87ac8'},
   {id:'songs_deck',   name:'Music Fan',        desc:'Add words from a song deck',            color:'#c87aa8'},
   {id:'shield_used',  name:'Shield Bearer',    desc:'Use your streak shield',                color:'#7a8cc8'},
 ];
@@ -188,11 +188,21 @@ function checkAchievements() {
   if (allWords.size >= 50)  unlockAchievement('words_50');
   if (allWords.size >= 200) unlockAchievement('words_200');
   if (decks.length > 0) unlockAchievement('first_deck');
-  const langsStudied = load('lf-langs-studied', []);
-  if (!langsStudied.includes(curLang)) { langsStudied.push(curLang); save('lf-langs-studied', langsStudied); }
-  if (langsStudied.length >= 3) unlockAchievement('all_langs');
   const songNames = ['よふかしのうた','可愛くてごめん','アイドル'];
   if (decks.some(d => songNames.includes(d.name))) unlockAchievement('songs_deck');
+  // all_langs is checked via recordLangFlashcard, not here
+}
+function recordLangFlashcard() {
+  // track cards seen per language; unlock all_langs when all three hit 5
+  const key = 'lf-lang-cards';
+  const counts = load(key, {korean:0, italian:0, japanese:0});
+  if ((counts[curLang] || 0) < 5) {
+    counts[curLang] = (counts[curLang] || 0) + 1;
+    save(key, counts);
+  }
+  if (counts.korean >= 5 && counts.italian >= 5 && counts.japanese >= 5) {
+    unlockAchievement('all_langs');
+  }
 }
 
 // ── THEME & FONT ──────────────────────────────────────────────────────────────
@@ -554,7 +564,7 @@ function flipCard(){
     }
   }
 }
-function nextCard(){sIdx++;if(sIdx>=studyList.length){const last=studyList[studyList.length-1];studyList=shuffle(studyList);if(studyList[0]?.kr===last?.kr&&studyList.length>1)[studyList[0],studyList[1]]=[studyList[1],studyList[0]];sIdx=0;}renderStudyCard();}
+function nextCard(){recordLangFlashcard();sIdx++;if(sIdx>=studyList.length){const last=studyList[studyList.length-1];studyList=shuffle(studyList);if(studyList[0]?.kr===last?.kr&&studyList.length>1)[studyList[0],studyList[1]]=[studyList[1],studyList[0]];sIdx=0;}renderStudyCard();}
 function reshuffleStudy(){const cur=studyList[sIdx];studyList=shuffle(studyList);if(studyList[0]?.kr===cur?.kr&&studyList.length>1)[studyList[0],studyList[1]]=[studyList[1],studyList[0]];sIdx=0;renderStudyCard();}
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('studyOverlay')?.classList.contains('open')) return;
@@ -587,7 +597,7 @@ function openReview(){
 }
 function srsGood(){const w=studyList[sIdx];if(w)reviewAnswer(w.kr,true);srsNextCard();}
 function srsAgain(){const w=studyList[sIdx];if(w){reviewAnswer(w.kr,false);studyList.push(w);}srsNextCard();}
-function srsNextCard(){sIdx++;const now=Date.now();while(sIdx<studyList.length){const w=studyList[sIdx];const c=getCard(activeDeckIdx,w.kr);if(c.due<=now||c.reps===0)break;sIdx++;}if(sIdx>=studyList.length){showToast('Review complete!');closeStudy();renderDeckSwitcher();return;}sFlip=false;renderStudyCard();}
+function srsNextCard(){recordLangFlashcard();sIdx++;const now=Date.now();while(sIdx<studyList.length){const w=studyList[sIdx];const c=getCard(activeDeckIdx,w.kr);if(c.due<=now||c.reps===0)break;sIdx++;}if(sIdx>=studyList.length){showToast('Review complete!');closeStudy();renderDeckSwitcher();return;}sFlip=false;renderStudyCard();}
 
 // ── PRACTICE TAB ──────────────────────────────────────────────────────────────
 let practiceQueue=[],practiceIdx=0,practiceScore={correct:0,total:0,total_ever:0,consecutive:0},practiceFilter='all',selectedBlocks=[],answered=false;
