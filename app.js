@@ -1046,10 +1046,13 @@ function analyzeReading(container,text){
   tokens.forEach(token=>{
     if(token.isPunct){const s=document.createElement('span');s.style.cssText='color:var(--su);font-size:.9rem;font-family:"Noto Sans KR",sans-serif';s.textContent=token.text;tw.appendChild(s);return;}
     const vw=LANGS[curLang].words.find(w=>w.kr===token.text)||token.word||null;const hasEntry=!!vw;const inDeck=hasEntry&&deckColorFor(token.text);
-    const span=document.createElement('span');span.className='reading-token'+(inDeck?' in-deck':'');if(!hasEntry)span.style.borderColor='transparent';
-    const te=document.createElement('span');te.className='reading-token-text';te.style.cssText=`font-size:${curLang==='japanese'?'1.3rem':'1.1rem'};color:${inDeck?'var(--acc)':hasEntry?'var(--tx)':'var(--su)'}`;te.textContent=token.text;span.appendChild(te);
+    const span=document.createElement('span');
+    span.className='reading-token'+(inDeck?' in-deck':(!hasEntry?' unknown-token':''));
+    if(!hasEntry) span.style.cssText='border-color:rgba(200,122,122,.4);cursor:pointer';
+    const te=document.createElement('span');te.className='reading-token-text';te.style.cssText=`font-size:${curLang==='japanese'?'1.3rem':'1.1rem'};color:${inDeck?'var(--acc)':hasEntry?'var(--tx)':'#c87a7a'}`;te.textContent=token.text;span.appendChild(te);
     if(hasEntry&&vw.ro&&showRomanization){const ro=document.createElement('span');ro.className='reading-token-ro';ro.textContent=vw.ro;span.appendChild(ro);}
     if(hasEntry){span.style.cursor='pointer';span.onclick=()=>showReadingWordCard(container,vw);}
+    else{span.title='unknown — click to add';span.onclick=()=>showUnknownWordPanel(container,token.text);}
     tw.appendChild(span);
   });
   out.appendChild(tw);
@@ -1069,6 +1072,68 @@ function showReadingWordCard(container,word){
   const mn=document.createElement('div');mn.style.cssText="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--tx);margin-bottom:.4rem";mn.textContent=word.meaning;card.appendChild(mn);
   if(word.pos){const pc={verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'};const pe=document.createElement('span');pe.style.cssText=`font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${pc[word.pos]||'var(--mu)'};margin-bottom:.5rem;display:inline-block`;pe.textContent=word.pos;card.appendChild(pe);}
   if(word.example){const ex=document.createElement('div');ex.style.cssText='font-size:.72rem;color:var(--mu);font-style:italic;line-height:1.65;padding:.5rem .75rem;background:var(--sf2);border-radius:7px;margin-top:.4rem;border:1px solid var(--bd)';ex.textContent=word.example;card.appendChild(ex);}
+}
+
+function showUnknownWordPanel(container, text) {
+  let card = document.getElementById('readingWordCard'); if (!card) return;
+  card.style.display = 'block'; card.innerHTML = '';
+
+  const hdr = document.createElement('div');
+  hdr.style.cssText = 'font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:#c87a7a;margin-bottom:.75rem';
+  hdr.textContent = 'unknown word — add it yourself';
+  card.appendChild(hdr);
+
+  const wordEl = document.createElement('div');
+  wordEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:2rem;font-weight:500;color:var(--tx);margin-bottom:1rem";
+  wordEl.textContent = text;
+  card.appendChild(wordEl);
+
+  const hint = document.createElement('div');
+  hint.style.cssText = 'font-size:.72rem;color:var(--mu);margin-bottom:.75rem;line-height:1.6';
+  hint.innerHTML = 'Fill in what you know, then save it to a deck. You can look up this word at <a href="https://jisho.org/search/' + encodeURIComponent(text) + '" target="_blank" style="color:var(--acc)">jisho.org</a>' + (curLang === 'korean' ? ' or <a href="https://papago.naver.com/" target="_blank" style="color:var(--acc)">papago</a>' : curLang === 'italian' ? ' or <a href="https://www.wordreference.com/iten/' + encodeURIComponent(text) + '" target="_blank" style="color:var(--acc)">wordreference</a>' : '') + '.';
+  card.appendChild(hint);
+
+  const fields = document.createElement('div');
+  fields.style.cssText = 'display:flex;flex-direction:column;gap:8px;margin-bottom:.75rem';
+
+  const makeField = (id, placeholder) => {
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.id = 'uwp-' + id; inp.placeholder = placeholder;
+    inp.style.cssText = 'width:100%;padding:8px 10px;background:var(--sf);border:1px solid var(--bd2);border-radius:7px;color:var(--tx);font-family:DM Mono,monospace;font-size:.82rem;outline:none;box-sizing:border-box';
+    inp.onfocus = () => inp.style.borderColor = 'var(--acc)';
+    inp.onblur  = () => inp.style.borderColor = 'var(--bd2)';
+    return inp;
+  };
+
+  fields.appendChild(makeField('ro',      'romanization / pronunciation'));
+  fields.appendChild(makeField('meaning', 'meaning in english'));
+  fields.appendChild(makeField('example', 'example sentence (optional)'));
+  card.appendChild(fields);
+
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'abtn accent'; saveBtn.textContent = 'save to vocabulary →';
+  saveBtn.style.cssText = 'width:100%;margin-top:2px';
+  saveBtn.onclick = () => {
+    const ro      = document.getElementById('uwp-ro')?.value.trim() || text;
+    const meaning = document.getElementById('uwp-meaning')?.value.trim();
+    const example = document.getElementById('uwp-example')?.value.trim() || text + ' — ' + (meaning || '?');
+    if (!meaning) { showToast('Add a meaning first'); return; }
+    const newWord = {kr:text, ro, meaning, example, pos:'expression', freq:7, register:'neutral', _custom:true};
+    LANGS[curLang].words.push(newWord);
+    if (activeDeckIdx >= 0 && activeDeckIdx < decks.length) {
+      decks[activeDeckIdx].words[text] = true;
+      saveDeckState();
+      showToast('"' + text + '" added to ' + decks[activeDeckIdx].name + '!');
+    } else {
+      showToast('"' + text + '" saved to vocabulary');
+    }
+    checkAchievements();
+    // re-render with the new word known
+    const inputVal = document.getElementById('readingInput')?.value;
+    if (inputVal) analyzeReading(container, inputVal);
+    showReadingWordCard(container, newWord);
+  };
+  card.appendChild(saveBtn);
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
