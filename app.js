@@ -964,7 +964,7 @@ const ROADMAPS = {
   ],
   japanese: [
     {stage:1, label:'the writing systems', color:'#7ac8a0', milestones:[
-      {title:'Learn hiragana (46 characters)', desc:'Every Japanese sound has a hiragana symbol. Foundation for everything — learn all 46 in 1–2 weeks at 5 per day.', actionLabel:'add hiragana deck →', action:()=>{addPremadeDeck('japanese_hiragana');switchTab('vocab');}, check:()=>decks.some(d=>d.name==='Hiragana (all 46)'), tip:'Learn あいうえお first — then か行, さ行, た行 in order.'},
+      {title:'Learn hiragana (46 characters)', desc:'Every Japanese sound has a hiragana symbol. Foundation for everything — learn all 46 in 1–2 weeks at 5 per day.', actionLabel:'add hiragana deck →', action:()=>{addPremadeDeck('japanese_hiragana');switchTab('vocab');}, check:()=>decks.some(d=>d.name==='Hiragana (all 46)'), tip:'Learn あいうえお first, then the k-sounds (か き く け こ), s-sounds (さ し す せ そ), and t-sounds (た ち つ て と) in order.'},
       {title:'Learn katakana (46 characters)', desc:'Same sounds as hiragana, angular shapes. Used for foreign loanwords. Faster to learn since you already know the sounds.', actionLabel:'add katakana deck →', action:()=>{addPremadeDeck('japanese_katakana');switchTab('vocab');}, check:()=>decks.some(d=>d.name==='Katakana (all 46)'), tip:'ラーメン, テレビ, コーヒー — once you know katakana you can read a huge chunk of modern Japanese.'},
       {title:'Learn the accent marks (dakuten)', desc:'Adding ゛changes the consonant: か → が, さ → ざ. Adding ゜makes p sounds: は → ぱ. 25 new sounds from one mark.', actionLabel:'add accent decks →', action:()=>{addPremadeDeck('japanese_dakuten');switchTab('vocab');}, check:()=>decks.some(d=>d.name==='Hiragana Accents')},
     ]},
