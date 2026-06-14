@@ -387,6 +387,52 @@ function buildGroupBtns() {
     btn.onclick=()=>{ curGrouping=key; save('lf-grouping',key); openSecs={}; buildGroupBtns(); renderWordGrid(); }; bar.appendChild(btn);
   });
 }
+function makeChip(w, i) {
+  const chip=document.createElement('div'); const chipColor=deckColorFor(w.kr);
+  chip.className='chip'+(chipColor?' on':''); if(chipColor) chip.style.borderColor=chipColor;
+  chip.style.animationDelay=Math.min(i*0.008,0.2)+'s'; chip.title=w.meaning+' — '+w.example;
+  const regColor={formal:'#7a8cc8',casual:'#c8a87a',neutral:'transparent'}[w.register||'neutral'];
+  const sb=(curGrouping==='fewest_strokes'&&w.strokes)?`<span style="font-size:.5rem;color:var(--mu);margin-left:auto">${w.strokes}画</span>`:'';
+  const roHtml=showRomanization?`<span class="chip-ro">${w.ro}</span>`:'';
+  chip.innerHTML=`<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px"><span class="chip-kr" style="${chipColor?'color:'+chipColor:''}">${w.kr}</span>${w.register&&w.register!=='neutral'?`<span class="reg-badge" style="background:${regColor}20;color:${regColor};border-color:${regColor}40">${w.register}</span>`:''}${sb}</div>${roHtml}`;
+  chip.onclick=()=>toggleWordInDeck(w); chip.oncontextmenu=e=>showWordCtxMenu(e,w); chip.ondblclick=()=>speak(w.kr,curLang);
+  return chip;
+}
+
+function makeGroupRow(groupName, words, sectionBody) {
+  // Group header inside a section body
+  const row = document.createElement('div');
+  row.style.cssText = 'width:100%;margin-bottom:4px;margin-top:2px';
+
+  const hdr = document.createElement('div');
+  const isOpen = !!openSecs['group:'+groupName];
+  hdr.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 2px;cursor:pointer;user-select:none';
+  const lbl = document.createElement('span');
+  lbl.style.cssText = 'font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)';
+  lbl.textContent = groupName;
+  const ct = document.createElement('span');
+  ct.style.cssText = 'font-size:.6rem;color:var(--mu)';
+  ct.textContent = words.length;
+  const chev = document.createElement('span');
+  chev.style.cssText = 'font-size:.55rem;color:var(--mu);margin-left:auto';
+  chev.textContent = isOpen ? '▴' : '▾';
+  hdr.appendChild(lbl); hdr.appendChild(ct); hdr.appendChild(chev);
+
+  const chips = document.createElement('div');
+  chips.style.cssText = 'display:' + (isOpen ? 'flex' : 'none') + ';flex-wrap:wrap;gap:6px;padding:4px 0 8px';
+  words.forEach((w,i) => chips.appendChild(makeChip(w,i)));
+
+  hdr.onclick = () => {
+    const open = chips.style.display === 'none';
+    chips.style.display = open ? 'flex' : 'none';
+    chev.textContent = open ? '▴' : '▾';
+    if (open) openSecs['group:'+groupName] = true; else delete openSecs['group:'+groupName];
+  };
+
+  row.appendChild(hdr); row.appendChild(chips);
+  sectionBody.appendChild(row);
+}
+
 function renderWordGrid() {
   const container=document.getElementById('wordSections'); if(!container) return;
   const rawSearch=document.getElementById('searchInput2');
@@ -424,17 +470,27 @@ function renderWordGrid() {
     const chev=document.createElement('span'); chev.className='sec-chev'; chev.textContent=isOpen?'▴':'▾';
     hdr.appendChild(left); hdr.appendChild(chev);
     const body=document.createElement('div'); body.className='sec-body'; body.style.display=isOpen?'flex':'none';
-    wds.forEach((w,i)=>{
-      const chip=document.createElement('div'); const chipColor=deckColorFor(w.kr);
-      chip.className='chip'+(chipColor?' on':''); if(chipColor) chip.style.borderColor=chipColor;
-      chip.style.animationDelay=Math.min(i*0.008,0.2)+'s'; chip.title=w.meaning+' — '+w.example;
-      const regColor={formal:'#7a8cc8',casual:'#c8a87a',neutral:'transparent'}[w.register||'neutral'];
-      const sb=(curGrouping==='fewest_strokes'&&w.strokes)?`<span style="font-size:.5rem;color:var(--mu);margin-left:auto">${w.strokes}画</span>`:'';
-      const roHtml=showRomanization?`<span class="chip-ro">${w.ro}</span>`:'';
-      chip.innerHTML=`<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px"><span class="chip-kr" style="${chipColor?'color:'+chipColor:''}">${w.kr}</span>${w.register&&w.register!=='neutral'?`<span class="reg-badge" style="background:${regColor}20;color:${regColor};border-color:${regColor}40">${w.register}</span>`:''}${sb}</div>${roHtml}`;
-      chip.onclick=()=>toggleWordInDeck(w); chip.oncontextmenu=e=>showWordCtxMenu(e,w); chip.ondblclick=()=>speak(w.kr,curLang);
-      body.appendChild(chip);
+
+    // Separate grouped and ungrouped words
+    const wordGroups = {};
+    const ungrouped = [];
+    wds.forEach(w => {
+      if (w.group) {
+        if (!wordGroups[w.group]) wordGroups[w.group] = [];
+        wordGroups[w.group].push(w);
+      } else {
+        ungrouped.push(w);
+      }
     });
+
+    // Render ungrouped chips normally
+    ungrouped.forEach((w,i) => body.appendChild(makeChip(w,i)));
+
+    // Render each word group as a sub-row
+    Object.entries(wordGroups).forEach(([groupName, groupWords]) => {
+      makeGroupRow(groupName, groupWords, body);
+    });
+
     const toggle=()=>{ const open=sec.classList.toggle('open'); body.style.display=open?'flex':'none'; chev.textContent=open?'▴':'▾'; if(open) openSecs[key]=true; else delete openSecs[key]; };
     hdr.onclick=toggle; if(isOpen) sec.classList.add('open');
     sec.appendChild(hdr); sec.appendChild(body); container.appendChild(sec);
