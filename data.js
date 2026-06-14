@@ -1083,7 +1083,7 @@ const SONGS = [
     {kr:"血",ro:"けつ / ち",meaning:"blood",lyric:"血走った red eyes",lyricRo:"chihashitta red eyes",note:"血走った = bloodshot, like eyes from staying up all night.",crush:false},
     {kr:"走",ro:"そう / はし-る",meaning:"to run",lyric:"血走った",lyricRo:"chihashitta",note:"Sung: chihashitta feels like chi-hashta. Middle syllable softens.",crush:true},
     {kr:"連",ro:"れん / つ-れる",meaning:"to connect / take along",lyric:"連れ去って midnight",lyricRo:"tsuresatte midnight",note:"連れ去って = take me away. 5 written beats to 3 sung.",crush:true},
-    {kr:"去",ro:"きょ・こ / さ-る",meaning:"to leave / depart",lyric:"連れ去って",lyricRo:"tsuresatte",note:"In 連れ去って reads as sa — one beat absorbed into the flow.",crush:true},
+    {kr:"去",ro:"きょ・こ / さ-る",meaning:"to leave / depart",lyric:"連れ去って",lyricRo:"tsuresatte",note:"In 連れ去って reads as sa — one beat absorbed into the flow.",crush:true}
    ]
   },
   {id:"kawaikute",lang:"japanese",title:"可愛くてごめん",titleRo:"Kawaikute Gomen",artist:"HoneyWorks ft. ちゅーたん",color:"#c87aa8",
@@ -1095,7 +1095,7 @@ const SONGS = [
     {kr:"大好き",ro:"だいすき",meaning:"love / really like",lyric:"大好きなお洋服",lyricRo:"daisuki na oyofuku",note:"大 = big + 好き = like. Really love. More enthusiastic than just 好き.",crush:false},
     {kr:"幸せ",ro:"しあわせ",meaning:"happiness / happy",lyric:"ぼっちだって幸せだもん",lyricRo:"bocchi datte shiawase da mon",note:"ぼっち = alone (slang). もん = because (childlike, assertive). Even alone I am happy.",crush:false},
     {kr:"自分",ro:"じぶん",meaning:"oneself / myself",lyric:"自分の味方は自分でありたい",lyricRo:"jibun no mikata wa jibun de aritai",note:"Core line: I want to be my own ally. 自分 appears as both protector and protected.",crush:false},
-    {kr:"大切",ro:"たいせつ",meaning:"important / precious",lyric:"一番大切にしてあげたい",lyricRo:"ichiban taisetsu ni shite agetai",note:"大切にする = to cherish. してあげたい = want to do for someone — herself.",crush:false},
+    {kr:"大切",ro:"たいせつ",meaning:"important / precious",lyric:"一番大切にしてあげたい",lyricRo:"ichiban taisetsu ni shite agetai",note:"大切にする = to cherish. してあげたい = want to do for someone — herself.",crush:false}
    ]
   }
 ];
