@@ -1044,26 +1044,46 @@ function renderGuide(container) {
   container.appendChild(wrap);
 }
 
+function milestoneKey(lang, stageIdx, milestoneIdx) {
+  return 'lf-milestone-' + lang + '-' + stageIdx + '-' + milestoneIdx;
+}
+function getMilestoneDone(lang, stageIdx, milestoneIdx) {
+  return localStorage.getItem(milestoneKey(lang, stageIdx, milestoneIdx)) === '1';
+}
+function setMilestoneDone(lang, stageIdx, milestoneIdx, done) {
+  if (done) localStorage.setItem(milestoneKey(lang, stageIdx, milestoneIdx), '1');
+  else localStorage.removeItem(milestoneKey(lang, stageIdx, milestoneIdx));
+}
+
 function buildRoadmap(container) {
   container.innerHTML = '';
   const hdr = document.createElement('div'); hdr.style.marginBottom = '1.25rem';
-  hdr.innerHTML = `<div class="guide-section-title">learning path</div><div class="guide-section-sub">your suggested progression for ${LANGS[curLang].label}. milestones track automatically as you use the app.</div>`;
+  hdr.innerHTML = `<div class="guide-section-title">learning path</div><div class="guide-section-sub">your suggested progression for ${LANGS[curLang].label}. check off milestones yourself as you complete them.</div>`;
   container.appendChild(hdr);
   const roadmap = ROADMAPS[curLang];
   if (!roadmap) { container.innerHTML += '<div class="empty-msg">Roadmap coming soon.</div>'; return; }
-  roadmap.forEach(stage => {
+  roadmap.forEach((stage, stageIdx) => {
     const stageEl = document.createElement('div'); stageEl.style.marginBottom = '1.5rem';
     const stageHdr = document.createElement('div'); stageHdr.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:.75rem';
     stageHdr.innerHTML = `<span style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:${stage.color};flex-shrink:0">stage ${stage.stage}</span><span style="font-size:.8rem;font-weight:500;color:var(--tx)">${stage.label}</span><span style="flex:1;height:1px;background:var(--bd)"></span>`;
     stageEl.appendChild(stageHdr);
-    stage.milestones.forEach(m => {
-      const isDone = typeof m.check === 'function' ? m.check() : false;
+    stage.milestones.forEach((m, milestoneIdx) => {
+      const isDone = getMilestoneDone(curLang, stageIdx, milestoneIdx);
       const card = document.createElement('div'); card.className = 'milestone-card';
       card.style.cssText = `border:1px solid ${isDone ? stage.color + '60' : 'var(--bd)'};background:${isDone ? stage.color + '10' : 'var(--sf)'}`;
+
+      // clickable check circle
       const checkEl = document.createElement('div'); checkEl.className = 'milestone-check';
-      checkEl.style.cssText = `border:2px solid ${isDone ? stage.color : 'var(--bd2)'};background:${isDone ? stage.color : 'transparent'}`;
+      checkEl.style.cssText = `border:2px solid ${isDone ? stage.color : 'var(--bd2)'};background:${isDone ? stage.color : 'transparent'};cursor:pointer;flex-shrink:0`;
       checkEl.textContent = isDone ? '✓' : '';
+      checkEl.title = isDone ? 'mark as not done' : 'mark as done';
+      checkEl.onclick = () => {
+        const nowDone = !getMilestoneDone(curLang, stageIdx, milestoneIdx);
+        setMilestoneDone(curLang, stageIdx, milestoneIdx, nowDone);
+        buildRoadmap(container);
+      };
       card.appendChild(checkEl);
+
       const content = document.createElement('div'); content.style.cssText = 'flex:1;min-width:0';
       const title = document.createElement('div'); title.className = 'milestone-title'; title.style.color = isDone ? stage.color : 'var(--tx)'; title.textContent = m.title; content.appendChild(title);
       const desc = document.createElement('div'); desc.className = 'milestone-desc'; desc.textContent = m.desc; content.appendChild(desc);
@@ -1073,8 +1093,13 @@ function buildRoadmap(container) {
     });
     container.appendChild(stageEl);
   });
-  const refreshBtn = document.createElement('button'); refreshBtn.className = 'ubtn'; refreshBtn.style.marginTop = '4px'; refreshBtn.textContent = '↺ refresh progress'; refreshBtn.onclick = () => buildRoadmap(container);
-  container.appendChild(refreshBtn);
+  const resetBtn = document.createElement('button'); resetBtn.className = 'ubtn'; resetBtn.style.marginTop = '4px'; resetBtn.textContent = '↺ reset all progress';
+  resetBtn.onclick = () => {
+    if (!confirm('Reset all milestone progress?')) return;
+    Object.keys(localStorage).filter(k => k.startsWith('lf-milestone-')).forEach(k => localStorage.removeItem(k));
+    buildRoadmap(container);
+  };
+  container.appendChild(resetBtn);
 }
 
 function buildReadingTool(container) {
