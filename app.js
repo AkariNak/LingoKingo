@@ -541,13 +541,17 @@ function overlayClick(e){if(e.target.id==='studyOverlay')closeStudy();}
 
 function renderStudyCard(){
   const w=studyList[sIdx];
+  // pick a random example for kanji with multiple examples
+  const cardExample = (w.examples && w.examples.length > 1)
+    ? w.examples[Math.floor(Math.random() * w.examples.length)]
+    : w.example;
   const front=document.getElementById('cFront'),back=document.getElementById('cBack'),fcard=document.getElementById('fcard');
   if(!front||!back) return;
   if(fcard){fcard.style.transition='none';fcard.classList.remove('flip');void fcard.offsetWidth;fcard.style.transition='';}
 
   // always show example on front for context in typing modes
   const roHtml=showRomanization?`<div class="fc-ro">${w.ro}</div>`:'';
-  const exHtml=(studyMode!=='flip')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${w.example}</div>`:'';
+  const exHtml=(studyMode!=='flip')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${cardExample}</div>`:'';
   front.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-kr">${w.kr}</div>${roHtml}<div class="fc-pos">${w.pos}</div>${w.register&&w.register!=='neutral'?`<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>`:''}${exHtml}`;
 
   if(studyMode === 'meaning' || studyMode === 'reading'){
@@ -590,7 +594,7 @@ function renderStudyCard(){
     back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);
     inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
   } else {
-    back.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${w.example}</div>`;
+    back.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${cardExample}</div>`;
   }
 
   sFlip=false;
