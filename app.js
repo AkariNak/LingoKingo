@@ -777,6 +777,7 @@ function renderGrammar(container){
 
 // ── SONGS TAB ─────────────────────────────────────────────────────────────────
 function renderSongs(container){
+  try {
   const langSongs=SONGS.filter(s=>!s.lang||s.lang===curLang);
   if(!langSongs.length){container.innerHTML='<div class="empty-msg">No songs yet for this language — switch to Japanese to see よふかしのうた.</div>';return;}
   const wrap=document.createElement('div');wrap.style.cssText='padding:1.5rem 2rem;display:flex;flex-direction:column;gap:1.2rem';
@@ -812,6 +813,7 @@ function renderSongs(container){
     wrap.appendChild(songCard);
   });
   container.appendChild(wrap);
+  } catch(e) { container.innerHTML = '<div class="empty-msg" style="color:#c87a7a">songs error: ' + e.message + '</div>'; console.error('renderSongs error:', e); }
 }
 function addSongToDeck(song,container){
   if(activeDeckIdx<0||activeDeckIdx>=decks.length){const n=prompt('Name for new deck:',song.title);if(!n||!n.trim())return;addDeck(n.trim());decks[decks.length-1].color=song.color;}
