@@ -215,6 +215,9 @@ function toggleTheme() {
   document.body.className = theme;
   const btn = document.getElementById('themeBtn');
   if (btn) btn.textContent = theme === 'dark' ? 'light mode' : 'dark mode';
+  // reapply accent since body class change resets inline styles
+  const accentId = getActiveAccent();
+  if (accentId !== 'acc_default') applyAccent(accentId);
 }
 function applyFontSize(size) {
   fontSize = size;
@@ -1142,10 +1145,9 @@ function applyAccent(id) {
   const acc = ACCENT_COLORS.find(a => a.id === id);
   if (!acc) return;
   localStorage.setItem('lf-accent', id);
-  document.documentElement.style.setProperty('--acc', acc.value);
-  // Derive border and bg from the accent
-  document.documentElement.style.setProperty('--acc-bd', acc.value + '40');
-  document.documentElement.style.setProperty('--acc-bg', acc.value + '14');
+  document.body.style.setProperty('--acc', acc.value);
+  document.body.style.setProperty('--acc-bd', acc.value + '40');
+  document.body.style.setProperty('--acc-bg', acc.value + '14');
 }
 
 function applyBgTheme(id) {
