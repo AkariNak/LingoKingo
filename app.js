@@ -1460,42 +1460,92 @@ function analyzeReading(container,text){
   if(total>0){const stats=document.createElement('div');stats.className='reading-stats';stats.innerHTML=`<span>${total} word${total!==1?'s':''}</span><span style="color:var(--acc)">${known} in vocabulary</span><span>${total-known} unknown</span>`;out.appendChild(stats);}
 }
 function buildKanjiBreakdown(word) {
-  // Only for multi-char words with kanji
   if (!word.kr || word.kr.length < 2) return null;
   const hasKanji = /[\u4e00-\u9fff]/.test(word.kr);
-  if (!hasKanji || !window.KANJI_MEANINGS) return null;
+  if (!hasKanji || typeof KANJI_MEANINGS === 'undefined') return null;
   const chars = [...word.kr];
   const kanjiChars = chars.filter(c => /[\u4e00-\u9fff]/.test(c) && KANJI_MEANINGS[c]);
   if (kanjiChars.length < 2) return null;
 
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'margin-top:.65rem;padding:.6rem .75rem;background:var(--sf2);border-radius:8px;border:1px solid var(--bd)';
+  wrap.style.cssText = 'margin-top:.75rem;padding:.75rem;background:var(--sf2);border-radius:10px;border:1px solid var(--bd)';
 
   const title = document.createElement('div');
-  title.style.cssText = 'font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.5rem';
+  title.style.cssText = 'font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.6rem';
   title.textContent = 'kanji breakdown';
   wrap.appendChild(title);
 
-  // Individual characters
+  // Individual character boxes
   const charsRow = document.createElement('div');
-  charsRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.55rem';
+  charsRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.6rem';
+
   kanjiChars.forEach(ch => {
     const entry = KANJI_MEANINGS[ch];
-    const parts = entry.split(' — ');
-    const reading = parts[0] || '';
-    const meaning = parts[1] || entry;
+    const on = entry.on || '';
+    const kun = entry.kun || '';
+    const meaning = entry.meaning || '';
+
     const box = document.createElement('div');
-    box.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:6px 10px;background:var(--sf);border:1px solid var(--bd2);border-radius:7px;min-width:56px';
-    box.innerHTML = `<span style="font-family:'Noto Sans KR',sans-serif;font-size:1.4rem;font-weight:500;color:var(--acc);line-height:1.1">${ch}</span><span style="font-size:.58rem;color:var(--acc);margin-top:2px">${reading}</span><span style="font-size:.62rem;color:var(--mu);margin-top:1px;text-align:center">${meaning}</span>`;
+    box.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:8px 12px;background:var(--sf);border:1px solid var(--bd2);border-radius:8px;min-width:80px;gap:3px';
+
+    // The kanji itself — large
+    const kanjiEl = document.createElement('div');
+    kanjiEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:2rem;font-weight:500;color:var(--acc);line-height:1";
+    kanjiEl.textContent = ch;
+    box.appendChild(kanjiEl);
+
+    // On-reading (Chinese reading) in katakana
+    if (on) {
+      const onRow = document.createElement('div');
+      onRow.style.cssText = 'display:flex;align-items:baseline;gap:3px;margin-top:2px';
+      const onLabel = document.createElement('span');
+      onLabel.style.cssText = 'font-size:.48rem;color:var(--su);letter-spacing:.06em';
+      onLabel.textContent = 'おん';
+      const onVal = document.createElement('span');
+      onVal.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:.65rem;color:var(--acc)";
+      onVal.textContent = on;
+      onRow.appendChild(onLabel); onRow.appendChild(onVal);
+      box.appendChild(onRow);
+    }
+
+    // Kun-reading (Japanese reading) in hiragana
+    if (kun) {
+      const kunRow = document.createElement('div');
+      kunRow.style.cssText = 'display:flex;align-items:baseline;gap:3px';
+      const kunLabel = document.createElement('span');
+      kunLabel.style.cssText = 'font-size:.48rem;color:var(--su);letter-spacing:.06em';
+      kunLabel.textContent = 'くん';
+      const kunVal = document.createElement('span');
+      kunVal.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:.65rem;color:var(--mu)";
+      kunVal.textContent = kun;
+      kunRow.appendChild(kunLabel); kunRow.appendChild(kunVal);
+      box.appendChild(kunRow);
+    }
+
+    // English meaning
+    const meanEl = document.createElement('div');
+    meanEl.style.cssText = 'font-size:.6rem;color:var(--mu);text-align:center;margin-top:2px;line-height:1.3;max-width:90px';
+    meanEl.textContent = meaning;
+    box.appendChild(meanEl);
+
     charsRow.appendChild(box);
   });
   wrap.appendChild(charsRow);
 
-  // Combined meaning
-  const combined = document.createElement('div');
-  combined.style.cssText = 'font-size:.72rem;color:var(--tx);line-height:1.6;padding-top:.4rem;border-top:1px solid var(--bd)';
-  combined.innerHTML = `<span style="color:var(--su);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;margin-right:6px">together</span>${word.kr} — ${word.meaning}`;
-  wrap.appendChild(combined);
+  // Together section
+  const together = document.createElement('div');
+  together.style.cssText = 'padding-top:.5rem;border-top:1px solid var(--bd)';
+
+  const togLabel = document.createElement('div');
+  togLabel.style.cssText = 'font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);margin-bottom:3px';
+  togLabel.textContent = 'together';
+  together.appendChild(togLabel);
+
+  const togWord = document.createElement('div');
+  togWord.style.cssText = "display:flex;align-items:baseline;gap:8px;flex-wrap:wrap";
+  togWord.innerHTML = `<span style="font-family:'Noto Sans KR',sans-serif;font-size:1.1rem;font-weight:500;color:var(--acc)">${word.kr}</span><span style="font-size:.7rem;color:var(--mu)">${word.ro}</span><span style="font-size:.72rem;color:var(--tx)">${word.meaning}</span>`;
+  together.appendChild(togWord);
+  wrap.appendChild(together);
 
   return wrap;
 }
