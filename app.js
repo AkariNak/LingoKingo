@@ -905,19 +905,63 @@ function renderSongs(container){
     song.words.filter(Boolean).forEach(w=>{
       const wordObj=LANGS[curLang]?.words.find(x=>x.kr===w.kr);const inDeck=wordObj&&deckColorFor(w.kr);
       const row=document.createElement('div');row.className='song-word-row';if(inDeck)row.style.borderColor=song.color;
-      const rowHdr=document.createElement('div');rowHdr.style.cssText='display:flex;align-items:center;gap:10px;padding:.6rem .9rem;cursor:pointer';
-      const kj=document.createElement('span');kj.style.cssText=`font-family:'Noto Sans KR',sans-serif;font-size:1.6rem;font-weight:500;color:${inDeck?song.color:'var(--tx)'};min-width:2.2rem;text-align:center;flex-shrink:0`;kj.textContent=w.kr;
-      const wi=document.createElement('div');wi.style.flex='1';wi.innerHTML=`<div style="font-size:.65rem;color:var(--acc)">${w.ro}</div><div style="font-size:.78rem;color:var(--tx)">${w.meaning}</div><div style="font-size:.65rem;color:var(--mu);font-style:italic">${w.lyric} — ${w.lyricRo}</div>`;
-      const right=document.createElement('div');right.style.cssText='display:flex;align-items:center;gap:6px;flex-shrink:0';
-      if(w.crush){const b=document.createElement('span');b.style.cssText='font-size:.55rem;padding:2px 7px;border-radius:99px;border:1px solid rgba(200,168,122,.4);color:var(--acc)';b.textContent='sounds different sung';right.appendChild(b);}
-      const spk=document.createElement('button');spk.className='ubtn';spk.textContent='▶';spk.onclick=e=>{e.stopPropagation();speak(w.kr,'japanese');};right.appendChild(spk);
-      const addBtn=document.createElement('button');addBtn.className='abtn'+(inDeck?' accent':'');if(inDeck)addBtn.style.cssText=`background:${song.color};border-color:${song.color}`;addBtn.textContent=inDeck?'✓ in deck':'+ deck';addBtn.onclick=e=>{e.stopPropagation();if(wordObj){toggleWordInDeck(wordObj);renderSongs(container);}};right.appendChild(addBtn);
-      const rc=document.createElement('span');rc.style.cssText='font-size:.55rem;color:var(--su)';rc.textContent='▾';right.appendChild(rc);
+
+      // ── header row: kanji + info + action buttons ──
+      const rowHdr=document.createElement('div');rowHdr.style.cssText='display:flex;align-items:flex-start;gap:10px;padding:.7rem .9rem;cursor:pointer';
+
+      // Large kanji on left
+      const kj=document.createElement('span');
+      kj.style.cssText=`font-family:'Noto Sans KR',sans-serif;font-size:1.8rem;font-weight:500;color:${inDeck?song.color:'var(--tx)'};min-width:2.6rem;text-align:center;flex-shrink:0;line-height:1.1`;
+      kj.textContent=w.kr;
+
+      // Middle: reading, meaning, lyric
+      const wi=document.createElement('div');wi.style.flex='1';wi.style.minWidth='0';
+      const roEl=document.createElement('div');roEl.style.cssText='font-size:.65rem;color:var(--acc);margin-bottom:1px';roEl.textContent=w.ro;
+      const mnEl=document.createElement('div');mnEl.style.cssText='font-size:.82rem;color:var(--tx);font-weight:500;margin-bottom:3px';mnEl.textContent=w.meaning;
+      const lyEl=document.createElement('div');lyEl.style.cssText='font-size:.63rem;color:var(--mu);font-style:italic;line-height:1.5';lyEl.textContent=w.lyric+' — '+w.lyricRo;
+      wi.appendChild(roEl);wi.appendChild(mnEl);wi.appendChild(lyEl);
+
+      // Right: action buttons + expand chevron (stacked vertically so they don't crowd)
+      const right=document.createElement('div');right.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0';
+
+      // Button row: speak + add to deck
+      const btnRow=document.createElement('div');btnRow.style.cssText='display:flex;align-items:center;gap:5px';
+      const spk=document.createElement('button');spk.className='ubtn';spk.style.padding='4px 8px';spk.textContent='▶';spk.onclick=e=>{e.stopPropagation();speak(w.kr,'japanese');};btnRow.appendChild(spk);
+      const addBtn=document.createElement('button');addBtn.className='abtn'+(inDeck?' accent':'');if(inDeck)addBtn.style.cssText=`background:${song.color};border-color:${song.color}`;
+      addBtn.style.fontSize='.7rem';addBtn.textContent=inDeck?'✓ in deck':'+ deck';
+      addBtn.onclick=e=>{e.stopPropagation();if(wordObj){toggleWordInDeck(wordObj);renderSongs(container);}};
+      btnRow.appendChild(addBtn);right.appendChild(btnRow);
+
+      // "sounds different sung" badge if present
+      if(w.crush){const b=document.createElement('span');b.style.cssText='font-size:.52rem;padding:2px 6px;border-radius:99px;border:1px solid rgba(200,168,122,.35);color:var(--acc);white-space:nowrap';b.textContent='sounds different sung';right.appendChild(b);}
+
+      // Expand chevron — only if there's a note
+      const rc=document.createElement('span');rc.style.cssText='font-size:.6rem;color:var(--su);margin-top:2px';
+      if(w.note) rc.textContent='▾ note'; else rc.textContent='';
+      right.appendChild(rc);
+
       rowHdr.appendChild(kj);rowHdr.appendChild(wi);rowHdr.appendChild(right);
+
+      // ── note panel (hidden by default) ──
       const noteEl=document.createElement('div');noteEl.className='song-note-body';
-      if(w.note){const p=document.createElement('p');p.style.cssText='font-size:.72rem;color:var(--mu);line-height:1.7';p.textContent=w.note;noteEl.appendChild(p);}
-      let noteOpen=false;rowHdr.onclick=()=>{noteOpen=!noteOpen;noteEl.style.display=noteOpen?'block':'none';rc.textContent=noteOpen?'▴':'▾';};
-      row.appendChild(rowHdr);row.appendChild(noteEl);grid.appendChild(row);
+      if(w.note){
+        const p=document.createElement('p');
+        p.style.cssText='font-size:.73rem;color:var(--mu);line-height:1.75;margin:0';
+        p.textContent=w.note;
+        noteEl.appendChild(p);
+      }
+
+      let noteOpen=false;
+      rowHdr.onclick=()=>{
+        if(!w.note) return;
+        noteOpen=!noteOpen;
+        noteEl.style.display=noteOpen?'block':'none';
+        rc.textContent=noteOpen?'▴ note':'▾ note';
+      };
+
+      row.appendChild(rowHdr);
+      if(w.note) row.appendChild(noteEl);
+      grid.appendChild(row);
     });
     body.appendChild(grid);songCard.appendChild(body);
     let isOpen=false;titleBar.onclick=e=>{if(addAll.contains(e.target))return;isOpen=!isOpen;body.style.display=isOpen?'block':'none';chev.textContent=isOpen?'▴':'▾';};
