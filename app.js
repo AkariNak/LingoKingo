@@ -650,7 +650,11 @@ function renderStudyCard(){
     back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);
     inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
   } else {
-    back.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${cardExample}</div>`;
+    const bk = document.createElement('div');
+    bk.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${cardExample}</div>`;
+    const bkBreakdown = buildKanjiBreakdown(w);
+    if (bkBreakdown) { bkBreakdown.style.cssText += ';margin:8px 12px 0;font-size:.85em'; bk.appendChild(bkBreakdown); }
+    back.innerHTML = ''; back.appendChild(bk);
   }
 
   sFlip=false;
@@ -1455,6 +1459,47 @@ function analyzeReading(container,text){
   const known=tokens.filter(t=>!t.isPunct&&(LANGS[curLang].words.find(w=>w.kr===t.text)||t.word)).length,total=tokens.filter(t=>!t.isPunct).length;
   if(total>0){const stats=document.createElement('div');stats.className='reading-stats';stats.innerHTML=`<span>${total} word${total!==1?'s':''}</span><span style="color:var(--acc)">${known} in vocabulary</span><span>${total-known} unknown</span>`;out.appendChild(stats);}
 }
+function buildKanjiBreakdown(word) {
+  // Only for multi-char words with kanji
+  if (!word.kr || word.kr.length < 2) return null;
+  const hasKanji = /[\u4e00-\u9fff]/.test(word.kr);
+  if (!hasKanji || !window.KANJI_MEANINGS) return null;
+  const chars = [...word.kr];
+  const kanjiChars = chars.filter(c => /[\u4e00-\u9fff]/.test(c) && KANJI_MEANINGS[c]);
+  if (kanjiChars.length < 2) return null;
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'margin-top:.65rem;padding:.6rem .75rem;background:var(--sf2);border-radius:8px;border:1px solid var(--bd)';
+
+  const title = document.createElement('div');
+  title.style.cssText = 'font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.5rem';
+  title.textContent = 'kanji breakdown';
+  wrap.appendChild(title);
+
+  // Individual characters
+  const charsRow = document.createElement('div');
+  charsRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.55rem';
+  kanjiChars.forEach(ch => {
+    const entry = KANJI_MEANINGS[ch];
+    const parts = entry.split(' — ');
+    const reading = parts[0] || '';
+    const meaning = parts[1] || entry;
+    const box = document.createElement('div');
+    box.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:6px 10px;background:var(--sf);border:1px solid var(--bd2);border-radius:7px;min-width:56px';
+    box.innerHTML = `<span style="font-family:'Noto Sans KR',sans-serif;font-size:1.4rem;font-weight:500;color:var(--acc);line-height:1.1">${ch}</span><span style="font-size:.58rem;color:var(--acc);margin-top:2px">${reading}</span><span style="font-size:.62rem;color:var(--mu);margin-top:1px;text-align:center">${meaning}</span>`;
+    charsRow.appendChild(box);
+  });
+  wrap.appendChild(charsRow);
+
+  // Combined meaning
+  const combined = document.createElement('div');
+  combined.style.cssText = 'font-size:.72rem;color:var(--tx);line-height:1.6;padding-top:.4rem;border-top:1px solid var(--bd)';
+  combined.innerHTML = `<span style="color:var(--su);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;margin-right:6px">together</span>${word.kr} — ${word.meaning}`;
+  wrap.appendChild(combined);
+
+  return wrap;
+}
+
 function showReadingWordCard(container,word){
   let card=document.getElementById('readingWordCard');if(!card) return;
   const inDeck=deckColorFor(word.kr);card.style.display='block';card.innerHTML='';
@@ -1468,6 +1513,9 @@ function showReadingWordCard(container,word){
   const mn=document.createElement('div');mn.style.cssText="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--tx);margin-bottom:.4rem";mn.textContent=word.meaning;card.appendChild(mn);
   if(word.pos){const pc={verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'};const pe=document.createElement('span');pe.style.cssText=`font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${pc[word.pos]||'var(--mu)'};margin-bottom:.5rem;display:inline-block`;pe.textContent=word.pos;card.appendChild(pe);}
   if(word.example){const ex=document.createElement('div');ex.style.cssText='font-size:.72rem;color:var(--mu);font-style:italic;line-height:1.65;padding:.5rem .75rem;background:var(--sf2);border-radius:7px;margin-top:.4rem;border:1px solid var(--bd)';ex.textContent=word.example;card.appendChild(ex);}
+  // Kanji breakdown — only for multi-kanji words
+  const breakdown = buildKanjiBreakdown(word);
+  if (breakdown) card.appendChild(breakdown);
 }
 
 function showUnknownWordPanel(container, text) {
