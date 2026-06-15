@@ -916,10 +916,12 @@ function renderSongs(container){
 
       // Middle: reading, meaning, lyric
       const wi=document.createElement('div');wi.style.flex='1';wi.style.minWidth='0';
-      const roEl=document.createElement('div');roEl.style.cssText='font-size:.65rem;color:var(--acc);margin-bottom:1px';roEl.textContent=w.ro;
+      // only show romaji for non-kanji words (kana, expressions etc)
+      const isAllKanji=/^[\u4e00-\u9fff]+$/.test(w.kr);
+      if(!isAllKanji){const roEl=document.createElement('div');roEl.style.cssText='font-size:.65rem;color:var(--acc);margin-bottom:1px';roEl.textContent=w.ro;wi.appendChild(roEl);}
       const mnEl=document.createElement('div');mnEl.style.cssText='font-size:.82rem;color:var(--tx);font-weight:500;margin-bottom:3px';mnEl.textContent=w.meaning;
       const lyEl=document.createElement('div');lyEl.style.cssText='font-size:.63rem;color:var(--mu);font-style:italic;line-height:1.5';lyEl.textContent=w.lyric+' — '+w.lyricRo;
-      wi.appendChild(roEl);wi.appendChild(mnEl);wi.appendChild(lyEl);
+      wi.appendChild(mnEl);wi.appendChild(lyEl);
 
       // Right: action buttons + expand chevron (stacked vertically so they don't crowd)
       const right=document.createElement('div');right.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0';
@@ -944,23 +946,40 @@ function renderSongs(container){
 
       // ── note panel (hidden by default) ──
       const noteEl=document.createElement('div');noteEl.className='song-note-body';
+      // kanji breakdown at top of note panel
+      const fakeWord={kr:w.kr,ro:w.ro,meaning:w.meaning};
+      const breakdown=buildKanjiBreakdown(fakeWord);
+      if(breakdown){breakdown.style.margin='0 0 .6rem';noteEl.appendChild(breakdown);}
       if(w.note){
-        const p=document.createElement('p');
-        p.style.cssText='font-size:.73rem;color:var(--mu);line-height:1.75;margin:0';
-        p.textContent=w.note;
-        noteEl.appendChild(p);
+        const sentences = w.note.split(/\.\s+/).filter(Boolean);
+        if(sentences.length <= 1){
+          const p=document.createElement('p');
+          p.style.cssText='font-size:.73rem;color:var(--mu);line-height:1.75;margin:0';
+          p.textContent=w.note;
+          noteEl.appendChild(p);
+        } else {
+          const ul=document.createElement('ul');
+          ul.style.cssText='margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:4px';
+          sentences.forEach(s=>{
+            const li=document.createElement('li');
+            li.style.cssText='font-size:.73rem;color:var(--mu);line-height:1.65';
+            li.textContent=s.endsWith('.')?s:s+'.';
+            ul.appendChild(li);
+          });
+          noteEl.appendChild(ul);
+        }
       }
-
+      const hasDetail=breakdown||w.note;
       let noteOpen=false;
       rowHdr.onclick=()=>{
-        if(!w.note) return;
+        if(!hasDetail) return;
         noteOpen=!noteOpen;
         noteEl.style.display=noteOpen?'block':'none';
         rc.textContent=noteOpen?'▴ note':'▾ note';
       };
-
+      if(!hasDetail) rc.textContent='';
       row.appendChild(rowHdr);
-      if(w.note) row.appendChild(noteEl);
+      if(hasDetail) row.appendChild(noteEl);
       grid.appendChild(row);
     });
     body.appendChild(grid);songCard.appendChild(body);
