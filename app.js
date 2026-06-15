@@ -601,13 +601,17 @@ function renderStudyCard(){
   const cardExample = (w.examples && w.examples.length > 1)
     ? w.examples[Math.floor(Math.random() * w.examples.length)]
     : w.example;
+  // Extract reading note from example if present (text after 　[reading])
+  const exParts = cardExample ? cardExample.split('　[') : [];
+  const exSentence = exParts[0] || cardExample;
+  const exReading = exParts[1] ? exParts[1].replace(']','') : '';
   const front=document.getElementById('cFront'),back=document.getElementById('cBack'),fcard=document.getElementById('fcard');
   if(!front||!back) return;
   if(fcard){fcard.style.transition='none';fcard.classList.remove('flip');void fcard.offsetWidth;fcard.style.transition='';}
 
   // always show example on front for context in typing modes
   const roHtml=showRomanization?`<div class="fc-ro">${w.ro}</div>`:'';
-  const exHtml=(studyMode!=='flip')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${cardExample}</div>`:'';
+  const exHtml=(studyMode!=='flip')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${exSentence}</div>`:'';
   front.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-kr">${w.kr}</div>${roHtml}<div class="fc-pos">${w.pos}</div>${w.register&&w.register!=='neutral'?`<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>`:''}${exHtml}`;
 
   if(studyMode === 'meaning' || studyMode === 'reading'){
@@ -650,7 +654,7 @@ function renderStudyCard(){
     back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);
     inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
   } else {
-    back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${cardExample}</div>`;
+    back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div>${exReading?`<div style="font-size:.6rem;color:var(--acc);margin-top:6px;letter-spacing:.04em">this example uses: ${exReading}</div>`:''}<div class="fc-ex">${exSentence}</div>`;
   }
 
   sFlip=false;
@@ -899,7 +903,7 @@ function renderSongs(container){
     const desc=document.createElement('div');desc.style.cssText='padding:.75rem 1.2rem;font-size:.74rem;color:var(--mu);line-height:1.7;border-bottom:1px solid var(--bd)';desc.textContent=song.desc;body.appendChild(desc);
     const grid=document.createElement('div');grid.style.cssText='padding:.85rem 1rem;display:flex;flex-direction:column;gap:6px';
     song.words.filter(Boolean).forEach(w=>{
-      const wordObj=LANGS[curLang]?.words.find(x=>x.kr===w.kr);const inDeck=wordObj&&deckColorFor(w.kr);
+      const wordObj=LANGS[song.lang||curLang]?.words.find(x=>x.kr===w.kr);const inDeck=wordObj&&deckColorFor(w.kr);
       const row=document.createElement('div');row.className='song-word-row';if(inDeck)row.style.borderColor=song.color;
 
       // ── header row: kanji + info + action buttons ──
@@ -927,7 +931,12 @@ function renderSongs(container){
       const spk=document.createElement('button');spk.className='ubtn';spk.style.padding='4px 8px';spk.textContent='▶';spk.onclick=e=>{e.stopPropagation();speak(w.kr,'japanese');};btnRow.appendChild(spk);
       const addBtn=document.createElement('button');addBtn.className='abtn'+(inDeck?' accent':'');if(inDeck)addBtn.style.cssText=`background:${song.color};border-color:${song.color}`;
       addBtn.style.fontSize='.7rem';addBtn.textContent=inDeck?'✓ in deck':'+ deck';
-      addBtn.onclick=e=>{e.stopPropagation();if(wordObj){toggleWordInDeck(wordObj);renderSongs(container);}};
+      addBtn.onclick=e=>{e.stopPropagation();
+        const langWords=LANGS[song.lang||curLang]?.words||JAPANESE_WORDS;
+        let target=langWords.find(x=>x.kr===w.kr);
+        if(!target){target={kr:w.kr,ro:w.ro,meaning:w.meaning,example:w.lyric+' — '+w.lyricRo,pos:'expression',freq:5,register:'neutral'};langWords.push(target);}
+        if(activeDeckIdx<0||activeDeckIdx>=decks.length){const n=prompt('Name your deck:','');if(!n?.trim())return;addDeck(n.trim());}
+        toggleWordInDeck(target);renderSongs(container);};
       btnRow.appendChild(addBtn);right.appendChild(btnRow);
 
       // "sounds different sung" badge if present
@@ -984,8 +993,14 @@ function renderSongs(container){
 }
 function addSongToDeck(song,container){
   if(activeDeckIdx<0||activeDeckIdx>=decks.length){const n=prompt('Name for new deck:',song.title);if(!n||!n.trim())return;addDeck(n.trim());decks[decks.length-1].color=song.color;}
-  const idx=activeDeckIdx>=0?activeDeckIdx:decks.length-1;let added=0;
-  song.words.forEach(w=>{const word=LANGS[curLang]?.words.find(x=>x.kr===w.kr);if(word){decks[idx].words[w.kr]=true;added++;}});
+  const idx=activeDeckIdx>=0?activeDeckIdx:decks.length-1;
+  const langWords=LANGS[song.lang||curLang]?.words||JAPANESE_WORDS;
+  let added=0;
+  song.words.filter(Boolean).forEach(w=>{
+    let word=langWords.find(x=>x.kr===w.kr);
+    if(!word){word={kr:w.kr,ro:w.ro,meaning:w.meaning,example:w.lyric+' — '+w.lyricRo,pos:'expression',freq:5,register:'neutral'};langWords.push(word);}
+    decks[idx].words[w.kr]=true;added++;
+  });
   saveDeckState();checkAchievements();showToast('Added '+added+' words to "'+decks[idx].name+'"');renderSongs(container);
 }
 
