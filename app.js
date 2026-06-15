@@ -439,12 +439,14 @@ function renderWordGrid() {
   const search=(rawSearch?.value||'').toLowerCase().trim();
   if(!GROUPINGS[curGrouping]) curGrouping='pos';
   const cfg=GROUPINGS[curGrouping], words=LANGS[curLang].words;
-  const alphaPoses=new Set(['hiragana','katakana','kanji','hiragana_d','katakana_d']);
+  const alphaPoses=new Set(['hiragana','katakana','hiragana_d','katakana_d']);
+  // kanji with script:"kanji" are alphabet drill cards — hide those by default too
+  const isAlphaKanji = w => w.pos==='kanji' && w.script==='kanji';
   let filtered=words.filter(w=>{
     if(activeSituation==='all'&&!(w.sit&&w.sit.length>0)) return false;
     if(activeSituation&&activeSituation!=='all'&&!(w.sit&&w.sit.includes(activeSituation))) return false;
     if(activeScripts.size>0){if(!activeScripts.has(w.pos)) return false;}
-    else if(curLang==='japanese'){if(alphaPoses.has(w.pos)) return false;}
+    else if(curLang==='japanese'){if(alphaPoses.has(w.pos)||isAlphaKanji(w)) return false;}
     if(search&&!w.kr.includes(search)&&!w.ro.toLowerCase().includes(search)&&!w.meaning.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -932,11 +934,12 @@ function renderSongs(container){
       const addBtn=document.createElement('button');addBtn.className='abtn'+(inDeck?' accent':'');if(inDeck)addBtn.style.cssText=`background:${song.color};border-color:${song.color}`;
       addBtn.style.fontSize='.7rem';addBtn.textContent=inDeck?'✓ in deck':'+ deck';
       addBtn.onclick=e=>{e.stopPropagation();
-        const langWords=LANGS[song.lang||curLang]?.words||JAPANESE_WORDS;
+        const langWords=LANGS[song.lang||'japanese']?.words||JAPANESE_WORDS;
         let target=langWords.find(x=>x.kr===w.kr);
-        if(!target){target={kr:w.kr,ro:w.ro,meaning:w.meaning,example:w.lyric+' — '+w.lyricRo,pos:'expression',freq:5,register:'neutral'};langWords.push(target);}
+        if(!target){target={kr:w.kr,ro:w.ro,meaning:w.meaning,example:w.lyric+' — '+w.lyricRo,pos:'noun',freq:5,register:'neutral'};langWords.push(target);}
         if(activeDeckIdx<0||activeDeckIdx>=decks.length){const n=prompt('Name your deck:','');if(!n?.trim())return;addDeck(n.trim());}
-        toggleWordInDeck(target);renderSongs(container);};
+        if(decks[activeDeckIdx].words[w.kr]){delete decks[activeDeckIdx].words[w.kr];}else{decks[activeDeckIdx].words[w.kr]=true;}
+        saveDeckState();renderSongs(container);};
       btnRow.appendChild(addBtn);right.appendChild(btnRow);
 
       // "sounds different sung" badge if present
@@ -992,16 +995,22 @@ function renderSongs(container){
   } catch(e) { container.innerHTML = '<div class="empty-msg" style="color:#c87a7a">songs error: ' + e.message + '</div>'; console.error('renderSongs error:', e); }
 }
 function addSongToDeck(song,container){
-  if(activeDeckIdx<0||activeDeckIdx>=decks.length){const n=prompt('Name for new deck:',song.title);if(!n||!n.trim())return;addDeck(n.trim());decks[decks.length-1].color=song.color;}
+  if(activeDeckIdx<0||activeDeckIdx>=decks.length){
+    const n=prompt('Name for new deck:',song.title);if(!n||!n.trim())return;
+    addDeck(n.trim());decks[decks.length-1].color=song.color;
+  }
   const idx=activeDeckIdx>=0?activeDeckIdx:decks.length-1;
-  const langWords=LANGS[song.lang||curLang]?.words||JAPANESE_WORDS;
+  const langWords=LANGS[song.lang||'japanese']?.words||JAPANESE_WORDS;
   let added=0;
   song.words.filter(Boolean).forEach(w=>{
-    let word=langWords.find(x=>x.kr===w.kr);
-    if(!word){word={kr:w.kr,ro:w.ro,meaning:w.meaning,example:w.lyric+' — '+w.lyricRo,pos:'expression',freq:5,register:'neutral'};langWords.push(word);}
+    if(!langWords.find(x=>x.kr===w.kr)){
+      langWords.push({kr:w.kr,ro:w.ro,meaning:w.meaning,example:w.lyric+' — '+w.lyricRo,pos:'noun',freq:5,register:'neutral'});
+    }
     decks[idx].words[w.kr]=true;added++;
   });
-  saveDeckState();checkAchievements();showToast('Added '+added+' words to "'+decks[idx].name+'"');renderSongs(container);
+  saveDeckState();checkAchievements();
+  showToast('Added '+added+' words to "'+decks[idx].name+'"');
+  renderSongs(container);
 }
 
 // ── MEDALS TAB ────────────────────────────────────────────────────────────────
