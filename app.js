@@ -962,7 +962,7 @@ function renderSongs(container){
           noteEl.appendChild(ul);
         }
       }
-      const hasDetail=breakdown||w.note;
+      const hasDetail=!!w.note;
       let noteOpen=false;
       rowHdr.onclick=()=>{
         if(!hasDetail) return;
