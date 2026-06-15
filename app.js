@@ -652,7 +652,7 @@ function renderStudyCard(){
   } else {
     const bk = document.createElement('div');
     bk.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div><div class="fc-ex">${cardExample}</div>`;
-    const bkBreakdown = buildKanjiBreakdown(w);
+    const bkBreakdown = buildKanjiBreakdown(w) || buildSingleKanjiInfo(w);
     if (bkBreakdown) { bkBreakdown.style.cssText += ';margin:8px 12px 0;font-size:.85em'; bk.appendChild(bkBreakdown); }
     back.innerHTML = ''; back.appendChild(bk);
   }
@@ -948,7 +948,7 @@ function renderSongs(container){
       const noteEl=document.createElement('div');noteEl.className='song-note-body';
       // kanji breakdown at top of note panel
       const fakeWord={kr:w.kr,ro:w.ro,meaning:w.meaning};
-      const breakdown=buildKanjiBreakdown(fakeWord);
+      const breakdown=buildKanjiBreakdown(fakeWord)||buildSingleKanjiInfo(fakeWord);
       if(breakdown){breakdown.style.margin='0 0 .6rem';noteEl.appendChild(breakdown);}
       if(w.note){
         const sentences = w.note.split(/\.\s+/).filter(Boolean);
@@ -1534,6 +1534,66 @@ function makeBullet(items) {
   return ul;
 }
 
+function buildSingleKanjiInfo(word) {
+  // For words that ARE a single kanji or contain one kanji with a KANJI_MEANINGS entry
+  if (!word.kr || typeof KANJI_MEANINGS === 'undefined') return null;
+  const chars = [...word.kr];
+  const kanjiChars = chars.filter(c => /[\u4e00-\u9fff]/.test(c) && KANJI_MEANINGS[c]);
+  // Only use this for single-kanji words (multi-kanji gets buildKanjiBreakdown)
+  if (kanjiChars.length !== 1) return null;
+
+  const ch = kanjiChars[0];
+  const entry = KANJI_MEANINGS[ch];
+  const on = entry.on || '';
+  const kun = entry.kun || '';
+  const meaning = entry.meaning || '';
+  const onEx = entry.onEx || '';
+  const kunEx = entry.kunEx || '';
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'margin-top:.75rem;padding:.75rem;background:var(--sf2);border-radius:10px;border:1px solid var(--bd)';
+
+  const title = document.createElement('div');
+  title.style.cssText = 'font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.5rem';
+  title.textContent = 'kanji detail';
+  wrap.appendChild(title);
+
+  // Kanji + meaning
+  const topRow = document.createElement('div');
+  topRow.style.cssText = 'display:flex;align-items:baseline;gap:10px;margin-bottom:.4rem';
+  const kanjiEl = document.createElement('span');
+  kanjiEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:2rem;font-weight:500;color:var(--acc);line-height:1;flex-shrink:0";
+  kanjiEl.textContent = ch;
+  const meaningEl = document.createElement('span');
+  meaningEl.style.cssText = 'font-size:.75rem;color:var(--tx)';
+  meaningEl.textContent = meaning;
+  topRow.appendChild(kanjiEl); topRow.appendChild(meaningEl);
+  wrap.appendChild(topRow);
+
+  const bullets = [];
+  if (on) {
+    let line = '音読み (おんよみ) — Chinese-origin reading: ' + on;
+    if (onEx) line += '　→　' + onEx;
+    bullets.push(line);
+  }
+  if (kun) {
+    let line = '訓読み (くんよみ) — Japanese reading: ' + kun;
+    if (kunEx) line += '　→　' + kunEx;
+    bullets.push(line);
+  }
+  if (bullets.length) wrap.appendChild(makeBullet(bullets));
+
+  if (word.example) {
+    const exLabel = document.createElement('div');
+    exLabel.style.cssText = 'font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);margin-top:.6rem;margin-bottom:.2rem';
+    exLabel.textContent = 'in a sentence';
+    wrap.appendChild(exLabel);
+    wrap.appendChild(makeBullet([word.example]));
+  }
+
+  return wrap;
+}
+
 function buildKanjiBreakdown(word) {
   if (!word.kr || word.kr.length < 2) return null;
   const hasKanji = /[\u4e00-\u9fff]/.test(word.kr);
@@ -1629,7 +1689,7 @@ function showReadingWordCard(container,word){
   if(word.pos){const pc={verb:'#7a8cc8',noun:'#7ac8a0',adjective:'#c87aa8',adverb:'#c8a87a',expression:'#c87a7a',pronoun:'#7ac8c8',particle:'#c8c87a'};const pe=document.createElement('span');pe.style.cssText=`font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:${pc[word.pos]||'var(--mu)'};margin-bottom:.5rem;display:inline-block`;pe.textContent=word.pos;card.appendChild(pe);}
   if(word.example){const ex=document.createElement('div');ex.style.cssText='font-size:.72rem;color:var(--mu);font-style:italic;line-height:1.65;padding:.5rem .75rem;background:var(--sf2);border-radius:7px;margin-top:.4rem;border:1px solid var(--bd)';ex.textContent=word.example;card.appendChild(ex);}
   // Kanji breakdown — only for multi-kanji words
-  const breakdown = buildKanjiBreakdown(word);
+  const breakdown = buildKanjiBreakdown(word) || buildSingleKanjiInfo(word);
   if (breakdown) card.appendChild(breakdown);
 }
 
