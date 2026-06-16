@@ -472,6 +472,12 @@ const JAPANESE_WORDS_3 = [
   {kr:"〜そうだ",ro:"~sou da",meaning:"looks like ~ / seems ~ / I heard ~",example:"難しそうだ — muzukashi sou da — it looks difficult",pos:"expression",freq:8,register:"neutral"},
   {kr:"〜ようだ",ro:"~you da",meaning:"it seems that ~ / it looks like ~ (observation)",example:"熱があるようだ — netsu ga aru you da — it seems they have a fever",pos:"expression",freq:7,register:"neutral"},
 
+  // ── KANJI-FORM VOCABULARY (the words you asked to learn) ────────────────────
+  {kr:"何",ro:"nani/nan",meaning:"what",example:"何が好きですか？ — nani ga suki desu ka? — what do you like?",pos:"pronoun",freq:10,register:"neutral"},
+  {kr:"食べる",ro:"taberu",meaning:"to eat",example:"何を食べる？ — nani wo taberu? — what are you going to eat?",pos:"verb",freq:10,register:"casual"},
+  {kr:"飲む",ro:"nomu",meaning:"to drink",example:"コーヒーを飲む — koohii wo nomu — to drink coffee",pos:"verb",freq:10,register:"casual"},
+  {kr:"行く",ro:"iku",meaning:"to go",example:"学校に行く — gakkou ni iku — to go to school",pos:"verb",freq:10,register:"casual"},
+
   // ── 願 ───────────────────────────────────────────────────────────────────────
   {kr:"願",ro:"gan/nega-u",meaning:"wish / desire / request / pray",example:"合格を願う — goukaku wo negau — to wish for a pass",pos:"kanji",freq:7,register:"neutral",script:"kanji",strokes:19},
   {kr:"願う",ro:"negau",meaning:"to wish / to hope / to pray / to request",example:"成功を願っています — seikou wo negatte imasu — I'm wishing you success",pos:"verb",freq:7,register:"neutral"},
