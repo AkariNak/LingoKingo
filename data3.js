@@ -472,6 +472,11 @@ const JAPANESE_WORDS_3 = [
   {kr:"〜そうだ",ro:"~sou da",meaning:"looks like ~ / seems ~ / I heard ~",example:"難しそうだ — muzukashi sou da — it looks difficult",pos:"expression",freq:8,register:"neutral"},
   {kr:"〜ようだ",ro:"~you da",meaning:"it seems that ~ / it looks like ~ (observation)",example:"熱があるようだ — netsu ga aru you da — it seems they have a fever",pos:"expression",freq:7,register:"neutral"},
 
+  // ── 願 ───────────────────────────────────────────────────────────────────────
+  {kr:"願",ro:"gan/nega-u",meaning:"wish / desire / request / pray",example:"合格を願う — goukaku wo negau — to wish for a pass",pos:"kanji",freq:7,register:"neutral",script:"kanji",strokes:19},
+  {kr:"願う",ro:"negau",meaning:"to wish / to hope / to pray / to request",example:"成功を願っています — seikou wo negatte imasu — I'm wishing you success",pos:"verb",freq:7,register:"neutral"},
+  {kr:"願い",ro:"negai",meaning:"wish / desire / hope / request",example:"願いが叶った — negai ga kanatta — my wish came true",pos:"noun",freq:7,register:"neutral"},
+
 ];
 
 // Append to existing JAPANESE_WORDS array
