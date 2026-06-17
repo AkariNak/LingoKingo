@@ -684,13 +684,13 @@ function renderStudyCard(){
     back.appendChild(wordsLabel);
 
     const wordList = document.createElement('div');
-    wordList.style.cssText = 'width:100%;overflow-y:auto;max-height:140px';
+    wordList.style.cssText = 'width:100%;overflow-y:auto;max-height:140px;display:flex;flex-direction:column;flex-shrink:0';
 
     w.examples.slice(0, 4).forEach(ex => {
       const parts = ex.split(' — ');
-      const word    = (parts[0] || '').replace(/\s*\[.*?\]/g, '').trim();
-      const reading = (parts[1] || '').replace(/\s*\[.*?\]/g, '').trim();
-      const eng     = (parts[2] || '').replace(/\s*\[.*?\]/g, '').trim();
+      const word    = (parts[0] || '').replace(/[\s\u3000]*\[.*?\]/g, '').trim();
+      const reading = (parts[1] || '').replace(/[\s\u3000]*\[.*?\]/g, '').trim();
+      const eng     = (parts[2] || '').replace(/[\s\u3000]*\[.*?\]/g, '').trim();
 
       const row = document.createElement('div');
       row.style.cssText = 'padding:5px 0;border-bottom:1px solid var(--bd)';
