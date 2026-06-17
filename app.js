@@ -681,6 +681,30 @@ function renderStudyCard(){
       <div style="width:100%;margin-bottom:.5rem">${exLines}</div>
       ${readings ? `<div style="font-size:.63rem;color:var(--mu);margin-top:.5rem;line-height:1.7;font-style:italic;padding:.5rem .75rem;background:var(--sf2);border-radius:6px">pattern: ${readings}</div>` : ''}
     `;
+} else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
+    const exLines = w.examples.slice(0, 4).map(ex => {
+      const parts = ex.split(' — ');
+      const word = (parts[0] || '').replace(/\s*\[.*?\]/g, '').trim();
+      const reading = (parts[1] || '').replace(/\s*\[.*?\]/g, '').trim();
+      const eng = (parts[2] || '').replace(/\s*\[.*?\]/g, '').trim();
+      return `<div style="display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--bd)">
+        <span style="font-family:'Noto Sans KR',sans-serif;font-size:1rem;flex:0 0 auto;color:var(--tx);white-space:nowrap">${word}</span>
+        <span style="font-size:.68rem;color:var(--acc);flex:0 0 auto;white-space:nowrap">${reading}</span>
+        <span style="font-size:.68rem;color:var(--mu);flex:1;min-width:0">${eng}</span>
+      </div>`;
+    }).join('');
+    const readings = [...new Set(w.examples.slice(0,4).map(ex => {
+      const m = ex.match(/\[([^\]]+)\]/);
+      return m ? m[1] : null;
+    }).filter(Boolean))].join(' · ');
+    back.innerHTML = `
+      <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
+      <div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem">core meaning</div>
+      <div class="fc-meaning" style="margin-bottom:.75rem">${w.meaning}</div>
+      <div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem">words</div>
+      <div style="width:100%">${exLines}</div>
+      ${readings ? `<div style="font-size:.62rem;color:var(--mu);margin-top:.5rem;line-height:1.6;font-style:italic;padding:.4rem .65rem;background:var(--sf2);border-radius:6px">pattern: ${readings}</div>` : ''}
+    `;
   } else {
     back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div>${exReading?`<div style="font-size:.6rem;color:var(--acc);margin-top:6px;letter-spacing:.04em">this example uses: ${exReading}</div>`:''}<div class="fc-ex">${exSentence}</div>`;
   }
