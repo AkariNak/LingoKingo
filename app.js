@@ -731,6 +731,8 @@ function renderStudyCard(){
       patternEl.textContent = 'pattern: ' + readings;
       back.appendChild(patternEl);
     }
+  } else {
+    back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div>${exReading?`<div style="font-size:.6rem;color:var(--acc);margin-top:6px;letter-spacing:.04em">this example uses: ${exReading}</div>`:''}<div class="fc-ex">${exSentence}</div>`;
   }
 
   sFlip=false;
