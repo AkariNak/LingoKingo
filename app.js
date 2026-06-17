@@ -658,81 +658,79 @@ function renderStudyCard(){
     };
     back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);
     inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
-} else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
-    const exLines = w.examples.slice(0, 4).map(ex => {
-      const word = ex.split(' — ')[0].replace(/\s*\[.*?\]/, '').trim();
-      const reading = ex.split(' — ')[1] || '';
-      const eng = ex.split(' — ')[2] || '';
-      return `<div style="display:flex;gap:10px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--bd)">
-        <span style="font-family:'Noto Sans KR',sans-serif;font-size:1.05rem;min-width:70px;color:var(--tx)">${word}</span>
-        <span style="font-size:.7rem;color:var(--acc);min-width:70px">${reading}</span>
-        <span style="font-size:.7rem;color:var(--mu)">${eng}</span>
-      </div>`;
-    }).join('');
-    const readings = [...new Set(w.examples.slice(0,4).map(ex => {
-      const m = ex.match(/\[([^\]]+)\]/);
-      return m ? m[1] : null;
-    }).filter(Boolean))].join(' · ');
-    back.innerHTML = `
-      <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
-      <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.3rem">core meaning</div>
-      <div class="fc-meaning" style="margin-bottom:.9rem">${w.meaning}</div>
-      <div style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.35rem">words</div>
-      <div style="width:100%;margin-bottom:.5rem">${exLines}</div>
-      ${readings ? `<div style="font-size:.63rem;color:var(--mu);margin-top:.5rem;line-height:1.7;font-style:italic;padding:.5rem .75rem;background:var(--sf2);border-radius:6px">pattern: ${readings}</div>` : ''}
-    `;
-} else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
-    const exLines = w.examples.slice(0, 4).map(ex => {
+  } else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
+    // ── KANJI CARD BACK — DOM-based, no innerHTML column issues ───────────────
+    back.innerHTML = '';
+    const spkBtn = document.createElement('button');
+    spkBtn.className = 'speak-btn';
+    spkBtn.textContent = '▶';
+    spkBtn.onclick = () => speak(w.kr, curLang);
+    back.appendChild(spkBtn);
+
+    const meaningLabel = document.createElement('div');
+    meaningLabel.style.cssText = 'font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.2rem';
+    meaningLabel.textContent = 'core meaning';
+    back.appendChild(meaningLabel);
+
+    const meaningVal = document.createElement('div');
+    meaningVal.className = 'fc-meaning';
+    meaningVal.style.marginBottom = '.6rem';
+    meaningVal.textContent = w.meaning;
+    back.appendChild(meaningVal);
+
+    const wordsLabel = document.createElement('div');
+    wordsLabel.style.cssText = 'font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem';
+    wordsLabel.textContent = 'words';
+    back.appendChild(wordsLabel);
+
+    const wordList = document.createElement('div');
+    wordList.style.cssText = 'width:100%;overflow-y:auto;max-height:140px';
+
+    w.examples.slice(0, 4).forEach(ex => {
       const parts = ex.split(' — ');
-      const word = (parts[0] || '').replace(/\s*\[.*?\]/g, '').trim();
+      const word    = (parts[0] || '').replace(/\s*\[.*?\]/g, '').trim();
       const reading = (parts[1] || '').replace(/\s*\[.*?\]/g, '').trim();
-      const eng = (parts[2] || '').replace(/\s*\[.*?\]/g, '').trim();
-      return `<div style="display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--bd)">
-        <span style="font-family:'Noto Sans KR',sans-serif;font-size:1rem;flex:0 0 auto;color:var(--tx);white-space:nowrap">${word}</span>
-        <span style="font-size:.68rem;color:var(--acc);flex:0 0 auto;white-space:nowrap">${reading}</span>
-        <span style="font-size:.68rem;color:var(--mu);flex:1;min-width:0">${eng}</span>
-      </div>`;
-    }).join('');
+      const eng     = (parts[2] || '').replace(/\s*\[.*?\]/g, '').trim();
+
+      const row = document.createElement('div');
+      row.style.cssText = 'padding:5px 0;border-bottom:1px solid var(--bd)';
+
+      const top = document.createElement('div');
+      top.style.cssText = 'display:flex;gap:8px;align-items:baseline;flex-wrap:wrap';
+
+      const wordEl = document.createElement('span');
+      wordEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:.95rem;color:var(--tx)";
+      wordEl.textContent = word;
+
+      const readingEl = document.createElement('span');
+      readingEl.style.cssText = 'font-size:.65rem;color:var(--acc)';
+      readingEl.textContent = reading;
+
+      top.appendChild(wordEl);
+      top.appendChild(readingEl);
+
+      const engEl = document.createElement('div');
+      engEl.style.cssText = 'font-size:.63rem;color:var(--mu);line-height:1.4;margin-top:1px';
+      engEl.textContent = eng;
+
+      row.appendChild(top);
+      row.appendChild(engEl);
+      wordList.appendChild(row);
+    });
+
+    back.appendChild(wordList);
+
     const readings = [...new Set(w.examples.slice(0,4).map(ex => {
       const m = ex.match(/\[([^\]]+)\]/);
       return m ? m[1] : null;
     }).filter(Boolean))].join(' · ');
-    back.innerHTML = `
-      <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
-      <div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem">core meaning</div>
-      <div class="fc-meaning" style="margin-bottom:.75rem">${w.meaning}</div>
-      <div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem">words</div>
-      <div style="width:100%">${exLines}</div>
-      ${readings ? `<div style="font-size:.62rem;color:var(--mu);margin-top:.5rem;line-height:1.6;font-style:italic;padding:.4rem .65rem;background:var(--sf2);border-radius:6px">pattern: ${readings}</div>` : ''}
-    `;
-} else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
-    const exLines = w.examples.slice(0, 4).map(ex => {
-      const parts = ex.split(' — ');
-      const word = (parts[0] || '').replace(/\s*\[.*?\]/g, '').trim();
-      const reading = (parts[1] || '').replace(/\s*\[.*?\]/g, '').trim();
-      const eng = (parts[2] || '').replace(/\s*\[.*?\]/g, '').trim();
-      return `<div style="display:flex;flex-direction:column;padding:6px 0;border-bottom:1px solid var(--bd);gap:2px">
-        <div style="display:flex;gap:8px;align-items:baseline">
-          <span style="font-family:'Noto Sans KR',sans-serif;font-size:.95rem;color:var(--tx)">${word}</span>
-          <span style="font-size:.65rem;color:var(--acc)">${reading}</span>
-        </div>
-        <span style="font-size:.65rem;color:var(--mu)">${eng}</span>
-      </div>`;
-    }).join('');
-    const readings = [...new Set(w.examples.slice(0,4).map(ex => {
-      const m = ex.match(/\[([^\]]+)\]/);
-      return m ? m[1] : null;
-    }).filter(Boolean))].join(' · ');
-    back.innerHTML = `
-      <button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button>
-      <div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.2rem">core meaning</div>
-      <div class="fc-meaning" style="margin-bottom:.6rem">${w.meaning}</div>
-      <div style="font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.2rem">words</div>
-      <div style="width:100%;overflow-y:auto;max-height:160px">${exLines}</div>
-      ${readings ? `<div style="font-size:.6rem;color:var(--mu);margin-top:.4rem;line-height:1.6;font-style:italic;padding:.35rem .6rem;background:var(--sf2);border-radius:6px">pattern: ${readings}</div>` : ''}
-    `;
-  } else {
-    back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div>${exReading?`<div style="font-size:.6rem;color:var(--acc);margin-top:6px;letter-spacing:.04em">this example uses: ${exReading}</div>`:''}<div class="fc-ex">${exSentence}</div>`;
+
+    if (readings) {
+      const patternEl = document.createElement('div');
+      patternEl.style.cssText = 'font-size:.6rem;color:var(--mu);margin-top:.4rem;line-height:1.6;font-style:italic;padding:.35rem .6rem;background:var(--sf2);border-radius:6px';
+      patternEl.textContent = 'pattern: ' + readings;
+      back.appendChild(patternEl);
+    }
   }
 
   sFlip=false;
