@@ -2302,24 +2302,22 @@ function renderActivityGrid(container) {
     return 'rgb('+r+','+g+','+b+')';
   }
 
+  // Row-based grid: left→right across each row, then next row down.
+  // dayData[0] = oldest = top-left. dayData[83] = today = bottom-right.
+  // 12 weeks = 84 days = 12 columns × 7 rows.
   const grid = document.createElement('div');
-  grid.style.cssText = 'display:flex;gap:2px';
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+weeks+',10px);grid-template-rows:repeat(7,10px);gap:2px';
 
-  // oldest day = top-left (col 0, row 0). today = bottom-right (col 11, row 6).
-  // dayData[0] = 83 days ago (top-left), dayData[83] = today (bottom-right).
-  for (let w = 0; w < weeks; w++) {
-    const col = document.createElement('div');
-    col.style.cssText = 'display:flex;flex-direction:column;gap:2px';
-    for (let d = 0; d < 7; d++) {
-      const idx = w * 7 + d;
-      const day = dayData[idx];
+  for (let row = 0; row < 7; row++) {
+    for (let col = 0; col < weeks; col++) {
+      const idx = row * weeks + col;  // left-to-right, top-to-bottom
+      const day = dayData[idx] || { key: '', count: 0 };
       const cell = document.createElement('div');
       cell.style.cssText = 'width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,0.07)';
       cell.style.background = cellColor(day.count);
-      cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
-      col.appendChild(cell);
+      if (day.key) cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
+      grid.appendChild(cell);
     }
-    grid.appendChild(col);
   }
   container.appendChild(grid);
 
