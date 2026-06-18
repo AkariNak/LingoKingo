@@ -549,66 +549,78 @@ function animateBadge(){const b=document.getElementById('deckBadge');if(!b)retur
 
 function renderDeckSwitcher(){
   const sw=document.getElementById('deckSwitcher'); if(!sw) return; sw.innerHTML='';
-  if(decks.length===0){sw.innerHTML='<span class="empty-deck">right-click any word to create your first deck</span>';}
-  else{decks.forEach((deck,i)=>{
-    const isActive = i===activeDeckIdx;
-    const btn=document.createElement('button');
-    btn.className='';
-    btn.setAttribute('style', [
-      'display:inline-flex',
-      'align-items:center',
-      'gap:7px',
-      'padding:5px 12px',
-      'border-radius:6px',
-      'font-family:DM Mono,monospace',
-      'font-size:.72rem',
-      'cursor:pointer',
-      `border:1.5px solid ${isActive ? deck.color : 'rgba('+hexToRgb(deck.color)+',.35)'}`,
-      `background:${isActive ? deck.color+'18' : 'var(--sf)'}`,
-      `color:${isActive ? deck.color : 'var(--tx)'}`,
-      'transition:all .15s',
-      'width:auto',
-      'height:auto',
-      'min-width:0',
-      'min-height:0',
-      'max-width:none',
-      'aspect-ratio:auto',
-      'border-radius:6px',
-      'box-sizing:border-box',
-      'white-space:nowrap',
-      'flex-shrink:0',
-      'line-height:1.4',
-    ].join(';'));
-    const dot=document.createElement('span');dot.style.cssText=`width:7px;height:7px;border-radius:50%;background:${deck.color};flex-shrink:0`;
-    const lbl=document.createElement('span');lbl.textContent=deck.name;
-    const wc=Object.keys(deck.words).length;
-    const ct=document.createElement('span');ct.style.cssText='opacity:.5;font-size:.65rem';if(wc>0)ct.textContent=wc;
-    btn.appendChild(dot);btn.appendChild(lbl);btn.appendChild(ct);
-    btn.onmouseenter=()=>{if(!isActive)btn.style.borderColor=deck.color;};
-    btn.onmouseleave=()=>{if(!isActive)btn.style.borderColor='rgba('+hexToRgb(deck.color)+',.35)';};
-    btn.onclick=()=>{activeDeckIdx=i===activeDeckIdx?-1:i;saveDeckState();renderDeckSwitcher();renderDeckChips();renderWordGrid();};
-    btn.oncontextmenu=e=>showDeckCtxMenu(e,i); sw.appendChild(btn);
-  });}
-  const add=document.createElement('button');add.className='dbtn';add.style.cssText='--dc:#7ac8a0;color:#7ac8a0;border-color:rgba(122,200,160,.3)';add.textContent='+ new deck';
-  add.onclick=()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());renderDeckSwitcher();renderDeckChips();renderWordGrid();}};sw.appendChild(add);
-  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute']};
-  if(pk[curLang]){const pb=document.createElement('button');pb.className='dbtn';pb.style.cssText='color:var(--acc);border-color:var(--acc-bd)';pb.textContent=curLang==='japanese'?'★ alphabet + accent decks':'★ starter decks';pb.onclick=()=>{if(curLang==='japanese')addPremadeDeckJapaneseAll();else pk[curLang].forEach(k=>addPremadeDeck(k));};sw.appendChild(pb);}
-  if(curLang==='japanese'){const vb=document.createElement('button');vb.className='dbtn';vb.style.cssText='color:#7ac8a0;border-color:rgba(122,200,160,.3)';vb.textContent='★ japanese vocabulary deck';vb.onclick=()=>addPremadeDeck('japanese_vocab');sw.appendChild(vb);}
-  const badge=document.getElementById('deckBadge');if(badge)badge.textContent=activeDeckIdx>=0?Object.keys(decks[activeDeckIdx]?.words||{}).length:'0';
-  const srsWrap=document.createElement('div');srsWrap.style.cssText='display:flex;flex-direction:column;gap:8px;margin-top:8px';
 
-  // Anki session button + stats
+  // ── Two-column layout: left=decks+utils, right=SRS+grid ──────────────────
+  const layout=document.createElement('div');
+  layout.style.cssText='display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap';
+
+  // LEFT: deck buttons + utility buttons
+  const leftCol=document.createElement('div');
+  leftCol.style.cssText='display:flex;flex-direction:column;gap:8px;flex:1;min-width:200px';
+
+  // Deck buttons row
+  const deckRow=document.createElement('div');
+  deckRow.style.cssText='display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+
+  if(decks.length===0){
+    deckRow.innerHTML='<span class="empty-deck">right-click any word to create your first deck</span>';
+  } else {
+    decks.forEach((deck,i)=>{
+      const isActive = i===activeDeckIdx;
+      const btn=document.createElement('button');
+      btn.className='dbtn'+(isActive?' dactive':'');
+      btn.style.setProperty('--dc', deck.color);
+      const dot=document.createElement('span');dot.className='ddot';dot.style.background=deck.color;
+      const lbl=document.createElement('span');lbl.textContent=deck.name;
+      const wc=Object.keys(deck.words).length;
+      const ct=document.createElement('span');ct.className='dct';if(wc>0)ct.textContent=wc;
+      btn.appendChild(dot);btn.appendChild(lbl);btn.appendChild(ct);
+      btn.onclick=()=>{activeDeckIdx=i===activeDeckIdx?-1:i;saveDeckState();renderDeckSwitcher();renderDeckChips();renderWordGrid();};
+      btn.oncontextmenu=e=>showDeckCtxMenu(e,i);
+      deckRow.appendChild(btn);
+    });
+  }
+  leftCol.appendChild(deckRow);
+
+  // Utility buttons row (same style as deck buttons)
+  const utilRow=document.createElement('div');
+  utilRow.style.cssText='display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+
+  const add=document.createElement('button');add.className='dbtn';add.textContent='+ new deck';
+  add.onclick=()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());renderDeckSwitcher();renderDeckChips();renderWordGrid();}};
+  utilRow.appendChild(add);
+
+  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute']};
+  if(pk[curLang]){
+    const pb=document.createElement('button');pb.className='dbtn';
+    pb.textContent=curLang==='japanese'?'★ alphabet + accent decks':'★ starter decks';
+    pb.onclick=()=>{if(curLang==='japanese')addPremadeDeckJapaneseAll();else pk[curLang].forEach(k=>addPremadeDeck(k));};
+    utilRow.appendChild(pb);
+  }
+  if(curLang==='japanese'){
+    const vb=document.createElement('button');vb.className='dbtn';
+    vb.textContent='★ vocabulary deck';
+    vb.onclick=()=>addPremadeDeck('japanese_vocab');
+    utilRow.appendChild(vb);
+  }
+  leftCol.appendChild(utilRow);
+  layout.appendChild(leftCol);
+
+  // RIGHT: SRS controls + activity grid
+  const rightCol=document.createElement('div');
+  rightCol.style.cssText='display:flex;flex-direction:column;gap:8px;min-width:220px';
+
+  const badge=document.getElementById('deckBadge');if(badge)badge.textContent=activeDeckIdx>=0?Object.keys(decks[activeDeckIdx]?.words||{}).length:'0';
+
   if(activeDeckIdx>=0&&activeDeckIdx<decks.length){
     const due=cardsDueToday(activeDeckIdx);
     const newAvail=newCardsAvailable(activeDeckIdx);
     const total=due+newAvail;
 
-    // Stats row
-    const statsRow=document.createElement('div');statsRow.style.cssText='display:flex;gap:12px;font-size:.7rem;color:var(--mu)';
-    statsRow.innerHTML=`<span style="color:#c87a7a">&#9632; ${due} due</span><span style="color:#7ac8a0">&#9632; ${newAvail} new</span>`;
-    srsWrap.appendChild(statsRow);
+    const statsRow=document.createElement('div');statsRow.style.cssText='display:flex;gap:12px;font-size:.7rem';
+    statsRow.innerHTML=`<span style="color:#c87a7a">■ ${due} due</span><span style="color:#7ac8a0">■ ${newAvail} new</span>`;
+    rightCol.appendChild(statsRow);
 
-    // Daily limit row
     const limitRow=document.createElement('div');limitRow.style.cssText='display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--mu)';
     const limitLabel=document.createElement('span');limitLabel.textContent='new cards/day:';
     const limitInput=document.createElement('input');
@@ -617,25 +629,23 @@ function renderDeckSwitcher(){
     limitInput.style.cssText='width:52px;padding:3px 6px;background:var(--sf);border:1px solid var(--bd2);border-radius:5px;color:var(--tx);font-family:DM Mono,monospace;font-size:.72rem;text-align:center';
     limitInput.onchange=()=>{const v=parseInt(limitInput.value);if(v>0){setDailyLimit(activeDeckIdx,v);renderDeckSwitcher();}};
     limitRow.appendChild(limitLabel);limitRow.appendChild(limitInput);
-    srsWrap.appendChild(limitRow);
+    rightCol.appendChild(limitRow);
 
-    // Study button
     const sb=document.createElement('button');sb.className='abtn accent';
-    sb.style.cssText='font-size:.8rem;padding:8px 14px';
     if(total===0){sb.textContent='nothing due — check back later';sb.style.opacity='0.5';}
     else{sb.textContent=`study now (${due} review + ${newAvail} new) →`;}
     sb.onclick=()=>{if(total>0)openAnkiSession();};
-    srsWrap.appendChild(sb);
+    rightCol.appendChild(sb);
 
-    // Activity grid
-    const gridWrap=document.createElement('div');gridWrap.style.cssText='margin-top:4px';
+    const gridWrap=document.createElement('div');gridWrap.style.cssText='margin-top:2px';
     renderActivityGrid(gridWrap);
-    srsWrap.appendChild(gridWrap);
+    rightCol.appendChild(gridWrap);
   } else {
     const hint=document.createElement('div');hint.style.cssText='font-size:.7rem;color:var(--mu)';hint.textContent='select a deck to start studying';
-    srsWrap.appendChild(hint);
+    rightCol.appendChild(hint);
   }
-  sw.appendChild(srsWrap);
+  layout.appendChild(rightCol);
+  sw.appendChild(layout);
 }
 function renderDeckChips(){
   const c=document.getElementById('deckChips'); if(!c) return;
