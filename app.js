@@ -2291,22 +2291,24 @@ function renderActivityGrid(container) {
 
   const maxCount = Math.max(...dayData.map(d => d.count), 1);
 
-  // Color scale: empty = very faint grey-blue, active = light→dark green (more=darker)
+  // Color scale: empty = near invisible, active = dark green (low) → bright green (high)
+  // More cards = LIGHTER/brighter. Less = darker. Empty = barely visible.
   function cellColor(count) {
-    if (count === 0) return 'rgba(255,255,255,0.05)'; // nearly invisible — just a hint
+    if (count === 0) return 'rgba(255,255,255,0.05)';
     const t = Math.min(1, count / maxCount);
-    // light green (low) → dark green (high)
-    // t=0.01: rgba(144,230,160,0.35)  t=1: rgba(30,140,80,1)
-    const r = Math.round(144 - t * 114);
-    const g = Math.round(230 - t * 90);
-    const b = Math.round(160 - t * 80);
-    const a = 0.35 + t * 0.65;
-    return 'rgba('+r+','+g+','+b+','+a.toFixed(2)+')';
+    // t=low: dark green. t=high: bright light green.
+    const r = Math.round(20 + t * 120);
+    const g = Math.round(90 + t * 140);
+    const b = Math.round(50 + t * 80);
+    return 'rgb('+r+','+g+','+b+')';
   }
 
   const grid = document.createElement('div');
   grid.style.cssText = 'display:flex;gap:2px';
 
+  // dayData[0] = oldest day (84 days ago), dayData[83] = today
+  // We want oldest top-left: col 0 = oldest week, col 11 = this week
+  // Within each col, row 0 = first day of that week (top)
   for (let w = 0; w < weeks; w++) {
     const col = document.createElement('div');
     col.style.cssText = 'display:flex;flex-direction:column;gap:2px';
@@ -2323,14 +2325,14 @@ function renderActivityGrid(container) {
   }
   container.appendChild(grid);
 
-  // Legend: left=less(faint), right=more(dark green)
+  // Legend: left=less(dark), right=more(bright)
   const legend = document.createElement('div');
   legend.style.cssText = 'display:flex;align-items:center;gap:3px;margin-top:5px;font-size:.58rem;color:var(--mu)';
   const less = document.createElement('span'); less.textContent = 'less'; legend.appendChild(less);
-  [0, 0.15, 0.4, 0.7, 1].forEach(v => {
+  [0, 0.2, 0.4, 0.7, 1].forEach(v => {
     const sq = document.createElement('div');
     sq.style.cssText = 'width:9px;height:9px;border-radius:1px;border:1px solid rgba(255,255,255,0.06);margin:0 1px';
-    sq.style.background = cellColor(v === 0 ? 0 : Math.round(v * maxCount) || 1);
+    sq.style.background = cellColor(v === 0 ? 0 : Math.ceil(v * maxCount));
     legend.appendChild(sq);
   });
   const more = document.createElement('span'); more.textContent = 'more'; legend.appendChild(more);
