@@ -2291,24 +2291,22 @@ function renderActivityGrid(container) {
 
   const maxCount = Math.max(...dayData.map(d => d.count), 1);
 
-  // Color scale: empty = near invisible, active = dark green (low) → bright green (high)
-  // More cards = LIGHTER/brighter. Less = darker. Empty = barely visible.
+  // more cards = DARKER green. empty = faint outline only.
   function cellColor(count) {
-    if (count === 0) return 'rgba(255,255,255,0.05)';
+    if (count === 0) return 'rgba(255,255,255,0.04)';
     const t = Math.min(1, count / maxCount);
-    // t=low: dark green. t=high: bright light green.
-    const r = Math.round(20 + t * 120);
-    const g = Math.round(90 + t * 140);
-    const b = Math.round(50 + t * 80);
+    // t=small: light green. t=1(max): very dark green.
+    const r = Math.round(140 - t * 120);
+    const g = Math.round(220 - t * 130);
+    const b = Math.round(130 - t * 100);
     return 'rgb('+r+','+g+','+b+')';
   }
 
   const grid = document.createElement('div');
   grid.style.cssText = 'display:flex;gap:2px';
 
-  // dayData[0] = oldest day (84 days ago), dayData[83] = today
-  // We want oldest top-left: col 0 = oldest week, col 11 = this week
-  // Within each col, row 0 = first day of that week (top)
+  // oldest day = top-left (col 0, row 0). today = bottom-right (col 11, row 6).
+  // dayData[0] = 83 days ago (top-left), dayData[83] = today (bottom-right).
   for (let w = 0; w < weeks; w++) {
     const col = document.createElement('div');
     col.style.cssText = 'display:flex;flex-direction:column;gap:2px';
@@ -2316,7 +2314,7 @@ function renderActivityGrid(container) {
       const idx = w * 7 + d;
       const day = dayData[idx];
       const cell = document.createElement('div');
-      cell.style.cssText = 'width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,0.06)';
+      cell.style.cssText = 'width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,0.07)';
       cell.style.background = cellColor(day.count);
       cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
       col.appendChild(cell);
@@ -2325,17 +2323,17 @@ function renderActivityGrid(container) {
   }
   container.appendChild(grid);
 
-  // Legend: left=less(dark), right=more(bright)
+  // Legend: left=less(light green), right=more(dark green)
   const legend = document.createElement('div');
   legend.style.cssText = 'display:flex;align-items:center;gap:3px;margin-top:5px;font-size:.58rem;color:var(--mu)';
-  const less = document.createElement('span'); less.textContent = 'less'; legend.appendChild(less);
+  const less = document.createElement('span'); less.style.marginRight='2px'; less.textContent = 'less'; legend.appendChild(less);
   [0, 0.2, 0.4, 0.7, 1].forEach(v => {
     const sq = document.createElement('div');
-    sq.style.cssText = 'width:9px;height:9px;border-radius:1px;border:1px solid rgba(255,255,255,0.06);margin:0 1px';
+    sq.style.cssText = 'width:9px;height:9px;border-radius:1px;border:1px solid rgba(255,255,255,0.07);margin:0 1px';
     sq.style.background = cellColor(v === 0 ? 0 : Math.ceil(v * maxCount));
     legend.appendChild(sq);
   });
-  const more = document.createElement('span'); more.textContent = 'more'; legend.appendChild(more);
+  const more = document.createElement('span'); more.style.marginLeft='2px'; more.textContent = 'more'; legend.appendChild(more);
   container.appendChild(legend);
 }
 
