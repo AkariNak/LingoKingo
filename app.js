@@ -2283,9 +2283,10 @@ function renderActivityGrid(container) {
   const maxCount = Math.max(...dayData.map(d => d.count), 1);
 
   const grid = document.createElement('div');
-  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+weeks+',1fr);gap:2px';
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+weeks+',10px);gap:2px';
 
-  // Group by week (columns), each column = 7 days
+  // Columns = weeks (left=oldest, right=most recent)
+  // Rows = days of week (top=first day of week)
   for (let w = 0; w < weeks; w++) {
     const col = document.createElement('div');
     col.style.cssText = 'display:flex;flex-direction:column;gap:2px';
@@ -2293,16 +2294,17 @@ function renderActivityGrid(container) {
       const idx = w * 7 + d;
       const day = dayData[idx];
       const cell = document.createElement('div');
-      cell.style.cssText = 'width:100%;aspect-ratio:1;border-radius:2px';
-      const intensity = day.count === 0 ? 0 : Math.min(1, day.count / Math.max(maxCount * 0.5, 5));
+      cell.style.cssText = 'width:10px;height:10px;border-radius:2px';
       if (day.count === 0) {
-        cell.style.background = 'var(--sf2)';
-        cell.style.opacity = '0.4';
+        cell.style.background = 'var(--sf3)';
       } else {
-        // Dark = more activity (higher alpha = darker/more saturated)
-        const alpha = 0.25 + intensity * 0.75;
-        // Use accent color darkened by mixing with bg
-        cell.style.background = 'rgba(122,200,160,' + alpha + ')';
+        // Dark = more activity: low count = light green, high = dark green
+        const intensity = Math.min(1, day.count / Math.max(maxCount, 1));
+        // Map intensity to a color: light (low) → dark (high)
+        const r = Math.round(40 + (1 - intensity) * 82);
+        const g = Math.round(120 + (1 - intensity) * 80);
+        const b = Math.round(80 + (1 - intensity) * 80);
+        cell.style.background = 'rgb('+r+','+g+','+b+')';
       }
       cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
       col.appendChild(cell);
@@ -2325,10 +2327,15 @@ function renderActivityGrid(container) {
   // rebuild properly
   legend.textContent = '';
   const less = document.createElement('span'); less.textContent = 'less '; legend.appendChild(less);
-  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+  [0, 0.2, 0.4, 0.7, 1].forEach(v => {
     const sq = document.createElement('div');
     sq.style.cssText = 'width:9px;height:9px;border-radius:1px;display:inline-block;margin:0 1px';
-    sq.style.background = v === 0 ? 'var(--sf2)' : 'rgba(122,200,160,' + (0.2 + v * 0.8) + ')';
+    if (v === 0) {
+      sq.style.background = 'var(--sf3)';
+    } else {
+      const r = Math.round(40 + (1-v)*82), g = Math.round(120 + (1-v)*80), b = Math.round(80 + (1-v)*80);
+      sq.style.background = 'rgb('+r+','+g+','+b+')';
+    }
     legend.appendChild(sq);
   });
   const more = document.createElement('span'); more.textContent = ' more'; legend.appendChild(more);
