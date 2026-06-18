@@ -553,8 +553,32 @@ function renderDeckSwitcher(){
   else{decks.forEach((deck,i)=>{
     const isActive = i===activeDeckIdx;
     const btn=document.createElement('button');
-    btn.className=''; // no dbtn class — use full inline style to avoid CSS circle override
-    btn.style.cssText=`display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:6px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;border:1.5px solid ${isActive?deck.color:'rgba('+hexToRgb(deck.color)+',.35)'};background:${isActive?deck.color+'18':'var(--sf)'};color:${isActive?deck.color:'var(--tx)'};transition:all .15s;width:auto;height:auto;aspect-ratio:unset;min-width:unset;border-radius:6px`;
+    btn.className='';
+    btn.setAttribute('style', [
+      'display:inline-flex',
+      'align-items:center',
+      'gap:7px',
+      'padding:5px 12px',
+      'border-radius:6px',
+      'font-family:DM Mono,monospace',
+      'font-size:.72rem',
+      'cursor:pointer',
+      `border:1.5px solid ${isActive ? deck.color : 'rgba('+hexToRgb(deck.color)+',.35)'}`,
+      `background:${isActive ? deck.color+'18' : 'var(--sf)'}`,
+      `color:${isActive ? deck.color : 'var(--tx)'}`,
+      'transition:all .15s',
+      'width:auto',
+      'height:auto',
+      'min-width:0',
+      'min-height:0',
+      'max-width:none',
+      'aspect-ratio:auto',
+      'border-radius:6px',
+      'box-sizing:border-box',
+      'white-space:nowrap',
+      'flex-shrink:0',
+      'line-height:1.4',
+    ].join(';'));
     const dot=document.createElement('span');dot.style.cssText=`width:7px;height:7px;border-radius:50%;background:${deck.color};flex-shrink:0`;
     const lbl=document.createElement('span');lbl.textContent=deck.name;
     const wc=Object.keys(deck.words).length;
@@ -1119,11 +1143,19 @@ function ankiFlipped() {
   // Show next interval on good button
   let goodInterval = '';
   if (c.state === 'new' || c.state === 'learning') {
-    const nextStep = (c.step || 0) + 1;
+    // For a new card (step 0), good moves to step 1 (first learning step = 10m)
+    // For learning step 1, good graduates to 1d
+    const curStep = c.step || 0;
+    const nextStep = curStep + 1;
     if (nextStep >= LEARNING_STEPS.length) {
       goodInterval = '1d';
     } else {
       const mins = LEARNING_STEPS[nextStep];
+      goodInterval = mins < 60 ? mins + 'm' : mins < 1440 ? Math.round(mins/60) + 'h' : Math.round(mins/1440) + 'd';
+    }
+    // Special case: new card has never been seen — first good shows step[0] = 10m
+    if (c.state === 'new') {
+      const mins = LEARNING_STEPS[0];
       goodInterval = mins < 60 ? mins + 'm' : mins < 1440 ? Math.round(mins/60) + 'h' : Math.round(mins/1440) + 'd';
     }
   } else {
@@ -2265,9 +2297,11 @@ function renderActivityGrid(container) {
       const intensity = day.count === 0 ? 0 : Math.min(1, day.count / Math.max(maxCount * 0.5, 5));
       if (day.count === 0) {
         cell.style.background = 'var(--sf2)';
+        cell.style.opacity = '0.4';
       } else {
-        // Green shading — low=faint, high=bright
-        const alpha = 0.2 + intensity * 0.8;
+        // Dark = more activity (higher alpha = darker/more saturated)
+        const alpha = 0.25 + intensity * 0.75;
+        // Use accent color darkened by mixing with bg
         cell.style.background = 'rgba(122,200,160,' + alpha + ')';
       }
       cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
