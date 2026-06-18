@@ -32,6 +32,7 @@ const PREMADE_DECKS = {
     {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
     {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
   ],
+  japanese_vocab:     [{name:'Japanese Vocabulary', color:'#7ac8a0', filter: w => w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_yofukashi:[{name:'よふかしのうた',  color:'#a87ac8', filter: w => w.song === 'yofukashi'}],
   japanese_kawaikute:[{name:'可愛くてごめん', color:'#c87aa8', filter: w => w.song === 'kawaikute'}],
   italian: [
@@ -558,10 +559,48 @@ function renderDeckSwitcher(){
   add.onclick=()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());renderDeckSwitcher();renderDeckChips();renderWordGrid();}};sw.appendChild(add);
   const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute']};
   if(pk[curLang]){const pb=document.createElement('button');pb.className='dbtn';pb.style.cssText='color:var(--acc);border-color:var(--acc-bd)';pb.textContent=curLang==='japanese'?'★ alphabet + accent decks':'★ starter decks';pb.onclick=()=>{if(curLang==='japanese')addPremadeDeckJapaneseAll();else pk[curLang].forEach(k=>addPremadeDeck(k));};sw.appendChild(pb);}
+  if(curLang==='japanese'){const vb=document.createElement('button');vb.className='dbtn';vb.style.cssText='color:#7ac8a0;border-color:rgba(122,200,160,.3)';vb.textContent='★ japanese vocabulary deck';vb.onclick=()=>addPremadeDeck('japanese_vocab');sw.appendChild(vb);}
   const badge=document.getElementById('deckBadge');if(badge)badge.textContent=activeDeckIdx>=0?Object.keys(decks[activeDeckIdx]?.words||{}).length:'0';
-  const srsWrap=document.createElement('div');srsWrap.style.cssText='display:flex;gap:8px;margin-top:6px;align-items:center;flex-wrap:wrap';
-  const smb=document.createElement('button');smb.id='srsModeBtn';smb.className='abtn'+(srsMode?' accent':'');smb.textContent=srsMode?'smart review: on':'smart review: off';smb.onclick=toggleSRSMode;srsWrap.appendChild(smb);
-  if(srsMode&&activeDeckIdx>=0&&activeDeckIdx<decks.length){const due=cardsDueToday(activeDeckIdx);const rb=document.createElement('button');rb.className='abtn accent';rb.textContent=due>0?'review ('+due+' due) →':'review (0 due)';rb.onclick=openReview;if(due===0)rb.style.opacity='0.5';srsWrap.appendChild(rb);}
+  const srsWrap=document.createElement('div');srsWrap.style.cssText='display:flex;flex-direction:column;gap:8px;margin-top:8px';
+
+  // Anki session button + stats
+  if(activeDeckIdx>=0&&activeDeckIdx<decks.length){
+    const due=cardsDueToday(activeDeckIdx);
+    const newAvail=newCardsAvailable(activeDeckIdx);
+    const total=due+newAvail;
+
+    // Stats row
+    const statsRow=document.createElement('div');statsRow.style.cssText='display:flex;gap:12px;font-size:.7rem;color:var(--mu)';
+    statsRow.innerHTML=`<span style="color:#c87a7a">&#9632; ${due} due</span><span style="color:#7ac8a0">&#9632; ${newAvail} new</span>`;
+    srsWrap.appendChild(statsRow);
+
+    // Daily limit row
+    const limitRow=document.createElement('div');limitRow.style.cssText='display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--mu)';
+    const limitLabel=document.createElement('span');limitLabel.textContent='new cards/day:';
+    const limitInput=document.createElement('input');
+    limitInput.type='number';limitInput.min='1';limitInput.max='100';
+    limitInput.value=getDailyLimit(activeDeckIdx);
+    limitInput.style.cssText='width:52px;padding:3px 6px;background:var(--sf);border:1px solid var(--bd2);border-radius:5px;color:var(--tx);font-family:DM Mono,monospace;font-size:.72rem;text-align:center';
+    limitInput.onchange=()=>{const v=parseInt(limitInput.value);if(v>0){setDailyLimit(activeDeckIdx,v);renderDeckSwitcher();}};
+    limitRow.appendChild(limitLabel);limitRow.appendChild(limitInput);
+    srsWrap.appendChild(limitRow);
+
+    // Study button
+    const sb=document.createElement('button');sb.className='abtn accent';
+    sb.style.cssText='font-size:.8rem;padding:8px 14px';
+    if(total===0){sb.textContent='nothing due — check back later';sb.style.opacity='0.5';}
+    else{sb.textContent=`study now (${due} review + ${newAvail} new) →`;}
+    sb.onclick=()=>{if(total>0)openAnkiSession();};
+    srsWrap.appendChild(sb);
+
+    // Activity grid
+    const gridWrap=document.createElement('div');gridWrap.style.cssText='margin-top:4px';
+    renderActivityGrid(gridWrap);
+    srsWrap.appendChild(gridWrap);
+  } else {
+    const hint=document.createElement('div');hint.style.cssText='font-size:.7rem;color:var(--mu)';hint.textContent='select a deck to start studying';
+    srsWrap.appendChild(hint);
+  }
   sw.appendChild(srsWrap);
 }
 function renderDeckChips(){
@@ -819,12 +858,9 @@ function toggleStudyRo(){showRomanization=!showRomanization;localStorage.setItem
 function flipCard(){
   sFlip=!sFlip;document.getElementById('fcard')?.classList.toggle('flip',sFlip);
   if(sFlip){
-    if(studyMode!=='flip'){const inp=document.querySelector('#cBack input');if(inp)setTimeout(()=>inp.focus(),500);}
+    if(studyMode!=='flip'&&studyMode!=='cloze'){const inp=document.querySelector('#cBack input');if(inp)setTimeout(()=>inp.focus(),500);}
     if(document.getElementById('srsControls')?.style.display!=='none'){
-      const ab=document.getElementById('againBtn'),gb=document.getElementById('goodBtn'),sh=document.getElementById('srsHint');
-      if(ab)ab.style.display='block';
-      if(gb){const w=studyList[sIdx];if(w){const c=getCard(activeDeckIdx,w.kr);const ni=c.reps===0?1:c.reps===1?3:Math.round(c.interval*c.ease);gb.textContent='✓ good · '+(ni===1?'1 day':ni+' days');}gb.style.display='block';}
-      if(sh)sh.style.display='none';
+      ankiFlipped();
     }
   }
 }
@@ -837,31 +873,288 @@ document.addEventListener('keydown',e=>{
   if(e.key===' '&&(studyMode==='flip'||studyMode==='cloze')){e.preventDefault();flipCard();}
 });
 
-// ── SRS SYSTEM ────────────────────────────────────────────────────────────────
-let srsMode=localStorage.getItem('lf-srs-mode')==='true';
-let srsData={};
-try{srsData=JSON.parse(localStorage.getItem('lf-srs-data')||'{}');}catch(e){srsData={};}
-function saveSRS(){localStorage.setItem('lf-srs-data',JSON.stringify(srsData));}
-function srsKey(deckIdx,kr){const deck=decks[deckIdx];return(deck?deck.name:'deck')+':'+kr;}
-function getCard(deckIdx,kr){const k=srsKey(deckIdx,kr);if(!srsData[k])srsData[k]={interval:1,due:0,ease:2.5,reps:0};return srsData[k];}
-function cardsDueToday(deckIdx){if(deckIdx<0||deckIdx>=decks.length)return 0;const now=Date.now();return Object.keys(decks[deckIdx].words).filter(kr=>getCard(deckIdx,kr).due<=now).length;}
-function reviewAnswer(kr,good){const k=srsKey(activeDeckIdx,kr);if(!srsData[k])srsData[k]={interval:1,due:0,ease:2.5,reps:0};const c=srsData[k];if(good){c.reps++;c.interval=c.reps===1?1:c.reps===2?3:Math.round(c.interval*c.ease);c.ease=Math.max(1.3,c.ease+0.1);c.due=Date.now()+c.interval*86400000;}else{c.reps=0;c.interval=1;c.ease=Math.max(1.3,c.ease-0.2);c.due=Date.now();}saveSRS();}
-function toggleSRSMode(){srsMode=!srsMode;localStorage.setItem('lf-srs-mode',srsMode?'true':'false');renderDeckSwitcher();}
-function openReview(){
-  if(activeDeckIdx<0||activeDeckIdx>=decks.length){showToast('Select a deck first.');return;}
-  const now=Date.now();const dueKeys=Object.keys(decks[activeDeckIdx].words).filter(kr=>getCard(activeDeckIdx,kr).due<=now);
-  if(dueKeys.length===0){showToast('No cards due for review!');return;}
-  studyList=shuffle(dueKeys.map(kr=>LANGS[curLang].words.find(w=>w.kr===kr)).filter(Boolean));sIdx=0;sFlip=false;
-  renderStudyCard();document.getElementById('studyOverlay')?.classList.add('open');
-  document.getElementById('srsControls').style.display='flex';document.getElementById('normalControls').style.display='none';
-  document.getElementById('mMeta').textContent=dueKeys.length+' cards due today';
-  const ab=document.getElementById('againBtn'),gb=document.getElementById('goodBtn'),sh=document.getElementById('srsHint');
-  if(ab)ab.style.display='none';if(gb)gb.style.display='none';if(sh)sh.style.display='block';
+// ── SRS SYSTEM (ANKI-STYLE) ──────────────────────────────────────────────────
+// Card states: 'new' | 'learning' | 'review'
+// Learning steps: 10min → 1day (graduate to review)
+// Review: Again=reset to learning, Good=interval*ease, ease starts 2.5
+// Ease: Again→-0.2, Good→unchanged. Min ease 1.3.
+
+let srsMode = localStorage.getItem('lf-srs-mode') === 'true';
+let srsData = {};
+try { srsData = JSON.parse(localStorage.getItem('lf-srs-data') || '{}'); } catch(e) { srsData = {}; }
+function saveSRS() { localStorage.setItem('lf-srs-data', JSON.stringify(srsData)); }
+
+// Activity log: { 'YYYY-MM-DD': count }
+let srsActivity = {};
+try { srsActivity = JSON.parse(localStorage.getItem('lf-srs-activity') || '{}'); } catch(e) { srsActivity = {}; }
+function logActivity() {
+  const d = todayStr();
+  srsActivity[d] = (srsActivity[d] || 0) + 1;
+  localStorage.setItem('lf-srs-activity', JSON.stringify(srsActivity));
+}
+
+// Per-deck new card limit
+function getDailyLimit(deckIdx) {
+  const limits = load('lf-daily-limits', {});
+  return parseInt(limits[deckIdx] ?? 10);
+}
+function setDailyLimit(deckIdx, n) {
+  const limits = load('lf-daily-limits', {});
+  limits[deckIdx] = n;
+  save('lf-daily-limits', limits);
+}
+
+// How many new cards introduced today for this deck
+function newCardsToday(deckIdx) {
+  const deck = decks[deckIdx]; if (!deck) return 0;
+  const d = todayStr();
+  return Object.keys(deck.words).filter(kr => {
+    const c = srsData[srsKey(deckIdx, kr)];
+    return c && c.firstSeen === d;
+  }).length;
+}
+
+function srsKey(deckIdx, kr) { const deck = decks[deckIdx]; return (deck ? deck.name : 'deck') + ':' + kr; }
+
+function getCard(deckIdx, kr) {
+  const k = srsKey(deckIdx, kr);
+  if (!srsData[k]) srsData[k] = { state: 'new', interval: 0, due: 0, ease: 2.5, reps: 0, step: 0, firstSeen: null };
+  // migrate old cards
+  if (!srsData[k].state) {
+    srsData[k].state = srsData[k].reps === 0 ? 'new' : 'review';
+    srsData[k].step = 0;
+    srsData[k].firstSeen = srsData[k].firstSeen || null;
+  }
+  return srsData[k];
+}
+
+// Learning steps in minutes
+const LEARNING_STEPS = [10, 1440]; // 10min, 1day
+
+function answerCard(kr, rating) {
+  // rating: 'again' | 'good'
+  const k = srsKey(activeDeckIdx, kr);
+  const c = getCard(activeDeckIdx, kr);
+  const now = Date.now();
+
+  if (!c.firstSeen) { c.firstSeen = todayStr(); }
+  logActivity();
+
+  if (rating === 'again') {
+    // Reset to start of learning
+    c.state = 'learning';
+    c.step = 0;
+    c.ease = Math.max(1.3, c.ease - 0.2);
+    c.due = now + LEARNING_STEPS[0] * 60000;
+  } else {
+    // good
+    if (c.state === 'new' || c.state === 'learning') {
+      c.step = (c.step || 0) + 1;
+      if (c.step >= LEARNING_STEPS.length) {
+        // Graduate to review
+        c.state = 'review';
+        c.interval = 1;
+        c.reps = 1;
+        c.due = now + 86400000; // 1 day
+      } else {
+        c.state = 'learning';
+        c.due = now + LEARNING_STEPS[c.step] * 60000;
+      }
+    } else {
+      // review phase: good = multiply by ease
+      c.reps++;
+      const newInterval = c.reps === 1 ? 1 : Math.max(1, Math.round(c.interval * c.ease));
+      // Add small fuzz (±5%) to avoid cards all coming due same day
+      const fuzz = 1 + (Math.random() * 0.1 - 0.05);
+      c.interval = Math.round(newInterval * fuzz);
+      c.due = now + c.interval * 86400000;
+      // ease unchanged for good
+    }
+  }
+  saveSRS();
+}
+
+function cardsDueToday(deckIdx) {
+  if (deckIdx < 0 || deckIdx >= decks.length) return 0;
+  const now = Date.now();
+  return Object.keys(decks[deckIdx].words).filter(kr => {
+    const c = getCard(deckIdx, kr);
+    return c.state !== 'new' && c.due <= now;
+  }).length;
+}
+
+function newCardsAvailable(deckIdx) {
+  if (deckIdx < 0 || deckIdx >= decks.length) return 0;
+  const limit = getDailyLimit(deckIdx);
+  const seenToday = newCardsToday(deckIdx);
+  const remaining = Math.max(0, limit - seenToday);
+  if (remaining === 0) return 0;
+  return Object.keys(decks[deckIdx].words).filter(kr => {
+    const c = getCard(deckIdx, kr);
+    return c.state === 'new';
+  }).length > 0 ? remaining : 0;
+}
+
+// Current session queues
+let ankiReviewQueue = [];   // due review cards
+let ankiNewQueue = [];      // new cards to introduce today
+let ankiLearningQueue = []; // cards in learning (requeued same session)
+let ankiSessionNewCount = 0;
+let ankiDailyNewLimit = 10;
+
+function buildAnkiSession(deckIdx) {
+  const deck = decks[deckIdx]; if (!deck) return;
+  const now = Date.now();
+  const limit = getDailyLimit(deckIdx);
+  const seenToday = newCardsToday(deckIdx);
+  const newLimit = Math.max(0, limit - seenToday);
+
+  const allKeys = Object.keys(deck.words);
+
+  // Reviews: due cards not in learning
+  ankiReviewQueue = shuffle(allKeys.filter(kr => {
+    const c = getCard(deckIdx, kr);
+    return (c.state === 'review' || c.state === 'learning') && c.due <= now;
+  }).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean));
+
+  // New cards: up to limit
+  const newKeys = allKeys.filter(kr => {
+    const c = getCard(deckIdx, kr);
+    return c.state === 'new' && !isSuspended(kr);
+  });
+  ankiNewQueue = newKeys.slice(0, newLimit).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean);
+  ankiLearningQueue = [];
+  ankiSessionNewCount = 0;
+}
+
+function toggleSRSMode() { srsMode = !srsMode; localStorage.setItem('lf-srs-mode', srsMode ? 'true' : 'false'); renderDeckSwitcher(); }
+
+function openAnkiSession() {
+  if (activeDeckIdx < 0 || activeDeckIdx >= decks.length) { showToast('Select a deck first.'); return; }
+  buildAnkiSession(activeDeckIdx);
+  const total = ankiReviewQueue.length + ankiNewQueue.length;
+  if (total === 0) {
+    showToast('Nothing due! Come back later or add more words.');
+    return;
+  }
+  sFlip = false;
+  document.getElementById('studyOverlay')?.classList.add('open');
+  document.getElementById('srsControls').style.display = 'flex';
+  document.getElementById('normalControls').style.display = 'none';
+  updateAnkiMeta();
+  showNextAnkiCard();
   updateStreak();
 }
-function srsGood(){const w=studyList[sIdx];if(w)reviewAnswer(w.kr,true);srsNextCard();}
-function srsAgain(){const w=studyList[sIdx];if(w){reviewAnswer(w.kr,false);studyList.push(w);}srsNextCard();}
-function srsNextCard(){recordLangFlashcard();sIdx++;const now=Date.now();while(sIdx<studyList.length){const w=studyList[sIdx];const c=getCard(activeDeckIdx,w.kr);if(c.due<=now||c.reps===0)break;sIdx++;}if(sIdx>=studyList.length){showToast('Review complete!');closeStudy();renderDeckSwitcher();return;}sFlip=false;renderStudyCard();}
+
+// Keep openReview as alias
+function openReview() { openAnkiSession(); }
+
+function updateAnkiMeta() {
+  const meta = document.getElementById('mMeta');
+  if (!meta) return;
+  const r = ankiReviewQueue.length + ankiLearningQueue.length;
+  const n = ankiNewQueue.length;
+  meta.innerHTML = `<span style="color:#c87a7a">${r} due</span> · <span style="color:#7ac8a0">${n} new</span>`;
+}
+
+function getCurrentAnkiCard() {
+  // Priority: learning (requeue) → review → new
+  if (ankiLearningQueue.length > 0 && ankiLearningQueue[0].dueAt <= Date.now()) return { w: ankiLearningQueue[0].w, queue: 'learning' };
+  if (ankiReviewQueue.length > 0) return { w: ankiReviewQueue[0], queue: 'review' };
+  if (ankiNewQueue.length > 0) return { w: ankiNewQueue[0], queue: 'new' };
+  // Check learning queue even if not due yet (last resort)
+  if (ankiLearningQueue.length > 0) return { w: ankiLearningQueue[0].w, queue: 'learning' };
+  return null;
+}
+
+function showNextAnkiCard() {
+  const next = getCurrentAnkiCard();
+  if (!next) {
+    showToast('Session complete! 🎉');
+    closeStudy();
+    renderDeckSwitcher();
+    return;
+  }
+  studyList = [next.w];
+  sIdx = 0;
+  sFlip = false;
+  renderStudyCard();
+  // Update hint text
+  const sh = document.getElementById('srsHint');
+  const ab = document.getElementById('againBtn');
+  const gb = document.getElementById('goodBtn');
+  if (sh) {
+    const c = getCard(activeDeckIdx, next.w.kr);
+    const queueLabel = next.queue === 'new' ? 'new' : next.queue === 'learning' ? 'learning' : 'review';
+    sh.textContent = `flip to reveal · ${queueLabel}`;
+    sh.style.display = 'block';
+  }
+  if (ab) ab.style.display = 'none';
+  if (gb) gb.style.display = 'none';
+  updateAnkiMeta();
+}
+
+function ankiFlipped() {
+  // Called when card is flipped — show again/good buttons
+  const ab = document.getElementById('againBtn');
+  const gb = document.getElementById('goodBtn');
+  const sh = document.getElementById('srsHint');
+  if (!ab || !gb) return;
+  const next = getCurrentAnkiCard();
+  if (!next) return;
+  const c = getCard(activeDeckIdx, next.w.kr);
+
+  // Show next interval on good button
+  let goodInterval = '';
+  if (c.state === 'new' || c.state === 'learning') {
+    const nextStep = (c.step || 0) + 1;
+    goodInterval = nextStep >= LEARNING_STEPS.length ? '1d' : LEARNING_STEPS[nextStep] + 'm';
+  } else {
+    const ni = Math.round(c.interval * c.ease);
+    goodInterval = ni <= 1 ? '1d' : ni < 30 ? ni + 'd' : ni < 365 ? Math.round(ni/30) + 'mo' : Math.round(ni/365) + 'yr';
+  }
+
+  ab.textContent = '✗ again · 10m';
+  gb.textContent = '✓ good · ' + goodInterval;
+  ab.style.display = 'block';
+  gb.style.display = 'block';
+  if (sh) sh.style.display = 'none';
+}
+
+function srsAgain() {
+  const next = getCurrentAnkiCard(); if (!next) return;
+  const w = next.w;
+  answerCard(w.kr, 'again');
+  // Remove from current queue, add to learning with delay
+  removeFromCurrentQueue(next);
+  ankiLearningQueue.push({ w, dueAt: Date.now() + LEARNING_STEPS[0] * 60000 });
+  // Sort learning by dueAt
+  ankiLearningQueue.sort((a, b) => a.dueAt - b.dueAt);
+  logActivity();
+  showNextAnkiCard();
+}
+
+function srsGood() {
+  const next = getCurrentAnkiCard(); if (!next) return;
+  const w = next.w;
+  answerCard(w.kr, 'good');
+  removeFromCurrentQueue(next);
+  logActivity();
+  showNextAnkiCard();
+}
+
+function removeFromCurrentQueue(next) {
+  if (next.queue === 'learning') {
+    ankiLearningQueue.shift();
+  } else if (next.queue === 'review') {
+    ankiReviewQueue.shift();
+  } else if (next.queue === 'new') {
+    ankiNewQueue.shift();
+    ankiSessionNewCount++;
+  }
+}
+
+function srsNextCard() { showNextAnkiCard(); }
 
 // ── PRACTICE TAB ──────────────────────────────────────────────────────────────
 let practiceQueue=[],practiceIdx=0,practiceScore={correct:0,total:0,total_ever:0,consecutive:0},practiceFilter='all',selectedBlocks=[],answered=false;
@@ -1915,6 +2208,80 @@ function showUnknownWordPanel(container, text) {
     showReadingWordCard(container, newWord);
   };
   card.appendChild(saveBtn);
+}
+
+// ── ACTIVITY GRID (GitHub-style heatmap) ─────────────────────────────────────
+function renderActivityGrid(container) {
+  container.innerHTML = '';
+  const label = document.createElement('div');
+  label.style.cssText = 'font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);margin-bottom:5px';
+  label.textContent = 'activity — last 12 weeks';
+  container.appendChild(label);
+
+  const weeks = 12;
+  const days = weeks * 7;
+  const today = new Date();
+
+  // Build array of last N days
+  const dayData = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    dayData.push({ key, count: srsActivity[key] || 0 });
+  }
+
+  const maxCount = Math.max(...dayData.map(d => d.count), 1);
+
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+weeks+',1fr);gap:2px';
+
+  // Group by week (columns), each column = 7 days
+  for (let w = 0; w < weeks; w++) {
+    const col = document.createElement('div');
+    col.style.cssText = 'display:flex;flex-direction:column;gap:2px';
+    for (let d = 0; d < 7; d++) {
+      const idx = w * 7 + d;
+      const day = dayData[idx];
+      const cell = document.createElement('div');
+      cell.style.cssText = 'width:100%;aspect-ratio:1;border-radius:2px';
+      const intensity = day.count === 0 ? 0 : Math.min(1, day.count / Math.max(maxCount * 0.5, 5));
+      if (day.count === 0) {
+        cell.style.background = 'var(--sf2)';
+      } else {
+        // Green shading — low=faint, high=bright
+        const alpha = 0.2 + intensity * 0.8;
+        cell.style.background = 'rgba(122,200,160,' + alpha + ')';
+      }
+      cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
+      col.appendChild(cell);
+    }
+    grid.appendChild(col);
+  }
+  container.appendChild(grid);
+
+  // Legend
+  const legend = document.createElement('div');
+  legend.style.cssText = 'display:flex;align-items:center;gap:4px;margin-top:4px;font-size:.58rem;color:var(--mu)';
+  legend.innerHTML = 'less ';
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+    const sq = document.createElement('div');
+    sq.style.cssText = 'width:9px;height:9px;border-radius:1px';
+    sq.style.background = v === 0 ? 'var(--sf2)' : 'rgba(122,200,160,' + (0.2 + v * 0.8) + ')';
+    legend.appendChild(sq);
+  });
+  legend.innerHTML += ' more';
+  // rebuild properly
+  legend.textContent = '';
+  const less = document.createElement('span'); less.textContent = 'less '; legend.appendChild(less);
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+    const sq = document.createElement('div');
+    sq.style.cssText = 'width:9px;height:9px;border-radius:1px;display:inline-block;margin:0 1px';
+    sq.style.background = v === 0 ? 'var(--sf2)' : 'rgba(122,200,160,' + (0.2 + v * 0.8) + ')';
+    legend.appendChild(sq);
+  });
+  const more = document.createElement('span'); more.textContent = ' more'; legend.appendChild(more);
+  container.appendChild(legend);
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
