@@ -2281,7 +2281,6 @@ function renderActivityGrid(container) {
   const days = weeks * 7;
   const today = new Date();
 
-  // Build array of last N days
   const dayData = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(today);
@@ -2292,11 +2291,22 @@ function renderActivityGrid(container) {
 
   const maxCount = Math.max(...dayData.map(d => d.count), 1);
 
-  const grid = document.createElement('div');
-  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+weeks+',10px);gap:2px';
+  // Color scale: empty = very faint grey-blue, active = light→dark green (more=darker)
+  function cellColor(count) {
+    if (count === 0) return 'rgba(255,255,255,0.05)'; // nearly invisible — just a hint
+    const t = Math.min(1, count / maxCount);
+    // light green (low) → dark green (high)
+    // t=0.01: rgba(144,230,160,0.35)  t=1: rgba(30,140,80,1)
+    const r = Math.round(144 - t * 114);
+    const g = Math.round(230 - t * 90);
+    const b = Math.round(160 - t * 80);
+    const a = 0.35 + t * 0.65;
+    return 'rgba('+r+','+g+','+b+','+a.toFixed(2)+')';
+  }
 
-  // Columns = weeks (left=oldest, right=most recent)
-  // Rows = days of week (top=first day of week)
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:flex;gap:2px';
+
   for (let w = 0; w < weeks; w++) {
     const col = document.createElement('div');
     col.style.cssText = 'display:flex;flex-direction:column;gap:2px';
@@ -2304,18 +2314,8 @@ function renderActivityGrid(container) {
       const idx = w * 7 + d;
       const day = dayData[idx];
       const cell = document.createElement('div');
-      cell.style.cssText = 'width:10px;height:10px;border-radius:2px';
-      if (day.count === 0) {
-        cell.style.background = 'var(--sf3)';
-      } else {
-        // Dark = more activity: low count = light green, high = dark green
-        const intensity = Math.min(1, day.count / Math.max(maxCount, 1));
-        // Map intensity to a color: light (low) → dark (high)
-        const r = Math.round(40 + (1 - intensity) * 82);
-        const g = Math.round(120 + (1 - intensity) * 80);
-        const b = Math.round(80 + (1 - intensity) * 80);
-        cell.style.background = 'rgb('+r+','+g+','+b+')';
-      }
+      cell.style.cssText = 'width:10px;height:10px;border-radius:2px;border:1px solid rgba(255,255,255,0.06)';
+      cell.style.background = cellColor(day.count);
       cell.title = day.key + ': ' + day.count + ' card' + (day.count !== 1 ? 's' : '');
       col.appendChild(cell);
     }
@@ -2323,32 +2323,17 @@ function renderActivityGrid(container) {
   }
   container.appendChild(grid);
 
-  // Legend
+  // Legend: left=less(faint), right=more(dark green)
   const legend = document.createElement('div');
-  legend.style.cssText = 'display:flex;align-items:center;gap:4px;margin-top:4px;font-size:.58rem;color:var(--mu)';
-  legend.innerHTML = 'less ';
-  [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+  legend.style.cssText = 'display:flex;align-items:center;gap:3px;margin-top:5px;font-size:.58rem;color:var(--mu)';
+  const less = document.createElement('span'); less.textContent = 'less'; legend.appendChild(less);
+  [0, 0.15, 0.4, 0.7, 1].forEach(v => {
     const sq = document.createElement('div');
-    sq.style.cssText = 'width:9px;height:9px;border-radius:1px';
-    sq.style.background = v === 0 ? 'var(--sf2)' : 'rgba(122,200,160,' + (0.2 + v * 0.8) + ')';
+    sq.style.cssText = 'width:9px;height:9px;border-radius:1px;border:1px solid rgba(255,255,255,0.06);margin:0 1px';
+    sq.style.background = cellColor(v === 0 ? 0 : Math.round(v * maxCount) || 1);
     legend.appendChild(sq);
   });
-  legend.innerHTML += ' more';
-  // rebuild properly
-  legend.textContent = '';
-  const less = document.createElement('span'); less.textContent = 'less '; legend.appendChild(less);
-  [0, 0.2, 0.4, 0.7, 1].forEach(v => {
-    const sq = document.createElement('div');
-    sq.style.cssText = 'width:9px;height:9px;border-radius:1px;display:inline-block;margin:0 1px';
-    if (v === 0) {
-      sq.style.background = 'var(--sf3)';
-    } else {
-      const r = Math.round(40 + (1-v)*82), g = Math.round(120 + (1-v)*80), b = Math.round(80 + (1-v)*80);
-      sq.style.background = 'rgb('+r+','+g+','+b+')';
-    }
-    legend.appendChild(sq);
-  });
-  const more = document.createElement('span'); more.textContent = ' more'; legend.appendChild(more);
+  const more = document.createElement('span'); more.textContent = 'more'; legend.appendChild(more);
   container.appendChild(legend);
 }
 
