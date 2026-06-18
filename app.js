@@ -72,6 +72,10 @@ function speak(text, lang) {
   u.rate = 0.85;
   window.speechSynthesis.speak(u);
 }
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return r+','+g+','+b;
+}
 function showToast(msg, duration) {
   let t = document.getElementById('toast');
   if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
@@ -547,11 +551,16 @@ function renderDeckSwitcher(){
   const sw=document.getElementById('deckSwitcher'); if(!sw) return; sw.innerHTML='';
   if(decks.length===0){sw.innerHTML='<span class="empty-deck">right-click any word to create your first deck</span>';}
   else{decks.forEach((deck,i)=>{
-    const btn=document.createElement('button'); btn.className='dbtn'+(i===activeDeckIdx?' dactive':''); btn.style.setProperty('--dc',deck.color);
-    const dot=document.createElement('span');dot.className='ddot';dot.style.background=deck.color;
+    const isActive = i===activeDeckIdx;
+    const btn=document.createElement('button');
+    btn.style.cssText=`display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:6px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;border:1.5px solid ${isActive?deck.color:'rgba('+hexToRgb(deck.color)+',.35)'};background:${isActive?deck.color+'18':'var(--sf)'};color:${isActive?deck.color:'var(--tx)'};transition:all .15s`;
+    const dot=document.createElement('span');dot.style.cssText=`width:7px;height:7px;border-radius:50%;background:${deck.color};flex-shrink:0`;
     const lbl=document.createElement('span');lbl.textContent=deck.name;
-    const ct=document.createElement('span');ct.className='dct';const wc=Object.keys(deck.words).length;if(wc>0)ct.textContent=wc;
+    const wc=Object.keys(deck.words).length;
+    const ct=document.createElement('span');ct.style.cssText='opacity:.5;font-size:.65rem';if(wc>0)ct.textContent=wc;
     btn.appendChild(dot);btn.appendChild(lbl);btn.appendChild(ct);
+    btn.onmouseenter=()=>{if(!isActive)btn.style.borderColor=deck.color;};
+    btn.onmouseleave=()=>{if(!isActive)btn.style.borderColor='rgba('+hexToRgb(deck.color)+',.35)';};
     btn.onclick=()=>{activeDeckIdx=i===activeDeckIdx?-1:i;saveDeckState();renderDeckSwitcher();renderDeckChips();renderWordGrid();};
     btn.oncontextmenu=e=>showDeckCtxMenu(e,i); sw.appendChild(btn);
   });}
@@ -1017,12 +1026,14 @@ function buildAnkiSession(deckIdx) {
     return (c.state === 'review' || c.state === 'learning') && c.due <= now;
   }).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean));
 
-  // New cards: up to limit
+  // New cards: sort by freq desc (most common first), then slice to limit
   const newKeys = allKeys.filter(kr => {
     const c = getCard(deckIdx, kr);
     return c.state === 'new' && !isSuspended(kr);
   });
-  ankiNewQueue = newKeys.slice(0, newLimit).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean);
+  const newWords = newKeys.map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean);
+  newWords.sort((a, b) => (b.freq || 0) - (a.freq || 0));
+  ankiNewQueue = newWords.slice(0, newLimit);
   ankiLearningQueue = [];
   ankiSessionNewCount = 0;
 }
