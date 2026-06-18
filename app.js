@@ -553,7 +553,8 @@ function renderDeckSwitcher(){
   else{decks.forEach((deck,i)=>{
     const isActive = i===activeDeckIdx;
     const btn=document.createElement('button');
-    btn.style.cssText=`display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:6px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;border:1.5px solid ${isActive?deck.color:'rgba('+hexToRgb(deck.color)+',.35)'};background:${isActive?deck.color+'18':'var(--sf)'};color:${isActive?deck.color:'var(--tx)'};transition:all .15s`;
+    btn.className=''; // no dbtn class — use full inline style to avoid CSS circle override
+    btn.style.cssText=`display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:6px;font-family:'DM Mono',monospace;font-size:.72rem;cursor:pointer;border:1.5px solid ${isActive?deck.color:'rgba('+hexToRgb(deck.color)+',.35)'};background:${isActive?deck.color+'18':'var(--sf)'};color:${isActive?deck.color:'var(--tx)'};transition:all .15s;width:auto;height:auto;aspect-ratio:unset;min-width:unset;border-radius:6px`;
     const dot=document.createElement('span');dot.style.cssText=`width:7px;height:7px;border-radius:50%;background:${deck.color};flex-shrink:0`;
     const lbl=document.createElement('span');lbl.textContent=deck.name;
     const wc=Object.keys(deck.words).length;
@@ -1119,7 +1120,12 @@ function ankiFlipped() {
   let goodInterval = '';
   if (c.state === 'new' || c.state === 'learning') {
     const nextStep = (c.step || 0) + 1;
-    goodInterval = nextStep >= LEARNING_STEPS.length ? '1d' : LEARNING_STEPS[nextStep] + 'm';
+    if (nextStep >= LEARNING_STEPS.length) {
+      goodInterval = '1d';
+    } else {
+      const mins = LEARNING_STEPS[nextStep];
+      goodInterval = mins < 60 ? mins + 'm' : mins < 1440 ? Math.round(mins/60) + 'h' : Math.round(mins/1440) + 'd';
+    }
   } else {
     const ni = Math.round(c.interval * c.ease);
     goodInterval = ni <= 1 ? '1d' : ni < 30 ? ni + 'd' : ni < 365 ? Math.round(ni/30) + 'mo' : Math.round(ni/365) + 'yr';
