@@ -360,6 +360,30 @@ function addDeck(name) { decks.push({name, color:nextDeckColor(), words:{}}); ac
 function deleteDeck(idx) { decks.splice(idx,1); if (activeDeckIdx >= decks.length) activeDeckIdx = decks.length-1; saveDeckState(); }
 function saveDeckState() { save('lf-decks', decks); save('lf-activeDeck', activeDeckIdx); }
 
+// ── SUSPEND STATE ────────────────────────────────────────────────────────────────────────────────
+let suspendedWords = new Set(load('lf-suspended', []));
+let showSuspended = false;
+let kanjiFilter = false;
+function isSuspended(kr) { return suspendedWords.has(kr); }
+function suspendWord(kr) { suspendedWords.add(kr); save('lf-suspended', [...suspendedWords]); }
+function unsuspendWord(kr) { suspendedWords.delete(kr); save('lf-suspended', [...suspendedWords]); }
+function getKanjiInDecks() {
+  const kanji = new Set();
+  decks.forEach(d => {
+    Object.keys(d.words).forEach(kr => {
+      [...kr].forEach(ch => { if (/[一-鿿]/.test(ch)) kanji.add(ch); });
+    });
+  });
+  LANGS[curLang].words.filter(w => w.pos === 'kanji').forEach(w => {
+    [...w.kr].forEach(ch => { if (/[一-鿿]/.test(ch)) kanji.add(ch); });
+  });
+  return kanji;
+}
+function wordHasKanjiFromDecks(w) {
+  const deckKanji = getKanjiInDecks();
+  return [...w.kr].some(ch => deckKanji.has(ch));
+}
+
 // ── VOCAB TAB ─────────────────────────────────────────────────────────────────
 function renderVocab(container) {
   container.innerHTML = '';
@@ -370,6 +394,10 @@ function renderVocab(container) {
   const fb = document.createElement('button'); fb.className='ubtn filters-toggle'; fb.id='filtersToggle'; fb.textContent='more filters ▾'; fb.onclick=toggleFilters; mainRow.appendChild(fb);
   const roBtn = document.createElement('button'); roBtn.className='ubtn'+(!showRomanization?' on':''); roBtn.id='roBtn'; roBtn.textContent=showRomanization?'hide romaji':'show romaji'; roBtn.onclick=toggleRomanization; mainRow.appendChild(roBtn);
   const cb = document.createElement('button'); cb.className='ubtn'; cb.textContent='+ custom word'; cb.onclick=openCustomWord; mainRow.appendChild(cb);
+  if(curLang==='japanese'){
+    const kfBtn=document.createElement('button');kfBtn.className='ubtn'+(kanjiFilter?' on':'');kfBtn.id='kanjiFilterBtn';kfBtn.textContent='kanji i know';kfBtn.title='Show only words containing kanji from your decks';kfBtn.onclick=()=>{kanjiFilter=!kanjiFilter;kfBtn.classList.toggle('on',kanjiFilter);renderWordGrid();};mainRow.appendChild(kfBtn);
+  }
+  const suBtn=document.createElement('button');suBtn.className='ubtn'+(showSuspended?' on':'');suBtn.id='suspendedBtn';suBtn.textContent=showSuspended?'hide suspended':'show suspended';suBtn.onclick=()=>{showSuspended=!showSuspended;suBtn.classList.toggle('on',showSuspended);suBtn.textContent=showSuspended?'hide suspended':'show suspended';renderWordGrid();};mainRow.appendChild(suBtn);
   ctrl.appendChild(mainRow);
   const fr = document.createElement('div'); fr.className='ctrl-row filters-row'; fr.id='filtersRow'; fr.style.cssText='display:none;flex-wrap:wrap;gap:6px;margin-top:4px';
   const gb = document.createElement('div'); gb.id='groupBar'; gb.style.cssText='display:flex;flex-wrap:wrap;gap:5px'; fr.appendChild(gb);
@@ -392,7 +420,8 @@ function buildGroupBtns() {
 }
 function makeChip(w, i) {
   const chip=document.createElement('div'); const chipColor=deckColorFor(w.kr);
-  chip.className='chip'+(chipColor?' on':''); if(chipColor) chip.style.borderColor=chipColor;
+  const suspended = isSuspended(w.kr);
+  chip.className='chip'+(chipColor?' on':'')+(suspended?' suspended':''); if(chipColor&&!suspended) chip.style.borderColor=chipColor; if(suspended) chip.style.opacity='0.35';
   chip.style.animationDelay=Math.min(i*0.008,0.2)+'s'; chip.title=w.meaning+' — '+w.example;
   const regColor={formal:'#7a8cc8',casual:'#c8a87a',neutral:'transparent'}[w.register||'neutral'];
   const sb=(curGrouping==='fewest_strokes'&&w.strokes)?`<span style="font-size:.5rem;color:var(--mu);margin-left:auto">${w.strokes}画</span>`:'';
@@ -450,6 +479,9 @@ function renderWordGrid() {
     if(activeSituation&&activeSituation!=='all'&&!(w.sit&&w.sit.includes(activeSituation))) return false;
     if(activeScripts.size>0){if(!activeScripts.has(w.pos)) return false;}
     else if(curLang==='japanese'){if(alphaPoses.has(w.pos)||isAlphaKanji(w)) return false;}
+    if(!showSuspended && isSuspended(w.kr)) return false;
+    if(showSuspended && !isSuspended(w.kr)) return false;
+    if(kanjiFilter && curLang==='japanese' && !wordHasKanjiFromDecks(w)) return false;
     if(search&&!w.kr.includes(search)&&!w.ro.toLowerCase().includes(search)&&!w.meaning.toLowerCase().includes(search)) return false;
     return true;
   });
@@ -561,6 +593,9 @@ function showWordCtxMenu(e,w){
   decks.forEach(deck=>{const inThis=!!deck.words[w.kr];menuRow(menu,(inThis?'✓ ':'')+deck.name,inThis?deck.color:null,()=>{decks.forEach(d=>delete d.words[w.kr]);if(!inThis)deck.words[w.kr]=true;saveDeckState();renderDeckSwitcher();renderDeckChips();renderWordGrid();checkAchievements();},isDark);});
   const d2=document.createElement('div');d2.style.cssText='border-top:1px solid '+(isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.08)')+';margin:3px 0';menu.appendChild(d2);
   menuRow(menu,'+ new deck',isDark?'#7ac8a0':'#1a7a4a',()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());decks[decks.length-1].words[w.kr]=true;saveDeckState();renderDeckSwitcher();renderDeckChips();renderWordGrid();}},isDark);
+  const d3=document.createElement('div');d3.style.cssText='border-top:1px solid '+(isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.08)')+';margin:3px 0';menu.appendChild(d3);
+  const susp=isSuspended(w.kr);
+  menuRow(menu,susp?'↑ unsuspend':'⊘ suspend',susp?'#7ac8a0':'#c87a7a',()=>{if(susp)unsuspendWord(w.kr);else suspendWord(w.kr);renderWordGrid();},isDark);
   positionMenu(menu,e);
 }
 function showDeckCtxMenu(e,idx){
@@ -575,8 +610,8 @@ function showDeckCtxMenu(e,idx){
 let studyList=[],sIdx=0,sFlip=false;
 // studyMode: 'flip' (default) | 'meaning' (type English) | 'reading' (type romaji)
 let studyMode = localStorage.getItem('lf-study-mode') || 'flip';
-const STUDY_MODES = ['flip','meaning','reading'];
-const STUDY_MODE_LABELS = {flip:'✎ flip', meaning:'✎ type meaning', reading:'✎ type reading'};
+const STUDY_MODES = ['flip','meaning','reading','cloze'];
+const STUDY_MODE_LABELS = {flip:'✎ flip', meaning:'✎ type meaning', reading:'✎ type reading', cloze:'✎ cloze'};
 
 function cycleStudyMode(){
   const idx = STUDY_MODES.indexOf(studyMode);
@@ -589,7 +624,7 @@ function openStudy(){
   if(activeDeckIdx<0||activeDeckIdx>=decks.length){alert('Select a deck first.');return;}
   const keys=Object.keys(decks[activeDeckIdx].words);
   if(keys.length===0){alert(decks[activeDeckIdx].name+' has no words yet.');return;}
-  studyList=shuffle(keys.map(kr=>LANGS[curLang].words.find(w=>w.kr===kr)).filter(Boolean));
+  studyList=shuffle(keys.map(kr=>LANGS[curLang].words.find(w=>w.kr===kr)).filter(Boolean).filter(w=>!isSuspended(w.kr)));
   sIdx=0;sFlip=false;renderStudyCard();
   document.getElementById('studyOverlay')?.classList.add('open');
   document.getElementById('srsControls').style.display='none';
@@ -615,11 +650,50 @@ function renderStudyCard(){
   if(fcard){fcard.style.transition='none';fcard.classList.remove('flip');void fcard.offsetWidth;fcard.style.transition='';}
 
   // always show example on front for context in typing modes
-  const roHtml=showRomanization?`<div class="fc-ro">${w.ro}</div>`:'';
-  const exHtml=(studyMode!=='flip')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${exSentence}</div>`:'';
-  front.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-kr">${w.kr}</div>${roHtml}<div class="fc-pos">${w.pos}</div>${w.register&&w.register!=='neutral'?`<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>`:''}${exHtml}`;
+  if(studyMode !== 'cloze') {
+    const roHtml=showRomanization?`<div class="fc-ro">${w.ro}</div>`:'';
+    const exHtml=(studyMode==='meaning'||studyMode==='reading')?`<div class="fc-ex" style="font-size:.68rem;margin-top:6px;opacity:.7">${exSentence}</div>`:'';
+    front.innerHTML=`<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-kr">${w.kr}</div>${roHtml}<div class="fc-pos">${w.pos}</div>${w.register&&w.register!=='neutral'?`<div class="fc-reg" style="color:${{formal:'#7a8cc8',casual:'#c8a87a'}[w.register]}">${w.register}</div>`:''}${exHtml}`;
+  }
 
-  if(studyMode === 'meaning' || studyMode === 'reading'){
+  if(studyMode === 'cloze'){
+    // ── CLOZE MODE ─────────────────────────────────────────────────────────────
+    // Build blank sentence from example — replace the target word with ＿＿＿
+    const clozeSentence = (() => {
+      if(!exSentence) return null;
+      // Try to blank the kr form in the sentence
+      if(exSentence.includes(w.kr)) return exSentence.replace(w.kr, '＿＿＿');
+      // Try each individual kanji
+      const chars = [...w.kr].filter(ch => /[一-鿿぀-ゟ゠-ヿ]/.test(ch));
+      for(const ch of chars) {
+        if(exSentence.includes(ch)) return exSentence.replace(ch, '＿');
+      }
+      return null;
+    })();
+
+    // Front: show sentence with blank, plus reading hint
+    const exRo = exSentence ? exSentence.split(' — ')[1] || '' : '';
+    const frontSentence = clozeSentence || (exSentence ? exSentence.replace(/ — .*/,'') : '?');
+    const frontRo = (() => {
+      if(!exSentence) return '';
+      const parts = exSentence.split(' — ');
+      if(!parts[1]) return '';
+      if(w.ro && parts[1]) return parts[1].replace(w.ro, '＿＿＿');
+      return parts[1];
+    })();
+
+    front.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\'")}','${curLang}')">▶</button><div style="font-family:'Noto Sans KR',sans-serif;font-size:1.3rem;line-height:1.8;color:var(--tx);margin-bottom:.5rem">${frontSentence}</div>${showRomanization&&frontRo?`<div style="font-size:.72rem;color:var(--mu);font-style:italic">${frontRo}</div>`:''}<div class="fc-pos" style="margin-top:.5rem">${w.pos}</div>`;
+
+    // Back: full answer card
+    back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\'")}','${curLang}')">▶</button>
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:.4rem">
+        <span style="font-family:'Noto Sans KR',sans-serif;font-size:1.6rem;font-weight:500;color:var(--acc)">${w.kr}</span>
+        ${showRomanization?`<span style="font-size:.75rem;color:var(--mu)">${w.ro}</span>`:''}
+        <span style="font-size:.85rem;color:var(--tx)">${w.meaning}</span>
+      </div>
+      <div style="font-size:.75rem;color:var(--mu);line-height:1.7;padding:.5rem .75rem;background:var(--sf2);border-radius:8px;font-family:'Noto Sans KR',sans-serif">${exSentence||''}</div>`;
+
+  } else if(studyMode === 'meaning' || studyMode === 'reading'){
     const isMeaning = studyMode === 'meaning';
     const prompt = isMeaning ? 'what does this mean?' : 'how do you read this?';
     const placeholder = isMeaning ? 'type the meaning...' : 'type the reading...';
@@ -658,8 +732,7 @@ function renderStudyCard(){
     };
     back.appendChild(inp);back.appendChild(checkBtn);back.appendChild(result);
     inp.onkeydown=e=>{if(e.key==='Enter')checkBtn.click();};
-  } else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
-    // ── KANJI CARD BACK — DOM-based, no innerHTML column issues ───────────────
+} else if (w.pos === 'kanji' && w.examples && w.examples.length > 1) {
     back.innerHTML = '';
     const spkBtn = document.createElement('button');
     spkBtn.className = 'speak-btn';
@@ -667,30 +740,30 @@ function renderStudyCard(){
     spkBtn.onclick = () => speak(w.kr, curLang);
     back.appendChild(spkBtn);
 
-    const meaningLabel = document.createElement('div');
-    meaningLabel.style.cssText = 'font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.2rem';
-    meaningLabel.textContent = 'core meaning';
-    back.appendChild(meaningLabel);
+    const mLabel = document.createElement('div');
+    mLabel.style.cssText = 'font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.2rem';
+    mLabel.textContent = 'core meaning';
+    back.appendChild(mLabel);
 
-    const meaningVal = document.createElement('div');
-    meaningVal.className = 'fc-meaning';
-    meaningVal.style.marginBottom = '.6rem';
-    meaningVal.textContent = w.meaning;
-    back.appendChild(meaningVal);
+    const mVal = document.createElement('div');
+    mVal.className = 'fc-meaning';
+    mVal.style.marginBottom = '.6rem';
+    mVal.textContent = w.meaning;
+    back.appendChild(mVal);
 
-    const wordsLabel = document.createElement('div');
-    wordsLabel.style.cssText = 'font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem';
-    wordsLabel.textContent = 'words';
-    back.appendChild(wordsLabel);
+    const wLabel = document.createElement('div');
+    wLabel.style.cssText = 'font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--su);margin-bottom:.25rem';
+    wLabel.textContent = 'words';
+    back.appendChild(wLabel);
 
     const wordList = document.createElement('div');
     wordList.style.cssText = 'width:100%;overflow-y:auto;max-height:140px;display:flex;flex-direction:column;flex-shrink:0';
 
     w.examples.slice(0, 4).forEach(ex => {
       const parts = ex.split(' — ');
-      const word    = (parts[0] || '').replace(/[\s\u3000]*\[.*?\]/g, '').trim();
-      const reading = (parts[1] || '').replace(/[\s\u3000]*\[.*?\]/g, '').trim();
-      const eng     = (parts[2] || '').replace(/[\s\u3000]*\[.*?\]/g, '').trim();
+      const word    = (parts[0] || '').replace(/[\s　]*\[.*?\]/g, '').trim();
+      const reading = (parts[1] || '').replace(/[\s　]*\[.*?\]/g, '').trim();
+      const eng     = (parts[2] || '').replace(/[\s　]*\[.*?\]/g, '').trim();
 
       const row = document.createElement('div');
       row.style.cssText = 'padding:5px 0;border-bottom:1px solid var(--bd)';
@@ -702,12 +775,12 @@ function renderStudyCard(){
       wordEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:.95rem;color:var(--tx)";
       wordEl.textContent = word;
 
-      const readingEl = document.createElement('span');
-      readingEl.style.cssText = 'font-size:.65rem;color:var(--acc)';
-      readingEl.textContent = reading;
+      const readEl = document.createElement('span');
+      readEl.style.cssText = 'font-size:.65rem;color:var(--acc)';
+      readEl.textContent = reading;
 
       top.appendChild(wordEl);
-      top.appendChild(readingEl);
+      top.appendChild(readEl);
 
       const engEl = document.createElement('div');
       engEl.style.cssText = 'font-size:.63rem;color:var(--mu);line-height:1.4;margin-top:1px';
@@ -717,19 +790,17 @@ function renderStudyCard(){
       row.appendChild(engEl);
       wordList.appendChild(row);
     });
-
     back.appendChild(wordList);
 
     const readings = [...new Set(w.examples.slice(0,4).map(ex => {
       const m = ex.match(/\[([^\]]+)\]/);
       return m ? m[1] : null;
     }).filter(Boolean))].join(' · ');
-
     if (readings) {
-      const patternEl = document.createElement('div');
-      patternEl.style.cssText = 'font-size:.6rem;color:var(--mu);margin-top:.4rem;line-height:1.6;font-style:italic;padding:.35rem .6rem;background:var(--sf2);border-radius:6px';
-      patternEl.textContent = 'pattern: ' + readings;
-      back.appendChild(patternEl);
+      const patEl = document.createElement('div');
+      patEl.style.cssText = 'font-size:.6rem;color:var(--mu);margin-top:.4rem;line-height:1.6;font-style:italic;padding:.35rem .6rem;background:var(--sf2);border-radius:6px';
+      patEl.textContent = 'pattern: ' + readings;
+      back.appendChild(patEl);
     }
   } else {
     back.innerHTML = `<button class="speak-btn" onclick="speak('${w.kr.replace(/'/g,"\\'")}','${curLang}')">▶</button><div class="fc-meaning">${w.meaning}</div>${exReading?`<div style="font-size:.6rem;color:var(--acc);margin-top:6px;letter-spacing:.04em">this example uses: ${exReading}</div>`:''}<div class="fc-ex">${exSentence}</div>`;
@@ -762,8 +833,8 @@ function reshuffleStudy(){const cur=studyList[sIdx];studyList=shuffle(studyList)
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('studyOverlay')?.classList.contains('open')) return;
   if(e.key==='Escape')closeStudy();
-  if(e.key==='ArrowRight'&&studyMode==='flip')nextCard();
-  if(e.key===' '&&studyMode==='flip'){e.preventDefault();flipCard();}
+  if(e.key==='ArrowRight'&&(studyMode==='flip'||studyMode==='cloze'))nextCard();
+  if(e.key===' '&&(studyMode==='flip'||studyMode==='cloze')){e.preventDefault();flipCard();}
 });
 
 // ── SRS SYSTEM ────────────────────────────────────────────────────────────────
