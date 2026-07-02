@@ -33,6 +33,20 @@ const PREMADE_DECKS = {
     {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
   ],
   japanese_vocab:     [{name:'Japanese Vocabulary', color:'#7ac8a0', filter: w => w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
+  japanese_n5:        [{name:'JLPT N5', color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
+  japanese_n4:        [{name:'JLPT N4', color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
+  japanese_n3:        [{name:'JLPT N3', color:'#c8a87a', filter: w => (w.freq === 7 || w.freq === 8) && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
+  japanese_n2:        [{name:'JLPT N2', color:'#c87aa8', filter: w => (w.freq === 5 || w.freq === 6) && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
+  japanese_n1:        [{name:'JLPT N1', color:'#c87a7a', filter: w => w.freq <= 4 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
+  korean_topik1:      [{name:'TOPIK 1', color:'#7ac8a0', filter: w => w.freq >= 10}],
+  korean_topik2:      [{name:'TOPIK 2', color:'#7ac8c8', filter: w => w.freq === 9}],
+  korean_topik34:     [{name:'TOPIK 3-4', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
+  korean_topik56:     [{name:'TOPIK 5-6', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
+  italian_a1:         [{name:'Italian A1', color:'#7ac8a0', filter: w => w.freq >= 10}],
+  italian_a2:         [{name:'Italian A2', color:'#7ac8c8', filter: w => w.freq === 9}],
+  italian_b1:         [{name:'Italian B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
+  italian_b2:         [{name:'Italian B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
+  italian_c1:         [{name:'Italian C1', color:'#c87a7a', filter: w => w.freq <= 4}],
   japanese_yofukashi:[{name:'よふかしのうた',  color:'#a87ac8', filter: w => w.song === 'yofukashi'}],
   japanese_kawaikute:[{name:'可愛くてごめん', color:'#c87aa8', filter: w => w.song === 'kawaikute'}],
   italian: [
@@ -164,7 +178,7 @@ function updateStreak() {
   if (newCount >= 3)   unlockAchievement('streak_3');
   if (newCount >= 7)   { unlockAchievement('streak_7'); if (s.shield === 0) localStorage.setItem('lf-streak-shield','1'); }
   if (newCount >= 14)  unlockAchievement('streak_14');
-  if (newCount >= 30)  { unlockAchievement('streak_30'); const sh = getStreak().shield; localStorage.setItem('lf-streak-shield', String(sh+1)); }
+  if (newCount >= 30 && newCount % 30 === 0) { unlockAchievement('streak_30'); const sh = getStreak().shield; localStorage.setItem('lf-streak-shield', String(sh+1)); }
   if (newCount >= 100) unlockAchievement('streak_100');
   if (newCount > 1) {
     const msgs = {3:'🔥 3 day streak!', 7:'⚡ one week streak!', 14:'🌟 two week streak!', 30:'🏆 30 days — incredible!', 100:'💎 100 days. legendary.'};
@@ -602,6 +616,49 @@ function renderDeckSwitcher(){
     vb.textContent='★ vocabulary deck';
     vb.onclick=()=>addPremadeDeck('japanese_vocab');
     utilRow.appendChild(vb);
+    // JLPT level decks
+    const levels=[
+      {key:'japanese_n5',label:'N5'},
+      {key:'japanese_n4',label:'N4'},
+      {key:'japanese_n3',label:'N3'},
+      {key:'japanese_n2',label:'N2'},
+      {key:'japanese_n1',label:'N1'},
+    ];
+    levels.forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';
+      lb.textContent='★ JLPT '+l.label;
+      lb.onclick=()=>addPremadeDeck(l.key);
+      utilRow.appendChild(lb);
+    });
+  }
+  if(curLang==='korean'){
+    const levels=[
+      {key:'korean_topik1',label:'TOPIK 1'},
+      {key:'korean_topik2',label:'TOPIK 2'},
+      {key:'korean_topik34',label:'TOPIK 3-4'},
+      {key:'korean_topik56',label:'TOPIK 5-6'},
+    ];
+    levels.forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';
+      lb.textContent='★ '+l.label;
+      lb.onclick=()=>addPremadeDeck(l.key);
+      utilRow.appendChild(lb);
+    });
+  }
+  if(curLang==='italian'){
+    const levels=[
+      {key:'italian_a1',label:'A1'},
+      {key:'italian_a2',label:'A2'},
+      {key:'italian_b1',label:'B1'},
+      {key:'italian_b2',label:'B2'},
+      {key:'italian_c1',label:'C1'},
+    ];
+    levels.forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';
+      lb.textContent='★ CEFR '+l.label;
+      lb.onclick=()=>addPremadeDeck(l.key);
+      utilRow.appendChild(lb);
+    });
   }
   leftCol.appendChild(utilRow);
   layout.appendChild(leftCol);
