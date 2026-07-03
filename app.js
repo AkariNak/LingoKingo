@@ -678,14 +678,30 @@ function renderDeckSwitcher(){
     statsRow.innerHTML=`<span style="color:#c87a7a">■ ${due} due</span><span style="color:#7ac8a0">■ ${newAvail} new</span>`;
     rightCol.appendChild(statsRow);
 
-    const limitRow=document.createElement('div');limitRow.style.cssText='display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--mu)';
-    const limitLabel=document.createElement('span');limitLabel.textContent='new cards/day:';
+    const limitRow=document.createElement('div');limitRow.style.cssText='display:flex;align-items:center;gap:10px;font-size:.7rem;color:var(--mu);flex-wrap:wrap';
+
+    const limitLabel=document.createElement('span');limitLabel.textContent='new/day:';
     const limitInput=document.createElement('input');
-    limitInput.type='number';limitInput.min='1';limitInput.max='100';
+    limitInput.type='number';limitInput.min='1';limitInput.max='200';
     limitInput.value=getDailyLimit(activeDeckIdx);
-    limitInput.style.cssText='width:52px;padding:3px 6px;background:var(--sf);border:1px solid var(--bd2);border-radius:5px;color:var(--tx);font-family:DM Mono,monospace;font-size:.72rem;text-align:center';
+    limitInput.style.cssText='width:48px;padding:3px 6px;background:var(--sf);border:1px solid var(--bd2);border-radius:5px;color:var(--tx);font-family:DM Mono,monospace;font-size:.72rem;text-align:center';
     limitInput.onchange=()=>{const v=parseInt(limitInput.value);if(v>0){setDailyLimit(activeDeckIdx,v);renderDeckSwitcher();}};
     limitRow.appendChild(limitLabel);limitRow.appendChild(limitInput);
+
+    const revLabel=document.createElement('span');revLabel.textContent='reviews/day:';
+    const revInput=document.createElement('input');
+    revInput.type='number';revInput.min='1';revInput.max='9999';
+    const curRevLimit=getReviewLimit(activeDeckIdx);
+    revInput.value=curRevLimit>=9999?'∞':curRevLimit;
+    revInput.placeholder='∞';
+    revInput.style.cssText='width:48px;padding:3px 6px;background:var(--sf);border:1px solid var(--bd2);border-radius:5px;color:var(--tx);font-family:DM Mono,monospace;font-size:.72rem;text-align:center';
+    revInput.onchange=()=>{
+      const raw=revInput.value.trim();
+      if(raw===''||raw==='∞'||raw==='999'||parseInt(raw)>=9999){setReviewLimit(activeDeckIdx,9999);revInput.value='∞';}
+      else{const v=parseInt(raw);if(v>0)setReviewLimit(activeDeckIdx,v);}
+      renderDeckSwitcher();
+    };
+    limitRow.appendChild(revLabel);limitRow.appendChild(revInput);
     rightCol.appendChild(limitRow);
 
     const sb=document.createElement('button');sb.className='abtn accent';
@@ -1004,6 +1020,16 @@ function setDailyLimit(deckIdx, n) {
   limits[deckIdx] = n;
   save('lf-daily-limits', limits);
 }
+function getReviewLimit(deckIdx) {
+  const limits = load('lf-review-limits', {});
+  const val = limits[deckIdx];
+  return val === undefined ? 9999 : parseInt(val); // default = unlimited
+}
+function setReviewLimit(deckIdx, n) {
+  const limits = load('lf-review-limits', {});
+  limits[deckIdx] = n;
+  save('lf-review-limits', limits);
+}
 
 // How many new cards introduced today for this deck
 function newCardsToday(deckIdx) {
@@ -1113,10 +1139,11 @@ function buildAnkiSession(deckIdx) {
   const allKeys = Object.keys(deck.words);
 
   // Reviews: due cards not in learning
+  const reviewLimit = getReviewLimit(deckIdx);
   ankiReviewQueue = shuffle(allKeys.filter(kr => {
     const c = getCard(deckIdx, kr);
     return (c.state === 'review' || c.state === 'learning') && c.due <= now;
-  }).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean));
+  }).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean)).slice(0, reviewLimit);
 
   // New cards: sort by freq desc (most common first), then slice to limit
   const newKeys = allKeys.filter(kr => {
