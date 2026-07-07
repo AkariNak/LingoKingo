@@ -24,6 +24,9 @@ body.light{
   background:var(--bg);color:var(--tx)
 }
 .surface{background:var(--sf)}
+
+/* custom bg themes override dark/light body vars */
+body[data-custom-theme]{background:var(--bg);color:var(--tx)}
 .t-muted{color:var(--mu)}
 .t-subtle{color:var(--su)}
 
