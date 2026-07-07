@@ -1735,14 +1735,14 @@ function applyBgTheme(id) {
   const t = BG_THEMES.find(x => x.id === id);
   if (!t) return;
   localStorage.setItem('lf-bg-theme', id);
-  Object.entries(t.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
-  // Remove body class dark/light since theme overrides everything
+  // Set on body so it beats body.dark / body.light specificity
+  Object.entries(t.vars).forEach(([k, v]) => document.body.style.setProperty(k, v));
   document.body.setAttribute('data-custom-theme', id);
 }
 
 function clearBgTheme() {
   localStorage.removeItem('lf-bg-theme');
-  BG_THEMES.forEach(t => Object.keys(t.vars).forEach(k => document.documentElement.style.removeProperty(k)));
+  BG_THEMES.forEach(t => Object.keys(t.vars).forEach(k => document.body.style.removeProperty(k)));
   document.body.removeAttribute('data-custom-theme');
 }
 
