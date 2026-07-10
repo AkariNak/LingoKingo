@@ -2443,7 +2443,8 @@ function renderStories(container) {
   allBtn.textContent = 'all';
   allBtn.onclick = () => { storyGenreFilter.clear(); renderStories(container); };
   genreWrap.appendChild(allBtn);
-  (typeof STORY_GENRES !== 'undefined' ? STORY_GENRES : []).forEach(g => {
+  const genreList = (typeof STORY_GENRES_BY_LANG !== 'undefined' ? (STORY_GENRES_BY_LANG[curLang] || STORY_GENRES || []) : []);
+  genreList.forEach(g => {
     const btn = document.createElement('button');
     btn.className = 'gbtn' + (storyGenreFilter.has(g) ? ' on' : '');
     btn.textContent = g;
