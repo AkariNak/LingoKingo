@@ -1,7 +1,4 @@
 // ── STORIES ───────────────────────────────────────────────────────────────────
-// Each story: { id, lang, title, titleNative, author, genres[], difficulty,
-//   blurb, lines[{text, reading?, translation}], questions[{q, choices[], answer}] }
-
 const STORIES = [
 
 // ── JAPANESE ──────────────────────────────────────────────────────────────────
@@ -13,20 +10,116 @@ const STORIES = [
   titleNative:'まちがった世界',
   genres:['isekai','fantasy','action'],
   difficulty:'N4',
-  blurb:'A high school student wakes up in a dark forest — no phone, no map, no memory of how he got there. Something is watching from between the trees.',
+  blurb:'He died in a convenience store parking lot at 2 AM. Slipped on ice. Embarrassing. Now he\'s somewhere else entirely, and the sky is the wrong color.',
   lines:[
-    {text:'目を開けたとき、知らない森の中にいた。',reading:'めをあけたとき、しらないもりのなかにいた。',translation:'When I opened my eyes, I was inside an unfamiliar forest.'},
-    {text:'空は赤かった。太陽はどこにもなかった。',reading:'そらはあかかった。たいようはどこにもなかった。',translation:'The sky was red. The sun was nowhere.'},
-    {text:'「ここはどこだ？」と声に出して言ったが、誰も答えなかった。',reading:'「ここはどこだ？」とこえにだしていったが、だれもこたえなかった。',translation:'"Where is this?" I said out loud, but no one answered.'},
-    {text:'木の間から何かが動いた。',reading:'きのあいだからなにかがうごいた。',translation:'Something moved between the trees.'},
-    {text:'走ろうとした瞬間、足が地面に張り付いて動かなかった。',reading:'はしろうとしたしゅんかん、あしがじめんにはりついてうごかなかった。',translation:'The moment I tried to run, my feet were stuck to the ground and wouldn\'t move.'},
-    {text:'低い声が耳に届いた。「来るのを待っていた。」',reading:'ひくいこえがみみにとどいた。「くるのをまっていた。」',translation:'A low voice reached my ears. "I\'ve been waiting for you to come."'},
-    {text:'振り返ると、そこには人間ではない何かが立っていた。',reading:'ふりかえると、そこにはにんげんではないなにかがたっていた。',translation:'When I turned around, something that wasn\'t human was standing there.'},
+    {text:'目を開けたとき、最初に気づいたのは空の色だった。',reading:'めをあけたとき、さいしょにきづいたのはそらのいろだった。',translation:'When I opened my eyes, the first thing I noticed was the color of the sky.'},
+    {text:'赤だった。夕焼けじゃない。ただ、赤かった。',reading:'あかだった。ゆうやけじゃない。ただ、あかかった。',translation:'Red. Not a sunset. Just red.'},
+    {text:'背中の下は土で、草のにおいがした。知らないにおいだった。',reading:'せなかのしたはつちで、くさのにおいがした。しらないにおいだった。',translation:'The ground beneath my back was dirt, and it smelled of grass. Grass I didn\'t recognize.'},
+    {text:'立ち上がると、森だった。木が高すぎた。',reading:'たちあがると、もりだった。きがたかすぎた。',translation:'When I stood up, there was a forest. The trees were too tall.'},
+    {text:'スマホを探した。なかった。財布もなかった。',reading:'スマホをさがした。なかった。さいふもなかった。',translation:'I reached for my phone. Gone. My wallet too.'},
+    {text:'木の間から何かがこちらを見ていた。目だけが見えた。黄色い目が。',reading:'きのあいだからなにかがこちらをみていた。めだけがみえた。きいろいめが。',translation:'Something between the trees was watching me. Only the eyes were visible. Yellow eyes.'},
+    {text:'死に方が間抜けだったわりに、続きがあるらしかった。',reading:'しにかたがまぬけだったわりに、つづきがあるらしかった。',translation:'For such a stupid way to die, it seemed there was a continuation.'},
   ],
   questions:[
-    {q:'Where does the story take place?',choices:['A school','An unfamiliar forest','A red desert','A dark city'],answer:'An unfamiliar forest'},
-    {q:'What color was the sky?',choices:['Blue','Black','Red','Grey'],answer:'Red'},
-    {q:'What happened when the boy tried to run?',choices:['He fell','His feet were stuck','He was grabbed','He woke up'],answer:'His feet were stuck'},
+    {q:'What was the first thing he noticed?',choices:['The trees','The smell of grass','The color of the sky','Yellow eyes'],answer:'The color of the sky'},
+    {q:'What color was the sky?',choices:['Blue','Orange','Black','Red'],answer:'Red'},
+    {q:'What does the last line suggest?',choices:['He is dreaming','He survived','He has been reincarnated','He is in hell'],answer:'He has been reincarnated'},
+  ]
+},
+
+{
+  id:'jp_magic_01',
+  lang:'japanese',
+  title:'Born Again with Magic',
+  titleNative:'魔法と共に転生した',
+  genres:['isekai','fantasy','action'],
+  difficulty:'N4',
+  blurb:'The second life started before he could hold his own head up. He couldn\'t walk, couldn\'t talk, couldn\'t do anything a person could do. But magic — that, he could already feel.',
+  lines:[
+    {text:'最初の記憶は天井だった。木でできた、知らない天井。',reading:'さいしょのきおくはてんじょうだった。きでできた、しらないてんじょう。',translation:'My first memory was a ceiling. Wood. A ceiling I didn\'t know.'},
+    {text:'体が動かなかった。腕が短すぎた。声を出そうとしたら泣き声になった。',reading:'からだがうごかなかった。うでがみじかすぎた。こえをだそうとしたらなきごえになった。',translation:'My body wouldn\'t move. My arms were too short. When I tried to speak, what came out was crying.'},
+    {text:'赤ん坊だと理解するまで少し時間がかかった。',reading:'あかんぼうだとりかいするまですこしじかんがかかった。',translation:'It took me a moment to understand I was a baby.'},
+    {text:'前の世界での記憶は全部あった。四十三年分。',reading:'まえのせかいでのきおくはぜんぶあった。よんじゅうさんねんぶん。',translation:'All my memories from before were intact. Forty-three years of them.'},
+    {text:'だが一つだけ、前と違うことがあった。',reading:'だがひとつだけ、まえとちがうことがあった。',translation:'But there was one thing different from before.'},
+    {text:'この小さな手の中を、何かが流れていた。川みたいに、静かに、ずっと。',reading:'このちいさなてのなかを、なにかがながれていた。かわみたいに、しずかに、ずっと。',translation:'Through these small hands, something was flowing. Like a river. Quietly. Always.'},
+    {text:'前の人生で欲しかったものが、今ここにあった。',reading:'まえのじんせいでほしかったものが、いまここにあった。',translation:'What I had wanted in my previous life was here now.'},
+  ],
+  questions:[
+    {q:'How old was he in his previous life?',choices:['Twenty-three','Thirty-five','Forty-three','Sixty'],answer:'Forty-three'},
+    {q:'What was different about this life?',choices:['He had a family','He had magic','He could fly','He remembered nothing'],answer:'He had magic'},
+    {q:'How does he describe what flows through his hands?',choices:['Like fire','Like electricity','Like a river','Like wind'],answer:'Like a river'},
+  ]
+},
+
+{
+  id:'jp_magic_02',
+  lang:'japanese',
+  title:'The Sword That Chose No One',
+  titleNative:'誰も選ばなかった剣',
+  genres:['fantasy','action','adventure'],
+  difficulty:'N3',
+  blurb:'The ceremony had been going on since morning. By afternoon, ninety heroes had tried. By evening, the crowd was tired of watching people fail. Aira was tired of standing.',
+  lines:[
+    {text:'エイラは式典が嫌いだった。人が多すぎて、暑かった。',reading:'エイラはしきてんがきらいだった。ひとがおおすぎて、あつかった。',translation:'Aira hated ceremonies. Too many people, and it was hot.'},
+    {text:'剣など興味がなかった。ただ、母親に連れてこられただけだった。',reading:'けんなどきょうみがなかった。ただ、ははおやにつれてこられただけだった。',translation:'She had no interest in the sword. She\'d only been dragged there by her mother.'},
+    {text:'人混みに押されて、よろけた。手が伸びた。何かに触れた。',reading:'ひとごみにおされて、よろけた。てがのびた。なにかにふれた。',translation:'Pushed by the crowd, she stumbled. Her hand reached out. Touched something.'},
+    {text:'光った。強く、まっすぐ、空に向かって。',reading:'ひかった。つよく、まっすぐ、そらにむかって。',translation:'It glowed. Brightly, straight upward toward the sky.'},
+    {text:'「選ばれようとしなかった者を、私は待っていた」',reading:'「えらばれようとしなかったものを、わたしはまっていた」',translation:'"I have been waiting for one who did not try to be chosen."'},
+    {text:'声は剣の中から来ていた。エイラには信じられなかった。',reading:'こえはけんのなかからきていた。エイラにはしんじられなかった。',translation:'The voice came from inside the sword. Aira couldn\'t believe it.'},
+    {text:'隣にいた母親が、小さく「嘘でしょ」とつぶやいた。',reading:'となりにいたははおやが、ちいさく「うそでしょ」とつぶやいた。',translation:'Her mother, standing beside her, whispered quietly, "You\'ve got to be kidding."'},
+  ],
+  questions:[
+    {q:'Why was Aira at the ceremony?',choices:['She wanted the sword','She was a hero candidate','Her mother brought her','She worked there'],answer:'Her mother brought her'},
+    {q:'How did she touch the sword?',choices:['She reached for it on purpose','She stumbled and her hand reached out','She was pushed directly into it','She tripped and fell on it'],answer:'She stumbled and her hand reached out'},
+    {q:'What did her mother say at the end?',choices:['"I knew it"','"You\'ve got to be kidding"','"I\'m so proud"','"Be careful"'],answer:'"You\'ve got to be kidding"'},
+  ]
+},
+
+{
+  id:'jp_magic_03',
+  lang:'japanese',
+  title:'What Magic Costs',
+  titleNative:'魔法の代償',
+  genres:['fantasy','action'],
+  difficulty:'N3',
+  blurb:'Every spell takes something. A memory. A color. Six months off your life. He stopped counting what he\'d lost somewhere around his thirtieth use. He doesn\'t know what year it is anymore.',
+  lines:[
+    {text:'最初に消えたのは赤だった。',reading:'さいしょにきえたのはあかだった。',translation:'The first thing to disappear was red.'},
+    {text:'ある朝、トマトを見て「これは何色だ」と思った。灰色に見えた。',reading:'あるあさ、トマトをみて「これはなにいろだ」とおもった。はいいろにみえた。',translation:'One morning I looked at a tomato and thought, what color is this. It looked grey.'},
+    {text:'次は子供の頃の声が消えた。顔は残った。声だけない。',reading:'つぎはこどものころのこえがきえた。かおはのこった。こえだけない。',translation:'Next went the voices of my childhood. The faces stayed. Just the voices, gone.'},
+    {text:'今は年が数えられない。去年が何年だったか思い出せない。',reading:'いまはとしがかぞえられない。きょねんがなんねんだったかおもいだせない。',translation:'Now I can\'t count the years. I can\'t remember what year last year was.'},
+    {text:'それでも使い続けた。',reading:'それでもつかいつづけた。',translation:'Even so, I kept using it.'},
+    {text:'守りたいものがある限り、失っても構わないと思っていた。',reading:'まもりたいものがあるかぎり、うしなってもかまわないとおもっていた。',translation:'As long as there was something I wanted to protect, I thought it didn\'t matter what I lost.'},
+    {text:'今朝、その人の名前を思い出せなかった。',reading:'けさ、そのひとのなまえをおもいだせなかった。',translation:'This morning, I couldn\'t remember that person\'s name.'},
+  ],
+  questions:[
+    {q:'What was the first thing he lost to magic?',choices:['His memories','The color red','His voice','His sense of time'],answer:'The color red'},
+    {q:'What can\'t he do now?',choices:['See','Walk','Count the years','Use magic'],answer:'Count the years'},
+    {q:'What happened this morning?',choices:['He lost another color','He forgot the year','He forgot the name of someone he wanted to protect','He stopped using magic'],answer:'He forgot the name of someone he wanted to protect'},
+  ]
+},
+
+{
+  id:'jp_magic_04',
+  lang:'japanese',
+  title:'One Second',
+  titleNative:'一秒',
+  genres:['isekai','school','action'],
+  difficulty:'N4',
+  blurb:'At the hero academy entrance exam, everyone gets one minute to show their power. He got one second — literally. The class laughed. That was before the practical.',
+  lines:[
+    {text:'能力開示の試験は一人ずつ行われた。',reading:'のうりょくかいじのしけんはひとりずつおこなわれた。',translation:'The ability disclosure exam was conducted one person at a time.'},
+    {text:'炎使い。風読み。剣の天才。教室が盛り上がった。',reading:'ほのおつかい。かぜよみ。けんのてんさい。きょうしつがもりあがった。',translation:'Fire user. Wind reader. Sword prodigy. The classroom got excited.'},
+    {text:'ケンジの番が来た。「一秒先の未来が見えます」',reading:'ケンジのばんがきた。「いちびょうさきのみらいがみえます」',translation:'Kenji\'s turn came. "I can see one second into the future."'},
+    {text:'誰かが笑った。それが広がった。',reading:'だれかがわらった。それがひろがった。',translation:'Someone laughed. It spread.'},
+    {text:'実技試験では、ケンジは一度も打たれなかった。',reading:'じつぎしけんでは、ケンジはいちどもうたれなかった。',translation:'In the practical exam, Kenji wasn\'t hit once.'},
+    {text:'相手の拳がどこに来るか、一秒前からわかっていた。',reading:'あいてのこぶしがどこにくるか、いちびょうまえからわかっていた。',translation:'He already knew where the opponent\'s fist would come, a second before it arrived.'},
+    {text:'笑っていた生徒たちは、もう笑っていなかった。',reading:'わらっていたせいとたちは、もうわらっていなかった。',translation:'The students who had laughed were no longer laughing.'},
+  ],
+  questions:[
+    {q:'What is Kenji\'s ability?',choices:['He can see the future','He can see one second into the future','He can slow time','He is very fast'],answer:'He can see one second into the future'},
+    {q:'What happened in the practical exam?',choices:['He lost','He used a different power','He wasn\'t hit once','He gave up'],answer:'He wasn\'t hit once'},
+    {q:'How did the class change by the end?',choices:['They were still laughing','They were scared of him','They stopped laughing','They apologized'],answer:'They stopped laughing'},
   ]
 },
 
@@ -37,20 +130,68 @@ const STORIES = [
   titleNative:'午前三時四十七分',
   genres:['slice of life','romance'],
   difficulty:'N5',
-  blurb:'She always texts at the same time. He has never asked why. Tonight he finally does.',
+  blurb:'She always texts at the exact same time. He stopped asking why months ago. Tonight he finally does.',
   lines:[
-    {text:'また午前三時四十七分にメッセージが来た。',reading:'またごぜんさんじよんじゅうななふんにメッセージがきた。',translation:'A message came again at 3:47 AM.'},
-    {text:'「眠れない」とだけ書いてあった。',reading:'「ねむれない」とだけかいてあった。',translation:'It just said "I can\'t sleep."'},
-    {text:'いつもそうだ。同じ時間、同じ言葉。',reading:'いつもそうだ。おなじじかん、おなじことば。',translation:'It\'s always like this. Same time, same words.'},
-    {text:'今夜は違うことを聞いてみた。「なんで眠れないの？」',reading:'こんやはちがうことをきいてみた。「なんでねむれないの？」',translation:'Tonight I tried asking something different. "Why can\'t you sleep?"'},
-    {text:'三分間、返事がなかった。',reading:'さんぷんかん、へんじがなかった。',translation:'For three minutes, there was no reply.'},
+    {text:'午前三時四十七分。また来た。',reading:'ごぜんさんじよんじゅうななふん。またきた。',translation:'3:47 AM. It came again.'},
+    {text:'「眠れない」',reading:'「ねむれない」',translation:'"Can\'t sleep."'},
+    {text:'いつもそれだけだ。句読点もない。',reading:'いつもそれだけだ。くとうてんもない。',translation:'Always just that. No punctuation.'},
+    {text:'今夜は違うことを返した。「なんで」',reading:'こんやはちがうことをかえした。「なんで」',translation:'Tonight I replied with something different. "Why."'},
+    {text:'既読がついた。返事はなかった。三分、四分、五分。',reading:'きどくがついた。へんじはなかった。さんぷん、よんぷん、ごふん。',translation:'She read it. No reply. Three minutes. Four. Five.'},
     {text:'「あなたのことを考えてるから」',reading:'「あなたのことをかんがえてるから」',translation:'"Because I\'m thinking about you."'},
-    {text:'僕もその夜は眠れなかった。',reading:'ぼくもそのよるはねむれなかった。',translation:'I couldn\'t sleep that night either.'},
+    {text:'その夜は、僕も眠れなかった。',reading:'そのよるは、ぼくもねむれなかった。',translation:'That night, I couldn\'t sleep either.'},
   ],
   questions:[
-    {q:'What time does she always message?',choices:['2:00 AM','3:47 AM','midnight','4:30 AM'],answer:'3:47 AM'},
-    {q:'What does she always write?',choices:['"Good night"','"I miss you"','"I can\'t sleep"','"Are you awake?"'],answer:'"I can\'t sleep"'},
-    {q:'Why can\'t she sleep?',choices:['She has work','She is sick','She is thinking about him','She had a nightmare'],answer:'She is thinking about him'},
+    {q:'What does she always text?',choices:['"Good night"','"I miss you"','"Can\'t sleep"','"Are you awake?"'],answer:'"Can\'t sleep"'},
+    {q:'What was different tonight?',choices:['She texted earlier','He asked her why','She called instead','She didn\'t text'],answer:'He asked her why'},
+    {q:'What happened after he read her reply?',choices:['He called her','He fell asleep','He couldn\'t sleep either','He texted back'],answer:'He couldn\'t sleep either'},
+  ]
+},
+
+{
+  id:'jp_romance_02',
+  lang:'japanese',
+  title:'The Umbrella',
+  titleNative:'傘',
+  genres:['romance','slice of life'],
+  difficulty:'N5',
+  blurb:'He had an umbrella. She didn\'t. He didn\'t say anything. He just slowed down a little.',
+  lines:[
+    {text:'駅を出た瞬間に雨が降ってきた。',reading:'えきをでたしゅんかんにあめがふってきた。',translation:'The moment we stepped out of the station, it started raining.'},
+    {text:'彼女は立ち止まった。空を見た。鞄を確認した。傘はなかった。',reading:'かのじょはたちどまった。そらをみた。かばんをかくにんした。かさはなかった。',translation:'She stopped. Looked at the sky. Checked her bag. No umbrella.'},
+    {text:'彼は黙って傘を開いた。それだけだった。',reading:'かれはだまってかさをひらいた。それだけだった。',translation:'He quietly opened his umbrella. That was all.'},
+    {text:'少し歩くのを遅くした。彼女も合わせた。',reading:'すこしあるくのをおそくした。かのじょもあわせた。',translation:'He slowed his pace slightly. She matched it.'},
+    {text:'自然に、二人の肩が同じ傘の下に収まっていた。',reading:'しぜんに、ふたりのかたがおなじかさのしたにおさまっていた。',translation:'Naturally, both their shoulders fit under the same umbrella.'},
+    {text:'何も言わなかった。雨の音だけがした。',reading:'なにもいわなかった。あめのおとだけがした。',translation:'They said nothing. Only the sound of rain.'},
+    {text:'彼女が「ありがとう」と言ったのは、別れ際だった。',reading:'かのじょが「ありがとう」といったのは、わかれぎわだった。',translation:'She said "thank you" at the moment they parted ways.'},
+  ],
+  questions:[
+    {q:'What did he do when it started raining?',choices:['He ran','He gave her his umbrella','He opened his umbrella and slowed down','He asked if she had one'],answer:'He opened his umbrella and slowed down'},
+    {q:'What was the only sound?',choices:['Their footsteps','Her voice','The rain','Traffic'],answer:'The rain'},
+    {q:'When did she thank him?',choices:['Right away','Under the umbrella','At the moment they parted','She didn\'t'],answer:'At the moment they parted'},
+  ]
+},
+
+{
+  id:'jp_romance_03',
+  lang:'japanese',
+  title:'Ninety-Nine Times',
+  titleNative:'九十九回',
+  genres:['romance','comedy'],
+  difficulty:'N4',
+  blurb:'He had confessed every spring for three years running. She\'d said no every time. This spring he showed up and said nothing. She was the one who brought it up.',
+  lines:[
+    {text:'桜が咲くたびに、田中は告白した。去年も、一昨年も。',reading:'さくらがさくたびに、たなかはこくはくした。きょねんも、おととしも。',translation:'Every time the cherry blossoms bloomed, Tanaka confessed. Last year. The year before.'},
+    {text:'返事はいつも同じだった。断りの言葉だけが変わった。',reading:'へんじはいつもおなじだった。ことわりのことばだけがかわった。',translation:'The answer was always the same. Only the phrasing of the rejection changed.'},
+    {text:'今年の春、田中は何も言わなかった。',reading:'ことしのはる、たなかはなにもいわなかった。',translation:'This spring, Tanaka said nothing.'},
+    {text:'桜の木の下で、ただ黙って立っていた。',reading:'さくらのきのしたで、ただだまってたっていた。',translation:'He just stood quietly under the cherry tree.'},
+    {text:'「今年は言わないの？」と彼女が聞いた。',reading:'「ことしはいわないの？」とかのじょがきいた。',translation:'"You\'re not saying it this year?" she asked.'},
+    {text:'「もういいかなと思って」',reading:'「もういいかなとおもって」',translation:'"I figured it was probably fine to stop."'},
+    {text:'「それは困る」と彼女は言った。桜が一枚、肩に落ちた。',reading:'「それはこまる」とかのじょはいった。さくらがいちまい、かたにおちた。',translation:'"That\'s a problem," she said. A single petal fell on her shoulder.'},
+  ],
+  questions:[
+    {q:'What did Tanaka do every spring?',choices:['Gave her flowers','Confessed his feelings','Wrote her a letter','Asked her to walk with him'],answer:'Confessed his feelings'},
+    {q:'What did he do differently this spring?',choices:['He confessed more boldly','He brought her something','He said nothing','He avoided her'],answer:'He said nothing'},
+    {q:'What did she say when he explained?',choices:['"Finally"','"Good"','"That\'s a problem"','"I knew it"'],answer:'"That\'s a problem"'},
   ]
 },
 
@@ -61,68 +202,44 @@ const STORIES = [
   titleNative:'写真',
   genres:['horror','mystery'],
   difficulty:'N4',
-  blurb:'A woman finds an old photograph of herself in a house she has never visited. The date on the back is tomorrow.',
+  blurb:'She moved into the apartment on a Tuesday. Found the box on Wednesday. On Thursday she couldn\'t stop looking at the photograph.',
   lines:[
-    {text:'引っ越した日の夜、押し入れの奥に古い箱を見つけた。',reading:'ひっこしたひのよる、おしいれのおくにふるいはこをみつけた。',translation:'On the night of my move, I found an old box at the back of the closet.'},
-    {text:'箱の中には一枚の写真だけが入っていた。',reading:'はこのなかにはいちまいのしゃしんだけがはいっていた。',translation:'Inside the box was only a single photograph.'},
-    {text:'写真に写っていたのは、この部屋で眠る私の姿だった。',reading:'しゃしんにうつっていたのは、このへやでねむるわたしのすがただった。',translation:'What was in the photograph was the image of me sleeping in this very room.'},
-    {text:'今夜と同じ服を着ていた。',reading:'こんやとおなじふくをきていた。',translation:'I was wearing the same clothes as tonight.'},
-    {text:'震える手で裏返すと、日付が書いてあった。',reading:'ふるえるてでうらがえすと、ひづけがかいてあった。',translation:'When I flipped it over with trembling hands, a date was written there.'},
-    {text:'明日の日付だった。',reading:'あしたのひづけだった。',translation:'It was tomorrow\'s date.'},
-    {text:'そのとき、押し入れの中から音がした。',reading:'そのとき、おしいれのなかからおとがした。',translation:'At that moment, a sound came from inside the closet.'},
+    {text:'押し入れの奥に、古い菓子箱があった。',reading:'おしいれのおくに、ふるいかしばこがあった。',translation:'At the back of the closet was an old candy box.'},
+    {text:'中に写真が一枚だけ入っていた。',reading:'なかにしゃしんがいちまいだけはいっていた。',translation:'Inside was only one photograph.'},
+    {text:'この部屋の写真だった。今と同じ壁紙、同じ窓。',reading:'このへやのしゃしんだった。いまとおなじかべがみ、おなじまど。',translation:'It was a photo of this room. Same wallpaper, same window.'},
+    {text:'布団の上で眠る人が写っていた。今夜と同じ服を着ていた。',reading:'ふとんのうえでねむるひとがうつっていた。こんやとおなじふくをきていた。',translation:'Someone was sleeping on the futon. Wearing the same clothes as tonight.'},
+    {text:'裏を返した。日付があった。',reading:'うらをかえした。ひづけがあった。',translation:'She turned it over. There was a date.'},
+    {text:'明日の日付だった。',reading:'あしたのひづけだった。',translation:'Tomorrow\'s date.'},
+    {text:'そのとき押し入れの中から、何かが動く音がした。',reading:'そのときおしいれのなかから、なにかがうごくおとがした。',translation:'At that moment, from inside the closet, came the sound of something moving.'},
   ],
   questions:[
-    {q:'Where did she find the box?',choices:['Under the bed','In the closet','In the kitchen','On the roof'],answer:'In the closet'},
-    {q:'What was in the photograph?',choices:['An old woman','A monster','Herself sleeping','An empty room'],answer:'Herself sleeping'},
-    {q:'What was written on the back of the photo?',choices:['Her name','A phone number','Tomorrow\'s date','The word "help"'],answer:'Tomorrow\'s date'},
+    {q:'What was in the box?',choices:['Old letters','Money','One photograph','Keys'],answer:'One photograph'},
+    {q:'What was strange about the photo?',choices:['It showed a ghost','It showed her sleeping in the same clothes as tonight','It had no people in it','It was very old'],answer:'It showed her sleeping in the same clothes as tonight'},
+    {q:'What was the date on the back?',choices:['The day she moved in','Yesterday','Today','Tomorrow'],answer:'Tomorrow'},
   ]
 },
 
 {
-  id:'jp_school_01',
+  id:'jp_horror_02',
   lang:'japanese',
-  title:'After the Bell',
-  titleNative:'放課後',
-  genres:['school','slice of life','romance'],
-  difficulty:'N5',
-  blurb:'She stays in the classroom every day after school. He pretends he forgot something just to talk to her.',
+  title:'The Mirror',
+  titleNative:'鏡',
+  genres:['horror','mystery'],
+  difficulty:'N4',
+  blurb:'It started with a half-second delay. She told herself it was her eyes. Then two seconds. Then the reflection smiled when she wasn\'t.',
   lines:[
-    {text:'佐藤は毎日、放課後も教室に残っている。',reading:'さとうはまいにち、ほうかごもきょうしつにのこっている。',translation:'Sato stays in the classroom every day after school too.'},
-    {text:'窓際の席で、いつも本を読んでいる。',reading:'まどぎわのせきで、いつもほんをよんでいる。',translation:'She always reads a book in the seat by the window.'},
-    {text:'僕は今日も教室に戻ってきた。理由は何もない。',reading:'ぼくはきょうもきょうしつにもどってきた。りゆうはなにもない。',translation:'I came back to the classroom today too. No reason in particular.'},
-    {text:'「また忘れ物？」と彼女は本から目を上げずに言った。',reading:'「またわすれもの？」とかのじょはほんからめをあげずにいった。',translation:'"Forgot something again?" she said without looking up from her book.'},
-    {text:'「そう」と答えながら、僕は自分の席についた。',reading:'「そう」とこたえながら、ぼくはじぶんのせきについた。',translation:'"Yeah," I answered, and sat down at my own seat.'},
-    {text:'しばらく静かだった。それが好きだった。',reading:'しばらくしずかだった。それがすきだった。',translation:'It was quiet for a while. I liked that.'},
-    {text:'「本当は何も忘れてないでしょ」と彼女が小さく笑った。',reading:'「ほんとうはなにもわすれてないでしょ」とかのじょがちいさくわらった。',translation:'"You didn\'t really forget anything, did you," she said with a small smile.'},
+    {text:'最初は気のせいだと思った。鏡の動きが少し遅い気がした。',reading:'さいしょはきのせいだとおもった。かがみのうごきがすこしおそいきがした。',translation:'At first I thought it was my imagination. The mirror seemed a little slow.'},
+    {text:'目の疲れだと思って、眠った。',reading:'めのつかれだとおもって、ねむった。',translation:'I thought it was eye fatigue and went to sleep.'},
+    {text:'翌朝も同じだった。一秒。確実に一秒、遅かった。',reading:'よくあさもおなじだった。いちびょう。かくじつにいちびょう、おそかった。',translation:'The next morning it was the same. One second. Definitely one second slow.'},
+    {text:'水曜日には二秒になった。',reading:'すいようびにはにびょうになった。',translation:'By Wednesday it was two seconds.'},
+    {text:'木曜日の朝、歯を磨きながら鏡を見た。反射の口が笑った。私は笑っていなかった。',reading:'もくようびのあさ、はをみがきながらかがみをみた。はんしゃのくちがわらった。わたしはわらっていなかった。',translation:'Thursday morning, brushing my teeth, I looked in the mirror. The reflection\'s mouth smiled. I wasn\'t smiling.'},
+    {text:'壊そうと手を伸ばした。反射の手が先に動いた。',reading:'こわそうとてをのばした。はんしゃのてがさきにうごいた。',translation:'I reached out to break it. The reflection\'s hand moved first.'},
+    {text:'口が動いた。声はなかったが、読めた。「来て」',reading:'くちがうごいた。こえはなかったが、よめた。「きて」',translation:'The mouth moved. No sound, but I could read it. "Come."'},
   ],
   questions:[
-    {q:'What does Sato do after school?',choices:['Goes home immediately','Plays sports','Stays and reads','Talks with friends'],answer:'Stays and reads'},
-    {q:'Where does she sit?',choices:['By the door','By the window','In the back','At the front'],answer:'By the window'},
-    {q:'Does she know he has no real reason to return?',choices:['No, she believes him','Yes, she figures it out','The story doesn\'t say','She asks him directly'],answer:'Yes, she figures it out'},
-  ]
-},
-
-{
-  id:'jp_fantasy_01',
-  lang:'japanese',
-  title:'The Last Gate',
-  titleNative:'最後の門',
-  genres:['fantasy','action','adventure'],
-  difficulty:'N3',
-  blurb:'The kingdom has one gate left. If it falls, everything behind it falls too. A lone soldier is told to hold it until dawn.',
-  lines:[
-    {text:'「夜明けまで持ちこたえろ。それだけでいい。」',reading:'「よあけまでもちこたえろ。それだけでいい。」',translation:'"Hold out until dawn. That\'s all you need to do."'},
-    {text:'将軍はそう言い残して、馬で去った。',reading:'しょうぐんはそういいのこして、うまでさった。',translation:'The general said that and left on horseback.'},
-    {text:'門の前に残ったのは私一人だった。',reading:'もんのまえにのこったのはわたしひとりだった。',translation:'Left in front of the gate was only me.'},
-    {text:'向こうから足音が聞こえた。一人ではなかった。',reading:'むこうからあしおとがきこえた。ひとりではなかった。',translation:'Footsteps could be heard from the other side. It wasn\'t just one.'},
-    {text:'剣を握りしめた。手が震えていたが、それでよかった。',reading:'けんをにぎりしめた。てがふるえていたが、それでよかった。',translation:'I gripped my sword. My hands were shaking, but that was fine.'},
-    {text:'震えているということは、まだ生きているということだ。',reading:'ふるえているということは、まだいきているということだ。',translation:'The fact that I\'m shaking means I\'m still alive.'},
-    {text:'夜明けまで、私は門の前に立ち続けた。',reading:'よあけまで、わたしはもんのまえにたちつづけた。',translation:'Until dawn, I kept standing in front of the gate.'},
-  ],
-  questions:[
-    {q:'What was the soldier\'s only task?',choices:['Kill the enemy general','Retreat safely','Hold the gate until dawn','Signal for help'],answer:'Hold the gate until dawn'},
-    {q:'How many soldiers were left at the gate?',choices:['A hundred','Ten','Three','One'],answer:'One'},
-    {q:'Why did the soldier think shaking hands were fine?',choices:['It kept him warm','It meant he was strong','It meant he was still alive','It scared the enemy'],answer:'It meant he was still alive'},
+    {q:'How did it start?',choices:['The reflection smiled','The reflection moved on its own','The mirror seemed a little slow','The mirror cracked'],answer:'The mirror seemed a little slow'},
+    {q:'What happened on Thursday morning?',choices:['The reflection disappeared','The reflection smiled when she wasn\'t','The mirror broke','The reflection waved'],answer:'The reflection smiled when she wasn\'t'},
+    {q:'What did the reflection\'s mouth say?',choices:['"Help"','"Stop"','"Come"','"Run"'],answer:'"Come"'},
   ]
 },
 
@@ -133,20 +250,140 @@ const STORIES = [
   titleNative:'404号室',
   genres:['mystery','horror'],
   difficulty:'N4',
-  blurb:'Every hotel has a room 404. Nobody books it. The staff say it doesn\'t exist. But the light is always on.',
+  blurb:'The staff said the room didn\'t exist. He saw the number with his own eyes.',
   lines:[
-    {text:'フロントの女性は「そのお部屋はございません」と笑顔で言った。',reading:'フロントのじょせいは「そのおへやはございません」とえがおでいった。',translation:'The woman at the front desk said with a smile, "That room does not exist."'},
-    {text:'しかし廊下の突き当たりに、確かに404という番号があった。',reading:'しかしろうかのつきあたりに、たしかに404というばんごうがあった。',translation:'But at the end of the hallway, there was certainly a number that said 404.'},
-    {text:'ドアの下から光が漏れていた。',reading:'ドアのしたからひかりがもれていた。',translation:'Light was leaking from under the door.'},
-    {text:'ノックしてみた。返事はなかった。でも誰かがいる気がした。',reading:'ノックしてみた。へんじはなかった。でもだれかがいるきがした。',translation:'I tried knocking. There was no answer. But I felt like someone was there.'},
-    {text:'翌朝、フロントに「昨夜の404号室の客は？」と聞いた。',reading:'よくあさ、フロントに「さくやの404ごうしつのきゃくは？」ときいた。',translation:'The next morning I asked the front desk, "Who was the guest in room 404 last night?"'},
-    {text:'女性の顔から笑顔が消えた。',reading:'じょせいのかおからえがおがきえた。',translation:'The smile disappeared from the woman\'s face.'},
-    {text:'「その部屋には、十年間ずっと誰も入っていません。」',reading:'「そのへやには、じゅうねんかんずっとだれもはいっていません。」',translation:'"No one has entered that room for ten years."'},
+    {text:'「404号室はございません」',reading:'「よんまるよんごうしつはございません」',translation:'"Room 404 does not exist."'},
+    {text:'フロントの女性は笑顔だった。自然な笑顔だった。それが怖かった。',reading:'フロントのじょせいはえがおだった。しぜんなえがおだった。それがこわかった。',translation:'The woman at the front desk was smiling. A natural smile. That was what was frightening.'},
+    {text:'だが廊下の突き当たりに、確かに404という数字があった。',reading:'だがろうかのつきあたりに、たしかに404というすうじがあった。',translation:'But at the end of the hallway, there was definitely the number 404.'},
+    {text:'ドアの下から光が漏れていた。',reading:'ドアのしたからひかりがもれていた。',translation:'Light leaked from under the door.'},
+    {text:'ノックした。返事はなかった。でも、中に何かいる感じがした。',reading:'ノックした。へんじはなかった。でも、なかになにかいるかんじがした。',translation:'I knocked. No answer. But there was a feeling that something was inside.'},
+    {text:'翌朝、「昨夜あの部屋に泊まった客は」と聞いた。',reading:'よくあさ、「さくやあのへやにとまったきゃくは」ときいた。',translation:'The next morning I asked, "The guest who stayed in that room last night —"'},
+    {text:'女性の笑顔が、初めて消えた。「あの部屋には、十年間誰も入っていません」',reading:'じょせいのえがおが、はじめてきえた。「あのへやには、じゅうねんかんだれもはいっていません」',translation:'For the first time, the woman\'s smile disappeared. "No one has entered that room for ten years."'},
   ],
   questions:[
-    {q:'What did the front desk say about room 404?',choices:['It was fully booked','It was being cleaned','It didn\'t exist','It was very expensive'],answer:'It didn\'t exist'},
-    {q:'What was strange about the room?',choices:['It was very loud','The light was on','The door was open','It smelled strange'],answer:'The light was on'},
-    {q:'How long has no one entered the room?',choices:['One year','Five years','Ten years','Never specified'],answer:'Ten years'},
+    {q:'What did the front desk say about room 404?',choices:['It was occupied','It was being cleaned','It didn\'t exist','It was the most expensive'],answer:'It didn\'t exist'},
+    {q:'What scared him about the receptionist?',choices:['She was too tall','Her smile was too natural','She spoke strangely','She looked like someone he knew'],answer:'Her smile was too natural'},
+    {q:'For how long has no one entered room 404?',choices:['One year','Five years','Ten years','Thirty years'],answer:'Ten years'},
+  ]
+},
+
+{
+  id:'jp_mystery_02',
+  lang:'japanese',
+  title:'The Detective Who Never Asks',
+  titleNative:'聞かない探偵',
+  genres:['mystery','action'],
+  difficulty:'N3',
+  blurb:'Detective Kurosawa doesn\'t ask questions. She watches. Tonight she watches a man who says his brother fell.',
+  lines:[
+    {text:'黒沢は証人に質問をしない。それが彼女のやり方だ。',reading:'くろさわはしょうにんにしつもんをしない。それがかのじょのやりかただ。',translation:'Kurosawa doesn\'t ask witnesses questions. That is her method.'},
+    {text:'人は質問されると答えを作る。黙って見られると、本当のことが出る。',reading:'ひとはしつもんされるとこたえをつくる。だまってみられると、ほんとうのことがでる。',translation:'When people are questioned, they construct answers. When watched in silence, the truth comes out.'},
+    {text:'男は三十分間で、左の親指を六回こすった。',reading:'おとこはさんじゅっぷんかんで、ひだりのおやゆびをろっかいこすった。',translation:'In thirty minutes, the man rubbed his left thumb six times.'},
+    {text:'目線は三回、右上に逃げた。記憶を作るときの動きだ。',reading:'めせんはさんかい、みぎうえにげた。きおくをつくるときのうごきだ。',translation:'His gaze drifted upper-right three times. The movement of someone constructing a memory.'},
+    {text:'「兄は自分で落ちました」と男は言った。',reading:'「あにはじぶんでおちました」とおとこはいった。',translation:'"My brother fell on his own," the man said.'},
+    {text:'黒沢は初めて口を開いた。',reading:'くろさわははじめてくちをひらいた。',translation:'For the first time, Kurosawa opened her mouth.'},
+    {text:'「落ちる前に、何か言いましたか？お兄さんは」',reading:'「おちるまえに、なにかいいましたか？おにいさんは」',translation:'"Before he fell — did your brother say anything?"'},
+  ],
+  questions:[
+    {q:'Why doesn\'t Kurosawa ask questions?',choices:['She is shy','When watched in silence the truth comes out','She doesn\'t speak the language','She already knows the answers'],answer:'When watched in silence the truth comes out'},
+    {q:'What does the man\'s eye movement suggest?',choices:['He is bored','He is nervous','He is constructing a memory','He is looking for an exit'],answer:'He is constructing a memory'},
+    {q:'What does Kurosawa ask at the end?',choices:['Where the brother fell','Whether he pushed him','What the brother said before falling','When it happened'],answer:'What the brother said before falling'},
+  ]
+},
+
+{
+  id:'jp_adventure_01',
+  lang:'japanese',
+  title:'The Map',
+  titleNative:'地図',
+  genres:['adventure','fantasy'],
+  difficulty:'N4',
+  blurb:'The map changes every morning. Not dramatically. Just a new path here, a name that wasn\'t there yesterday. Maria was the first cartographer to follow it.',
+  lines:[
+    {text:'地図は朝起きるたびに変わっていた。',reading:'ちずはあさおきるたびにかわっていた。',translation:'The map changed every time I woke up in the morning.'},
+    {text:'新しい道が増え、昨日あった道が消えた。',reading:'あたらしいみちがふえ、きのうあったみちがきえた。',translation:'New paths appeared, paths from yesterday vanished.'},
+    {text:'地図師の組合は「不可能だ、偽物だ」と言った。',reading:'ちずしのくみあいは「ふかのうだ、にせものだ」といった。',translation:'The cartographers\' guild said "impossible, it\'s a fake."'},
+    {text:'マリアは黙って荷物をまとめた。',reading:'マリアはだまってにもつをまとめた。',translation:'Maria quietly packed her bags.'},
+    {text:'地図の示す道を三日間歩いた。靴が壊れた。水が尽きた。',reading:'ちずのしめすみちをみっかかんあるいた。くつがこわれた。みずがつきた。',translation:'She walked the path the map showed for three days. Her shoes broke. Her water ran out.'},
+    {text:'四日目の朝、地図に載っていない山が見えた。',reading:'よっかめのあさ、ちずにのっていないやまがみえた。',translation:'On the morning of the fourth day, a mountain not on any map came into view.'},
+    {text:'地図の余白に、新しい文字が現れていた。「マリアの山」',reading:'ちずのよはくに、あたらしいもじがあらわれていた。「マリアのやま」',translation:'In the margin of the map, new text had appeared. "Maria\'s Mountain."'},
+  ],
+  questions:[
+    {q:'What did the cartographers\' guild say about the map?',choices:['They wanted to buy it','They said follow it','They said it was impossible and fake','They said it was dangerous'],answer:'They said it was impossible and fake'},
+    {q:'What happened to Maria on the journey?',choices:['She got lost','Her shoes broke and her water ran out','She turned back','She found a village'],answer:'Her shoes broke and her water ran out'},
+    {q:'What appeared in the map\'s margin?',choices:['A warning','The name "Maria\'s Mountain"','A new path','Her name and a date'],answer:'The name "Maria\'s Mountain"'},
+  ]
+},
+
+{
+  id:'jp_fantasy_01',
+  lang:'japanese',
+  title:'Until Dawn',
+  titleNative:'夜明けまで',
+  genres:['fantasy','action','adventure'],
+  difficulty:'N3',
+  blurb:'The general gave him one order: hold the gate until dawn. Then the general left. There was no one else.',
+  lines:[
+    {text:'「夜明けまで持ちこたえろ」将軍はそれだけ言って、馬で去った。',reading:'「よあけまでもちこたえろ」しょうぐんはそれだけいって、うまでさった。',translation:'"Hold out until dawn." The general said only that, and left on horseback.'},
+    {text:'門の前に残ったのは私だけだった。',reading:'もんのまえにのこったのはわたしだけだった。',translation:'Left in front of the gate was only me.'},
+    {text:'向こう側から音が聞こえた。足音ではなかった。もっと重いものの音だった。',reading:'むこうがわからおとがきこえた。あしおとではなかった。もっとおもいもののおとだった。',translation:'Sound came from the other side. Not footsteps. Something heavier.'},
+    {text:'剣を握った。手が震えていた。',reading:'けんをにぎった。てがふるえていた。',translation:'I gripped my sword. My hands were shaking.'},
+    {text:'震えているのは怖いからではなく、寒いからだと思うことにした。',reading:'ふるえているのはこわいからではなく、さむいからだとおもうことにした。',translation:'I decided to think it was the cold, not fear, that made me shake.'},
+    {text:'夜が長かった。長すぎた。',reading:'よるがながかった。ながすぎた。',translation:'The night was long. Too long.'},
+    {text:'夜明けが来たとき、私はまだ立っていた。',reading:'よあけがきたとき、わたしはまだたっていた。',translation:'When dawn came, I was still standing.'},
+  ],
+  questions:[
+    {q:'What was his only order?',choices:['Retreat at midnight','Hold the gate until dawn','Signal for backup','Fight until he couldn\'t'],answer:'Hold the gate until dawn'},
+    {q:'What did he decide about his shaking hands?',choices:['That he was afraid','That he was getting stronger','That it was the cold, not fear','That he needed to stop'],answer:'That it was the cold, not fear'},
+    {q:'What happened when dawn came?',choices:['He had fallen','Help arrived','He was still standing','The gate had broken'],answer:'He was still standing'},
+  ]
+},
+
+{
+  id:'jp_comedy_01',
+  lang:'japanese',
+  title:'The God Who Got Lost',
+  titleNative:'迷子の神様',
+  genres:['comedy','fantasy','slice of life'],
+  difficulty:'N4',
+  blurb:'He descended to earth to fix a small miracle — a sparrow that was supposed to land on the wrong branch. He got off at the wrong station. Then the wrong platform. The sparrow found the right branch on its own.',
+  lines:[
+    {text:'神様が地上に降りてきたのは、小さなミスを直すためだった。',reading:'かみさまがちじょうにおりてきたのは、ちいさなミスをなおすためだった。',translation:'The god had come down to earth to fix a small mistake.'},
+    {text:'しかし渋谷で乗り換えを間違え、気づいたら埼玉にいた。',reading:'しかしぶやでのりかえをまちがえ、きづいたらさいたまにいた。',translation:'But he took the wrong transfer at Shibuya and found himself in Saitama.'},
+    {text:'全知全能のはずだったが、路線図だけは例外だった。',reading:'ぜんちぜんのうのはずだったが、ろせんずだけはれいがいだった。',translation:'He was supposed to be all-knowing, but train maps were apparently an exception.'},
+    {text:'コンビニで女子高生に声をかけた。「渋谷にはどう行けば」',reading:'コンビニでじょしこうせいにこえをかけた。「しぶやにはどうすれば」',translation:'He approached a high school girl in a convenience store. "How do I get to Shibuya."'},
+    {text:'彼女は上から下まで見た。白い服、長い髪、光る目。「コスプレ？」',reading:'かのじょはうえからしたまでみた。しろいふく、ながいかみ、ひかるめ。「コスプレ？」',translation:'She looked him up and down. White robes, long hair, luminous eyes. "Costume party?"'},
+    {text:'「違います」「じゃあなんで光ってるの」',reading:'「ちがいます」「じゃあなんでひかってるの」',translation:'"No." "Then why are you glowing?"'},
+    {text:'神様は三千年生きて初めて、答えに困った。',reading:'かみさまはさんぜんねんいきてはじめて、こたえにこまった。',translation:'For the first time in three thousand years, the god had no answer.'},
+  ],
+  questions:[
+    {q:'Why did the god come to earth?',choices:['To find a hero','To test humanity','To fix a small mistake','To take a vacation'],answer:'To fix a small mistake'},
+    {q:'Where did he end up instead of Shibuya?',choices:['Shinjuku','Osaka','Saitama','Yokohama'],answer:'Saitama'},
+    {q:'What was he unable to understand?',choices:['Human speech','Modern technology','Train maps','Japanese customs'],answer:'Train maps'},
+  ]
+},
+
+{
+  id:'jp_school_01',
+  lang:'japanese',
+  title:'After the Bell',
+  titleNative:'放課後',
+  genres:['school','slice of life','romance'],
+  difficulty:'N5',
+  blurb:'He forgot something in the classroom every single day for two months. He never forgot anything.',
+  lines:[
+    {text:'放課後の教室に、佐藤はいつもいた。',reading:'ほうかごのきょうしつに、さとうはいつもいた。',translation:'Sato was always in the classroom after school.'},
+    {text:'窓際の席で本を読んでいた。いつも同じ席だった。',reading:'まどぎわのせきでほんをよんでいた。いつもおなじせきだった。',translation:'She read a book at the seat by the window. Always the same seat.'},
+    {text:'二ヶ月間、毎日何かを忘れた。消しゴム、プリント、体育着。',reading:'ふたかげつかん、まいにちなにかをわすれた。けしゴム、プリント、たいいくぎ。',translation:'For two months, every day he forgot something. An eraser, a handout, gym clothes.'},
+    {text:'今日は何も忘れていなかった。それでも戻ってきた。',reading:'きょうはなにもわすれていなかった。それでももどってきた。',translation:'Today he hadn\'t forgotten anything. He came back anyway.'},
+    {text:'「また忘れ物？」本から目を上げずに彼女が言った。',reading:'「またわすれもの？」ほんからめをあげずにかのじょがいった。',translation:'"Forgot something again?" she said without looking up from her book.'},
+    {text:'「そう」と答えて、自分の席に座った。',reading:'「そう」とこたえて、じぶんのせきにすわった。',translation:'"Yeah," he answered, and sat down at his own seat.'},
+    {text:'しばらくして、「本当は何も忘れてないでしょ」と彼女が小さく笑った。',reading:'しばらくして、「ほんとうはなにもわすれてないでしょ」とかのじょがちいさくわらった。',translation:'After a while, "you didn\'t actually forget anything, did you," she said with a small smile.'},
+  ],
+  questions:[
+    {q:'What does Sato do every day after school?',choices:['Practices sports','Reads a book by the window','Helps clean the classroom','Waits for friends'],answer:'Reads a book by the window'},
+    {q:'How long had he been "forgetting" things?',choices:['One week','One month','Two months','Three months'],answer:'Two months'},
+    {q:'What does she figure out?',choices:['That he likes her book','That he wants her seat','That he didn\'t actually forget anything','That he has been watching her'],answer:'That he didn\'t actually forget anything'},
   ]
 },
 
@@ -159,20 +396,44 @@ const STORIES = [
   titleNative:'마지막 기차',
   genres:['romance','slice of life'],
   difficulty:'TOPIK 2',
-  blurb:'Two strangers miss the last train. The station is empty. They have nothing to do but talk.',
+  blurb:'Both of them missed the last train. The station closed at midnight. They had five hours and nothing in common except the bench they were sitting on.',
   lines:[
-    {text:'밤 11시 58분. 우리 둘 다 기차를 놓쳤다.',reading:'bam yeolhansi siphalpun. uri dul da gichal nohtchyeotta.',translation:'11:58 PM. We both missed the train.'},
-    {text:'역은 우리 둘만 남았다.',reading:'yeogeun uri dulmman namatda.',translation:'Only the two of us were left at the station.'},
-    {text:'그녀가 먼저 말했다. "다음 기차는 몇 시예요?"',reading:'geunyeoga meonjeo malhaetda. "daeum gichaneu myeot siyeyo?"',translation:'She spoke first. "What time is the next train?"'},
-    {text:'"새벽 5시요." 그녀는 웃지 않았다. 나도.',reading:'"saebyeok dasiosiyyo." geunyeoneun utji anatda. nado.',translation:'"5 AM." She didn\'t smile. Neither did I.'},
-    {text:'우리는 벤치에 나란히 앉았다.',reading:'urineun benchie naranhi anjatda.',translation:'We sat side by side on the bench.'},
-    {text:'처음에는 아무 말도 하지 않았다. 그런데 이상하게 편했다.',reading:'cheoeume aneun amu maldo haji anatda. geureonde isanghage pyeonhaetda.',translation:'At first we said nothing. But strangely it felt comfortable.'},
+    {text:'11시 58분이었다. 우리 둘 다 기차를 놓쳤다.',reading:'yeolhansi siphalpunietta. uri dul da gichal nohchyeotda.',translation:'It was 11:58. We both missed the train.'},
+    {text:'역무원이 셔터를 내리고 돌아갔다.',reading:'yeongmuoni syeoteoreul naerigo doragatta.',translation:'The station worker pulled down the shutter and left.'},
+    {text:'우리만 남았다. 빈 역, 빈 벤치, 우리 둘.',reading:'urimman namatda. bin yeok, bin benchi, uri dul.',translation:'Only us remained. An empty station, an empty bench, the two of us.'},
+    {text:'"다음 기차는 새벽 5시예요." 그녀가 먼저 말했다.',reading:'"daeum gichaneuon saebyeok dasiosiyeyo." geunyeoga meonjeo malhaetda.',translation:'"Next train is 5 AM." She spoke first.'},
+    {text:'"알아요." 나도 알고 있었다.',reading:'"arayo." nado algo isseotta.',translation:'"I know." I already knew.'},
+    {text:'처음에는 아무 말도 안 했다. 그런데 이상하게 편했다.',reading:'cheoeume aneun amu maldo an haetda. geureonde isanghage pyeonhaetda.',translation:'At first neither of us said anything. Strangely, it felt comfortable.'},
     {text:'새벽이 될 때까지 우리는 이야기를 멈추지 않았다.',reading:'saebyeogi doel ttaekkaji urineun iyagireul meomchuji anatda.',translation:'Until dawn, we didn\'t stop talking.'},
   ],
   questions:[
-    {q:'What time did they miss the train?',choices:['10 PM','11:58 PM','midnight','1 AM'],answer:'11:58 PM'},
-    {q:'When is the next train?',choices:['1 AM','3 AM','5 AM','6 AM'],answer:'5 AM'},
-    {q:'How did the silence feel?',choices:['Awkward','Scary','Comfortable','Boring'],answer:'Comfortable'},
+    {q:'What time did they miss the train?',choices:['11:30','11:58','Midnight','1 AM'],answer:'11:58'},
+    {q:'When is the next train?',choices:['2 AM','3 AM','5 AM','6 AM'],answer:'5 AM'},
+    {q:'How did the silence feel?',choices:['Awkward','Uncomfortable','Strangely comfortable','Boring'],answer:'Strangely comfortable'},
+  ]
+},
+
+{
+  id:'ko_romance_02',
+  lang:'korean',
+  title:'Voice Memo',
+  titleNative:'음성 메모',
+  genres:['romance','drama'],
+  difficulty:'TOPIK 2',
+  blurb:'Old phone. Three-year-old voice memo. Her own voice, crying. She listened to it four times before she could put the phone down.',
+  lines:[
+    {text:'서랍 안에서 오래된 폰이 나왔다.',reading:'seorarp aneseo oraedoen poni nawatda.',translation:'An old phone came out from inside the drawer.'},
+    {text:'충전해서 켰더니 음성 메모가 하나 있었다.',reading:'chungjeonhaeseo kyeottdeoni eumsong memoga hana isseotda.',translation:'I charged it and turned it on. There was one voice memo.'},
+    {text:'3년 전 날짜. 내 목소리. 울고 있었다.',reading:'samnyeon jeon nalja. nae mokssori. ulgo isseotda.',translation:'Three years ago. My voice. Crying.'},
+    {text:'"미래의 나, 제발 행복해."',reading:'"miraeeui na, jebal haengbokhae."',translation:'"Future me, please be happy."'},
+    {text:'네 번 들었다. 다섯 번은 못 들었다.',reading:'ne beon deureotda. daseot beonemun mot deureotda.',translation:'I listened four times. I couldn\'t do a fifth.'},
+    {text:'창밖을 보다가 한참 그러고 있었다.',reading:'changbakkeul bodaga hancham geurogo isseotda.',translation:'I stared out the window for a long time.'},
+    {text:'행복한지는 모르겠다. 그래도 살고 있다.',reading:'haengbokanji neun moreugettda. geraedo salgo itda.',translation:'I don\'t know if I\'m happy. But I\'m living.'},
+  ],
+  questions:[
+    {q:'Where did she find the old phone?',choices:['Under the bed','In a box','In a drawer','In a bag'],answer:'In a drawer'},
+    {q:'How many times did she listen to the memo?',choices:['Once','Twice','Four times','Five times'],answer:'Four times'},
+    {q:'What does she say at the end?',choices:['She is happy','She is sad','She doesn\'t know if she\'s happy but she\'s living','She wants to change the past'],answer:'She doesn\'t know if she\'s happy but she\'s living'},
   ]
 },
 
@@ -181,46 +442,118 @@ const STORIES = [
   lang:'korean',
   title:'The Caller',
   titleNative:'전화',
-  genres:['thriller','mystery','action'],
+  genres:['thriller','mystery'],
   difficulty:'TOPIK 3-4',
-  blurb:'She answers a wrong number. The caller knows her name. Her address. And what she had for dinner.',
+  blurb:'Unknown number. She almost didn\'t answer. She wishes she hadn\'t.',
   lines:[
-    {text:'모르는 번호에서 전화가 왔다.',reading:'moreuneun beonhoeeseo jeonhwaga watda.',translation:'A call came from an unknown number.'},
-    {text:'"여보세요?" 잠깐의 침묵이 있었다.',reading:'"yeoboseyo?" jamkkanui chimmughi isseotda.',translation:'"Hello?" There was a brief silence.'},
-    {text:'"김지수씨, 맞죠?"',reading:'"gimjisuski, matjyo?"',translation:'"You\'re Kim Jisoo, right?"'},
-    {text:'나는 전화를 끊으려 했다. 그런데 목소리가 계속 말했다.',reading:'naneun jeonhwaleul kkeuneuryeo haetda. geureonde moksoriga gyesok malhaetda.',translation:'I tried to hang up. But the voice kept talking.'},
-    {text:'"오늘 저녁에 혼자 밥 먹었죠? 된장찌개요."',reading:'"oneul jeonyeoge honja bap meokeotjyo? doenjangjjigaeyo."',translation:'"You ate alone for dinner tonight, right? Doenjang jjigae."'},
-    {text:'손이 떨렸다.',reading:'soni tteollyeotda.',translation:'My hands trembled.'},
-    {text:'"지금 창문 보지 마세요."',reading:'"jigeum changmun boji maseyo."',translation:'"Don\'t look at the window right now."'},
+    {text:'모르는 번호였다. 끊으려다가 받았다.',reading:'moreuneun beonhoyeotta. kkeuneuryeodaga batda.',translation:'Unknown number. I was about to hang up and then answered.'},
+    {text:'"여보세요?" 아무 소리도 없었다.',reading:'"yeoboseyo?" amu soriddo opseotda.',translation:'"Hello?" Nothing.'},
+    {text:'끊으려는 순간 목소리가 들렸다.',reading:'kkeuneuryeoneun sungan moksoriga deullyeotta.',translation:'The moment I was about to hang up, a voice came.'},
+    {text:'"김지수씨, 지금 혼자시죠?"',reading:'"gimjisuski, jigeum honjasijyo?"',translation:'"You\'re alone right now, aren\'t you, Kim Jisoo?"'},
+    {text:'몸이 굳었다.',reading:'momi guteotda.',translation:'My body went rigid.'},
+    {text:'"오늘 저녁에 된장찌개 드셨죠. 혼자서."',reading:'"oneul jeonyeoge doenjangjjigae deussyeotjyo. honjaseo."',translation:'"You had doenjang jjigae for dinner tonight. Alone."'},
+    {text:'"창문 보지 마세요. 지금."',reading:'"changmun boji maseyo. jigeum."',translation:'"Don\'t look at the window. Right now."'},
   ],
   questions:[
-    {q:'Who called her?',choices:['A friend','Her boss','An unknown caller','Her mother'],answer:'An unknown caller'},
-    {q:'What did she eat for dinner?',choices:['Bibimbap','Ramen','Doenjang jjigae','Fried rice'],answer:'Doenjang jjigae'},
-    {q:'What did the caller tell her not to do?',choices:['Answer the phone','Open the door','Look at the window','Turn on the lights'],answer:'Look at the window'},
+    {q:'Why did she answer?',choices:['She recognized the number','She was bored','She was about to hang up and then answered','She thought it was a friend'],answer:'She was about to hang up and then answered'},
+    {q:'What did the caller know about her dinner?',choices:['That she ate out','That she skipped dinner','That she had doenjang jjigae alone','That she cooked something'],answer:'That she had doenjang jjigae alone'},
+    {q:'What did the caller tell her not to do?',choices:['Answer the door','Turn on the light','Look at the window','Call the police'],answer:'Look at the window'},
+  ]
+},
+
+{
+  id:'ko_thriller_02',
+  lang:'korean',
+  title:'The Neighbor',
+  titleNative:'이웃',
+  genres:['thriller','mystery'],
+  difficulty:'TOPIK 2',
+  blurb:'Every night at 3 AM. Footsteps. Same hallway, same rhythm, same time. She\'d stopped checking who it was months ago. Tonight it stopped outside her door.',
+  lines:[
+    {text:'이사 온 날부터 시작됐다.',reading:'isa on nalbuteo sijakttwaetda.',translation:'It started from the day I moved in.'},
+    {text:'매일 밤 3시, 복도에서 발소리가 들렸다.',reading:'maeil bam sesī, bokdoeseo balsori ga deullyeotda.',translation:'Every night at 3 AM, I heard footsteps in the hallway.'},
+    {text:'같은 속도. 같은 박자. 처음엔 무서웠다. 이제는 그냥 그러려니 했다.',reading:'gateun sokdo. gateun bakja. cheoeumeun museowotda. ijeeneun geunyang geureolyeoni haetda.',translation:'Same speed. Same rhythm. At first it scared me. Now I just accepted it.'},
+    {text:'오늘 밤, 소리가 내 문 앞에서 멈췄다.',reading:'oneul bam, sorIGA nae mun apeseo meomchwotda.',translation:'Tonight, the sound stopped outside my door.'},
+    {text:'숨을 참았다. 귀를 기울였다.',reading:'sumeul chamatta. gwireul giuryeotda.',translation:'I held my breath. I strained to listen.'},
+    {text:'1분. 2분. 아무것도 없었다.',reading:'ilbun. ibun. amugetto opseotda.',translation:'One minute. Two minutes. Nothing.'},
+    {text:'그리고 문 밑으로 쪽지 한 장이 들어왔다.',reading:'geurigo mun mitero jjokji han jangi deureowatda.',translation:'Then a piece of paper slid under the door.'},
+  ],
+  questions:[
+    {q:'When do the footsteps always come?',choices:['Midnight','1 AM','3 AM','4 AM'],answer:'3 AM'},
+    {q:'How did her feeling about the footsteps change over time?',choices:['She got more scared','She called the police','She just accepted it','She moved rooms'],answer:'She just accepted it'},
+    {q:'What happened at the end?',choices:['Someone knocked','A note slid under the door','She opened the door','The footsteps went away'],answer:'A note slid under the door'},
   ]
 },
 
 {
   id:'ko_fantasy_01',
   lang:'korean',
-  title:'The Debt',
-  titleNative:'빚',
-  genres:['fantasy','action','adventure'],
+  title:'The Last Memory Keeper',
+  titleNative:'마지막 기억 보관자',
+  genres:['fantasy','drama'],
   difficulty:'TOPIK 3-4',
-  blurb:'A man who can see the future owes a debt to someone he has never met — because they saved his life before he was born.',
+  blurb:'Everyone sells their painful memories. Why would you keep them? She knows why. She is the only one left who does.',
   lines:[
-    {text:'나는 미래를 볼 수 있다. 하지만 내 미래는 볼 수 없다.',reading:'naneun miraeleul bol su itda. hajiman nae miraeneun bol su eoptda.',translation:'I can see the future. But I cannot see my own.'},
-    {text:'어느 날, 낯선 여자가 나를 찾아왔다.',reading:'eoneu nal, natson yeojaga nareul chajawatda.',translation:'One day, a strange woman came looking for me.'},
-    {text:'"당신은 나한테 빚이 있어요."',reading:'"dangsineun nahante bijhi iseoyo."',translation:'"You owe me a debt."'},
-    {text:'"처음 뵙겠습니다만, 어떻게요?"',reading:'"cheoeum boepgesseumnidaman, eotteokkeyo?"',translation:'"I\'m meeting you for the first time, but how so?"'},
-    {text:'"당신이 태어나기 전에 내가 당신을 구했으니까요."',reading:'"dangsini taeeonagi jeone naega dangsineul guhaesseunikkayo."',translation:'"Because I saved you before you were born."'},
-    {text:'나는 그녀의 눈을 보았다. 거짓말이 아니었다.',reading:'naneun geunyeoui nuneul boatda. geojitmari aniyeotda.',translation:'I looked into her eyes. It wasn\'t a lie.'},
-    {text:'"무엇을 원하십니까?"',reading:'"mueoseul wonhasimnikka?"',translation:'"What do you want?"'},
+    {text:'이 세상에서는 기억을 팔 수 있다.',reading:'i sesangeseo neun gieogeul pal su itda.',translation:'In this world you can sell memories.'},
+    {text:'고통스러운 기억은 싸다. 아무도 안 사려고 해서.',reading:'gotongseureoun gieoguen ssada. amudo an saryeogo haeseo.',translation:'Painful ones are cheap. Nobody wants to buy them.'},
+    {text:'나는 하나도 안 팔았다. 기쁜 것도, 아픈 것도.',reading:'naneun hanado an paratda. gippeun geotdo, apeun geotdo.',translation:'I haven\'t sold a single one. Not the good ones, not the painful ones.'},
+    {text:'"왜 그 나쁜 기억들을 갖고 있어?" 사람들이 물었다.',reading:'"wae geu nappeun gieokdeureul gatgo isseo?" saramdeuri mureotda.',translation:'"Why do you keep those bad memories?" people asked.'},
+    {text:'대답하지 않았다. 설명해도 이해 못 할 것 같아서.',reading:'daedaphaji anatda. seolmyeonghaedo ihae mot hal geot gatahseo.',translation:'I didn\'t answer. I didn\'t think they\'d understand even if I explained.'},
+    {text:'행복한 순간들이 반짝이는 건, 그 뒤에 어두운 것들이 있어서다.',reading:'haengbokan sungandeuI banjjakineuon geon, geu dwie eodouneun geotdeuri isseosdaa.',translation:'The reason happy moments shine is because there\'s darkness behind them.'},
+    {text:'그들이 팔아버린 어둠이 뭔지, 그들은 이미 기억하지 못한다.',reading:'geudeuri parabeolin eodumi mwonji, geudeureun imi gieokaji motanda.',translation:'What darkness they sold away, they no longer remember.'},
   ],
   questions:[
-    {q:'What ability does the man have?',choices:['He can fly','He can see the future','He can read minds','He is immortal'],answer:'He can see the future'},
-    {q:'What does the woman claim?',choices:['He stole from her','He owes her money','She saved him before he was born','She knows his future'],answer:'She saved him before he was born'},
-    {q:'How does he know she\'s telling the truth?',choices:['He saw it in a vision','He read her mind','He looked in her eyes','She showed him proof'],answer:'He looked in her eyes'},
+    {q:'What kind of memories are cheap?',choices:['Happy ones','Childhood ones','Painful ones','Old ones'],answer:'Painful ones'},
+    {q:'Why didn\'t she explain herself to others?',choices:['She was too shy','She couldn\'t speak','She didn\'t think they\'d understand','It was a secret'],answer:'She didn\'t think they\'d understand'},
+    {q:'What does she believe about painful memories?',choices:['They should be deleted','They make happy moments shine','They are worthless','They are dangerous'],answer:'They make happy moments shine'},
+  ]
+},
+
+{
+  id:'ko_action_01',
+  lang:'korean',
+  title:'The Last Round',
+  titleNative:'마지막 라운드',
+  genres:['action','drama'],
+  difficulty:'TOPIK 3-4',
+  blurb:'The doctor said stop. The coach said stop. Her left eye was swollen shut. She got up anyway. Some people just have to finish what they started.',
+  lines:[
+    {text:'의사가 기권을 권했다. 코치도 같은 말을 했다.',reading:'uisaga gikwoneul gwonhaetda. kochiido gateun maleul haetda.',translation:'The doctor recommended withdrawal. The coach said the same.'},
+    {text:'왼쪽 눈이 안 보였다. 입술에서 피가 났다.',reading:'oenjok nuni an boyeotda. ipsureseo piga natda.',translation:'My left eye couldn\'t see. Blood came from my lip.'},
+    {text:'그래도 일어났다.',reading:'geraedo ireottda.',translation:'I got up anyway.'},
+    {text:'관중이 조용해졌다.',reading:'gwanjungi joyonghaejeotda.',translation:'The crowd went quiet.'},
+    {text:'상대가 다가왔다. 마지막 힘을 모았다.',reading:'sangdaega dagawatda. majimak himeul moatda.',translation:'The opponent came forward. I gathered the last of my strength.'},
+    {text:'쓰러진 건 나였다. 하지만 일어난 것도 나였다.',reading:'sseurojin geon nayeotda. hajiman ireonan geotdo nayeotda.',translation:'The one who fell was me. But the one who got up was also me.'},
+    {text:'심판이 열을 셀 때, 나는 이미 서 있었다.',reading:'simpani yeoreul sel ttae, naneun imi seo isseotda.',translation:'By the time the referee counted ten, I was already standing.'},
+  ],
+  questions:[
+    {q:'Who told her to stop?',choices:['Only the crowd','Only the coach','The doctor and the coach','Her opponent'],answer:'The doctor and the coach'},
+    {q:'What was her physical state?',choices:['Fine','Tired but okay','Left eye couldn\'t see, bleeding lip','Both eyes were swollen'],answer:'Left eye couldn\'t see, bleeding lip'},
+    {q:'What happened by the count of ten?',choices:['She was still down','She had won','She was already standing','She had given up'],answer:'She was already standing'},
+  ]
+},
+
+{
+  id:'ko_fantasy_02',
+  lang:'korean',
+  title:'The Debt',
+  titleNative:'빚',
+  genres:['fantasy','action','drama'],
+  difficulty:'TOPIK 3-4',
+  blurb:'He can see the future. Everyone else\'s. Not his own. A woman appears and says he owes her a debt — from before he was born.',
+  lines:[
+    {text:'나는 남의 미래는 볼 수 있다. 내 미래는 볼 수 없다.',reading:'naneun namui miraeneun bol su itda. nae miraeneun bol su eopda.',translation:'I can see other people\'s futures. I can\'t see my own.'},
+    {text:'어느 날 아침, 낯선 여자가 사무실 문을 열었다.',reading:'eoneu nal achim, natson yeojaga samusil muneul yeoreotda.',translation:'One morning, a strange woman opened the door to my office.'},
+    {text:'"당신한테 빚이 있어요."',reading:'"dangsinhan te bijhi iseoyo."',translation:'"You owe me a debt."'},
+    {text:'"처음 뵙겠습니다만." "알아요. 처음 만나죠."',reading:'"cheoeum boepgesseumnidaman." "arayo. cheoeum mannajyo."',translation:'"This is the first time we\'ve met." "I know. First time."'},
+    {text:'"당신이 태어나기 전에, 내가 당신을 살렸어요."',reading:'"dangsini taeeonagi jeone, naega dangsineul sallyeotsseoyo."',translation:'"Before you were born, I saved you."'},
+    {text:'거짓말을 하면 눈에 보이는 편인데, 그녀의 눈에는 아무것도 없었다.',reading:'geojitmareul hamyeon nune boineun pyeoninde, geunyeoui nune neun amugetto opseotda.',translation:'Lies usually show in people\'s eyes. Hers showed nothing.'},
+    {text:'"무엇을 원하십니까." 처음부터 이건 질문이 아니었다.',reading:'"mueoseul wonhasimnikka." cheoumbuteo igeon jilmuni aniyeotda.',translation:'"What do you want." From the start it hadn\'t been a question.'},
+  ],
+  questions:[
+    {q:'What is his limitation?',choices:['He can\'t see the future at all','He can see the future but not his own','He can only see bad futures','He loses the ability sometimes'],answer:'He can see the future but not his own'},
+    {q:'How did he know she wasn\'t lying?',choices:['He used his power','He could tell from her voice','Lies show in people\'s eyes and hers showed nothing','She had proof'],answer:'Lies show in people\'s eyes and hers showed nothing'},
+    {q:'What does the last line suggest about his question?',choices:['He already knew what she wanted','He was scared to ask','It was actually a threat','He didn\'t want an answer'],answer:'He already knew what she wanted'},
   ]
 },
 
@@ -233,476 +566,20 @@ const STORIES = [
   titleNative:'Lo stesso tavolo',
   genres:['romance','slice of life'],
   difficulty:'A2',
-  blurb:'Every morning at the same café, the same table, the same coffee. And always, the same stranger sitting across from him.',
+  blurb:'Same café, same table, same coffee. He had never spoken to her. She had never spoken to him. Then one morning she wasn\'t there.',
   lines:[
-    {text:'Ogni mattina vengo in questo bar alle otto.',reading:'',translation:'Every morning I come to this café at eight.'},
-    {text:'Prendo sempre lo stesso caffè. Mi siedo sempre allo stesso tavolo.',reading:'',translation:'I always get the same coffee. I always sit at the same table.'},
-    {text:'Lei è già lì. Come sempre.',reading:'',translation:'She\'s already there. As always.'},
-    {text:'Non ci siamo mai parlati. Ma ci sorridiamo.',reading:'',translation:'We\'ve never spoken. But we smile at each other.'},
-    {text:'Stamattina lei non c\'era.',reading:'',translation:'This morning she wasn\'t there.'},
-    {text:'Ho aspettato fino alle nove. Poi sono andato via.',reading:'',translation:'I waited until nine. Then I left.'},
-    {text:'Domani torno. Spero che ci sia.',reading:'',translation:'Tomorrow I\'ll come back. I hope she\'s there.'},
+    {text:'Vengo qui ogni mattina alle otto.',reading:'',translation:'I come here every morning at eight.'},
+    {text:'Lei è già al suo posto. Finestra, terzo sgabello a sinistra, cappuccino.',reading:'',translation:'She\'s already at her spot. Window, third stool on the left, cappuccino.'},
+    {text:'Non ci siamo mai parlati. Sorriso, a volte. Solo quello.',reading:'',translation:'We\'ve never spoken. A smile sometimes. Only that.'},
+    {text:'Stamattina il terzo sgabello era vuoto.',reading:'',translation:'This morning the third stool was empty.'},
+    {text:'Ho aspettato. Il caffè si è raffreddato.',reading:'',translation:'I waited. The coffee went cold.'},
+    {text:'Il barista mi ha guardato. "La signorina non viene di giovedì."',reading:'',translation:'The barman looked at me. "The young lady doesn\'t come on Thursdays."'},
+    {text:'Non sapevo che era giovedì.',reading:'',translation:'I hadn\'t realized it was Thursday.'},
   ],
   questions:[
-    {q:'What time does he arrive at the café?',choices:['Seven','Eight','Nine','Ten'],answer:'Eight'},
-    {q:'Have they ever spoken?',choices:['Yes, once','Yes, every day','Never','The story doesn\'t say'],answer:'Never'},
-    {q:'Why was today different?',choices:['He arrived late','His coffee was wrong','She wasn\'t there','The café was closed'],answer:'She wasn\'t there'},
-  ]
-},
-
-{
-  id:'it_mystery_01',
-  lang:'italian',
-  title:'The Letter',
-  titleNative:'La lettera',
-  genres:['mystery','adventure'],
-  difficulty:'B1',
-  blurb:'A woman receives a letter addressed to her, written in her own handwriting, dated three years in the future.',
-  lines:[
-    {text:'La busta era indirizzata a me. Era la mia scrittura.',reading:'',translation:'The envelope was addressed to me. It was my handwriting.'},
-    {text:'Ma la data era quella di tre anni fa — no, di tre anni nel futuro.',reading:'',translation:'But the date was three years ago — no, three years in the future.'},
-    {text:'Ho riletto la data quattro volte. Non cambiava.',reading:'',translation:'I reread the date four times. It didn\'t change.'},
-    {text:'Ho aperto la busta con mani che tremavano.',reading:'',translation:'I opened the envelope with trembling hands.'},
-    {text:'C\'era scritto solo una frase: "Non aprire la porta rossa."',reading:'',translation:'There was only one sentence written: "Don\'t open the red door."'},
-    {text:'Nel mio appartamento non c\'è nessuna porta rossa.',reading:'',translation:'In my apartment there is no red door.'},
-    {text:'Poi ho sentito bussare.',reading:'',translation:'Then I heard knocking.'},
-  ],
-  questions:[
-    {q:'Whose handwriting was on the envelope?',choices:['Her sister\'s','A stranger\'s','Her own','Unknown'],answer:'Her own'},
-    {q:'What was written in the letter?',choices:['"Run away"','"Don\'t open the red door"','"Call the police"','"Trust no one"'],answer:'"Don\'t open the red door"'},
-    {q:'What happened at the end?',choices:['She found the red door','Someone knocked','She called for help','She threw the letter away'],answer:'Someone knocked'},
-  ]
-},
-
-{
-  id:'it_action_01',
-  lang:'italian',
-  title:'Five Seconds',
-  titleNative:'Cinque secondi',
-  genres:['action','adventure'],
-  difficulty:'B1',
-  blurb:'A train. A bomb. A detective with exactly five seconds to decide which wire to cut.',
-  lines:[
-    {text:'Il treno correva a centoventi chilometri all\'ora.',reading:'',translation:'The train was running at a hundred and twenty kilometres per hour.'},
-    {text:'Mancavano cinque secondi.',reading:'',translation:'Five seconds were left.'},
-    {text:'Due fili. Uno rosso. Uno blu. Uno era la soluzione. L\'altro era la fine.',reading:'',translation:'Two wires. One red. One blue. One was the solution. The other was the end.'},
-    {text:'Aveva passato vent\'anni a studiare questi dispositivi.',reading:'',translation:'He had spent twenty years studying these devices.'},
-    {text:'Ma la paura non sparisce mai. Si impara solo a ignorarla.',reading:'',translation:'But fear never disappears. You only learn to ignore it.'},
-    {text:'Chiuse gli occhi per un secondo. Poi tagliò.',reading:'',translation:'He closed his eyes for a second. Then he cut.'},
-    {text:'Silenzio.',reading:'',translation:'Silence.'},
-  ],
-  questions:[
-    {q:'How fast was the train going?',choices:['80 km/h','100 km/h','120 km/h','200 km/h'],answer:'120 km/h'},
-    {q:'How many wires were there?',choices:['One','Two','Three','Four'],answer:'Two'},
-    {q:'What does he say about fear?',choices:['It goes away with experience','You can never ignore it','You learn to ignore it','It makes you stronger'],answer:'You learn to ignore it'},
-  ]
-},
-
-];
-
-// Genre lists per language
-const STORY_GENRES_BY_LANG = {
-  japanese: ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy'],
-  korean:   ['romance','slice of life','thriller','mystery','fantasy','action','drama','school','comedy'],
-  italian:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy'],
-};
-const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy','thriller','drama'];
-
-// ── ADDITIONAL JAPANESE STORIES ───────────────────────────────────────────────
-
-STORIES.push(
-
-// MAGIC / ISEKAI (Mushoku Tensei energy)
-{
-  id:'jp_magic_01',
-  lang:'japanese',
-  title:'Born Again with Magic',
-  titleNative:'魔法と共に転生した',
-  genres:['isekai','fantasy','action'],
-  difficulty:'N4',
-  blurb:'A man dies having wasted his life. He is reborn as an infant in another world — and this time, he can already feel the magic flowing through him before he can even speak.',
-  lines:[
-    {text:'気づいたとき、私は赤ん坊だった。',reading:'きづいたとき、わたしはあかんぼうだった。',translation:'When I came to, I was a baby.'},
-    {text:'前の世界での記憶は全部残っていた。',reading:'まえのせかいでのきおくはぜんぶのこっていた。',translation:'All my memories from the previous world remained.'},
-    {text:'後悔だけが胸の中に残った人生だった。',reading:'こうかいだけがむねのなかにのこったじんせいだった。',translation:'It had been a life where only regret remained in my chest.'},
-    {text:'だが今は違う。この小さな手の中に、何かが流れている。',reading:'だがいまはちがう。このちいさなてのなかに、なにかがながれている。',translation:'But now it\'s different. Something is flowing through these small hands.'},
-    {text:'魔力だと、すぐにわかった。',reading:'まりょくだと、すぐにわかった。',translation:'I immediately understood it was magical energy.'},
-    {text:'まだ言葉も話せない。でも魔法はもう使える。',reading:'まだことばもはなせない。でもまほうはもうつかえる。',translation:'I can\'t even speak yet. But I can already use magic.'},
-    {text:'今度こそ、全力で生きてやる。',reading:'こんどこそ、ぜんりょくでいきてやる。',translation:'This time for sure, I\'ll live with everything I have.'},
-  ],
-  questions:[
-    {q:'What does he realize about his memories?',choices:['They are gone','They are fragments','They are all intact','He has someone else\'s memories'],answer:'They are all intact'},
-    {q:'What does he feel flowing through his hands?',choices:['Blood','Warmth','Magical energy','Water'],answer:'Magical energy'},
-    {q:'What is his resolve?',choices:['To find his family','To return home','To live with everything he has','To become a king'],answer:'To live with everything he has'},
-  ]
-},
-
-{
-  id:'jp_magic_02',
-  lang:'japanese',
-  title:'The Sword That Chose No One',
-  titleNative:'誰も選ばなかった剣',
-  genres:['fantasy','action','adventure'],
-  difficulty:'N3',
-  blurb:'Every hero in the kingdom tried to pull the sacred sword. Every one failed. Then a girl who came only to watch accidentally touched the hilt — and the sword spoke.',
-  lines:[
-    {text:'百人の勇者が剣に触れ、百人が失敗した。',reading:'ひゃくにんのゆうしゃがけんにふれ、ひゃくにんがしっぱいした。',translation:'A hundred heroes touched the sword, and a hundred failed.'},
-    {text:'エイラは観客として来ていた。剣など関係ない。',reading:'エイラはかんきゃくとしてきていた。けんなどかんけいない。',translation:'Aira had come as a spectator. The sword had nothing to do with her.'},
-    {text:'人混みに押されて、気づいたら柄に手が触れていた。',reading:'ひとごみにおされて、きづいたらつかにてがふれていた。',translation:'Pushed by the crowd, she realized her hand was touching the hilt.'},
-    {text:'剣が光った。',reading:'けんがひかった。',translation:'The sword glowed.'},
-    {text:'「ずっと待っていた」と声が聞こえた。剣の中から。',reading:'「ずっとまっていた」とこえがきこえた。けんのなかから。',translation:'"I have been waiting," a voice said. From inside the sword.'},
-    {text:'エイラは悲鳴を上げそうになったが、声は優しかった。',reading:'エイラはひめいをあげそうになったが、こえはやさしかった。',translation:'Aira nearly screamed, but the voice was gentle.'},
-    {text:'「あなたが選ばれた理由は、選ばれようとしなかったからだ」',reading:'「あなたがえらばれたりゆうは、えらばれようとしなかったからだ」',translation:'"The reason you were chosen is because you did not try to be chosen."'},
-  ],
-  questions:[
-    {q:'Why was Aira at the ceremony?',choices:['She wanted the sword','She was forced to come','She came as a spectator','She was a hero'],answer:'She came as a spectator'},
-    {q:'How did she touch the sword?',choices:['She reached for it','She was pushed by the crowd','She was told to','She tripped'],answer:'She was pushed by the crowd'},
-    {q:'Why was she chosen?',choices:['She was the strongest','She was the kindest','She did not try to be chosen','The sword made a mistake'],answer:'She did not try to be chosen'},
-  ]
-},
-
-{
-  id:'jp_magic_03',
-  lang:'japanese',
-  title:'The Magic That Costs Everything',
-  titleNative:'全てを代償にする魔法',
-  genres:['fantasy','action'],
-  difficulty:'N3',
-  blurb:'In this world, magic costs something personal — a memory, a year of your life, a color you can no longer see. He has used it too many times.',
-  lines:[
-    {text:'この世界では、魔法は何かを代償にして使う。',reading:'このせかいでは、まほうはなにかをだいしょうにしてつかう。',translation:'In this world, magic is used by sacrificing something in return.'},
-    {text:'私はこれまでに百回以上使った。',reading:'わたしはこれまでにひゃっかいいじょうつかった。',translation:'I have used it more than a hundred times up to now.'},
-    {text:'最初は色が見えなくなった。赤から始まった。',reading:'さいしょはいろがみえなくなった。あかからはじまった。',translation:'At first I couldn\'t see colors. It started with red.'},
-    {text:'次に、子供の頃の記憶が消えた。顔だけ残った。',reading:'つぎに、こどものころのきおくがきえた。かおだけのこった。',translation:'Next, my childhood memories disappeared. Only faces remained.'},
-    {text:'今は、人の名前が覚えられない。',reading:'いまは、ひとのなまえがおぼえられない。',translation:'Now I can\'t remember people\'s names.'},
-    {text:'それでも魔法をやめられない。',reading:'それでもまほうをやめられない。',translation:'Even so, I can\'t stop using magic.'},
-    {text:'守りたいものが、まだある。',reading:'まもりたいものが、まだある。',translation:'There are still things I want to protect.'},
-  ],
-  questions:[
-    {q:'What does magic cost in this world?',choices:['Gold','Something personal','Physical strength','Years of sleep'],answer:'Something personal'},
-    {q:'What was the first thing he lost?',choices:['His name','His memories','The color red','His voice'],answer:'The color red'},
-    {q:'Why does he keep using magic despite the cost?',choices:['He is addicted','He has no choice','There are still things he wants to protect','He doesn\'t feel the losses'],answer:'There are still things he wants to protect'},
-  ]
-},
-
-{
-  id:'jp_magic_04',
-  lang:'japanese',
-  title:'The Weakest Class',
-  titleNative:'最弱のクラス',
-  genres:['isekai','school','action'],
-  difficulty:'N4',
-  blurb:'Every student in the hero academy has a rare ability. His ability, revealed on the first day: he can see one second into the future. Everyone laughed. No one laughed after the exam.',
-  lines:[
-    {text:'英雄学院の入学試験で、全員の能力が明らかになった。',reading:'えいゆうがくいんのにゅうがくしけんで、ぜんいんののうりょくがあきらかになった。',translation:'At the entrance exam for the Hero Academy, everyone\'s ability was revealed.'},
-    {text:'炎を操る者、剣の天才、風を読む者。',reading:'ほのおをあやつるもの、けんのてんさい、かぜをよむもの。',translation:'Those who control fire, sword geniuses, those who read the wind.'},
-    {text:'ケンジの番が来た。「一秒先が見える」',reading:'ケンジのばんがきた。「いちびょうさきがみえる」',translation:'Kenji\'s turn came. "I can see one second into the future."'},
-    {text:'教室が静まりかえった後、笑いが起きた。',reading:'きょうしつがしずまりかえったあと、わらいがおきた。',translation:'After the classroom fell silent, laughter broke out.'},
-    {text:'「たった一秒か」と誰かが言った。',reading:'「たったいちびょうか」とだれかがいった。',translation:'"Just one second," someone said.'},
-    {text:'実技試験で、ケンジは誰にも触れられなかった。',reading:'じつぎしけんで、ケンジはだれにもふれられなかった。',translation:'In the practical exam, no one could touch Kenji.'},
-    {text:'一秒あれば、十分だった。',reading:'いちびょうあれば、じゅうぶんだった。',translation:'One second was enough.'},
-  ],
-  questions:[
-    {q:'What is Kenji\'s ability?',choices:['He is very fast','He can see one second into the future','He can stop time','He can read minds'],answer:'He can see one second into the future'},
-    {q:'How did the class react?',choices:['They were impressed','They were silent','They laughed','They challenged him'],answer:'They laughed'},
-    {q:'What happened in the practical exam?',choices:['He lost badly','Nobody could touch him','He used a different power','He gave up'],answer:'Nobody could touch him'},
-  ]
-},
-
-// ADVENTURE
-{
-  id:'jp_adventure_01',
-  lang:'japanese',
-  title:'The Map With No End',
-  titleNative:'終わりのない地図',
-  genres:['adventure','fantasy'],
-  difficulty:'N4',
-  blurb:'An explorer finds a map that updates itself in real time — showing paths that didn\'t exist yesterday, and marking places no cartographer has ever named.',
-  lines:[
-    {text:'その地図は、昨日とは違っていた。',reading:'そのちずは、きのうとはちがっていた。',translation:'The map was different from yesterday.'},
-    {text:'新しい道が現れていた。誰も作っていない道が。',reading:'あたらしいみちがあらわれていた。だれもつくっていないみちが。',translation:'A new path had appeared. A path that no one had made.'},
-    {text:'地図師たちは「不可能だ」と言った。',reading:'ちずしたちは「ふかのうだ」といった。',translation:'The cartographers said "it\'s impossible."'},
-    {text:'しかしマリアは地図を信じた。',reading:'しかしマリアはちずをしんじた。',translation:'But Maria trusted the map.'},
-    {text:'三日間歩いて、地図の示す場所に着いた。',reading:'みっかかんあるいて、ちずのしめすばしょについた。',translation:'After walking for three days, she reached the place the map indicated.'},
-    {text:'そこには、まだ誰も見たことのない山があった。',reading:'そこには、まださあだれもみたことのないやまがあった。',translation:'There was a mountain there that no one had ever seen.'},
-    {text:'地図に新しい名前が書かれていた。「マリアの山」',reading:'ちずにあたらしいなまえがかかれていた。「マリアのやま」',translation:'A new name was written on the map. "Maria\'s Mountain."'},
-  ],
-  questions:[
-    {q:'What was strange about the map?',choices:['It was very old','It updated itself','It was written in code','It was blank'],answer:'It updated itself'},
-    {q:'What did the cartographers say?',choices:['"Follow the map"','"It\'s a treasure map"','"It\'s impossible"','"Burn it"'],answer:'"It\'s impossible"'},
-    {q:'What was at the location the map showed?',choices:['A city','A river','A mountain no one had seen','A door'],answer:'A mountain no one had seen'},
-  ]
-},
-
-// ROMANCE
-{
-  id:'jp_romance_02',
-  lang:'japanese',
-  title:'The Umbrella',
-  titleNative:'傘',
-  genres:['romance','slice of life'],
-  difficulty:'N5',
-  blurb:'It was raining. She had no umbrella. He had one, but said nothing and just walked slower.',
-  lines:[
-    {text:'突然、雨が降り始めた。',reading:'とつぜん、あめがふりはじめた。',translation:'Suddenly, rain began to fall.'},
-    {text:'彼女は傘を持っていなかった。',reading:'かのじょはかさをもっていなかった。',translation:'She didn\'t have an umbrella.'},
-    {text:'彼は傘を持っていたが、何も言わなかった。',reading:'かれはかさをもっていたが、なにもいわなかった。',translation:'He had an umbrella, but said nothing.'},
-    {text:'ただ、少しだけ歩くのを遅くした。',reading:'ただ、すこしだけあるくのをおそくした。',translation:'He just walked a little slower.'},
-    {text:'自然に、二人は同じ傘の下に入っていた。',reading:'しぜんに、ふたりはおなじかさのしたにはいっていた。',translation:'Naturally, the two of them were under the same umbrella.'},
-    {text:'「ありがとう」と彼女が言った。',reading:'「ありがとう」とかのじょがいった。',translation:'"Thank you," she said.'},
-    {text:'「傘が大きいだけだよ」と彼は答えた。顔が少し赤かった。',reading:'「かさがおおきいだけだよ」とかれはこたえた。かおがすこしあかかった。',translation:'"The umbrella is just big," he answered. His face was a little red.'},
-  ],
-  questions:[
-    {q:'Why did he walk slower?',choices:['He was tired','He wanted her to share his umbrella','He saw something','He was lost'],answer:'He wanted her to share his umbrella'},
-    {q:'What did he say when she thanked him?',choices:['"You\'re welcome"','"It\'s nothing"','"The umbrella is just big"','"I like the rain"'],answer:'"The umbrella is just big"'},
-    {q:'How did he look when he answered?',choices:['Angry','Sad','A little red in the face','Confused'],answer:'A little red in the face'},
-  ]
-},
-
-{
-  id:'jp_romance_03',
-  lang:'japanese',
-  title:'One Hundred Rejections',
-  titleNative:'百回の断り',
-  genres:['romance','comedy'],
-  difficulty:'N4',
-  blurb:'He confessed to her 99 times and was rejected every time. On the hundredth, he said nothing. She asked why.',
-  lines:[
-    {text:'田中は九十九回告白して、九十九回断られた。',reading:'たなかはきゅうじゅうきゅうかいこくはくして、きゅうじゅうきゅうかいことわられた。',translation:'Tanaka confessed 99 times and was rejected 99 times.'},
-    {text:'百回目の春が来た。',reading:'ひゃっかいめのはるがきた。',translation:'The hundredth spring came.'},
-    {text:'彼は何も言わなかった。',reading:'かれはなにもいわなかった。',translation:'He said nothing.'},
-    {text:'「今年は言わないの？」と彼女が聞いた。',reading:'「ことしはいわないの？」とかのじょがきいた。',translation:'"You\'re not saying it this year?" she asked.'},
-    {text:'「もう諦めた」と彼は答えた。',reading:'「もうあきらめた」とかれはこたえた。',translation:'"I\'ve given up," he answered.'},
-    {text:'しばらく沈黙があった。',reading:'しばらくちんもくがあった。',translation:'There was a silence for a while.'},
-    {text:'「それは困る」と彼女は言った。',reading:'「それはこまる」とかのじょはいった。',translation:'"That\'s a problem," she said.'},
-  ],
-  questions:[
-    {q:'How many times did he confess?',choices:['Ten','Fifty','Ninety-nine','A hundred'],answer:'Ninety-nine'},
-    {q:'What did he do differently on the hundredth spring?',choices:['He gave her flowers','He confessed louder','He said nothing','He moved away'],answer:'He said nothing'},
-    {q:'What did she say at the end?',choices:['"I love you"','"That\'s a problem"','"Finally"','"Why did you stop?"'],answer:'"That\'s a problem"'},
-  ]
-},
-
-// HORROR
-{
-  id:'jp_horror_02',
-  lang:'japanese',
-  title:'The Mirror That Is Slow',
-  titleNative:'遅い鏡',
-  genres:['horror','mystery'],
-  difficulty:'N4',
-  blurb:'She noticed her reflection was always a second behind. Then two seconds. Then it started doing things she wasn\'t doing.',
-  lines:[
-    {text:'最初は気のせいだと思った。',reading:'さいしょはきのせいだとおもった。',translation:'At first I thought it was my imagination.'},
-    {text:'鏡の中の自分が、少しだけ遅かった。',reading:'かがみのなかのじぶんが、すこしだけおそかった。',translation:'My reflection in the mirror was just a little slow.'},
-    {text:'一秒。それが二秒になった。',reading:'いちびょう。それがにびょうになった。',translation:'One second. Then it became two seconds.'},
-    {text:'ある朝、鏡の中の私が笑った。私は笑っていなかった。',reading:'あるあさ、かがみのなかのわたしがわらった。わたしはわらっていなかった。',translation:'One morning, my reflection smiled. I wasn\'t smiling.'},
-    {text:'鏡を壊そうとしたとき、反射の中の手が先に動いた。',reading:'かがみをこわそうとしたとき、はんしゃのなかのてがさきにうごいた。',translation:'When I tried to break the mirror, the reflection\'s hand moved first.'},
-    {text:'「やめて」と鏡の中の口が動いた。',reading:'「やめて」とかがみのなかのくちがうごいた。',translation:'"Stop," the mouth in the mirror moved.'},
-    {text:'声はなかった。でも読めた。',reading:'こえはなかった。でもよめた。',translation:'There was no sound. But I could read it.'},
-  ],
-  questions:[
-    {q:'What first seemed wrong with the mirror?',choices:['It was cracked','The reflection was slow','The reflection looked different','It made a sound'],answer:'The reflection was slow'},
-    {q:'What happened one morning that was truly frightening?',choices:['The mirror fell','The reflection smiled when she wasn\'t','She saw someone else','The mirror spoke'],answer:'The reflection smiled when she wasn\'t'},
-    {q:'What did the reflection\'s mouth say?',choices:['"Help me"','"Run"','"Stop"','"Come closer"'],answer:'"Stop"'},
-  ]
-},
-
-// MYSTERY
-{
-  id:'jp_mystery_02',
-  lang:'japanese',
-  title:'The Detective Who Never Asks',
-  titleNative:'聞かない探偵',
-  genres:['mystery','action'],
-  difficulty:'N3',
-  blurb:'Detective Kurosawa never asks witnesses questions. She just watches them. In five minutes she knows everything. Tonight she watches a man who may have killed his brother.',
-  lines:[
-    {text:'黒沢刑事は、証人に質問をしない。',reading:'くろさわけいじは、しょうにんにしつもんをしない。',translation:'Detective Kurosawa does not ask witnesses questions.'},
-    {text:'ただ見る。それだけだ。',reading:'ただみる。それだけだ。',translation:'She just watches. That\'s all.'},
-    {text:'人は嘘をつくとき、必ず何かをする。',reading:'ひとはうそをつくとき、かならずなにかをする。',translation:'When people lie, they always do something.'},
-    {text:'指が動く。目線が右に外れる。呼吸が変わる。',reading:'ゆびがうごく。めせんがみぎにはずれる。こきゅうがかわる。',translation:'Fingers move. Eyes drift to the right. Breathing changes.'},
-    {text:'男は三回、左手の親指を擦った。',reading:'おとこはさんかい、ひだりてのおやゆびをこすった。',translation:'The man rubbed his left thumb three times.'},
-    {text:'「兄は自分で落ちた」と男が言った。',reading:'「あにはじぶんでおちた」とおとこがいった。',translation:'"My brother fell on his own," the man said.'},
-    {text:'黒沢は初めて口を開いた。「どちらの手で押しましたか？」',reading:'くろさわははじめてくちをひらいた。「どちらのてでおしましたか？」',translation:'Kurosawa opened her mouth for the first time. "Which hand did you push with?"'},
-  ],
-  questions:[
-    {q:'What is Kurosawa\'s method?',choices:['She asks many questions','She reads files','She just watches people','She uses technology'],answer:'She just watches people'},
-    {q:'What does she notice when people lie?',choices:['They sweat','Their voice changes pitch','Small physical signs','They look away immediately'],answer:'Small physical signs'},
-    {q:'What did Kurosawa\'s first question reveal?',choices:['He was innocent','He was nervous','That he pushed his brother','That he was lying about his name'],answer:'That he pushed his brother'},
-  ]
-},
-
-// COMEDY / SLICE OF LIFE
-{
-  id:'jp_comedy_01',
-  lang:'japanese',
-  title:'The God Who Got Lost',
-  titleNative:'迷子になった神様',
-  genres:['comedy','fantasy','slice of life'],
-  difficulty:'N4',
-  blurb:'A god descends to Japan to fix a minor miracle and immediately gets lost on the subway. He has to ask a high school girl for directions.',
-  lines:[
-    {text:'神様が地上に降りてきたのは、小さなミスを直すためだった。',reading:'かみさまがちじょうにおりてきたのは、ちいさなミスをなおすためだった。',translation:'The god descended to earth to fix a small mistake.'},
-    {text:'しかし渋谷駅で、乗り換えを間違えた。',reading:'しかししぶやえきで、のりかえをまちがえた。',translation:'However, at Shibuya station, he took the wrong transfer.'},
-    {text:'全知全能のはずだったが、路線図は別の話だった。',reading:'ぜんちぜんのうのはずだったが、ろせんずはべつのはなしだった。',translation:'He was supposed to be all-knowing and all-powerful, but the train map was another matter.'},
-    {text:'「すみません、これはどこ行きですか？」',reading:'「すみません、これはどこいきですか？」',translation:'"Excuse me, where does this go?"'},
-    {text:'女子高生は神様を上から下まで見た。',reading:'じょしこうせいはかみさまをうえからしたまでみた。',translation:'The high school girl looked the god up and down.'},
-    {text:'「コスプレですか？」',reading:'「コスプレですか？」',translation:'"Is that a costume?"'},
-    {text:'神様は初めて恥ずかしいという気持ちを知った。',reading:'かみさまははじめてはずかしいというきもちをしった。',translation:'The god learned for the first time what it felt like to be embarrassed.'},
-  ],
-  questions:[
-    {q:'Why did the god come to earth?',choices:['To end the world','To find a hero','To fix a small mistake','To take a vacation'],answer:'To fix a small mistake'},
-    {q:'What went wrong?',choices:['He lost his powers','He got lost on the subway','He was spotted by humans','He forgot his mission'],answer:'He got lost on the subway'},
-    {q:'What did the girl ask him?',choices:['"Are you a god?"','"Are you lost?"','"Is that a costume?"','"Can I help you?"'],answer:'"Is that a costume?"'},
-  ]
-},
-
-// ── ADDITIONAL KOREAN STORIES ─────────────────────────────────────────────────
-
-{
-  id:'ko_thriller_02',
-  lang:'korean',
-  title:'The Neighbor',
-  titleNative:'이웃',
-  genres:['thriller','mystery','horror'],
-  difficulty:'TOPIK 2',
-  blurb:'She has never seen her neighbor\'s face. Only heard footsteps at 3 AM every night. Tonight the footsteps stopped outside her door.',
-  lines:[
-    {text:'옆집 이웃의 얼굴을 한 번도 본 적이 없다.',reading:'yeokjip iwutui eolguleul han beondo bon jeogi eopda.',translation:'I have never seen my neighbor\'s face even once.'},
-    {text:'매일 밤 3시, 발소리가 들린다.',reading:'maeil bam sesī, balsori ga deullinda.',translation:'Every night at 3 AM, I hear footsteps.'},
-    {text:'복도를 걷는 소리. 같은 속도. 같은 리듬.',reading:'bokdoleul geotneun sori. gateun sokdo. gateun rideum.',translation:'The sound of walking down the hallway. Same speed. Same rhythm.'},
-    {text:'오늘 밤, 소리가 내 문 앞에서 멈췄다.',reading:'oneul bam, sori ga nae mun apeseo meomchwotda.',translation:'Tonight, the sound stopped outside my door.'},
-    {text:'숨을 참았다.',reading:'sumeul chamatta.',translation:'I held my breath.'},
-    {text:'1분이 지났다. 2분. 3분.',reading:'ilbuni jinatda. ibun. sambun.',translation:'One minute passed. Two. Three.'},
-    {text:'그리고 문 밑으로 쪽지 한 장이 들어왔다.',reading:'geurigo mun mitero jjokji han jangi deureowatda.',translation:'Then a note slid under the door.'},
-  ],
-  questions:[
-    {q:'When does she hear the footsteps?',choices:['Midnight','1 AM','3 AM','Dawn'],answer:'3 AM'},
-    {q:'What was different tonight?',choices:['The footsteps were louder','The footsteps stopped at her door','There were no footsteps','She saw someone'],answer:'The footsteps stopped at her door'},
-    {q:'What came under the door?',choices:['A key','A note','A flower','Nothing'],answer:'A note'},
-  ]
-},
-
-{
-  id:'ko_fantasy_02',
-  lang:'korean',
-  title:'The Last Memory Keeper',
-  titleNative:'마지막 기억 보관자',
-  genres:['fantasy','drama','action'],
-  difficulty:'TOPIK 3-4',
-  blurb:'In a world where memories can be traded like objects, she is the last person who refuses to sell hers. Everyone thinks she\'s a fool. She knows something they\'ve all forgotten.',
-  lines:[
-    {text:'이 세상에서 기억은 팔 수 있다.',reading:'i sesangeso gieoguen pal su itda.',translation:'In this world, memories can be sold.'},
-    {text:'행복한 기억은 비싸다. 고통스러운 기억은 싸다.',reading:'haengbokan gieoguen bissada. gotongseureoun gieoguen ssada.',translation:'Happy memories are expensive. Painful ones are cheap.'},
-    {text:'나는 하나도 팔지 않았다.',reading:'naneun hanado palji anatda.',translation:'I haven\'t sold a single one.'},
-    {text:'사람들은 내가 바보라고 했다.',reading:'saramdeureun naega baborago haetta.',translation:'People said I was a fool.'},
-    {text:'"그 고통스러운 것도 왜 갖고 있어?"',reading:'"geu gotongseureoun geotdo wae gatgo isseo?"',translation:'"Why do you keep even those painful ones?"'},
-    {text:'나는 웃었다. "고통이 없으면 행복도 없으니까."',reading:'naneun useotda. "gotoni eopseumyeon haengbokdo eopseunikkka."',translation:'I smiled. "Because without pain, there\'s no happiness."'},
-    {text:'그들이 잊어버린 것을 나는 아직 기억하고 있다.',reading:'geudeuri ijeobeolin geoseul naneun ajik gieokago itda.',translation:'What they have forgotten, I still remember.'},
-  ],
-  questions:[
-    {q:'What can people do with memories in this world?',choices:['Share them','See them as videos','Sell them','Delete them permanently'],answer:'Sell them'},
-    {q:'Why does she keep painful memories?',choices:['She is a collector','She can\'t sell them','Without pain there is no happiness','She forgot to sell them'],answer:'Without pain there is no happiness'},
-    {q:'What does she know that others have forgotten?',choices:['How to get memories back','Something important they sold away','Where the memory market is','The true price of happiness'],answer:'Something important they sold away'},
-  ]
-},
-
-{
-  id:'ko_romance_02',
-  lang:'korean',
-  title:'Voice Memo',
-  titleNative:'음성 메모',
-  genres:['romance','drama'],
-  difficulty:'TOPIK 2',
-  blurb:'She found a voice memo on her old phone. Her own voice, from three years ago, crying and saying: "I hope future me is happy." She listened to it four times.',
-  lines:[
-    {text:'오래된 폰을 켰을 때 음성 메모가 하나 있었다.',reading:'oraedoen poneul kyeosseul ttae eumsong memoga hana isseotda.',translation:'When I turned on my old phone, there was one voice memo.'},
-    {text:'3년 전 날짜였다.',reading:'samnyeon jeon naljjaiyeotda.',translation:'It was dated three years ago.'},
-    {text:'내 목소리였다. 울고 있었다.',reading:'nae moksori yeotda. ulgo isseotda.',translation:'It was my voice. I was crying.'},
-    {text:'"미래의 나, 행복하길 바라."',reading:'"miraeeui na, haengbokhagil bara."',translation:'"Future me, I hope you\'re happy."'},
-    {text:'네 번 들었다.',reading:'ne beon deureotda.',translation:'I listened four times.'},
-    {text:'그리고 오래 앉아 있었다.',reading:'geurigo orae anja isseotda.',translation:'And I sat for a long time.'},
-    {text:'행복한지 모르겠다. 그래도 살아있다.',reading:'haengbokanji moreugettda. geuraedo saraitda.',translation:'I don\'t know if I\'m happy. But I\'m alive.'},
-  ],
-  questions:[
-    {q:'Where did she find the memo?',choices:['On her computer','On an old phone','In her email','On a recorder'],answer:'On an old phone'},
-    {q:'How old was the memo?',choices:['One year','Two years','Three years','Five years'],answer:'Three years'},
-    {q:'What does she conclude at the end?',choices:['She is definitely happy','She regrets the past','She doesn\'t know if she\'s happy but she\'s alive','She wants to go back'],answer:'She doesn\'t know if she\'s happy but she\'s alive'},
-  ]
-},
-
-{
-  id:'ko_action_01',
-  lang:'korean',
-  title:'The Last Round',
-  titleNative:'마지막 라운드',
-  genres:['action','drama'],
-  difficulty:'TOPIK 3-4',
-  blurb:'A boxer with one fight left in her career. Her coach says quit. The crowd says quit. She has never listened to anyone in her life.',
-  lines:[
-    {text:'이것이 마지막 경기라는 걸 알고 있었다.',reading:'igeosi majimak gyeonggiraneon geol algo isseotda.',translation:'I knew this was the last match.'},
-    {text:'코치는 "그만해"라고 했다. 열두 번째였다.',reading:'kochieneun "geumanhae"rago haetda. yeoldeu beonjjaeyeotda.',translation:'The coach said "stop." It was the twelfth time.'},
-    {text:'관중도 같은 눈빛이었다.',reading:'gwanjungdo gateun nunbichi yeotda.',translation:'The crowd had the same look in their eyes.'},
-    {text:'나는 링 위에 올라갔다.',reading:'naneun ring wiee ollagatta.',translation:'I climbed into the ring.'},
-    {text:'첫 번째 펀치를 맞았을 때 무릎이 흔들렸다.',reading:'cheot beonjjae peonchirul majasseul ttae mureubi heundeullyeotda.',translation:'When the first punch landed, my knees shook.'},
-    {text:'그래도 안 넘어졌다.',reading:'geraedo an neomeojeotda.',translation:'Still I didn\'t fall.'},
-    {text:'넘어지는 건 상대방 몫이었다.',reading:'neomeoojineun geon sangdaebang moksiyeotda.',translation:'Falling was the opponent\'s job.'},
-  ],
-  questions:[
-    {q:'How many times did the coach say stop?',choices:['Once','Six times','Twelve times','Twenty times'],answer:'Twelve times'},
-    {q:'What happened after the first punch?',choices:['She fell','Her knees shook but she stayed up','She knocked her opponent down','She stopped the fight'],answer:'Her knees shook but she stayed up'},
-    {q:'What does she say falling is?',choices:['Inevitable','Her destiny','The opponent\'s job','A sign of weakness'],answer:'The opponent\'s job'},
-  ]
-},
-
-// ── ADDITIONAL ITALIAN STORIES ────────────────────────────────────────────────
-
-{
-  id:'it_mystery_02',
-  lang:'italian',
-  title:'The Witness',
-  titleNative:'Il testimone',
-  genres:['mystery','thriller','action'],
-  difficulty:'B1',
-  blurb:'He saw everything from his window. A detective comes to take his statement. He answers every question truthfully — except one.',
-  lines:[
-    {text:'Ho visto tutto dalla finestra del terzo piano.',reading:'',translation:'I saw everything from the third floor window.'},
-    {text:'L\'ispettore aveva un taccuino e una penna.',reading:'',translation:'The inspector had a notebook and a pen.'},
-    {text:'Ha fatto molte domande. Ho risposto a tutte.',reading:'',translation:'He asked many questions. I answered all of them.'},
-    {text:'"Ha riconosciuto l\'uomo?"',reading:'',translation:'"Did you recognize the man?"'},
-    {text:'"No," ho detto. "Era troppo buio."',reading:'',translation:'"No," I said. "It was too dark."'},
-    {text:'Era una bugia. L\'avevo riconosciuto benissimo.',reading:'',translation:'It was a lie. I had recognized him perfectly well.'},
-    {text:'Era mio fratello.',reading:'',translation:'It was my brother.'},
-  ],
-  questions:[
-    {q:'From where did the witness see everything?',choices:['The street','A shop','The third floor window','A car'],answer:'The third floor window'},
-    {q:'What did he lie about?',choices:['Where he was','What time it was','Whether he recognized the man','What the man was wearing'],answer:'Whether he recognized the man'},
-    {q:'Why did he lie?',choices:['He was scared','The man was his brother','He didn\'t trust the detective','He wanted money'],answer:'The man was his brother'},
-  ]
-},
-
-{
-  id:'it_fantasy_01',
-  lang:'italian',
-  title:'The City That Moves',
-  titleNative:'La città che si muove',
-  genres:['fantasy','adventure'],
-  difficulty:'B2',
-  blurb:'Every morning the streets of the city have rearranged themselves. Locals know the rules. Tourists always get lost — and some are never found.',
-  lines:[
-    {text:'In questa città, le strade cambiano ogni notte.',reading:'',translation:'In this city, the streets change every night.'},
-    {text:'I residenti lo sanno. Hanno imparato le regole.',reading:'',translation:'The residents know it. They have learned the rules.'},
-    {text:'Regola uno: non uscire dopo la mezzanotte.',reading:'',translation:'Rule one: don\'t go out after midnight.'},
-    {text:'Regola due: se la strada è nuova, non seguirla.',reading:'',translation:'Rule two: if the street is new, don\'t follow it.'},
-    {text:'Regola tre: il mercato è sempre al centro. Sempre.',reading:'',translation:'Rule three: the market is always in the center. Always.'},
-    {text:'I turisti non conoscono le regole.',reading:'',translation:'Tourists don\'t know the rules.'},
-    {text:'Alcuni non vengono mai trovati.',reading:'',translation:'Some are never found.'},
-  ],
-  questions:[
-    {q:'When do the streets change?',choices:['Every week','During storms','Every night','Every year'],answer:'Every night'},
-    {q:'What is rule two?',choices:['Don\'t go out after midnight','Don\'t follow new streets','Stay near the market','Never go alone'],answer:'Don\'t follow new streets'},
-    {q:'What is always in the center?',choices:['The church','The school','The market','The old tower'],answer:'The market'},
+    {q:'What time does he come to the café?',choices:['Seven','Eight','Nine','Whenever'],answer:'Eight'},
+    {q:'What does she always order?',choices:['Espresso','Tea','Cappuccino','Water'],answer:'Cappuccino'},
+    {q:'Why wasn\'t she there?',choices:['She moved','She was sick','She doesn\'t come on Thursdays','She changed cafés'],answer:'She doesn\'t come on Thursdays'},
   ]
 },
 
@@ -713,20 +590,116 @@ STORIES.push(
   titleNative:'L\'ordine sbagliato',
   genres:['romance','comedy','slice of life'],
   difficulty:'A2',
-  blurb:'He ordered a cappuccino. She brought an espresso. He drank it without saying anything. She came back and said she knew — she just wanted to see what he would do.',
+  blurb:'He ordered a cappuccino. She brought an espresso. He drank it without saying a word. She came back ten minutes later.',
   lines:[
     {text:'Ho ordinato un cappuccino.',reading:'',translation:'I ordered a cappuccino.'},
-    {text:'Lei ha portato un espresso.',reading:'',translation:'She brought an espresso.'},
-    {text:'Non ho detto niente. Ho bevuto.',reading:'',translation:'I said nothing. I drank it.'},
-    {text:'Dieci minuti dopo è tornata.',reading:'',translation:'Ten minutes later she came back.'},
-    {text:'"Sa che era sbagliato, vero?"',reading:'',translation:'"You know it was wrong, right?"'},
-    {text:'"Sì," ho risposto. "Ma era buono."',reading:'',translation:'"Yes," I answered. "But it was good."'},
-    {text:'"Volevo solo vedere cosa faceva." Ha sorriso.',reading:'',translation:'"I just wanted to see what you would do." She smiled.'},
+    {text:'Lei ha portato un espresso, ha sorriso e se n\'è andata.',reading:'',translation:'She brought an espresso, smiled, and left.'},
+    {text:'L\'ho guardato. L\'ho bevuto.',reading:'',translation:'I looked at it. I drank it.'},
+    {text:'Dieci minuti dopo è tornata con un altro caffè.',reading:'',translation:'Ten minutes later she came back with another coffee.'},
+    {text:'"Sa che era sbagliato."',reading:'',translation:'"You know it was wrong."'},
+    {text:'"Sì. Era buono lo stesso."',reading:'',translation:'"Yes. It was good anyway."'},
+    {text:'Ha lasciato il cappuccino sul tavolo. Questa volta non ha sorriso. Ha riso.',reading:'',translation:'She left the cappuccino on the table. This time she didn\'t smile. She laughed.'},
   ],
   questions:[
-    {q:'What did he order?',choices:['An espresso','A cappuccino','A tea','Water'],answer:'A cappuccino'},
-    {q:'Why did he not complain?',choices:['He didn\'t notice','He was shy','The story doesn\'t say','He drank it without saying anything'],answer:'He drank it without saying anything'},
-    {q:'Why did she bring the wrong order?',choices:['It was a mistake','She was new','She wanted to see what he would do','She forgot'],answer:'She wanted to see what he would do'},
+    {q:'What did she bring him?',choices:['Tea','A cappuccino','An espresso','Nothing'],answer:'An espresso'},
+    {q:'What did he do?',choices:['Complained','Left','Drank it without saying anything','Sent it back'],answer:'Drank it without saying anything'},
+    {q:'What was different about her expression at the end?',choices:['She smiled like before','She laughed instead of smiling','She was serious','She left without expression'],answer:'She laughed instead of smiling'},
+  ]
+},
+
+{
+  id:'it_mystery_01',
+  lang:'italian',
+  title:'The Witness',
+  titleNative:'Il testimone',
+  genres:['mystery','thriller'],
+  difficulty:'B1',
+  blurb:'He saw everything. He answered every question truthfully. Except one.',
+  lines:[
+    {text:'Ho visto tutto dalla finestra del terzo piano.',reading:'',translation:'I saw everything from the third floor window.'},
+    {text:'L\'ispettore è arrivato alle undici. Aveva un taccuino piccolo e una penna rossa.',reading:'',translation:'The inspector arrived at eleven. He had a small notebook and a red pen.'},
+    {text:'Ho risposto a tutte le domande. Con calma. Senza esitare.',reading:'',translation:'I answered every question. Calmly. Without hesitating.'},
+    {text:'"Ha riconosciuto l\'uomo?"',reading:'',translation:'"Did you recognize the man?"'},
+    {text:'"No," ho detto. "Era troppo buio."',reading:'',translation:'"No," I said. "It was too dark."'},
+    {text:'Era una bugia. L\'avevo riconosciuto subito.',reading:'',translation:'It was a lie. I had recognized him immediately.'},
+    {text:'Era mio fratello.',reading:'',translation:'It was my brother.'},
+  ],
+  questions:[
+    {q:'How did he answer the inspector\'s questions?',choices:['Nervously','With hesitation','Calmly, without hesitating','He refused to answer'],answer:'Calmly, without hesitating'},
+    {q:'What did he lie about?',choices:['Where he was','The time','Whether he recognized the man','What the man was wearing'],answer:'Whether he recognized the man'},
+    {q:'Why did he lie?',choices:['He was scared of the inspector','The man was his brother','He didn\'t trust the police','He didn\'t see clearly'],answer:'The man was his brother'},
+  ]
+},
+
+{
+  id:'it_mystery_02',
+  lang:'italian',
+  title:'The Letter',
+  titleNative:'La lettera',
+  genres:['mystery','thriller'],
+  difficulty:'B1',
+  blurb:'The envelope was addressed to her. In her own handwriting. The date was three years in the future. Then she heard knocking.',
+  lines:[
+    {text:'La busta era nel cassetto, sotto le bollette.',reading:'',translation:'The envelope was in the drawer, under the bills.'},
+    {text:'Il mio indirizzo. La mia scrittura. Nessun mittente.',reading:'',translation:'My address. My handwriting. No sender.'},
+    {text:'La data era quella di tre anni nel futuro.',reading:'',translation:'The date was three years in the future.'},
+    {text:'L\'ho riletta. Non cambiava.',reading:'',translation:'I reread it. It didn\'t change.'},
+    {text:'Dentro c\'era scritto solo: "Non aprire la porta rossa."',reading:'',translation:'Inside it said only: "Don\'t open the red door."'},
+    {text:'Non ho una porta rossa.',reading:'',translation:'I don\'t have a red door.'},
+    {text:'Poi qualcuno ha bussato.',reading:'',translation:'Then someone knocked.'},
+  ],
+  questions:[
+    {q:'Where was the envelope?',choices:['On the table','Under the door','In a drawer under bills','In her bag'],answer:'In a drawer under bills'},
+    {q:'What was strange about the date?',choices:['It was very old','It was illegible','It was three years in the future','There was no date'],answer:'It was three years in the future'},
+    {q:'What did the letter say?',choices:['"Run"','"Don\'t open the red door"','"Trust no one"','"Call me"'],answer:'"Don\'t open the red door"'},
+  ]
+},
+
+{
+  id:'it_fantasy_01',
+  lang:'italian',
+  title:'The City That Moves',
+  titleNative:'La città che si muove',
+  genres:['fantasy','adventure'],
+  difficulty:'B2',
+  blurb:'Every morning the streets are different. The locals know the rules. The tourists don\'t.',
+  lines:[
+    {text:'Le strade cambiano ogni notte. I residenti lo sanno da generazioni.',reading:'',translation:'The streets change every night. The residents have known this for generations.'},
+    {text:'Regola uno: niente passeggiate dopo la mezzanotte.',reading:'',translation:'Rule one: no walks after midnight.'},
+    {text:'Regola due: se una strada è nuova, non seguirla.',reading:'',translation:'Rule two: if a street is new, don\'t follow it.'},
+    {text:'Regola tre: il mercato è sempre al centro. Sempre. Se non lo trovi, sei già perso.',reading:'',translation:'Rule three: the market is always in the center. Always. If you can\'t find it, you\'re already lost.'},
+    {text:'I turisti non conoscono le regole.',reading:'',translation:'Tourists don\'t know the rules.'},
+    {text:'Arrivano con le mappe. Le mappe non servono qui.',reading:'',translation:'They arrive with maps. Maps are useless here.'},
+    {text:'Alcuni vengono trovati il mattino dopo. Altri no.',reading:'',translation:'Some are found the next morning. Others aren\'t.'},
+  ],
+  questions:[
+    {q:'How long have residents known about the streets?',choices:['For a few years','Since childhood','For generations','Since last year'],answer:'For generations'},
+    {q:'What is rule three?',choices:['Don\'t go out alone','The market is always at the center','Don\'t follow new streets','Come home before midnight'],answer:'The market is always at the center'},
+    {q:'What happens to tourists?',choices:['They are warned at the entrance','Some are found the next morning, others aren\'t','They always find their way','The residents help them'],answer:'Some are found the next morning, others aren\'t'},
+  ]
+},
+
+{
+  id:'it_action_01',
+  lang:'italian',
+  title:'Five Seconds',
+  titleNative:'Cinque secondi',
+  genres:['action','thriller','adventure'],
+  difficulty:'B1',
+  blurb:'Two wires. Five seconds. A choice he had trained for his whole career but never wanted to make.',
+  lines:[
+    {text:'Il treno andava a centoventi all\'ora. Dentro, quattrocento persone.',reading:'',translation:'The train was doing a hundred and twenty. Inside, four hundred people.'},
+    {text:'Cinque secondi sul display.',reading:'',translation:'Five seconds on the display.'},
+    {text:'Due fili. Rosso e blu.',reading:'',translation:'Two wires. Red and blue.'},
+    {text:'Vent\'anni di addestramento per questo momento.',reading:'',translation:'Twenty years of training for this moment.'},
+    {text:'Le mani non tremavano. Quello lo sorprese.',reading:'',translation:'His hands weren\'t shaking. That surprised him.'},
+    {text:'Ha chiuso gli occhi un secondo. Ha tagliato.',reading:'',translation:'He closed his eyes for one second. He cut.'},
+    {text:'Silenzio. Poi il treno ha frenato.',reading:'',translation:'Silence. Then the train began to brake.'},
+  ],
+  questions:[
+    {q:'How many people were on the train?',choices:['A hundred','Two hundred','Four hundred','A thousand'],answer:'Four hundred'},
+    {q:'What surprised him?',choices:['The number of seconds left','That his hands weren\'t shaking','The color of the wires','That no one helped'],answer:'That his hands weren\'t shaking'},
+    {q:'What happened after he cut the wire?',choices:['An explosion','Nothing happened','Silence, then the train braked','The display reset'],answer:'Silence, then the train braked'},
   ]
 },
 
@@ -737,20 +710,20 @@ STORIES.push(
   titleNative:'L\'ultima lezione',
   genres:['drama','slice of life'],
   difficulty:'B1',
-  blurb:'A professor gives his last lecture before retirement. He has taught for forty years. He has one thing left to say that he has never said in class.',
+  blurb:'Forty years of teaching. One last thing left to say that he never had the courage to say before.',
   lines:[
-    {text:'Quarant\'anni fa ho iniziato a insegnare in questa aula.',reading:'',translation:'Forty years ago I began teaching in this classroom.'},
-    {text:'Ho parlato di storia, di guerra, di filosofia.',reading:'',translation:'I spoke about history, war, philosophy.'},
-    {text:'Oggi è l\'ultima lezione.',reading:'',translation:'Today is the last lesson.'},
-    {text:'Gli studenti aspettavano qualcosa di importante.',reading:'',translation:'The students were waiting for something important.'},
-    {text:'Ho detto solo questo: "Non so ancora tutto."',reading:'',translation:'I said only this: "I still don\'t know everything."'},
-    {text:'La classe era silenziosa.',reading:'',translation:'The class was silent.'},
-    {text:'"E questa è la cosa più importante che vi ho insegnato."',reading:'',translation:'"And that is the most important thing I have taught you."'},
+    {text:'Ho insegnato in questa aula per quarant\'anni.',reading:'',translation:'I have taught in this classroom for forty years.'},
+    {text:'Ho parlato di tutto. Storia, guerra, filosofia, letteratura.',reading:'',translation:'I have talked about everything. History, war, philosophy, literature.'},
+    {text:'Oggi è l\'ultima volta.',reading:'',translation:'Today is the last time.'},
+    {text:'Gli studenti aspettavano qualcosa di memorabile.',reading:'',translation:'The students were expecting something memorable.'},
+    {text:'Ho detto: "Non so ancora tutto."',reading:'',translation:'I said: "I still don\'t know everything."'},
+    {text:'Qualcuno ha riso. Gli altri erano in silenzio.',reading:'',translation:'Someone laughed. The others were silent.'},
+    {text:'"Questa è la cosa più importante che vi ho insegnato. Tenetela."',reading:'',translation:'"That is the most important thing I have taught you. Hold onto it."'},
   ],
   questions:[
-    {q:'How long had he been teaching?',choices:['Twenty years','Thirty years','Forty years','Fifty years'],answer:'Forty years'},
-    {q:'What did he say in his final lesson?',choices:['"Study hard"','"History repeats itself"','"I still don\'t know everything"','"Follow your dreams"'],answer:'"I still don\'t know everything"'},
-    {q:'What does he call the most important thing he taught?',choices:['Philosophy','History','Admitting you don\'t know everything','Hard work'],answer:'Admitting you don\'t know everything'},
+    {q:'How long did he teach?',choices:['Twenty years','Thirty years','Forty years','Fifty years'],answer:'Forty years'},
+    {q:'What did he say in his final class?',choices:['"Study hard"','"Follow your passion"','"I still don\'t know everything"','"History repeats itself"'],answer:'"I still don\'t know everything"'},
+    {q:'How did the students react?',choices:['Everyone was moved','Everyone laughed','Someone laughed, the others were silent','Everyone applauded'],answer:'Someone laughed, the others were silent'},
   ]
 },
 
@@ -759,23 +732,31 @@ STORIES.push(
   lang:'italian',
   title:'The Password',
   titleNative:'La password',
-  genres:['thriller','mystery'],
+  genres:['thriller','mystery','action'],
   difficulty:'B2',
-  blurb:'She is a hacker hired to break into a private server. She cracks every layer in minutes. Then she finds one folder she cannot open — and recognizes the password hint.',
+  blurb:'She cracked every layer of the server in twenty-two minutes. One folder remained locked. She recognized the password hint.',
   lines:[
-    {text:'Ho impiegato ventidue minuti a entrare nel sistema.',reading:'',translation:'It took me twenty-two minutes to get into the system.'},
-    {text:'I firewall erano forti ma non abbastanza.',reading:'',translation:'The firewalls were strong but not strong enough.'},
-    {text:'C\'era una cartella sola rimasta bloccata.',reading:'',translation:'There was one folder that remained locked.'},
-    {text:'Il suggerimento per la password era: "Il nome che non ho mai detto ad alta voce."',reading:'',translation:'The password hint was: "The name I have never said aloud."'},
-    {text:'Mi sono fermata.',reading:'',translation:'I stopped.'},
-    {text:'Conoscevo quella frase. Me l\'aveva detta mio padre.',reading:'',translation:'I knew that phrase. My father had said it to me.'},
-    {text:'Ho digitato il mio nome.',reading:'',translation:'I typed my own name.'},
+    {text:'Ventidue minuti. Non era un record, ma era abbastanza.',reading:'',translation:'Twenty-two minutes. Not a record, but enough.'},
+    {text:'Ogni livello di protezione era caduto. Quasi ogni livello.',reading:'',translation:'Every layer of protection had fallen. Almost every layer.'},
+    {text:'Una cartella. Bloccata.',reading:'',translation:'One folder. Locked.'},
+    {text:'Il suggerimento: "Il nome che non ho mai detto ad alta voce."',reading:'',translation:'The hint: "The name I have never said aloud."'},
+    {text:'Le mani si sono fermate sulla tastiera.',reading:'',translation:'Her hands stopped on the keyboard.'},
+    {text:'Quella frase. L\'aveva sentita una volta sola. Da mio padre, la notte prima che sparisse.',reading:'',translation:'That phrase. She had heard it only once. From her father, the night before he disappeared.'},
+    {text:'Ha digitato il suo nome. La cartella si è aperta.',reading:'',translation:'She typed her own name. The folder opened.'},
   ],
   questions:[
-    {q:'How long did it take her to enter the system?',choices:['Five minutes','Ten minutes','Twenty-two minutes','An hour'],answer:'Twenty-two minutes'},
-    {q:'What was the password hint?',choices:['"My first love"','"The name I have never said aloud"','"My mother\'s birthday"','"The place I was born"'],answer:'"The name I have never said aloud"'},
-    {q:'What did she type as the password?',choices:['Her father\'s name','Her mother\'s name','Her own name','She doesn\'t try'],answer:'Her own name'},
+    {q:'How long did it take to get through the server?',choices:['Five minutes','Twenty-two minutes','An hour','Three days'],answer:'Twenty-two minutes'},
+    {q:'Where had she heard the password hint before?',choices:['From a teacher','From her father the night before he disappeared','In an old book','She had written it herself'],answer:'From her father the night before he disappeared'},
+    {q:'What was the password?',choices:['Her father\'s name','Her mother\'s name','Her own name','It isn\'t revealed'],answer:'Her own name'},
   ]
 }
 
-);
+];
+
+// Genre lists per language
+const STORY_GENRES_BY_LANG = {
+  japanese: ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy'],
+  korean:   ['romance','slice of life','thriller','mystery','fantasy','action','drama'],
+  italian:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
+};
+const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy','thriller','drama'];
