@@ -2423,6 +2423,7 @@ function renderActivityGrid(container) {
 // ── STORIES TAB ───────────────────────────────────────────────────────────────
 let storyReadingDir = localStorage.getItem('lf-story-dir') || 'ltr'; // ltr | rtl | vertical
 let storyGenreFilter = new Set();
+let storyDiffFilter = new Set();
 let storyDeckMode = localStorage.getItem('lf-story-deck') !== 'false';
 let activeStoryId = null;
 
@@ -2456,18 +2457,25 @@ function renderStories(container) {
   const wrap = document.createElement('div');
   wrap.style.cssText = 'padding:1.2rem 2rem;display:flex;flex-direction:column;gap:1rem';
 
-  // Controls bar
+  // Controls — two rows: filters on top, toggles below
   const ctrl = document.createElement('div');
-  ctrl.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:.75rem;border-bottom:1px solid var(--bd)';
+  ctrl.style.cssText = 'display:flex;flex-direction:column;gap:8px;padding-bottom:.75rem;border-bottom:1px solid var(--bd)';
 
-  // Genre filter pills
-  const genreWrap = document.createElement('div');
-  genreWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;flex:1';
-  const allBtn = document.createElement('button');
-  allBtn.className = 'gbtn' + (storyGenreFilter.size === 0 ? ' on' : '');
-  allBtn.textContent = 'all';
-  allBtn.onclick = () => { storyGenreFilter.clear(); renderStories(container); };
-  genreWrap.appendChild(allBtn);
+  // Row 1: Genre pills
+  const genreRow = document.createElement('div');
+  genreRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;align-items:center';
+
+  const genreLabel = document.createElement('span');
+  genreLabel.style.cssText = 'font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);flex-shrink:0;margin-right:2px';
+  genreLabel.textContent = 'genre';
+  genreRow.appendChild(genreLabel);
+
+  const allGenreBtn = document.createElement('button');
+  allGenreBtn.className = 'gbtn' + (storyGenreFilter.size === 0 ? ' on' : '');
+  allGenreBtn.textContent = 'all';
+  allGenreBtn.onclick = () => { storyGenreFilter.clear(); rebuildFilters(); rebuildGrid(); };
+  genreRow.appendChild(allGenreBtn);
+
   const genreList = (typeof STORY_GENRES_BY_LANG !== 'undefined' ? (STORY_GENRES_BY_LANG[curLang] || STORY_GENRES || []) : []);
   genreList.forEach(g => {
     const btn = document.createElement('button');
@@ -2475,15 +2483,52 @@ function renderStories(container) {
     btn.textContent = g;
     btn.onclick = () => {
       if (storyGenreFilter.has(g)) storyGenreFilter.delete(g); else storyGenreFilter.add(g);
-      renderStories(container);
+      rebuildFilters(); rebuildGrid();
     };
-    genreWrap.appendChild(btn);
+    genreRow.appendChild(btn);
   });
-  ctrl.appendChild(genreWrap);
+  ctrl.appendChild(genreRow);
 
-  // Reading direction toggle
+  // Row 2: Difficulty pills (language-aware)
+  const diffRow = document.createElement('div');
+  diffRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;align-items:center';
+
+  const diffLabel = document.createElement('span');
+  diffLabel.style.cssText = 'font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);flex-shrink:0;margin-right:2px';
+  diffLabel.textContent = 'level';
+  diffRow.appendChild(diffLabel);
+
+  const diffLevels = curLang === 'japanese'
+    ? ['N5','N4','N3','N2','N1']
+    : curLang === 'korean'
+    ? ['TOPIK 1','TOPIK 2','TOPIK 3-4','TOPIK 5-6']
+    : ['A1','A2','B1','B2','C1'];
+
+  const allDiffBtn = document.createElement('button');
+  allDiffBtn.className = 'gbtn' + (storyDiffFilter.size === 0 ? ' on' : '');
+  allDiffBtn.textContent = 'all';
+  allDiffBtn.onclick = () => { storyDiffFilter.clear(); rebuildFilters(); rebuildGrid(); };
+  diffRow.appendChild(allDiffBtn);
+
+  diffLevels.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'gbtn' + (storyDiffFilter.has(d) ? ' on' : '');
+    btn.textContent = d;
+    btn.onclick = () => {
+      if (storyDiffFilter.has(d)) storyDiffFilter.delete(d); else storyDiffFilter.add(d);
+      rebuildFilters(); rebuildGrid();
+    };
+    diffRow.appendChild(btn);
+  });
+  ctrl.appendChild(diffRow);
+
+  // Row 3: utility toggles
+  const toggleRow = document.createElement('div');
+  toggleRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+
+  // Reading direction
   const dirBtn = document.createElement('button');
-  const dirLabels = { ltr: '← left to right', rtl: 'right to left →', vertical: '↓ vertical' };
+  const dirLabels = { ltr: '← L to R', rtl: 'R to L →', vertical: '↓ vertical' };
   dirBtn.className = 'ubtn';
   dirBtn.textContent = dirLabels[storyReadingDir];
   dirBtn.onclick = () => {
@@ -2492,10 +2537,10 @@ function renderStories(container) {
     localStorage.setItem('lf-story-dir', storyReadingDir);
     dirBtn.textContent = dirLabels[storyReadingDir];
   };
-  ctrl.appendChild(dirBtn);
+  toggleRow.appendChild(dirBtn);
 
-  // SRS filter toggle
-  let srsFilterMode = localStorage.getItem('lf-story-srs-filter') || 'off'; // off | some | most
+  // SRS filter
+  let srsFilterMode = localStorage.getItem('lf-story-srs-filter') || 'off';
   const srsFilterLabels = { off: 'srs filter: off', some: 'srs: some known', most: 'srs: mostly known' };
   const srsBtn = document.createElement('button');
   srsBtn.className = 'ubtn' + (srsFilterMode !== 'off' ? ' on' : '');
@@ -2508,7 +2553,7 @@ function renderStories(container) {
     srsBtn.textContent = srsFilterLabels[srsFilterMode];
     rebuildGrid();
   };
-  ctrl.appendChild(srsBtn);
+  toggleRow.appendChild(srsBtn);
 
   // Deck highlight toggle
   const deckBtn = document.createElement('button');
@@ -2519,8 +2564,21 @@ function renderStories(container) {
     localStorage.setItem('lf-story-deck', storyDeckMode ? 'true' : 'false');
     renderStories(container);
   };
-  ctrl.appendChild(deckBtn);
+  toggleRow.appendChild(deckBtn);
+  ctrl.appendChild(toggleRow);
   wrap.appendChild(ctrl);
+
+  function rebuildFilters() {
+    // Refresh all filter button states without full re-render
+    genreRow.querySelectorAll('.gbtn').forEach(btn => {
+      if (btn.textContent === 'all') btn.className = 'gbtn' + (storyGenreFilter.size === 0 ? ' on' : '');
+      else btn.className = 'gbtn' + (storyGenreFilter.has(btn.textContent) ? ' on' : '');
+    });
+    diffRow.querySelectorAll('.gbtn').forEach(btn => {
+      if (btn.textContent === 'all') btn.className = 'gbtn' + (storyDiffFilter.size === 0 ? ' on' : '');
+      else btn.className = 'gbtn' + (storyDiffFilter.has(btn.textContent) ? ' on' : '');
+    });
+  }
 
   // Filter stories
   const langStories = (typeof STORIES !== 'undefined' ? STORIES : []).filter(s => s.lang === curLang);
@@ -2529,6 +2587,7 @@ function renderStories(container) {
     let result = storyGenreFilter.size === 0
       ? stories
       : stories.filter(s => s.genres.some(g => storyGenreFilter.has(g)));
+    if (storyDiffFilter.size > 0) result = result.filter(s => storyDiffFilter.has(s.difficulty));
     if (srsFilterMode === 'some') result = result.filter(s => storyKnownScore(s) >= 0.2);
     if (srsFilterMode === 'most') result = result.filter(s => storyKnownScore(s) >= 0.5);
     return result;
