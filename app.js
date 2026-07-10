@@ -297,6 +297,7 @@ function renderTab(tab) {
   if (tab === 'practice') renderPractice(main);
   if (tab === 'grammar')  renderGrammar(main);
   if (tab === 'songs')    renderSongs(main);
+  if (tab === 'stories')  renderStories(main);
   if (tab === 'guide')    renderGuide(main);
   if (tab === 'medals')   renderMedals(main);
   if (tab === 'themes')   renderThemes(main);
@@ -2419,6 +2420,279 @@ function renderActivityGrid(container) {
   container.appendChild(legend);
 }
 
+// ── STORIES TAB ───────────────────────────────────────────────────────────────
+let storyReadingDir = localStorage.getItem('lf-story-dir') || 'ltr'; // ltr | rtl | vertical
+let storyGenreFilter = new Set();
+let storyDeckMode = localStorage.getItem('lf-story-deck') !== 'false';
+let activeStoryId = null;
+
+function renderStories(container) {
+  container.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:1.2rem 2rem;display:flex;flex-direction:column;gap:1rem';
+
+  // Controls bar
+  const ctrl = document.createElement('div');
+  ctrl.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:.75rem;border-bottom:1px solid var(--bd)';
+
+  // Genre filter pills
+  const genreWrap = document.createElement('div');
+  genreWrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;flex:1';
+  const allBtn = document.createElement('button');
+  allBtn.className = 'gbtn' + (storyGenreFilter.size === 0 ? ' on' : '');
+  allBtn.textContent = 'all';
+  allBtn.onclick = () => { storyGenreFilter.clear(); renderStories(container); };
+  genreWrap.appendChild(allBtn);
+  (typeof STORY_GENRES !== 'undefined' ? STORY_GENRES : []).forEach(g => {
+    const btn = document.createElement('button');
+    btn.className = 'gbtn' + (storyGenreFilter.has(g) ? ' on' : '');
+    btn.textContent = g;
+    btn.onclick = () => {
+      if (storyGenreFilter.has(g)) storyGenreFilter.delete(g); else storyGenreFilter.add(g);
+      renderStories(container);
+    };
+    genreWrap.appendChild(btn);
+  });
+  ctrl.appendChild(genreWrap);
+
+  // Reading direction toggle
+  const dirBtn = document.createElement('button');
+  const dirLabels = { ltr: '← left to right', rtl: 'right to left →', vertical: '↓ vertical' };
+  dirBtn.className = 'ubtn';
+  dirBtn.textContent = dirLabels[storyReadingDir];
+  dirBtn.onclick = () => {
+    const dirs = ['ltr', 'rtl', 'vertical'];
+    storyReadingDir = dirs[(dirs.indexOf(storyReadingDir) + 1) % dirs.length];
+    localStorage.setItem('lf-story-dir', storyReadingDir);
+    dirBtn.textContent = dirLabels[storyReadingDir];
+  };
+  ctrl.appendChild(dirBtn);
+
+  // Deck highlight toggle
+  const deckBtn = document.createElement('button');
+  deckBtn.className = 'ubtn' + (storyDeckMode ? ' on' : '');
+  deckBtn.textContent = storyDeckMode ? 'deck words: on' : 'deck words: off';
+  deckBtn.onclick = () => {
+    storyDeckMode = !storyDeckMode;
+    localStorage.setItem('lf-story-deck', storyDeckMode ? 'true' : 'false');
+    renderStories(container);
+  };
+  ctrl.appendChild(deckBtn);
+  wrap.appendChild(ctrl);
+
+  // Filter stories
+  const langStories = (typeof STORIES !== 'undefined' ? STORIES : []).filter(s => s.lang === curLang);
+  const filtered = storyGenreFilter.size === 0
+    ? langStories
+    : langStories.filter(s => s.genres.some(g => storyGenreFilter.has(g)));
+
+  if (filtered.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-msg';
+    empty.textContent = 'No stories match. Try a different filter or language.';
+    wrap.appendChild(empty);
+    container.appendChild(wrap);
+    return;
+  }
+
+  // Story cards grid
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px';
+
+  filtered.forEach(story => {
+    const card = document.createElement('div');
+    card.style.cssText = 'border:1px solid var(--bd);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s;background:var(--sf)';
+    card.onmouseenter = () => card.style.borderColor = 'var(--acc)';
+    card.onmouseleave = () => card.style.borderColor = 'var(--bd)';
+
+    const header = document.createElement('div');
+    header.style.cssText = 'padding:.9rem 1.1rem .6rem';
+    header.innerHTML = `
+      <div style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--tx);margin-bottom:2px">${story.title}</div>
+      <div style="font-family:'Noto Sans KR',sans-serif;font-size:.78rem;color:var(--mu);margin-bottom:.5rem">${story.titleNative}</div>
+      <div style="font-size:.65rem;color:var(--mu);line-height:1.6">${story.blurb}</div>
+    `;
+    card.appendChild(header);
+
+    const footer = document.createElement('div');
+    footer.style.cssText = 'padding:.5rem 1.1rem .8rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center';
+    const diffEl = document.createElement('span');
+    diffEl.style.cssText = 'font-size:.6rem;padding:2px 7px;border-radius:4px;background:var(--acc-bg);border:1px solid var(--acc-bd);color:var(--acc)';
+    diffEl.textContent = story.difficulty;
+    footer.appendChild(diffEl);
+    story.genres.forEach(g => {
+      const tag = document.createElement('span');
+      tag.style.cssText = 'font-size:.6rem;padding:2px 7px;border-radius:4px;background:var(--sf2);border:1px solid var(--bd2);color:var(--mu)';
+      tag.textContent = g;
+      footer.appendChild(tag);
+    });
+    card.appendChild(footer);
+
+    card.onclick = () => openStory(story, container);
+    grid.appendChild(card);
+  });
+  wrap.appendChild(grid);
+  container.appendChild(wrap);
+}
+
+function openStory(story, container) {
+  container.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:1.2rem 2rem;display:flex;flex-direction:column;gap:1rem;max-width:680px';
+
+  // Back button
+  const backBtn = document.createElement('button');
+  backBtn.className = 'ubtn';
+  backBtn.textContent = '← back to stories';
+  backBtn.onclick = () => renderStories(container);
+  wrap.appendChild(backBtn);
+
+  // Title
+  const titleEl = document.createElement('div');
+  titleEl.innerHTML = `
+    <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--tx)">${story.title}</div>
+    <div style="font-family:'Noto Sans KR',sans-serif;font-size:.9rem;color:var(--mu);margin-top:2px">${story.titleNative}</div>
+  `;
+  wrap.appendChild(titleEl);
+
+  // Direction selector
+  const dirRow = document.createElement('div');
+  dirRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;align-items:center';
+  const dirLabel = document.createElement('span');
+  dirLabel.style.cssText = 'font-size:.65rem;color:var(--mu)';
+  dirLabel.textContent = 'reading direction:';
+  dirRow.appendChild(dirLabel);
+  [['ltr','← L to R'],['rtl','R to L →'],['vertical','↓ vertical']].forEach(([val, lbl]) => {
+    const b = document.createElement('button');
+    b.className = 'gbtn' + (storyReadingDir === val ? ' on' : '');
+    b.textContent = lbl;
+    b.onclick = () => {
+      storyReadingDir = val;
+      localStorage.setItem('lf-story-dir', val);
+      openStory(story, container);
+    };
+    dirRow.appendChild(b);
+  });
+  wrap.appendChild(dirRow);
+
+  // Story text
+  const storyBox = document.createElement('div');
+
+  // Deck words for highlighting
+  const deckWords = new Set();
+  if (storyDeckMode && activeDeckIdx >= 0 && activeDeckIdx < decks.length) {
+    Object.keys(decks[activeDeckIdx].words).forEach(kr => deckWords.add(kr));
+  }
+
+  if (storyReadingDir === 'vertical') {
+    storyBox.style.cssText = 'writing-mode:vertical-rl;text-orientation:mixed;max-height:520px;overflow-x:auto;border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);font-family:"Noto Sans KR",sans-serif;font-size:1.1rem;line-height:2.2;color:var(--tx);display:flex;flex-direction:row;gap:1.5rem';
+  } else if (storyReadingDir === 'rtl') {
+    storyBox.style.cssText = 'direction:rtl;border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);display:flex;flex-direction:column;gap:1rem';
+  } else {
+    storyBox.style.cssText = 'border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);display:flex;flex-direction:column;gap:1rem';
+  }
+
+  story.lines.forEach((line, i) => {
+    const lineEl = document.createElement('div');
+    if (storyReadingDir === 'vertical') {
+      lineEl.style.cssText = 'display:flex;flex-direction:column;gap:.4rem';
+    }
+
+    // Main text — highlight deck words
+    const textEl = document.createElement('div');
+    textEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:1.1rem;line-height:1.9;color:var(--tx)";
+    if (deckWords.size > 0 && curLang === 'japanese') {
+      // Simple highlight: wrap matching deck words
+      let html = line.text;
+      deckWords.forEach(w => {
+        if (w.length > 1 && html.includes(w)) {
+          html = html.replaceAll(w, `<span style="background:var(--acc-bg);border-bottom:1.5px solid var(--acc);padding:0 1px">${w}</span>`);
+        }
+      });
+      textEl.innerHTML = html;
+    } else {
+      textEl.textContent = line.text;
+    }
+
+    // Reading (furigana-style, smaller)
+    const readEl = document.createElement('div');
+    if (line.reading && curLang === 'japanese' && showRomanization) {
+      readEl.style.cssText = 'font-size:.68rem;color:var(--mu);line-height:1.6;font-family:"DM Mono",monospace';
+      readEl.textContent = line.reading;
+    }
+
+    // Translation (tap to reveal)
+    const transWrap = document.createElement('div');
+    transWrap.style.cssText = 'cursor:pointer';
+    const transEl = document.createElement('div');
+    transEl.style.cssText = 'font-size:.72rem;color:transparent;line-height:1.6;font-style:italic;padding:3px 6px;border-radius:4px;background:var(--sf2);border:1px solid var(--bd);transition:color .2s;user-select:none';
+    transEl.textContent = line.translation;
+    const transHint = document.createElement('div');
+    transHint.style.cssText = 'font-size:.58rem;color:var(--su);margin-top:1px';
+    transHint.textContent = 'tap to reveal';
+    let revealed = false;
+    transWrap.onclick = () => {
+      revealed = !revealed;
+      transEl.style.color = revealed ? 'var(--mu)' : 'transparent';
+      transHint.textContent = revealed ? 'tap to hide' : 'tap to reveal';
+    };
+    transWrap.appendChild(transEl);
+    transWrap.appendChild(transHint);
+
+    lineEl.appendChild(textEl);
+    if (line.reading && curLang === 'japanese' && showRomanization) lineEl.appendChild(readEl);
+    lineEl.appendChild(transWrap);
+    storyBox.appendChild(lineEl);
+  });
+  wrap.appendChild(storyBox);
+
+  // Comprehension questions
+  const qTitle = document.createElement('div');
+  qTitle.style.cssText = 'font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);margin-top:.5rem';
+  qTitle.textContent = 'comprehension';
+  wrap.appendChild(qTitle);
+
+  story.questions.forEach((q, qi) => {
+    const qCard = document.createElement('div');
+    qCard.style.cssText = 'border:1px solid var(--bd);border-radius:8px;padding:.85rem 1rem;background:var(--sf)';
+    const qText = document.createElement('div');
+    qText.style.cssText = 'font-size:.82rem;color:var(--tx);margin-bottom:.6rem';
+    qText.textContent = (qi + 1) + '. ' + q.q;
+    qCard.appendChild(qText);
+    const choices = document.createElement('div');
+    choices.style.cssText = 'display:flex;flex-direction:column;gap:5px';
+    let answered = false;
+    q.choices.forEach(choice => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.style.cssText = 'text-align:left;font-size:.75rem;padding:6px 10px';
+      btn.textContent = choice;
+      btn.onclick = () => {
+        if (answered) return;
+        answered = true;
+        const correct = choice === q.answer;
+        btn.style.borderColor = correct ? '#7ac8a0' : '#c87a7a';
+        btn.style.color = correct ? '#7ac8a0' : '#c87a7a';
+        btn.style.background = correct ? 'rgba(122,200,160,.1)' : 'rgba(200,122,122,.1)';
+        if (!correct) {
+          choices.querySelectorAll('button').forEach(b => {
+            if (b.textContent === q.answer) {
+              b.style.borderColor = '#7ac8a0';
+              b.style.color = '#7ac8a0';
+              b.style.background = 'rgba(122,200,160,.1)';
+            }
+          });
+        }
+      };
+      choices.appendChild(btn);
+    });
+    qCard.appendChild(choices);
+    wrap.appendChild(qCard);
+  });
+
+  container.appendChild(wrap);
+}
+
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 (function boot(){
   decks=load('lf-decks',[]);activeDeckIdx=load('lf-activeDeck',-1);curGrouping=load('lf-grouping','pos');
@@ -2430,6 +2704,10 @@ function renderActivityGrid(container) {
   const L=LANGS[curLang];document.getElementById('langFlag').textContent=L.flag;document.getElementById('langLabel').textContent=L.label;
   document.querySelectorAll('.lang-option').forEach(el=>el.classList.toggle('active',el.dataset.lang===curLang));
   showScriptFilters(curLang==='japanese');
+  if(!document.querySelector('[data-tab="stories"]')){
+    const tb=document.getElementById('tabBar');const sb=document.createElement('button');sb.className='tab-btn';sb.dataset.tab='stories';sb.textContent='stories';sb.onclick=()=>switchTab('stories');
+    tb.insertBefore(sb,document.getElementById('fontBtn'));
+  }
   if(!document.querySelector('[data-tab="medals"]')){
     const tb=document.getElementById('tabBar');const mb=document.createElement('button');mb.className='tab-btn';mb.dataset.tab='medals';mb.textContent='medals';mb.onclick=()=>switchTab('medals');
     tb.insertBefore(mb,document.getElementById('fontBtn'));
