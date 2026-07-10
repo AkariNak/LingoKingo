@@ -181,7 +181,7 @@ const STORIES = [
   lang:'korean',
   title:'The Caller',
   titleNative:'전화',
-  genres:['mystery','horror','action'],
+  genres:['thriller','mystery','action'],
   difficulty:'TOPIK 3-4',
   blurb:'She answers a wrong number. The caller knows her name. Her address. And what she had for dinner.',
   lines:[
@@ -300,5 +300,10 @@ const STORIES = [
 
 ];
 
-// Genre list for filtering
-const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy'];
+// Genre lists per language
+const STORY_GENRES_BY_LANG = {
+  japanese: ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy'],
+  korean:   ['romance','slice of life','thriller','mystery','fantasy','action','drama','school','comedy'],
+  italian:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy'],
+};
+const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy','thriller','drama'];
