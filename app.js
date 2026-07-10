@@ -2426,6 +2426,31 @@ let storyGenreFilter = new Set();
 let storyDeckMode = localStorage.getItem('lf-story-deck') !== 'false';
 let activeStoryId = null;
 
+function storyKnownScore(story) {
+  // Returns 0-1: fraction of story words the user has reviewed in SRS
+  const allReviewed = new Set();
+  Object.keys(srsData).forEach(k => {
+    const c = srsData[k];
+    if (c && c.state !== 'new') {
+      // key format is "deckname:kr"
+      const kr = k.split(':').slice(1).join(':');
+      if (kr) allReviewed.add(kr);
+    }
+  });
+  if (allReviewed.size === 0) return 0;
+  const words = LANGS[story.lang]?.words || [];
+  let total = 0, known = 0;
+  story.lines.forEach(line => {
+    words.forEach(w => {
+      if (w.kr.length > 1 && line.text.includes(w.kr)) {
+        total++;
+        if (allReviewed.has(w.kr)) known++;
+      }
+    });
+  });
+  return total === 0 ? 0 : known / total;
+}
+
 function renderStories(container) {
   container.innerHTML = '';
   const wrap = document.createElement('div');
@@ -2469,6 +2494,22 @@ function renderStories(container) {
   };
   ctrl.appendChild(dirBtn);
 
+  // SRS filter toggle
+  let srsFilterMode = localStorage.getItem('lf-story-srs-filter') || 'off'; // off | some | most
+  const srsFilterLabels = { off: 'srs filter: off', some: 'srs: some known', most: 'srs: mostly known' };
+  const srsBtn = document.createElement('button');
+  srsBtn.className = 'ubtn' + (srsFilterMode !== 'off' ? ' on' : '');
+  srsBtn.textContent = srsFilterLabels[srsFilterMode];
+  srsBtn.onclick = () => {
+    const modes = ['off', 'some', 'most'];
+    srsFilterMode = modes[(modes.indexOf(srsFilterMode) + 1) % modes.length];
+    localStorage.setItem('lf-story-srs-filter', srsFilterMode);
+    srsBtn.className = 'ubtn' + (srsFilterMode !== 'off' ? ' on' : '');
+    srsBtn.textContent = srsFilterLabels[srsFilterMode];
+    rebuildGrid();
+  };
+  ctrl.appendChild(srsBtn);
+
   // Deck highlight toggle
   const deckBtn = document.createElement('button');
   deckBtn.className = 'ubtn' + (storyDeckMode ? ' on' : '');
@@ -2483,24 +2524,30 @@ function renderStories(container) {
 
   // Filter stories
   const langStories = (typeof STORIES !== 'undefined' ? STORIES : []).filter(s => s.lang === curLang);
-  const filtered = storyGenreFilter.size === 0
-    ? langStories
-    : langStories.filter(s => s.genres.some(g => storyGenreFilter.has(g)));
 
-  if (filtered.length === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'empty-msg';
-    empty.textContent = 'No stories match. Try a different filter or language.';
-    wrap.appendChild(empty);
-    container.appendChild(wrap);
-    return;
+  function applyFilters(stories) {
+    let result = storyGenreFilter.size === 0
+      ? stories
+      : stories.filter(s => s.genres.some(g => storyGenreFilter.has(g)));
+    if (srsFilterMode === 'some') result = result.filter(s => storyKnownScore(s) >= 0.2);
+    if (srsFilterMode === 'most') result = result.filter(s => storyKnownScore(s) >= 0.5);
+    return result;
   }
 
   // Story cards grid
   const grid = document.createElement('div');
   grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px';
+  wrap.appendChild(grid);
 
-  filtered.forEach(story => {
+  function rebuildGrid() {
+    grid.innerHTML = '';
+    const filtered = applyFilters(langStories);
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-msg">No stories match. Try a different filter or language.</div>';
+      return;
+    }
+    filtered.forEach(story => {
+      const score = storyKnownScore(story);
     const card = document.createElement('div');
     card.style.cssText = 'border:1px solid var(--bd);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s;background:var(--sf)';
     card.onmouseenter = () => card.style.borderColor = 'var(--acc)';
@@ -2529,10 +2576,23 @@ function renderStories(container) {
     });
     card.appendChild(footer);
 
-    card.onclick = () => openStory(story, container);
-    grid.appendChild(card);
-  });
-  wrap.appendChild(grid);
+      card.onclick = () => openStory(story, container);
+
+      // Show SRS score badge if filter is active
+      if (srsFilterMode !== 'off' && score > 0) {
+        const scoreEl = document.createElement('div');
+        scoreEl.style.cssText = 'padding:.3rem 1.1rem .5rem;font-size:.62rem;color:var(--mu)';
+        const pct = Math.round(score * 100);
+        scoreEl.textContent = pct + '% known vocabulary';
+        scoreEl.style.color = pct >= 50 ? '#7ac8a0' : pct >= 20 ? '#c8a87a' : 'var(--mu)';
+        card.appendChild(scoreEl);
+      }
+
+      grid.appendChild(card);
+    });
+  }
+
+  rebuildGrid();
   container.appendChild(wrap);
 }
 
