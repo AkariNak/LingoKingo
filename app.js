@@ -2441,7 +2441,8 @@ function storyKnownScore(story) {
   if (allReviewed.size === 0) return 0;
   const words = LANGS[story.lang]?.words || [];
   let total = 0, known = 0;
-  story.lines.forEach(line => {
+  const allLines = story.lines || (story.pages || []).flat();
+  allLines.forEach(line => {
     words.forEach(w => {
       if (w.kr.length > 1 && line.text.includes(w.kr)) {
         total++;
