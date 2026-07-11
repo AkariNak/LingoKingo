@@ -2655,6 +2655,128 @@ function renderStories(container) {
   container.appendChild(wrap);
 }
 
+function renderStoryPage(story, pageIdx, container) {
+  // Renders one page (or all lines if no pages)
+  const pages = story.pages || [story.lines];
+  const lines = pages[pageIdx];
+  const totalPages = pages.length;
+  const deckWords = new Set();
+  if (storyDeckMode && activeDeckIdx >= 0 && activeDeckIdx < decks.length) {
+    Object.keys(decks[activeDeckIdx].words).forEach(kr => deckWords.add(kr));
+  }
+
+  container.innerHTML = '';
+
+  // Page indicator
+  if (totalPages > 1) {
+    const pageBar = document.createElement('div');
+    pageBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem';
+
+    const pageLabel = document.createElement('span');
+    pageLabel.style.cssText = 'font-size:.65rem;color:var(--su);letter-spacing:.08em';
+    pageLabel.textContent = `page ${pageIdx + 1} of ${totalPages}`;
+    pageBar.appendChild(pageLabel);
+
+    // Dot indicators
+    const dots = document.createElement('div');
+    dots.style.cssText = 'display:flex;gap:5px;align-items:center';
+    for (let i = 0; i < totalPages; i++) {
+      const dot = document.createElement('div');
+      dot.style.cssText = `width:7px;height:7px;border-radius:50%;background:${i === pageIdx ? 'var(--acc)' : 'var(--bd2)'};transition:background .2s;cursor:pointer`;
+      dot.onclick = () => renderStoryPage(story, i, container);
+      dots.appendChild(dot);
+    }
+    pageBar.appendChild(dots);
+    container.appendChild(pageBar);
+  }
+
+  // Story box
+  const storyBox = document.createElement('div');
+  if (storyReadingDir === 'vertical') {
+    storyBox.style.cssText = 'writing-mode:vertical-rl;text-orientation:mixed;max-height:520px;overflow-x:auto;border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);font-family:"Noto Sans KR",sans-serif;font-size:1.1rem;line-height:2.2;color:var(--tx);display:flex;flex-direction:row;gap:1.5rem';
+  } else if (storyReadingDir === 'rtl') {
+    storyBox.style.cssText = 'direction:rtl;border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);display:flex;flex-direction:column;gap:1rem';
+  } else {
+    storyBox.style.cssText = 'border:1px solid var(--bd);border-radius:10px;padding:1.4rem 1.6rem;background:var(--sf);display:flex;flex-direction:column;gap:1.1rem';
+  }
+
+  lines.forEach(line => {
+    const lineEl = document.createElement('div');
+    if (storyReadingDir === 'vertical') lineEl.style.cssText = 'display:flex;flex-direction:column;gap:.4rem';
+
+    const textEl = document.createElement('div');
+    textEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:1.1rem;line-height:1.9;color:var(--tx)";
+    if (deckWords.size > 0 && curLang === 'japanese') {
+      let html = line.text;
+      deckWords.forEach(w => {
+        if (w.length > 1 && html.includes(w)) {
+          html = html.replaceAll(w, `<span style="background:var(--acc-bg);border-bottom:1.5px solid var(--acc);padding:0 1px">${w}</span>`);
+        }
+      });
+      textEl.innerHTML = html;
+    } else {
+      textEl.textContent = line.text;
+    }
+
+    if (line.reading && curLang === 'japanese' && showRomanization) {
+      const readEl = document.createElement('div');
+      readEl.style.cssText = 'font-size:.66rem;color:var(--mu);line-height:1.6;font-family:"DM Mono",monospace;margin-top:-4px';
+      readEl.textContent = line.reading;
+      lineEl.appendChild(textEl);
+      lineEl.appendChild(readEl);
+    } else {
+      lineEl.appendChild(textEl);
+    }
+
+    // Translation — tap to reveal
+    const transWrap = document.createElement('div');
+    transWrap.style.cssText = 'cursor:pointer;margin-top:-2px';
+    const transEl = document.createElement('div');
+    transEl.style.cssText = 'font-size:.71rem;color:transparent;line-height:1.6;font-style:italic;padding:3px 6px;border-radius:4px;background:var(--sf2);border:1px solid var(--bd);transition:color .2s;user-select:none';
+    transEl.textContent = line.translation;
+    const transHint = document.createElement('div');
+    transHint.style.cssText = 'font-size:.56rem;color:var(--su);margin-top:1px';
+    transHint.textContent = 'tap to reveal';
+    let revealed = false;
+    transWrap.onclick = () => {
+      revealed = !revealed;
+      transEl.style.color = revealed ? 'var(--mu)' : 'transparent';
+      transHint.textContent = revealed ? 'tap to hide' : 'tap to reveal';
+    };
+    transWrap.appendChild(transEl);
+    transWrap.appendChild(transHint);
+    lineEl.appendChild(transWrap);
+    storyBox.appendChild(lineEl);
+  });
+  container.appendChild(storyBox);
+
+  // Prev / Next navigation
+  if (totalPages > 1) {
+    const navRow = document.createElement('div');
+    navRow.style.cssText = 'display:flex;justify-content:space-between;gap:8px;margin-top:.25rem';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'abtn';
+    prevBtn.textContent = '← prev';
+    prevBtn.style.visibility = pageIdx === 0 ? 'hidden' : 'visible';
+    prevBtn.onclick = () => { renderStoryPage(story, pageIdx - 1, container); container.scrollIntoView({behavior:'smooth',block:'start'}); };
+    navRow.appendChild(prevBtn);
+
+    const nextBtn = document.createElement('button');
+    if (pageIdx < totalPages - 1) {
+      nextBtn.className = 'abtn accent';
+      nextBtn.textContent = 'next →';
+      nextBtn.onclick = () => { renderStoryPage(story, pageIdx + 1, container); container.scrollIntoView({behavior:'smooth',block:'start'}); };
+    } else {
+      nextBtn.className = 'abtn';
+      nextBtn.textContent = 'questions →';
+      nextBtn.onclick = () => { container.scrollIntoView({behavior:'smooth',block:'start'}); };
+    }
+    navRow.appendChild(nextBtn);
+    container.appendChild(navRow);
+  }
+}
+
 function openStory(story, container) {
   container.innerHTML = '';
   const wrap = document.createElement('div');
@@ -2695,76 +2817,10 @@ function openStory(story, container) {
   });
   wrap.appendChild(dirRow);
 
-  // Story text
-  const storyBox = document.createElement('div');
-
-  // Deck words for highlighting
-  const deckWords = new Set();
-  if (storyDeckMode && activeDeckIdx >= 0 && activeDeckIdx < decks.length) {
-    Object.keys(decks[activeDeckIdx].words).forEach(kr => deckWords.add(kr));
-  }
-
-  if (storyReadingDir === 'vertical') {
-    storyBox.style.cssText = 'writing-mode:vertical-rl;text-orientation:mixed;max-height:520px;overflow-x:auto;border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);font-family:"Noto Sans KR",sans-serif;font-size:1.1rem;line-height:2.2;color:var(--tx);display:flex;flex-direction:row;gap:1.5rem';
-  } else if (storyReadingDir === 'rtl') {
-    storyBox.style.cssText = 'direction:rtl;border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);display:flex;flex-direction:column;gap:1rem';
-  } else {
-    storyBox.style.cssText = 'border:1px solid var(--bd);border-radius:10px;padding:1.2rem;background:var(--sf);display:flex;flex-direction:column;gap:1rem';
-  }
-
-  story.lines.forEach((line, i) => {
-    const lineEl = document.createElement('div');
-    if (storyReadingDir === 'vertical') {
-      lineEl.style.cssText = 'display:flex;flex-direction:column;gap:.4rem';
-    }
-
-    // Main text — highlight deck words
-    const textEl = document.createElement('div');
-    textEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:1.1rem;line-height:1.9;color:var(--tx)";
-    if (deckWords.size > 0 && curLang === 'japanese') {
-      // Simple highlight: wrap matching deck words
-      let html = line.text;
-      deckWords.forEach(w => {
-        if (w.length > 1 && html.includes(w)) {
-          html = html.replaceAll(w, `<span style="background:var(--acc-bg);border-bottom:1.5px solid var(--acc);padding:0 1px">${w}</span>`);
-        }
-      });
-      textEl.innerHTML = html;
-    } else {
-      textEl.textContent = line.text;
-    }
-
-    // Reading (furigana-style, smaller)
-    const readEl = document.createElement('div');
-    if (line.reading && curLang === 'japanese' && showRomanization) {
-      readEl.style.cssText = 'font-size:.68rem;color:var(--mu);line-height:1.6;font-family:"DM Mono",monospace';
-      readEl.textContent = line.reading;
-    }
-
-    // Translation (tap to reveal)
-    const transWrap = document.createElement('div');
-    transWrap.style.cssText = 'cursor:pointer';
-    const transEl = document.createElement('div');
-    transEl.style.cssText = 'font-size:.72rem;color:transparent;line-height:1.6;font-style:italic;padding:3px 6px;border-radius:4px;background:var(--sf2);border:1px solid var(--bd);transition:color .2s;user-select:none';
-    transEl.textContent = line.translation;
-    const transHint = document.createElement('div');
-    transHint.style.cssText = 'font-size:.58rem;color:var(--su);margin-top:1px';
-    transHint.textContent = 'tap to reveal';
-    let revealed = false;
-    transWrap.onclick = () => {
-      revealed = !revealed;
-      transEl.style.color = revealed ? 'var(--mu)' : 'transparent';
-      transHint.textContent = revealed ? 'tap to hide' : 'tap to reveal';
-    };
-    transWrap.appendChild(transEl);
-    transWrap.appendChild(transHint);
-
-    lineEl.appendChild(textEl);
-    if (line.reading && curLang === 'japanese' && showRomanization) lineEl.appendChild(readEl);
-    lineEl.appendChild(transWrap);
-    storyBox.appendChild(lineEl);
-  });
-  wrap.appendChild(storyBox);
+  // Story pages
+  const pageContainer = document.createElement('div');
+  wrap.appendChild(pageContainer);
+  renderStoryPage(story, 0, pageContainer);
 
   // Comprehension questions
   const qTitle = document.createElement('div');
