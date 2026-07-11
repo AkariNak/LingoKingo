@@ -298,6 +298,7 @@ function renderTab(tab) {
   if (tab === 'grammar')  renderGrammar(main);
   if (tab === 'songs')    renderSongs(main);
   if (tab === 'stories')  renderStories(main);
+  if (tab === 'writing')  renderWritingTab(main);
   if (tab === 'guide')    renderGuide(main);
   if (tab === 'medals')   renderMedals(main);
   if (tab === 'themes')   renderThemes(main);
@@ -767,8 +768,8 @@ function showDeckCtxMenu(e,idx){
 let studyList=[],sIdx=0,sFlip=false;
 // studyMode: 'flip' (default) | 'meaning' (type English) | 'reading' (type romaji)
 let studyMode = localStorage.getItem('lf-study-mode') || 'flip';
-const STUDY_MODES = ['flip','meaning','reading','cloze'];
-const STUDY_MODE_LABELS = {flip:'✎ flip', meaning:'✎ type meaning', reading:'✎ type reading', cloze:'✎ cloze'};
+const STUDY_MODES = ['flip','meaning','reading','cloze','writing'];
+const STUDY_MODE_LABELS = {flip:'✎ flip', meaning:'✎ type meaning', reading:'✎ type reading', cloze:'✎ cloze', writing:'✎ writing'};
 
 function cycleStudyMode(){
   const idx = STUDY_MODES.indexOf(studyMode);
@@ -849,6 +850,110 @@ function renderStudyCard(){
         <span style="font-size:.85rem;color:var(--tx)">${w.meaning}</span>
       </div>
       <div style="font-size:.75rem;color:var(--mu);line-height:1.7;padding:.5rem .75rem;background:var(--sf2);border-radius:8px;font-family:'Noto Sans KR',sans-serif">${exSentence||''}</div>`;
+
+  } else if(studyMode === 'writing'){
+    // ── WRITING MODE ──────────────────────────────────────────────────────────
+    // Front: show meaning + reading, user writes the character/word
+    // Back: show the character for comparison with self-grade buttons
+    const roHtml2 = showRomanization ? `<div class="fc-ro">${w.ro}</div>` : '';
+    front.innerHTML = `
+      <div class="fc-meaning" style="font-size:1.2rem;margin-bottom:.4rem">${w.meaning}</div>
+      ${roHtml2}
+      <div class="fc-pos">${w.pos}</div>
+      <div style="font-size:.6rem;color:var(--su);margin-top:.5rem">write the ${curLang === 'japanese' ? 'character' : 'word'} on the back →</div>
+    `;
+    // Back: canvas for writing + character reveal
+    back.innerHTML = '';
+    const writeWrap = document.createElement('div');
+    writeWrap.style.cssText = 'width:100%;display:flex;flex-direction:column;align-items:center;gap:8px';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 200; canvas.height = 200;
+    canvas.style.cssText = 'border:1.5px solid var(--bd2);border-radius:10px;background:var(--sf2);touch-action:none;cursor:crosshair';
+
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--tx').trim() || '#f0eee8';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    let drawing = false, lastX = 0, lastY = 0;
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      if (e.touches) {
+        return [(e.touches[0].clientX - rect.left) * scaleX, (e.touches[0].clientY - rect.top) * scaleY];
+      }
+      return [(e.clientX - rect.left) * scaleX, (e.clientY - rect.top) * scaleY];
+    }
+    canvas.addEventListener('mousedown', e => { drawing = true; [lastX, lastY] = getPos(e); });
+    canvas.addEventListener('mousemove', e => {
+      if (!drawing) return;
+      const [x, y] = getPos(e);
+      ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
+      [lastX, lastY] = [x, y];
+    });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mouseleave', () => drawing = false);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; [lastX, lastY] = getPos(e); }, {passive:false});
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (!drawing) return;
+      const [x, y] = getPos(e);
+      ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
+      [lastX, lastY] = [x, y];
+    }, {passive:false});
+    canvas.addEventListener('touchend', () => drawing = false);
+
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'ubtn'; clearBtn.textContent = '✕ clear';
+    clearBtn.onclick = () => ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Character reveal (hidden until user taps)
+    const revealWrap = document.createElement('div');
+    revealWrap.style.cssText = 'display:flex;align-items:center;gap:12px;margin-top:4px';
+
+    const charEl = document.createElement('div');
+    charEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:4rem;font-weight:700;color:transparent;background:var(--sf2);border:1.5px solid var(--bd2);border-radius:10px;width:80px;height:80px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s;user-select:none";
+    charEl.textContent = w.kr;
+    charEl.title = 'tap to reveal';
+    let charRevealed = false;
+    charEl.onclick = () => {
+      charRevealed = !charRevealed;
+      charEl.style.color = charRevealed ? 'var(--acc)' : 'transparent';
+      charHint.textContent = charRevealed ? 'tap to hide' : 'tap to reveal';
+    };
+
+    const charInfo = document.createElement('div');
+    charInfo.style.cssText = 'display:flex;flex-direction:column;gap:4px';
+    const charHint = document.createElement('div');
+    charHint.style.cssText = 'font-size:.6rem;color:var(--su)';
+    charHint.textContent = 'tap to reveal';
+    const roEl = document.createElement('div');
+    roEl.style.cssText = 'font-size:.72rem;color:var(--mu)';
+    roEl.textContent = w.ro;
+    charInfo.appendChild(charHint); charInfo.appendChild(roEl);
+    revealWrap.appendChild(charEl); revealWrap.appendChild(charInfo);
+
+    // Self-grade buttons
+    const gradeRow = document.createElement('div');
+    gradeRow.style.cssText = 'display:flex;gap:8px;margin-top:4px';
+    const againBtn2 = document.createElement('button');
+    againBtn2.className = 'abtn'; againBtn2.textContent = '✗ again';
+    againBtn2.style.cssText = 'background:rgba(200,122,122,.12);border-color:rgba(200,122,122,.4);color:#c87a7a';
+    againBtn2.onclick = () => { if(document.getElementById('srsControls')?.style.display!=='none') srsAgain(); else nextCard(); };
+    const gotBtn = document.createElement('button');
+    gotBtn.className = 'abtn'; gotBtn.textContent = '✓ got it';
+    gotBtn.style.cssText = 'background:rgba(122,200,160,.12);border-color:rgba(122,200,160,.4);color:#7ac8a0';
+    gotBtn.onclick = () => { if(document.getElementById('srsControls')?.style.display!=='none') srsGood(); else nextCard(); };
+    gradeRow.appendChild(againBtn2); gradeRow.appendChild(gotBtn);
+
+    writeWrap.appendChild(canvas);
+    writeWrap.appendChild(clearBtn);
+    writeWrap.appendChild(revealWrap);
+    writeWrap.appendChild(gradeRow);
+    back.appendChild(writeWrap);
 
   } else if(studyMode === 'meaning' || studyMode === 'reading'){
     const isMeaning = studyMode === 'meaning';
@@ -987,8 +1092,8 @@ function reshuffleStudy(){const cur=studyList[sIdx];studyList=shuffle(studyList)
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('studyOverlay')?.classList.contains('open')) return;
   if(e.key==='Escape')closeStudy();
-  if(e.key==='ArrowRight'&&(studyMode==='flip'||studyMode==='cloze'))nextCard();
-  if(e.key===' '&&(studyMode==='flip'||studyMode==='cloze')){e.preventDefault();flipCard();}
+  if(e.key==='ArrowRight'&&(studyMode==='flip'||studyMode==='cloze'||studyMode==='writing'))nextCard();
+  if(e.key===' '&&(studyMode==='flip'||studyMode==='cloze'||studyMode==='writing')){e.preventDefault();flipCard();}
 });
 
 // ── SRS SYSTEM (ANKI-STYLE) ──────────────────────────────────────────────────
@@ -2420,6 +2525,293 @@ function renderActivityGrid(container) {
   container.appendChild(legend);
 }
 
+// ── WRITING TAB ───────────────────────────────────────────────────────────────
+let writingMode = localStorage.getItem('lf-write-mode') || 'character'; // character | word | sentence
+let writingScript = localStorage.getItem('lf-write-script') || 'hiragana';
+let writingQueue = [];
+let writingIdx = 0;
+let writingCtx = null;
+let writingDrawing = false;
+let writingLastX = 0, writingLastY = 0;
+
+function buildWritingQueue() {
+  const words = LANGS[curLang].words;
+  if (writingMode === 'character') {
+    const scriptMap = {
+      hiragana: w => w.pos === 'hiragana',
+      katakana: w => w.pos === 'katakana',
+      kanji:    w => w.pos === 'kanji' && w.script === 'kanji',
+    };
+    const filter = scriptMap[writingScript] || scriptMap.hiragana;
+    writingQueue = shuffle(words.filter(filter));
+  } else if (writingMode === 'word') {
+    const deckKeys = activeDeckIdx >= 0 && activeDeckIdx < decks.length
+      ? Object.keys(decks[activeDeckIdx].words)
+      : [];
+    const pool = deckKeys.length > 0
+      ? words.filter(w => deckKeys.includes(w.kr))
+      : words.filter(w => w.freq >= 9 && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d');
+    writingQueue = shuffle(pool);
+  } else {
+    // sentence mode — use example sentences from deck or high-freq words
+    const deckKeys = activeDeckIdx >= 0 && activeDeckIdx < decks.length
+      ? Object.keys(decks[activeDeckIdx].words)
+      : [];
+    const pool = deckKeys.length > 0
+      ? words.filter(w => deckKeys.includes(w.kr) && w.example)
+      : words.filter(w => w.freq >= 9 && w.example);
+    writingQueue = shuffle(pool);
+  }
+  writingIdx = 0;
+}
+
+function renderWritingTab(container) {
+  container.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:1.2rem 2rem;display:flex;flex-direction:column;gap:1rem;max-width:600px';
+
+  // Mode selector
+  const modeRow = document.createElement('div');
+  modeRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+  const modeLabel = document.createElement('span');
+  modeLabel.style.cssText = 'font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);flex-shrink:0';
+  modeLabel.textContent = 'mode';
+  modeRow.appendChild(modeLabel);
+  ['character','word','sentence'].forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'gbtn' + (writingMode === m ? ' on' : '');
+    btn.textContent = m;
+    btn.onclick = () => {
+      writingMode = m;
+      localStorage.setItem('lf-write-mode', m);
+      buildWritingQueue();
+      renderWritingTab(container);
+    };
+    modeRow.appendChild(btn);
+  });
+  wrap.appendChild(modeRow);
+
+  // Script selector (only for character mode + japanese)
+  if (writingMode === 'character' && curLang === 'japanese') {
+    const scriptRow = document.createElement('div');
+    scriptRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;align-items:center';
+    const scriptLabel = document.createElement('span');
+    scriptLabel.style.cssText = 'font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);flex-shrink:0';
+    scriptLabel.textContent = 'script';
+    scriptRow.appendChild(scriptLabel);
+    ['hiragana','katakana','kanji'].forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'gbtn' + (writingScript === s ? ' on' : '');
+      btn.textContent = s;
+      btn.onclick = () => {
+        writingScript = s;
+        localStorage.setItem('lf-write-script', s);
+        buildWritingQueue();
+        renderWritingTab(container);
+      };
+      scriptRow.appendChild(btn);
+    });
+    wrap.appendChild(scriptRow);
+  }
+
+  buildWritingQueue();
+
+  if (writingQueue.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-msg';
+    empty.textContent = writingMode === 'word' || writingMode === 'sentence'
+      ? 'Select a deck first, or switch to character mode.'
+      : 'No characters found. Try a different script.';
+    wrap.appendChild(empty);
+    container.appendChild(wrap);
+    return;
+  }
+
+  // Card area
+  const cardArea = document.createElement('div');
+  cardArea.id = 'writeCardArea';
+  wrap.appendChild(cardArea);
+  container.appendChild(wrap);
+  renderWritingCard(cardArea);
+}
+
+function renderWritingCard(area) {
+  area.innerHTML = '';
+  if (writingIdx >= writingQueue.length) {
+    writingIdx = 0;
+    writingQueue = shuffle(writingQueue);
+  }
+  const w = writingQueue[writingIdx];
+  if (!w) return;
+
+  // Prompt
+  const promptEl = document.createElement('div');
+  promptEl.style.cssText = 'border:1px solid var(--bd);border-radius:12px;padding:1.2rem 1.5rem;background:var(--sf);margin-bottom:.75rem;display:flex;flex-direction:column;gap:.4rem';
+
+  if (writingMode === 'character') {
+    promptEl.innerHTML = `
+      <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)">write this character</div>
+      <div style="font-family:'Noto Sans KR',sans-serif;font-size:3.5rem;font-weight:700;color:var(--acc);line-height:1">${w.kr}</div>
+      ${showRomanization ? `<div style="font-size:.78rem;color:var(--mu)">${w.ro}</div>` : ''}
+    `;
+  } else if (writingMode === 'word') {
+    promptEl.innerHTML = `
+      <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)">write this word</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--tx)">${w.meaning}</div>
+      ${showRomanization ? `<div style="font-size:.72rem;color:var(--mu)">${w.ro}</div>` : ''}
+    `;
+  } else {
+    const ex = (w.example || w.kr).split(' — ')[0];
+    promptEl.innerHTML = `
+      <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)">write this sentence</div>
+      <div style="font-size:.72rem;color:var(--mu);font-style:italic;margin-bottom:4px">${w.meaning}</div>
+      <div style="font-size:.7rem;color:var(--su)">(write the ${curLang} version)</div>
+    `;
+  }
+  area.appendChild(promptEl);
+
+  // Canvas
+  const canvasWrap = document.createElement('div');
+  canvasWrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px';
+
+  const canvasSize = writingMode === 'sentence' ? 280 : 200;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvasSize; canvas.height = canvasSize;
+  canvas.style.cssText = `width:${canvasSize}px;height:${canvasSize}px;border:1.5px solid var(--bd2);border-radius:10px;background:var(--sf2);touch-action:none;cursor:crosshair`;
+
+  // Grid lines for guidance
+  const ctx = canvas.getContext('2d');
+  const isDark = document.body.classList.contains('dark');
+  ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  ctx.lineWidth = 1;
+  // Center cross
+  ctx.beginPath(); ctx.moveTo(canvasSize/2, 0); ctx.lineTo(canvasSize/2, canvasSize); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, canvasSize/2); ctx.lineTo(canvasSize, canvasSize/2); ctx.stroke();
+  // Corner to corner diagonals (lighter)
+  ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(canvasSize,canvasSize); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(canvasSize,0); ctx.lineTo(0,canvasSize); ctx.stroke();
+
+  // Drawing state
+  let drawing = false, lastX = 0, lastY = 0;
+  const txColor = isDark ? '#f0eee8' : '#1c1a16';
+  ctx.strokeStyle = txColor; ctx.lineWidth = writingMode === 'sentence' ? 2.5 : 3;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if (e.touches) return [(e.touches[0].clientX - rect.left)*scaleX, (e.touches[0].clientY - rect.top)*scaleY];
+    return [(e.clientX - rect.left)*scaleX, (e.clientY - rect.top)*scaleY];
+  }
+  function startDraw(e) { drawing = true; [lastX, lastY] = getPos(e); }
+  function draw(e) {
+    if (!drawing) return;
+    const [x, y] = getPos(e);
+    ctx.strokeStyle = txColor;
+    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
+    [lastX, lastY] = [x, y];
+  }
+  function endDraw() { drawing = false; }
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); startDraw(e); }, {passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); draw(e); }, {passive:false});
+  canvas.addEventListener('touchend', endDraw);
+  canvasWrap.appendChild(canvas);
+
+  // Controls row
+  const ctrlRow = document.createElement('div');
+  ctrlRow.style.cssText = 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center';
+
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'ubtn'; clearBtn.textContent = '✕ clear';
+  clearBtn.onclick = () => {
+    ctx.clearRect(0, 0, canvasSize, canvasSize);
+    // Redraw grid
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(canvasSize/2, 0); ctx.lineTo(canvasSize/2, canvasSize); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, canvasSize/2); ctx.lineTo(canvasSize, canvasSize/2); ctx.stroke();
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(canvasSize,canvasSize); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(canvasSize,0); ctx.lineTo(0,canvasSize); ctx.stroke();
+    ctx.strokeStyle = txColor; ctx.lineWidth = writingMode === 'sentence' ? 2.5 : 3;
+  };
+  ctrlRow.appendChild(clearBtn);
+  canvasWrap.appendChild(ctrlRow);
+
+  // Answer reveal
+  const revealSection = document.createElement('div');
+  revealSection.style.cssText = 'width:100%;border:1px solid var(--bd);border-radius:10px;padding:1rem 1.2rem;background:var(--sf);margin-top:.25rem';
+
+  const answerEl = document.createElement('div');
+  answerEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:2.2rem;font-weight:600;color:transparent;transition:color .2s;cursor:pointer;user-select:none;text-align:center;line-height:1.3";
+  if (writingMode === 'sentence') {
+    answerEl.style.fontSize = '1rem';
+    answerEl.textContent = (w.example || w.kr).split(' — ')[0];
+  } else {
+    answerEl.textContent = w.kr;
+  }
+
+  const answerHint = document.createElement('div');
+  answerHint.style.cssText = 'font-size:.6rem;color:var(--su);text-align:center;margin-top:4px';
+  answerHint.textContent = 'tap to reveal answer';
+
+  let revealed = false;
+  const toggleReveal = () => {
+    revealed = !revealed;
+    answerEl.style.color = revealed ? 'var(--acc)' : 'transparent';
+    answerHint.textContent = revealed ? 'tap to hide' : 'tap to reveal answer';
+  };
+  answerEl.onclick = toggleReveal;
+  answerHint.onclick = toggleReveal;
+
+  revealSection.appendChild(answerEl);
+  revealSection.appendChild(answerHint);
+
+  // Progress and nav
+  const navRow = document.createElement('div');
+  navRow.style.cssText = 'display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:.5rem';
+
+  const progress = document.createElement('span');
+  progress.style.cssText = 'font-size:.65rem;color:var(--su)';
+  progress.textContent = `${writingIdx + 1} / ${writingQueue.length}`;
+
+  const gradeRow = document.createElement('div');
+  gradeRow.style.cssText = 'display:flex;gap:8px';
+
+  const againBtn = document.createElement('button');
+  againBtn.className = 'abtn';
+  againBtn.textContent = '✗ try again';
+  againBtn.style.cssText = 'font-size:.72rem;background:rgba(200,122,122,.12);border-color:rgba(200,122,122,.4);color:#c87a7a';
+  againBtn.onclick = () => {
+    // Keep same card at front of queue
+    renderWritingCard(area);
+  };
+
+  const gotBtn = document.createElement('button');
+  gotBtn.className = 'abtn';
+  gotBtn.textContent = '✓ got it →';
+  gotBtn.style.cssText = 'font-size:.72rem;background:rgba(122,200,160,.12);border-color:rgba(122,200,160,.4);color:#7ac8a0';
+  gotBtn.onclick = () => {
+    writingIdx++;
+    renderWritingCard(area);
+  };
+
+  gradeRow.appendChild(againBtn);
+  gradeRow.appendChild(gotBtn);
+  navRow.appendChild(progress);
+  navRow.appendChild(gradeRow);
+
+  area.appendChild(canvasWrap);
+  area.appendChild(revealSection);
+  area.appendChild(navRow);
+}
+
 // ── STORIES TAB ───────────────────────────────────────────────────────────────
 let storyReadingDir = localStorage.getItem('lf-story-dir') || 'ltr'; // ltr | rtl | vertical
 let storyGenreFilter = new Set();
@@ -2903,6 +3295,10 @@ function openStory(story, container) {
   const L=LANGS[curLang];document.getElementById('langFlag').textContent=L.flag;document.getElementById('langLabel').textContent=L.label;
   document.querySelectorAll('.lang-option').forEach(el=>el.classList.toggle('active',el.dataset.lang===curLang));
   showScriptFilters(curLang==='japanese');
+  if(!document.querySelector('[data-tab="writing"]')){
+    const tb=document.getElementById('tabBar');const wb=document.createElement('button');wb.className='tab-btn';wb.dataset.tab='writing';wb.textContent='writing';wb.onclick=()=>switchTab('writing');
+    tb.insertBefore(wb,document.getElementById('fontBtn'));
+  }
   if(!document.querySelector('[data-tab="stories"]')){
     const tb=document.getElementById('tabBar');const sb=document.createElement('button');sb.className='tab-btn';sb.dataset.tab='stories';sb.textContent='stories';sb.onclick=()=>switchTab('stories');
     tb.insertBefore(sb,document.getElementById('fontBtn'));
