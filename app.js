@@ -2656,7 +2656,7 @@ function renderStories(container) {
   container.appendChild(wrap);
 }
 
-function renderStoryPage(story, pageIdx, container) {
+function renderStoryPage(story, pageIdx, container, onFinish) {
   // Renders one page (or all lines if no pages)
   const pages = story.pages || [story.lines];
   const lines = pages[pageIdx];
@@ -2684,7 +2684,7 @@ function renderStoryPage(story, pageIdx, container) {
     for (let i = 0; i < totalPages; i++) {
       const dot = document.createElement('div');
       dot.style.cssText = `width:7px;height:7px;border-radius:50%;background:${i === pageIdx ? 'var(--acc)' : 'var(--bd2)'};transition:background .2s;cursor:pointer`;
-      dot.onclick = () => renderStoryPage(story, i, container);
+      dot.onclick = () => renderStoryPage(story, i, container, onFinish);
       dots.appendChild(dot);
     }
     pageBar.appendChild(dots);
@@ -2767,11 +2767,11 @@ function renderStoryPage(story, pageIdx, container) {
     if (pageIdx < totalPages - 1) {
       nextBtn.className = 'abtn accent';
       nextBtn.textContent = 'next →';
-      nextBtn.onclick = () => { renderStoryPage(story, pageIdx + 1, container); container.scrollIntoView({behavior:'smooth',block:'start'}); };
+      nextBtn.onclick = () => { renderStoryPage(story, pageIdx + 1, container, onFinish); container.scrollIntoView({behavior:'smooth',block:'start'}); };
     } else {
-      nextBtn.className = 'abtn';
+      nextBtn.className = 'abtn accent';
       nextBtn.textContent = 'questions →';
-      nextBtn.onclick = () => { container.scrollIntoView({behavior:'smooth',block:'start'}); };
+      nextBtn.onclick = () => { if (onFinish) onFinish(); };
     }
     navRow.appendChild(nextBtn);
     container.appendChild(navRow);
@@ -2821,17 +2821,19 @@ function openStory(story, container) {
   // Story pages
   const pageContainer = document.createElement('div');
   wrap.appendChild(pageContainer);
-  renderStoryPage(story, 0, pageContainer);
 
-  // Comprehension questions
+  // Questions section — hidden until reader clicks the button
+  const qSection = document.createElement('div');
+  qSection.style.display = 'none';
+
   const qTitle = document.createElement('div');
-  qTitle.style.cssText = 'font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);margin-top:.5rem';
+  qTitle.style.cssText = 'font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su);margin-top:.5rem;margin-bottom:.75rem';
   qTitle.textContent = 'comprehension';
-  wrap.appendChild(qTitle);
+  qSection.appendChild(qTitle);
 
   story.questions.forEach((q, qi) => {
     const qCard = document.createElement('div');
-    qCard.style.cssText = 'border:1px solid var(--bd);border-radius:8px;padding:.85rem 1rem;background:var(--sf)';
+    qCard.style.cssText = 'border:1px solid var(--bd);border-radius:8px;padding:.85rem 1rem;background:var(--sf);margin-bottom:8px';
     const qText = document.createElement('div');
     qText.style.cssText = 'font-size:.82rem;color:var(--tx);margin-bottom:.6rem';
     qText.textContent = (qi + 1) + '. ' + q.q;
@@ -2864,8 +2866,28 @@ function openStory(story, container) {
       choices.appendChild(btn);
     });
     qCard.appendChild(choices);
-    wrap.appendChild(qCard);
+    qSection.appendChild(qCard);
   });
+  wrap.appendChild(qSection);
+
+  // "questions" button — appears after last page for multi-page, inline for single-page
+  const totalPages = (story.pages || [story.lines]).length;
+
+  function showQuestions() {
+    qSection.style.display = 'block';
+    qBtn.style.display = 'none';
+    qSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  const qBtn = document.createElement('button');
+  qBtn.className = 'abtn accent';
+  qBtn.style.cssText = 'margin-top:.5rem;align-self:flex-start';
+  qBtn.textContent = 'questions →';
+  qBtn.onclick = showQuestions;
+  wrap.appendChild(qBtn);
+
+  // Render first page — passing showQuestions so the last-page nav can trigger it
+  renderStoryPage(story, 0, pageContainer, showQuestions);
 
   container.appendChild(wrap);
 }
