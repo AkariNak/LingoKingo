@@ -760,3 +760,176 @@ const STORY_GENRES_BY_LANG = {
   italian:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
 };
 const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy','thriller','drama'];
+
+// ── MULTI-PAGE STORIES ────────────────────────────────────────────────────────
+// These use `pages` instead of `lines` — each page is an array of line objects.
+
+STORIES.push(
+
+{
+  id:'jp_isekai_long_01',
+  lang:'japanese',
+  title:'The First Morning',
+  titleNative:'最初の朝',
+  genres:['isekai','fantasy','action'],
+  difficulty:'N3',
+  blurb:'He woke up in a world he didn\'t choose. No instructions. No map. Just a forest, a sword he didn\'t know how to use, and something watching from the dark.',
+  pages:[
+    // Page 1 — waking up
+    [
+      {text:'目が覚めたとき、天井がなかった。',reading:'めがさめたとき、てんじょうがなかった。',translation:'When I woke up, there was no ceiling.'},
+      {text:'空だった。赤い空。雲一つない、どこまでも赤い空。',reading:'そらだった。あかいそら。くもひとつない、どこまでもあかいそら。',translation:'Just sky. Red sky. Not a cloud anywhere. Red as far as it went.'},
+      {text:'背中が痛かった。地面に寝ていたからだ。土の上で。',reading:'せなかがいたかった。じめんにねていたからだ。つちのうえで。',translation:'My back hurt. Because I\'d been lying on the ground. On bare dirt.'},
+      {text:'起き上がって、まず自分の手を見た。自分の手だった。よかった。',reading:'おきあがって、まずじぶんのてをみた。じぶんのてだった。よかった。',translation:'I sat up and first looked at my hands. They were my hands. Good.'},
+      {text:'次に周りを見た。森だった。ただの森ではなかった。木が太すぎた。',reading:'つぎにまわりをみた。もりだった。ただのもりではなかった。きがふとすぎた。',translation:'Next I looked around. Forest. But not ordinary forest. The trees were too thick.'},
+      {text:'一本の木が、知っている木の十倍はあった。',reading:'いっぽんのきが、しっているきのじゅうばいはあった。',translation:'Each tree was at least ten times the size of any tree I knew.'},
+    ],
+    // Page 2 — the sword
+    [
+      {text:'地面に剣が刺さっていた。',reading:'じめんにけんがささっていた。',translation:'A sword was thrust into the ground.'},
+      {text:'普通の剣ではなかった。刃が青く光っていた。ぼんやりと、でも確かに。',reading:'ふつうのけんではなかった。はがあおくひかっていた。ぼんやりと、でもたしかに。',translation:'Not an ordinary sword. The blade glowed blue. Faintly, but definitely.'},
+      {text:'抜いた。思ったより軽かった。',reading:'ぬいた。おもったよりかるかった。',translation:'I pulled it out. Lighter than I expected.'},
+      {text:'剣の使い方は知らなかった。ゲームでしか使ったことがなかった。',reading:'けんのつかいかたはしらなかった。ゲームでしかつかったことがなかった。',translation:'I didn\'t know how to use a sword. I\'d only ever used one in games.'},
+      {text:'でも、手に持つと少し落ち着いた。武器があるというだけで。',reading:'でも、てにもつとすこしおちついた。ぶきがあるというだけで。',translation:'But holding it calmed me down a little. Just having a weapon.'},
+      {text:'どこかで、枝が折れる音がした。',reading:'どこかで、えだがおれるおとがした。',translation:'Somewhere, a branch snapped.'},
+    ],
+    // Page 3 — the encounter
+    [
+      {text:'動かなかった。息を止めた。',reading:'うごかなかった。いきをとめた。',translation:'I didn\'t move. Held my breath.'},
+      {text:'木の間から何かが出てきた。大きかった。犬ではなかった。狼でもなかった。',reading:'きのあいだからなにかがでてきた。おおきかった。いぬではなかった。おおかみでもなかった。',translation:'Something came out from between the trees. Large. Not a dog. Not a wolf either.'},
+      {text:'目が四つあった。黄色い目が、四つ。',reading:'めがよっつあった。きいろいめが、よっつ。',translation:'It had four eyes. Yellow eyes. Four of them.'},
+      {text:'こちらを見ていた。ずっと見ていた。',reading:'こちらをみていた。ずっとみていた。',translation:'It was watching me. Just watching.'},
+      {text:'剣を構えた。震えながら。',reading:'けんをかまえた。ふるえながら。',translation:'I raised the sword. Trembling.'},
+      {text:'生き物は動かなかった。ただ、座った。',reading:'いきものはうごかなかった。ただ、すわった。',translation:'The creature didn\'t move. It just sat down.'},
+      {text:'それから、人間の言葉で話しかけてきた。「迷子か」',reading:'それから、にんげんのことばではなしかけてきた。「まいごか」',translation:'Then it spoke to me in human words. "Are you lost?"'},
+    ],
+  ],
+  questions:[
+    {q:'What was the first thing he noticed when he woke up?',choices:['The trees','The sword','There was no ceiling, just red sky','The creature'],answer:'There was no ceiling, just red sky'},
+    {q:'What was unusual about the sword?',choices:['It was too heavy','It was too long','The blade glowed blue','It spoke to him'],answer:'The blade glowed blue'},
+    {q:'How many eyes did the creature have?',choices:['Two','Three','Four','Six'],answer:'Four'},
+  ]
+},
+
+{
+  id:'jp_mystery_long_01',
+  lang:'japanese',
+  title:'The Apartment in 3B',
+  titleNative:'3号室',
+  genres:['mystery','horror'],
+  difficulty:'N3',
+  blurb:'The woman in 3B has lived there for thirty years. Nobody has seen her leave. Last Tuesday the mail started piling up.',
+  pages:[
+    [
+      {text:'三号室の住人と会ったことはなかった。',reading:'さんごうしつのじゅうにんとあったことはなかった。',translation:'I had never met the resident of 3B.'},
+      {text:'でも、いることはわかった。夜中に音がしたから。毎晩同じ時間に。',reading:'でも、いることはわかった。よなかにおとがしたから。まいばんおなじじかんに。',translation:'But I knew someone was there. Because there were sounds at night. Same time every night.'},
+      {text:'引っ越してきた日に管理人が言った。「三十年住んでる方がいますよ」',reading:'ひっこしてきたひにかんりにんがいった。「さんじゅうねんすんでるかたがいますよ」',translation:'On the day I moved in, the building manager said, "There\'s someone who has lived there for thirty years."'},
+      {text:'「お名前は？」「さあ。一度も会ったことがないので」',reading:'「おなまえは？」「さあ。いちどもあったことがないので」',translation:'"What\'s their name?" "I\'m not sure. I\'ve never met them myself."'},
+      {text:'それ以上聞かなかった。',reading:'それいじょうきかなかった。',translation:'I didn\'t ask anything more.'},
+    ],
+    [
+      {text:'火曜日の夜、三号室の前を通ったとき、ドアの前に郵便物があった。',reading:'かようびのよる、さんごうしつのまえをとおったとき、ドアのまえにゆうびんぶつがあった。',translation:'Tuesday night, passing by 3B, there was mail in front of the door.'},
+      {text:'水曜日も。木曜日も。増えていた。',reading:'すいようびも。もくようびも。ふえていた。',translation:'Wednesday too. Thursday too. It was piling up.'},
+      {text:'金曜日の夜、ドアをノックした。返事はなかった。',reading:'きんようびのよる、ドアをノックした。へんじはなかった。',translation:'Friday night, I knocked on the door. No answer.'},
+      {text:'もう一度。もう一度。静かだった。',reading:'もういちど。もういちど。しずかだった。',translation:'Again. Again. Silence.'},
+      {text:'でも、ドアの下から光が見えた。電気はついていた。',reading:'でも、ドアのしたからひかりがみえた。でんきはついていた。',translation:'But light showed under the door. The lights were on.'},
+    ],
+    [
+      {text:'管理人に連絡した。管理人は来なかった。',reading:'かんりにんにれんらくした。かんりにんはこなかった。',translation:'I contacted the manager. The manager didn\'t come.'},
+      {text:'警察に電話しようとして、やめた。理由はわからない。',reading:'けいさつにでんわしようとして、やめた。りゆうはわからない。',translation:'I was about to call the police and stopped. I don\'t know why.'},
+      {text:'代わりに、ドアの前に座って待った。',reading:'かわりに、ドアのまえにすわってまった。',translation:'Instead, I sat in front of the door and waited.'},
+      {text:'午前二時、ドアが内側から開いた。',reading:'ごぜんにじ、ドアがうちがわからひらいた。',translation:'At 2 AM, the door opened from the inside.'},
+      {text:'老いた女性が立っていた。細かった。目が大きかった。',reading:'おいたじょせいがたっていた。ほそかった。めがおおきかった。',translation:'An old woman was standing there. Thin. With large eyes.'},
+      {text:'「ずっと待っていましたよ」と彼女は言った。「あなたが来るのを」',reading:'「ずっとまっていましたよ」とかのじょはいった。「あなたがくるのを」',translation:'"I have been waiting," she said. "For you to come."'},
+    ],
+  ],
+  questions:[
+    {q:'How long has the resident of 3B lived there?',choices:['Ten years','Twenty years','Thirty years','Fifty years'],answer:'Thirty years'},
+    {q:'What made the narrator finally knock on the door?',choices:['A strange smell','Mail piling up for days','A loud noise','The manager asked them to'],answer:'Mail piling up for days'},
+    {q:'What did the old woman say?',choices:['"Go away"','"Call the police"','"I have been waiting for you to come"','"Help me"'],answer:'"I have been waiting for you to come"'},
+  ]
+},
+
+{
+  id:'ko_thriller_long_01',
+  lang:'korean',
+  title:'The Interview',
+  titleNative:'인터뷰',
+  genres:['thriller','mystery','action'],
+  difficulty:'TOPIK 3-4',
+  blurb:'A journalist interviews a man convicted of a crime he says he didn\'t commit. By the end of the interview, she isn\'t sure she believes the court.',
+  pages:[
+    [
+      {text:'면회실은 작았다. 테이블 하나, 의자 둘, 형광등 하나.',reading:'myeonhoesirum jakkatda. teibeul hana, uija dul, hyeongwangdeung hana.',translation:'The visitation room was small. One table, two chairs, one fluorescent light.'},
+      {text:'남자는 먼저 와 있었다. 손을 테이블 위에 올려놓고.',reading:'namjaneun meonjeo wa isseotda. soneul teibeul wie ollyeonoko.',translation:'The man was already there. Hands placed on the table.'},
+      {text:'"10분 드리겠습니다." 교도관이 문을 닫았다.',reading:'"sipbun deurigesssumnida." gyodogwani muneul datatta.',translation:'"You have ten minutes." The guard closed the door.'},
+      {text:'"저는 안 했습니다." 그가 첫 마디로 말했다.',reading:'"jeoneun an haetssumnida." geuga cheot madiro malhaetda.',translation:'"I didn\'t do it." That was his first sentence.'},
+      {text:'"알고 있어요." 나도 모르게 그 말이 나왔다.',reading:'"algo isseoyo." nado moreuge geu mari nawatda.',translation:'"I know." The words came out before I knew it.'},
+    ],
+    [
+      {text:'"왜 그렇게 생각해요?" 그가 처음으로 눈을 마주쳤다.',reading:'"wae geureoke saenggakaeyo?" geuga cheoeumeuro nuneul majuchyeotda.',translation:'"Why do you think that?" For the first time, he met my eyes.'},
+      {text:'"사건 기록을 읽었어요. 뭔가 안 맞는 게 있더라고요."',reading:'"sageon girokkeul ilgeosseoyo. mwonga an manneun ge itdeoragoyo."',translation:'"I read the case records. Something didn\'t fit."'},
+      {text:'그는 오래 나를 봤다. 그리고 말했다.',reading:'geuneun orae nareul bwatda. geurigo malhaetda.',translation:'He looked at me for a long time. Then spoke.'},
+      {text:'"그날 밤 저는 집에 있었어요. 혼자서. 증명할 수 없죠."',reading:'"geunal bam jeoneun jibe isseosseoyo. honjaseo. jeungmyeonghal su eopjyo."',translation:'"That night I was home. Alone. Can\'t prove it."'},
+      {text:'"알리바이가 없다는 걸 알면서도 왜 아무 말도 안 했어요?"',reading:'"alibai ga eopttaneun geol almyeonseodo wae amu maldo an haesseoyo?"',translation:'"Why didn\'t you say anything, knowing you had no alibi?"'},
+      {text:'"말해봤자 안 믿을 거라는 걸 알았으니까요."',reading:'"malhaebwatja an mideul georaneur geol araseunikkayo."',translation:'"Because I knew even if I spoke, no one would believe me."'},
+    ],
+    [
+      {text:'10분이 끝났다. 교도관이 문을 열었다.',reading:'sibpuni kkeunnatda. gyodogwani muneul yeoreotda.',translation:'Ten minutes were up. The guard opened the door.'},
+      {text:'남자가 일어섰다. 그리고 마지막으로 말했다.',reading:'namjaga ireosseotda. geurigo majimageuro malhaetda.',translation:'The man stood up. And said one last thing.'},
+      {text:'"그날 밤 제가 집에 있었다는 걸 아는 사람이 딱 한 명 있어요."',reading:'"geunal bam jega jibe isseotdaneun geol aneun sarami ttak han myeong isseoyo."',translation:'"There is exactly one person who knows I was home that night."'},
+      {text:'"누구요?"',reading:'"nuguyo?"',translation:'"Who?"'},
+      {text:'"진짜 범인이요."',reading:'"jinjja beomini yo."',translation:'"The real killer."'},
+      {text:'문이 닫혔다. 나는 한동안 자리에서 일어나지 못했다.',reading:'muni dachyeotda. naneun handonggan jariseo ireonaji motaetda.',translation:'The door closed. I couldn\'t get up from my chair for a long time.'},
+    ],
+  ],
+  questions:[
+    {q:'What was the man\'s first sentence?',choices:['"Help me"','"I didn\'t do it"','"You have to believe me"','"Thank you for coming"'],answer:'"I didn\'t do it"'},
+    {q:'Why didn\'t he say anything during the trial?',choices:['He had a lawyer who told him not to','He was unconscious','He knew no one would believe him','He was protecting someone'],answer:'He knew no one would believe him'},
+    {q:'Who does he say knows the truth?',choices:['His lawyer','A witness','The real killer','His neighbor'],answer:'The real killer'},
+  ]
+},
+
+{
+  id:'it_mystery_long_01',
+  lang:'italian',
+  title:'The House on Via Sette',
+  titleNative:'La casa di via Sette',
+  genres:['mystery','thriller','drama'],
+  difficulty:'B2',
+  blurb:'The house has been empty for eleven years. Then last spring the lights came on. Nobody went in. Nobody came out. The neighbors stopped talking about it after a while.',
+  pages:[
+    [
+      {text:'La casa di via Sette era vuota da undici anni.',reading:'',translation:'The house on Via Sette had been empty for eleven years.'},
+      {text:'Lo sapevano tutti. Era uno di quei fatti che in un quartiere piccolo diventano parte del paesaggio.',reading:'',translation:'Everyone knew. It was one of those facts that in a small neighbourhood become part of the scenery.'},
+      {text:'La primavera scorsa, le luci si sono accese.',reading:'',translation:'Last spring, the lights came on.'},
+      {text:'Non al piano di sopra. Al piano di sotto, nella stanza che dà sul giardino.',reading:'',translation:'Not upstairs. Downstairs, in the room facing the garden.'},
+      {text:'Mia madre l\'ha visto per prima. "Devono averla venduta," ha detto.',reading:'',translation:'My mother saw it first. "Someone must have bought it," she said.'},
+      {text:'Ma nessuno era entrato. E nessuno era uscito.',reading:'',translation:'But no one had gone in. And no one had come out.'},
+    ],
+    [
+      {text:'Sono andato a guardare una sera.',reading:'',translation:'I went to look one evening.'},
+      {text:'La luce era lì. Gialla, fioca, come una candela.',reading:'',translation:'The light was there. Yellow, dim, like a candle.'},
+      {text:'Ho bussato. Silenzio.',reading:'',translation:'I knocked. Silence.'},
+      {text:'Il giorno dopo ho chiesto al vecchio Enzo, che abita lì da quarant\'anni.',reading:'',translation:'The next day I asked old Enzo, who has lived there for forty years.'},
+      {text:'"Quella casa," ha detto, "non comprarla. Non affittarla. Non entrarci."',reading:'',translation:'"That house," he said, "don\'t buy it. Don\'t rent it. Don\'t go inside."'},
+      {text:'"Perché?"',reading:'',translation:'"Why?"'},
+      {text:'"Perché chi ci entra non esce lo stesso di prima."',reading:'',translation:'"Because whoever goes in doesn\'t come out the same."'},
+    ],
+    [
+      {text:'Non l\'ho ascoltato.',reading:'',translation:'I didn\'t listen to him.'},
+      {text:'La settimana dopo sono entrato. La porta non era chiusa a chiave.',reading:'',translation:'The following week I went inside. The door wasn\'t locked.'},
+      {text:'Dentro faceva freddo. Non il freddo di una casa abbandonata. Un freddo diverso.',reading:'',translation:'Inside it was cold. Not the cold of an abandoned house. A different kind of cold.'},
+      {text:'Nella stanza del piano di sotto c\'era una sedia, un tavolo, una tazza.',reading:'',translation:'In the downstairs room there was a chair, a table, a cup.'},
+      {text:'La tazza era ancora calda.',reading:'',translation:'The cup was still warm.'},
+      {text:'Sono uscito in fretta. Non so ancora cosa ho visto in quello specchio mentre me ne andavo.',reading:'',translation:'I left quickly. I still don\'t know what I saw in that mirror as I was leaving.'},
+    ],
+  ],
+  questions:[
+    {q:'How long had the house been empty?',choices:['Five years','Eight years','Eleven years','Twenty years'],answer:'Eleven years'},
+    {q:'What did old Enzo warn about the house?',choices:['It was haunted by a ghost','Whoever goes in doesn\'t come out the same','It was dangerous to enter at night','Someone was living there secretly'],answer:'Whoever goes in doesn\'t come out the same'},
+    {q:'What was strange about the cup?',choices:['It was broken','It was floating','It was still warm','It was moving'],answer:'It was still warm'},
+  ]
+}
+
+);
