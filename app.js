@@ -2650,9 +2650,10 @@ function renderWritingCard(area) {
 
   if (writingMode === 'character') {
     promptEl.innerHTML = `
-      <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)">write this character</div>
-      <div style="font-family:'Noto Sans KR',sans-serif;font-size:3.5rem;font-weight:700;color:var(--acc);line-height:1">${w.kr}</div>
+      <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)">memorize then write</div>
+      <div id="writeCharDisplay" style="font-family:'Noto Sans KR',sans-serif;font-size:3.5rem;font-weight:700;color:var(--acc);line-height:1;transition:opacity .4s">${w.kr}</div>
       ${showRomanization ? `<div style="font-size:.78rem;color:var(--mu)">${w.ro}</div>` : ''}
+      <div id="writeCharHint" style="font-size:.58rem;color:var(--su);margin-top:2px">character hides when you start writing</div>
     `;
   } else if (writingMode === 'word') {
     promptEl.innerHTML = `
@@ -2705,7 +2706,17 @@ function renderWritingCard(area) {
     if (e.touches) return [(e.touches[0].clientX - rect.left)*scaleX, (e.touches[0].clientY - rect.top)*scaleY];
     return [(e.clientX - rect.left)*scaleX, (e.clientY - rect.top)*scaleY];
   }
-  function startDraw(e) { drawing = true; [lastX, lastY] = getPos(e); }
+  let charHidden = false;
+  function startDraw(e) {
+    drawing = true; [lastX, lastY] = getPos(e);
+    if (!charHidden && writingMode === 'character') {
+      charHidden = true;
+      const cd = document.getElementById('writeCharDisplay');
+      const ch = document.getElementById('writeCharHint');
+      if (cd) cd.style.opacity = '0';
+      if (ch) ch.style.opacity = '0';
+    }
+  }
   function draw(e) {
     if (!drawing) return;
     const [x, y] = getPos(e);
@@ -2731,6 +2742,14 @@ function renderWritingCard(area) {
   clearBtn.className = 'ubtn'; clearBtn.textContent = '✕ clear';
   clearBtn.onclick = () => {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
+    // Restore character display on clear
+    if (writingMode === 'character') {
+      charHidden = false;
+      const cd = document.getElementById('writeCharDisplay');
+      const ch = document.getElementById('writeCharHint');
+      if (cd) cd.style.opacity = '1';
+      if (ch) ch.style.opacity = '1';
+    }
     // Redraw grid
     ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
     ctx.lineWidth = 1;
@@ -3315,7 +3334,7 @@ function openStory(story, container) {
   const nc=document.getElementById('normalControls');
   if(nc&&!document.getElementById('typingModeBtn')){
     const tr=document.createElement('div');tr.style.cssText='display:flex;gap:8px;margin-top:8px';
-    const tmb=document.createElement('button');tmb.id='typingModeBtn';tmb.className='abtn';tmb.textContent='✎ typing: off';tmb.onclick=()=>toggleStudyTypingMode();tr.appendChild(tmb);
+    const tmb=document.createElement('button');tmb.id='typingModeBtn';tmb.className='abtn'+(studyMode!=='flip'?' accent':'');tmb.textContent=STUDY_MODE_LABELS[studyMode]||'✎ flip';tmb.onclick=()=>toggleStudyTypingMode();tr.appendChild(tmb);
     const rrb=document.createElement('button');rrb.id='studyRoBtn';rrb.className='abtn';rrb.textContent=showRomanization?'hide romaji':'show romaji';rrb.onclick=()=>toggleStudyRo();tr.appendChild(rrb);
     nc.appendChild(tr);
   }
