@@ -1244,21 +1244,32 @@ function buildAnkiSession(deckIdx) {
 
   const allKeys = Object.keys(deck.words);
 
-  // Reviews: due cards not in learning
+  // Reviews: due cards — shuffled
   const reviewLimit = getReviewLimit(deckIdx);
   ankiReviewQueue = shuffle(allKeys.filter(kr => {
     const c = getCard(deckIdx, kr);
     return (c.state === 'review' || c.state === 'learning') && c.due <= now;
   }).map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean)).slice(0, reviewLimit);
 
-  // New cards: sort by freq desc (most common first), then slice to limit
+  // New cards: pick top N by freq, then shuffle so they don't come in freq order
   const newKeys = allKeys.filter(kr => {
     const c = getCard(deckIdx, kr);
     return c.state === 'new' && !isSuspended(kr);
   });
   const newWords = newKeys.map(kr => LANGS[curLang].words.find(w => w.kr === kr)).filter(Boolean);
   newWords.sort((a, b) => (b.freq || 0) - (a.freq || 0));
-  ankiNewQueue = newWords.slice(0, newLimit);
+  // Take top N by freq, then shuffle that pool so order within session is random
+  const limitedNew = newWords.slice(0, Math.max(newLimit, 0));
+  // Mark firstSeen now so the limit is respected if session is reopened today
+  const today = todayStr();
+  limitedNew.forEach(w => {
+    const k = srsKey(deckIdx, w.kr);
+    if (srsData[k] && !srsData[k].firstSeen) {
+      srsData[k].firstSeen = today;
+    }
+  });
+  saveSRS();
+  ankiNewQueue = shuffle(limitedNew);
   ankiLearningQueue = [];
   ankiSessionNewCount = 0;
 }
