@@ -428,7 +428,151 @@ function renderVocab(container) {
   const dp = document.createElement('div'); dp.id='deckPanel'; dp.className='deck-panel surface';
   dp.innerHTML=`<div class="deck-hdr"><span class="deck-title">your deck</span><div class="deck-acts"><button class="abtn danger" onclick="clearActiveDeck()">remove all</button><button class="abtn accent" onclick="openStudy()">study deck →</button></div></div><div id="deckSwitcher" class="deck-switcher"></div><div id="deckChips"></div>`;
   container.appendChild(dp);
+
+  // Known words panel
+  const kp = document.createElement('div');
+  kp.id = 'knownPanel';
+  kp.className = 'deck-panel surface';
+  kp.style.marginTop = '1rem';
+  container.appendChild(kp);
+  renderKnownWords(kp);
+
   showScriptFilters(curLang==='japanese'); buildSitPills(); buildGroupBtns(); renderWordGrid(); renderDeckSwitcher(); renderDeckChips();
+}
+
+function intervalLabel(days) {
+  if (!days || days < 1) return 'learning';
+  if (days < 7) return days + 'd';
+  if (days < 30) return Math.round(days / 7) + 'w';
+  if (days < 365) return Math.round(days / 30) + 'mo';
+  return Math.round(days / 365) + 'yr';
+}
+
+function renderKnownWords(container) {
+  container.innerHTML = '';
+
+  // Collect all graduated (state=review) cards across all decks
+  const known = [];
+  decks.forEach((deck, di) => {
+    Object.keys(deck.words).forEach(kr => {
+      const k = srsKey(di, kr);
+      const c = srsData[k];
+      if (c && c.state === 'review') {
+        const word = LANGS[curLang].words.find(w => w.kr === kr);
+        if (word) known.push({ word, card: c, deck, deckIdx: di });
+      }
+    });
+  });
+
+  // Header
+  const hdr = document.createElement('div');
+  hdr.className = 'deck-hdr';
+  const title = document.createElement('span');
+  title.className = 'deck-title';
+  title.textContent = 'words i know';
+  const count = document.createElement('span');
+  count.style.cssText = 'font-size:.65rem;color:var(--mu);margin-left:8px';
+  count.textContent = known.length + ' word' + (known.length !== 1 ? 's' : '');
+  title.appendChild(count);
+  hdr.appendChild(title);
+
+  // Toggle button
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'ubtn';
+  const stored = localStorage.getItem('lf-known-open');
+  let isOpen = stored === 'true';
+  toggleBtn.textContent = isOpen ? 'hide ▴' : 'show ▾';
+  hdr.appendChild(toggleBtn);
+  container.appendChild(hdr);
+
+  if (known.length === 0) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'font-size:.72rem;color:var(--su);padding:.75rem 0';
+    empty.textContent = 'no graduated cards yet — keep reviewing and words will appear here once they reach review phase.';
+    container.appendChild(empty);
+    return;
+  }
+
+  // Body
+  const body = document.createElement('div');
+  body.style.display = isOpen ? 'block' : 'none';
+
+  toggleBtn.onclick = () => {
+    isOpen = !isOpen;
+    body.style.display = isOpen ? 'block' : 'none';
+    toggleBtn.textContent = isOpen ? 'hide ▴' : 'show ▾';
+    localStorage.setItem('lf-known-open', isOpen);
+  };
+
+  // Sort controls
+  let sortMode = 'interval_desc';
+  const sortRow = document.createElement('div');
+  sortRow.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem;align-items:center';
+  const sortLabel = document.createElement('span');
+  sortLabel.style.cssText = 'font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--su)';
+  sortLabel.textContent = 'sort';
+  sortRow.appendChild(sortLabel);
+
+  function rebuildKnownList() {
+    listEl.innerHTML = '';
+    const sorted = [...known];
+    if (sortMode === 'interval_desc') sorted.sort((a,b) => (b.card.interval||0) - (a.card.interval||0));
+    if (sortMode === 'interval_asc') sorted.sort((a,b) => (a.card.interval||0) - (b.card.interval||0));
+    if (sortMode === 'alpha') sorted.sort((a,b) => a.word.kr.localeCompare(b.word.kr));
+    if (sortMode === 'deck') sorted.sort((a,b) => a.deck.name.localeCompare(b.deck.name));
+
+    sorted.forEach(({word, card, deck}) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px solid var(--bd)';
+
+      const krEl = document.createElement('span');
+      krEl.style.cssText = "font-family:'Noto Sans KR',sans-serif;font-size:1rem;color:var(--tx);min-width:60px";
+      krEl.textContent = word.kr;
+
+      const roEl = document.createElement('span');
+      roEl.style.cssText = 'font-size:.65rem;color:var(--mu);flex:1';
+      roEl.textContent = word.ro;
+
+      const mnEl = document.createElement('span');
+      mnEl.style.cssText = 'font-size:.68rem;color:var(--mu);flex:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+      mnEl.textContent = word.meaning;
+
+      const intEl = document.createElement('span');
+      intEl.style.cssText = `font-size:.62rem;padding:2px 7px;border-radius:4px;background:${card.interval >= 30 ? 'rgba(122,200,160,.15)' : card.interval >= 7 ? 'rgba(200,168,122,.15)' : 'rgba(122,160,200,.15)'};color:${card.interval >= 30 ? '#7ac8a0' : card.interval >= 7 ? '#c8a87a' : '#7a8cc8'};white-space:nowrap`;
+      intEl.textContent = intervalLabel(card.interval);
+      intEl.title = 'next review in ' + intervalLabel(card.interval);
+
+      const deckDot = document.createElement('span');
+      deckDot.style.cssText = `width:7px;height:7px;border-radius:50%;background:${deck.color};flex-shrink:0`;
+      deckDot.title = deck.name;
+
+      row.appendChild(krEl);
+      row.appendChild(roEl);
+      row.appendChild(mnEl);
+      row.appendChild(intEl);
+      row.appendChild(deckDot);
+      listEl.appendChild(row);
+    });
+  }
+
+  [['interval_desc','strongest first'],['interval_asc','weakest first'],['alpha','a → z'],['deck','by deck']].forEach(([val, lbl]) => {
+    const btn = document.createElement('button');
+    btn.className = 'gbtn' + (sortMode === val ? ' on' : '');
+    btn.textContent = lbl;
+    btn.onclick = () => {
+      sortMode = val;
+      sortRow.querySelectorAll('.gbtn').forEach(b => b.classList.toggle('on', b.textContent === lbl));
+      rebuildKnownList();
+    };
+    sortRow.appendChild(btn);
+  });
+  body.appendChild(sortRow);
+
+  const listEl = document.createElement('div');
+  listEl.style.cssText = 'max-height:320px;overflow-y:auto';
+  body.appendChild(listEl);
+  rebuildKnownList();
+  container.appendChild(body);
 }
 function toggleFilters() { const r=document.getElementById('filtersRow'),b=document.getElementById('filtersToggle'),open=r.style.display==='flex'; r.style.display=open?'none':'flex'; b.textContent=open?'more filters ▾':'hide filters ▴'; }
 function buildGroupBtns() {
