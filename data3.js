@@ -489,3 +489,41 @@ const JAPANESE_WORDS_3 = [
 if (typeof JAPANESE_WORDS !== 'undefined') {
   JAPANESE_WORDS.push(...JAPANESE_WORDS_3);
 }
+
+// ── KANJI CARD DATA FORMAT NOTE ────────────────────────────────────────────────
+// Kanji cards use the `examples` array (up to 4 entries) for the compound words
+// shown on the card back. Each entry follows the pattern:
+//   "食べる たべる — to eat　[た reading]"
+// The card back renderer in app.js reads these when pos === 'kanji'.
+// See the renderStudyCard patch in the project notes for the layout change.
+
+// ── GRAMMAR ADDITIONS ──────────────────────────────────────────────────────────
+// Appended to the existing GRAMMAR.japanese array defined in app.js
+
+(function() {
+  if (typeof GRAMMAR === 'undefined' || !GRAMMAR.japanese) return;
+
+  GRAMMAR.japanese.push(
+    {
+      title: 'How to actually learn kanji (not the way most people do it)',
+      short: 'Learn words first. Kanji meanings follow naturally from real vocabulary.',
+      body: 'Most beginners study kanji in isolation — memorizing the symbol and its meaning, then stopping. That is collecting symbols, not learning Japanese.\n\nThe better method is word → reading → meaning → kanji pattern:\n  食べる → たべる → to eat\nThen later you notice:\n  食事 しょくじ — meal\n  食堂 しょくどう — cafeteria\n  食品 しょくひん — food product\n\nYou now know that 食 can read as た (in native Japanese words) and しょく (in Chinese-origin compounds). You learned both readings through real words with real meaning. That sticks.\n\nIsolated kanji study is only useful as a supplement. Learning that 水 = water, 火 = fire, 人 = person, 学 = study helps recognition. But if you stop there and never learn:\n  水曜日 すいようび — Wednesday\n  火山 かざん — volcano\n  人間 にんげん — human being\n  学生 がくせい — student\n...then you are not learning Japanese. You are collecting symbols.\n\nThe efficient beginner path:\n  1. Hiragana + katakana first\n  2. Basic grammar structure\n  3. Core vocabulary with kanji, kana reading, and meaning together\n  4. Kanji meanings as memory aids for vocabulary you already know\n  5. Reading and listening at your level as much as possible',
+      example: 'WRONG WAY: 食 = food/eat. (stop)\n\nRIGHT WAY:\n  食べる たべる — to eat (verb, casual)\n  食べます たべます — to eat (verb, polite)\n  食事 しょくじ — meal\n  食堂 しょくどう — cafeteria\n  食品 しょくひん — food product\n  食欲 しょくよく — appetite\n\nNow 食 is not a symbol. It is a pattern you have seen in six real words.',
+      level: 1
+    },
+    {
+      title: 'わたしは is not wrong — it\'s just overused',
+      short: 'Japanese usually drops pronouns. Saying it every sentence sounds robotic.',
+      body: 'Textbooks teach わたしは〜です because it shows you the full sentence skeleton. That is useful. But in real Japanese, pronouns are dropped whenever the meaning is obvious from context — which is most of the time.\n\nわたしは by itself is not wrong. It adds contrast or emphasis:\n  私は大丈夫です — I\'m okay (implying maybe someone else isn\'t)\n  私はジョンです — I\'m John (emphasis on who is speaking)\n\nThe more natural beginner pattern is just:\n  〜です。\n  学生です。 — I\'m a student.\n  アメリカ人です。 — I\'m American.\n  大丈夫です。 — I\'m okay.\n\nNo pronoun needed. The verb ending and context tell everyone who you\'re talking about.',
+      example: 'ROBOTIC: 私はジョンです。私は学生です。私はアメリカ人です。\nNATURAL: ジョンです。学生です。アメリカ人です。\n\nWhen to keep it: if you\'re contrasting yourself with someone else\n  私は大丈夫でも、友達は大丈夫じゃない。\n  I\'m okay, but my friend isn\'t.',
+      level: 1
+    },
+    {
+      title: 'です makes it polite — dropping it makes it casual',
+      short: 'Desu is polite. With friends, people often drop it entirely.',
+      body: 'です (desu) is the polite form of "to be." It ends most basic sentences when speaking to strangers, in class, or at work.\n\nWith close friends, especially younger speakers, です often disappears entirely. The noun or adjective just stands alone:\n\nPolite → Casual:\n  ジョンです → ジョン\n  学生です → 学生\n  大丈夫です → 大丈夫\n  好きです → 好き\n\nThis is not sloppy or rude between friends — it\'s completely natural. It\'s the same shift as English "I am fine" → "fine" or "I\'m good" → "good."\n\nThe rule of thumb:\n  Strangers, elders, work, school → keep です\n  Close friends your age → dropping it is normal\n  Text messages → often dropped',
+      example: 'POLITE (stranger / teacher):\n  大丈夫ですか？ — Are you okay?\n  大丈夫です。 — I\'m okay.\n\nCASUAL (friend):\n  大丈夫？ — You okay?\n  大丈夫。 — I\'m good.\n\nBoth are correct. Context decides which to use.',
+      level: 1
+    }
+  );
+})();
