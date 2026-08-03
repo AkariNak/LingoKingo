@@ -32,6 +32,11 @@ const PREMADE_DECKS = {
     {name:'Hiragana Accents', color:'#7ac8c8', filter: w => w.pos === 'hiragana_d'},
     {name:'Katakana Accents', color:'#c8c87a', filter: w => w.pos === 'katakana_d'},
   ],
+  russian_cyrillic:    [{name:'Cyrillic Alphabet',    color:'#7a8cc8', filter: w => w.pos === 'cyrillic'}],
+  russian_traps:       [{name:'Letter Traps',         color:'#c8a87a', filter: w => w.pos === 'cyrillic_note'}],
+  russian_n5:          [{name:'Russian Beginner',      color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
+  russian_n4:          [{name:'Russian Elementary',    color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
+  russian_n3:          [{name:'Russian Intermediate',  color:'#c8c87a', filter: w => (w.freq === 7 || w.freq === 8) && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
   japanese_vocab:     [{name:'Japanese Vocabulary', color:'#7ac8a0', filter: w => w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n5:        [{name:'JLPT N5', color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n4:        [{name:'JLPT N4', color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
@@ -49,6 +54,14 @@ const PREMADE_DECKS = {
   italian_c1:         [{name:'Italian C1', color:'#c87a7a', filter: w => w.freq <= 4}],
   japanese_yofukashi:[{name:'よふかしのうた',  color:'#a87ac8', filter: w => w.song === 'yofukashi'}],
   japanese_kawaikute:[{name:'可愛くてごめん', color:'#c87aa8', filter: w => w.song === 'kawaikute'}],
+  russian:  [
+    {name:'Russian Essentials',   color:'#c87a7a', filter: w => w.freq >= 9 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'},
+    {name:'Cyrillic Alphabet',    color:'#7a8cc8', filter: w => w.pos === 'cyrillic'},
+    {name:'Letter Traps',         color:'#c8a87a', filter: w => w.pos === 'cyrillic_note'},
+    {name:'Russian N5 (beginner)',color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'},
+    {name:'Russian N4',           color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'},
+    {name:'Russian N3',           color:'#c8c87a', filter: w => (w.freq === 7 || w.freq === 8) && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'},
+  ],
   italian: [
     {name:'Italian Essentials', color:'#c8a87a', filter: w => w.freq >= 9},
     {name:'Italian Verbs',      color:'#7a8cc8', filter: w => w.pos === 'verb'},
@@ -60,6 +73,7 @@ const LANGS = {
   korean:   {label:'Korean',   script:'한국어',  flag:'🇰🇷', placeholder:'search hangul, romanization, or meaning…',  words: KOREAN_WORDS,   sentences: () => KOREAN_SENTENCES,   grammar: () => GRAMMAR.korean},
   italian:  {label:'Italian',  script:'Italiano',flag:'🇮🇹', placeholder:'search Italian, pronunciation, or meaning…', words: ITALIAN_WORDS,  sentences: () => ITALIAN_SENTENCES,  grammar: () => GRAMMAR.italian},
   japanese: {label:'Japanese', script:'日本語',  flag:'🇯🇵', placeholder:'search hiragana, romaji, or meaning…',       words: JAPANESE_WORDS, sentences: () => JAPANESE_SENTENCES, grammar: () => GRAMMAR.japanese},
+  russian:  {label:'Russian',  script:'Русский', flag:'🇷🇺', placeholder:'search Cyrillic, romanization, or meaning…', words: typeof RUSSIAN_WORDS !== 'undefined' ? RUSSIAN_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.russian || []},
 };
 
 let curLang = localStorage.getItem('lf-lang') || 'korean';
@@ -750,7 +764,7 @@ function renderDeckSwitcher(){
   add.onclick=()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());renderDeckSwitcher();renderDeckChips();renderWordGrid();}};
   utilRow.appendChild(add);
 
-  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute']};
+  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute'],russian:['russian']};
   if(pk[curLang]){
     const pb=document.createElement('button');pb.className='dbtn';
     pb.textContent=curLang==='japanese'?'★ alphabet + accent decks':'★ starter decks';
@@ -776,6 +790,27 @@ function renderDeckSwitcher(){
       lb.onclick=()=>addPremadeDeck(l.key);
       utilRow.appendChild(lb);
     });
+  }
+  if(curLang==='russian'){
+    const levels=[
+      {key:'russian_n5', label:'Beginner'},
+      {key:'russian_n4', label:'Elementary'},
+      {key:'russian_n3', label:'Intermediate'},
+    ];
+    levels.forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';
+      lb.textContent='★ '+l.label;
+      lb.onclick=()=>addPremadeDeck(l.key);
+      utilRow.appendChild(lb);
+    });
+    const cyrBtn=document.createElement('button');cyrBtn.className='dbtn';
+    cyrBtn.textContent='★ Cyrillic alphabet';
+    cyrBtn.onclick=()=>addPremadeDeck('russian_cyrillic');
+    utilRow.appendChild(cyrBtn);
+    const trapBtn=document.createElement('button');trapBtn.className='dbtn';
+    trapBtn.textContent='★ letter traps';
+    trapBtn.onclick=()=>addPremadeDeck('russian_traps');
+    utilRow.appendChild(trapBtn);
   }
   if(curLang==='korean'){
     const levels=[
@@ -3467,6 +3502,16 @@ function openStory(story, container) {
   document.getElementById('themeBtn').textContent=theme==='dark'?'light mode':'dark mode';
   applyStoredThemes();
   const L=LANGS[curLang];document.getElementById('langFlag').textContent=L.flag;document.getElementById('langLabel').textContent=L.label;
+  const langMenuEl = document.getElementById('langMenu');
+  if (langMenuEl && !langMenuEl.querySelector('[data-lang="russian"]')) {
+    const ruOpt = document.createElement('div');
+    ruOpt.className = 'lang-option';
+    ruOpt.dataset.lang = 'russian';
+    ruOpt.innerHTML = '<span>🇷🇺</span><span>Russian</span><span class="lang-script">Русский</span>';
+    ruOpt.onclick = () => switchLang('russian');
+    langMenuEl.appendChild(ruOpt);
+  }
+  if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.russian) GRAMMAR.russian = [];
   document.querySelectorAll('.lang-option').forEach(el=>el.classList.toggle('active',el.dataset.lang===curLang));
   showScriptFilters(curLang==='japanese');
   if(!document.querySelector('[data-tab="writing"]')){
