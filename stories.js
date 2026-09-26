@@ -758,7 +758,8 @@ const STORY_GENRES_BY_LANG = {
   japanese: ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy'],
   korean:   ['romance','slice of life','thriller','mystery','fantasy','action','drama'],
   italian:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
-  spanish:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
+  spanish_mx: ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
+  spanish_ve: ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
 };
 const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy','thriller','drama'];
 
@@ -941,7 +942,7 @@ STORIES.push(
 
 {
   id:'es_romance_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'The Last Table',
   titleNative:'La última mesa',
   genres:['romance','slice of life'],
@@ -965,7 +966,7 @@ STORIES.push(
 
 {
   id:'es_thriller_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'The Wrong Floor',
   titleNative:'El piso equivocado',
   genres:['thriller','mystery'],
@@ -989,7 +990,7 @@ STORIES.push(
 
 {
   id:'es_slice_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'Ahorita',
   titleNative:'Ahorita',
   genres:['slice of life','comedy'],
@@ -1013,7 +1014,7 @@ STORIES.push(
 
 {
   id:'es_romance_02',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'What You Said at the Airport',
   titleNative:'Lo que dijiste en el aeropuerto',
   genres:['romance','drama'],
@@ -1037,7 +1038,7 @@ STORIES.push(
 
 {
   id:'es_fantasy_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'The Girl Who Collected Storms',
   titleNative:'La niña que coleccionaba tormentas',
   genres:['fantasy','adventure'],
@@ -1061,7 +1062,7 @@ STORIES.push(
 
 {
   id:'es_drama_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'The Last Call',
   titleNative:'La última llamada',
   genres:['drama','slice of life'],
@@ -1085,7 +1086,7 @@ STORIES.push(
 
 {
   id:'es_mystery_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'The House Number',
   titleNative:'El número de la casa',
   genres:['mystery','thriller'],
@@ -1109,7 +1110,7 @@ STORIES.push(
 
 {
   id:'es_comedy_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'Spicy',
   titleNative:'Picante',
   genres:['comedy','slice of life'],
@@ -1134,7 +1135,7 @@ STORIES.push(
 // MULTI-PAGE SPANISH STORY
 {
   id:'es_drama_long_01',
-  lang:'spanish',
+  lang:'spanish_mx',
   title:'What We Don\'t Say',
   titleNative:'Lo que no decimos',
   genres:['drama','romance','slice of life'],
@@ -1171,6 +1172,108 @@ STORIES.push(
     {q:'How long had they not spoken?',choices:['One year','Two years','Three years','Five years'],answer:'Three years'},
     {q:'What was his first question to her?',choices:['"Why are you here?"','"How are you?"','"How is mom?"','"Can we talk?"'],answer:'"How is mom?"'},
     {q:'What did "dale" signal at the end?',choices:['She was angry','She refused','She agreed to have coffee with him','She left without answering'],answer:'She agreed to have coffee with him'},
+  ]
+}
+
+);
+
+// ── VENEZUELAN SPANISH STORIES ────────────────────────────────────────────────
+
+STORIES.push(
+
+{
+  id:'ve_slice_01',
+  lang:'spanish_ve',
+  title:'The Queue',
+  titleNative:'La cola',
+  genres:['slice of life','comedy'],
+  difficulty:'A2',
+  blurb:'She had been in line for two hours. The man in front of her had been in line for three. They didn\'t speak until the line stopped moving entirely.',
+  lines:[
+    {text:'"¿Cuánto tiempo llevas aquí?" le preguntó ella.',ro:'',translation:'"How long have you been here?" she asked him.'},
+    {text:'"Tres horas, pana," dijo él, sin voltear.',ro:'',translation:'"Three hours, friend," he said, without turning around.'},
+    {text:'Ella suspiró. "Yo llevo dos."',ro:'',translation:'She sighed. "I\'ve been here two."'},
+    {text:'La cola no se movió en quince minutos.',ro:'',translation:'The line didn\'t move for fifteen minutes.'},
+    {text:'"¿Sabes cuánto falta?" preguntó ella.',ro:'',translation:'"Do you know how much longer?" she asked.'},
+    {text:'"Ni idea, chama. Esto es Venezuela."',ro:'',translation:'"No idea, girl. This is Venezuela."'},
+    {text:'Ella se rió. Él también. Era lo único que podían hacer.',ro:'',translation:'She laughed. Him too. It was the only thing they could do.'},
+  ],
+  questions:[
+    {q:'How long had the man been waiting?',choices:['One hour','Two hours','Three hours','Four hours'],answer:'Three hours'},
+    {q:'What Venezuelan word did he use to address her?',choices:['Pana','Chama','Vaina','Chévere'],answer:'Chama'},
+    {q:'What did they do at the end?',choices:['Left the line','Complained to the manager','Laughed','Called someone'],answer:'Laughed'},
+  ]
+},
+
+{
+  id:'ve_romance_01',
+  lang:'spanish_ve',
+  title:'Chévere',
+  titleNative:'Chévere',
+  genres:['romance','slice of life'],
+  difficulty:'A2',
+  blurb:'She asked what he thought of the city. He said one word. She decided she liked him.',
+  lines:[
+    {text:'"¿Y qué te parece Caracas?" le preguntó ella.',ro:'',translation:'"So what do you think of Caracas?" she asked him.'},
+    {text:'Él miró por la ventana del metro. Las luces. El caos. La gente.',ro:'',translation:'He looked out the metro window. The lights. The chaos. The people.'},
+    {text:'"Chévere," dijo.',ro:'',translation:'"Chévere," he said.'},
+    {text:'Ella lo miró. "¿Solo eso?"',ro:'',translation:'She looked at him. "Just that?"'},
+    {text:'"Es que todo lo bueno es chévere, ¿no?"',ro:'',translation:'"It\'s just that everything good is chévere, right?"'},
+    {text:'Ella pensó en eso un momento.',ro:'',translation:'She thought about that for a moment.'},
+    {text:'"Dale," dijo.',ro:'',translation:'"Dale," she said.'},
+  ],
+  questions:[
+    {q:'Where were they when he answered?',choices:['On a bus','In a restaurant','On the metro','Walking'],answer:'On the metro'},
+    {q:'What did he say about the city?',choices:['"It\'s crazy"','"I love it"','"Chévere"','"Too hot"'],answer:'"Chévere"'},
+    {q:'What did she say at the end?',choices:['"I agree"','"Dale"','"Tell me more"','"Chévere"'],answer:'"Dale"'},
+  ]
+},
+
+{
+  id:'ve_drama_01',
+  lang:'spanish_ve',
+  title:'The Arepa',
+  titleNative:'La arepa',
+  genres:['drama','slice of life'],
+  difficulty:'B1',
+  blurb:'He hadn\'t eaten an arepa in four years. His neighbor knocked on his door with one. He didn\'t know what to say.',
+  lines:[
+    {text:'Llegó golpeando la puerta a las siete de la mañana.',ro:'',translation:'She arrived knocking at the door at seven in the morning.'},
+    {text:'Traía una arepa envuelta en papel.',ro:'',translation:'She was carrying an arepa wrapped in paper.'},
+    {text:'"Te vi solo en Navidad," dijo. "Así que hice de más."',ro:'',translation:'"I saw you alone at Christmas," she said. "So I made extra."'},
+    {text:'Cuatro años sin comer una arepa recién hecha.',ro:'',translation:'Four years without eating a freshly made arepa.'},
+    {text:'No pudo decir nada.',ro:'',translation:'He couldn\'t say anything.'},
+    {text:'"¿Estás bien, chamo?" preguntó ella.',ro:'',translation:'"Are you okay, man?" she asked.'},
+    {text:'"Sí," dijo. "Gracias, pana." Y la voz se le quebró un poco.',ro:'',translation:'"Yes," he said. "Thank you, friend." And his voice broke a little.'},
+  ],
+  questions:[
+    {q:'Why did the neighbor bring the arepa?',choices:['It was his birthday','She saw he was alone at Christmas','He asked her to','She had too many'],answer:'She saw he was alone at Christmas'},
+    {q:'How long had it been since he had a homemade arepa?',choices:['One year','Two years','Four years','Ten years'],answer:'Four years'},
+    {q:'What happened to his voice at the end?',choices:['He shouted','It broke a little','He couldn\'t speak at all','He started laughing'],answer:'It broke a little'},
+  ]
+},
+
+{
+  id:'ve_thriller_01',
+  lang:'spanish_ve',
+  title:'The Message',
+  titleNative:'El mensaje',
+  genres:['thriller','mystery'],
+  difficulty:'B1',
+  blurb:'He received a voice note. Unknown number. It was someone asking for help in a whisper. He recognized the voice.',
+  lines:[
+    {text:'El mensaje llegó a la una de la madrugada.',ro:'',translation:'The message arrived at one in the morning.'},
+    {text:'Número desconocido. Una nota de voz.',ro:'',translation:'Unknown number. A voice note.'},
+    {text:'Presionó play. Había silencio primero. Luego una voz muy baja.',ro:'',translation:'He pressed play. There was silence first. Then a very low voice.'},
+    {text:'"Necesito ayuda. No puedo hablar alto. Estoy en..."',ro:'',translation:'"I need help. I can\'t speak loudly. I\'m at..."'},
+    {text:'La nota se cortó.',ro:'',translation:'The message cut off.'},
+    {text:'Escuchó tres veces más.',ro:'',translation:'He listened three more times.'},
+    {text:'En la tercera, reconoció la voz. Era su hermana.',ro:'',translation:'On the third time, he recognized the voice. It was his sister.'},
+  ],
+  questions:[
+    {q:'When did the message arrive?',choices:['In the morning','At noon','At one in the morning','In the evening'],answer:'At one in the morning'},
+    {q:'Why did the person speak in a whisper?',choices:['They were sick','They couldn\'t speak loudly','The signal was bad','They didn\'t want to wake someone'],answer:'They couldn\'t speak loudly'},
+    {q:'Who did he recognize on the third listen?',choices:['His mother','His friend','His sister','His neighbor'],answer:'His sister'},
   ]
 }
 
