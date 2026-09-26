@@ -37,11 +37,14 @@ const PREMADE_DECKS = {
   russian_n5:          [{name:'Russian Beginner',      color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
   russian_n4:          [{name:'Russian Elementary',    color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
   russian_n3:          [{name:'Russian Intermediate',  color:'#c8c87a', filter: w => (w.freq === 7 || w.freq === 8) && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
-  spanish_a1:          [{name:'Spanish A1', color:'#7ac8a0', filter: w => w.freq >= 10}],
-  spanish_a2:          [{name:'Spanish A2', color:'#7ac8c8', filter: w => w.freq === 9}],
-  spanish_b1:          [{name:'Spanish B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
-  spanish_b2:          [{name:'Spanish B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
-  spanish_c1:          [{name:'Spanish C1', color:'#c87a7a', filter: w => w.freq <= 4}],
+  spanish_mx_a1:       [{name:'MX Spanish A1', color:'#7ac8a0', filter: w => w.freq >= 10}],
+  spanish_mx_a2:       [{name:'MX Spanish A2', color:'#7ac8c8', filter: w => w.freq === 9}],
+  spanish_mx_b1:       [{name:'MX Spanish B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
+  spanish_mx_b2:       [{name:'MX Spanish B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
+  spanish_ve_a1:       [{name:'VE Spanish A1', color:'#7ac8a0', filter: w => w.freq >= 10}],
+  spanish_ve_a2:       [{name:'VE Spanish A2', color:'#7ac8c8', filter: w => w.freq === 9}],
+  spanish_ve_b1:       [{name:'VE Spanish B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
+  spanish_ve_b2:       [{name:'VE Spanish B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
   japanese_vocab:     [{name:'Japanese Vocabulary', color:'#7ac8a0', filter: w => w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n5:        [{name:'JLPT N5', color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n4:        [{name:'JLPT N4', color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
@@ -79,7 +82,8 @@ const LANGS = {
   italian:  {label:'Italian',  script:'Italiano',flag:'🇮🇹', placeholder:'search Italian, pronunciation, or meaning…', words: ITALIAN_WORDS,  sentences: () => ITALIAN_SENTENCES,  grammar: () => GRAMMAR.italian},
   japanese: {label:'Japanese', script:'日本語',  flag:'🇯🇵', placeholder:'search hiragana, romaji, or meaning…',       words: JAPANESE_WORDS, sentences: () => JAPANESE_SENTENCES, grammar: () => GRAMMAR.japanese},
   russian:  {label:'Russian',  script:'Русский', flag:'🇷🇺', placeholder:'search Cyrillic, romanization, or meaning…', words: typeof RUSSIAN_WORDS !== 'undefined' ? RUSSIAN_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.russian || []},
-  spanish:  {label:'Spanish',  script:'Español',  flag:'🇲🇽', placeholder:'search Spanish, pronunciation, or meaning…',  words: typeof SPANISH_WORDS !== 'undefined' ? SPANISH_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.spanish || []},
+  spanish_mx: {label:'Spanish (MX)', script:'Español MX', flag:'🇲🇽', placeholder:'search Mexican Spanish, pronunciation, or meaning…', words: typeof SPANISH_MX_WORDS !== 'undefined' ? SPANISH_MX_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.spanish_mx || []},
+  spanish_ve: {label:'Spanish (VE)', script:'Español VE', flag:'🇻🇪', placeholder:'search Venezuelan Spanish, pronunciation, or meaning…', words: typeof SPANISH_VE_WORDS !== 'undefined' ? SPANISH_VE_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.spanish_ve || []},
 };
 
 let curLang = localStorage.getItem('lf-lang') || 'korean';
@@ -770,7 +774,7 @@ function renderDeckSwitcher(){
   add.onclick=()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());renderDeckSwitcher();renderDeckChips();renderWordGrid();}};
   utilRow.appendChild(add);
 
-  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute'],russian:['russian'],spanish:['spanish']};
+  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute'],russian:['russian'],spanish_mx:['spanish_mx'],spanish_ve:['spanish_ve']};
   if(pk[curLang]){
     const pb=document.createElement('button');pb.className='dbtn';
     pb.textContent=curLang==='japanese'?'★ alphabet + accent decks':'★ starter decks';
@@ -797,19 +801,14 @@ function renderDeckSwitcher(){
       utilRow.appendChild(lb);
     });
   }
-  if(curLang==='spanish'){
-    const levels=[
-      {key:'spanish_a1',label:'A1'},
-      {key:'spanish_a2',label:'A2'},
-      {key:'spanish_b1',label:'B1'},
-      {key:'spanish_b2',label:'B2'},
-      {key:'spanish_c1',label:'C1'},
-    ];
-    levels.forEach(l=>{
-      const lb=document.createElement('button');lb.className='dbtn';
-      lb.textContent='★ CEFR '+l.label;
-      lb.onclick=()=>addPremadeDeck(l.key);
-      utilRow.appendChild(lb);
+  if(curLang==='spanish_mx'){
+    [{key:'spanish_mx_a1',label:'A1'},{key:'spanish_mx_a2',label:'A2'},{key:'spanish_mx_b1',label:'B1'},{key:'spanish_mx_b2',label:'B2'}].forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';lb.textContent='★ CEFR '+l.label;lb.onclick=()=>addPremadeDeck(l.key);utilRow.appendChild(lb);
+    });
+  }
+  if(curLang==='spanish_ve'){
+    [{key:'spanish_ve_a1',label:'A1'},{key:'spanish_ve_a2',label:'A2'},{key:'spanish_ve_b1',label:'B1'},{key:'spanish_ve_b2',label:'B2'}].forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';lb.textContent='★ CEFR '+l.label;lb.onclick=()=>addPremadeDeck(l.key);utilRow.appendChild(lb);
     });
   }
   if(curLang==='russian'){
@@ -3524,13 +3523,21 @@ function openStory(story, container) {
   applyStoredThemes();
   const L=LANGS[curLang];document.getElementById('langFlag').textContent=L.flag;document.getElementById('langLabel').textContent=L.label;
   const langMenuEl = document.getElementById('langMenu');
-  if (langMenuEl && !langMenuEl.querySelector('[data-lang="spanish"]')) {
-    const esOpt = document.createElement('div');
-    esOpt.className = 'lang-option';
-    esOpt.dataset.lang = 'spanish';
-    esOpt.innerHTML = '<span>🇲🇽</span><span>Spanish</span><span class="lang-script">Español</span>';
-    esOpt.onclick = () => switchLang('spanish');
-    langMenuEl.appendChild(esOpt);
+  if (langMenuEl && !langMenuEl.querySelector('[data-lang="spanish_mx"]')) {
+    const mxOpt = document.createElement('div');
+    mxOpt.className = 'lang-option';
+    mxOpt.dataset.lang = 'spanish_mx';
+    mxOpt.innerHTML = '<span>🇲🇽</span><span>Spanish (MX)</span><span class="lang-script">Español MX</span>';
+    mxOpt.onclick = () => switchLang('spanish_mx');
+    langMenuEl.appendChild(mxOpt);
+  }
+  if (langMenuEl && !langMenuEl.querySelector('[data-lang="spanish_ve"]')) {
+    const veOpt = document.createElement('div');
+    veOpt.className = 'lang-option';
+    veOpt.dataset.lang = 'spanish_ve';
+    veOpt.innerHTML = '<span>🇻🇪</span><span>Spanish (VE)</span><span class="lang-script">Español VE</span>';
+    veOpt.onclick = () => switchLang('spanish_ve');
+    langMenuEl.appendChild(veOpt);
   }
   if (langMenuEl && !langMenuEl.querySelector('[data-lang="russian"]')) {
     const ruOpt = document.createElement('div');
@@ -3541,7 +3548,8 @@ function openStory(story, container) {
     langMenuEl.appendChild(ruOpt);
   }
   if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.russian) GRAMMAR.russian = [];
-  if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.spanish) GRAMMAR.spanish = [];
+  if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.spanish_mx) GRAMMAR.spanish_mx = [];
+  if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.spanish_ve) GRAMMAR.spanish_ve = [];
   document.querySelectorAll('.lang-option').forEach(el=>el.classList.toggle('active',el.dataset.lang===curLang));
   showScriptFilters(curLang==='japanese');
   if(!document.querySelector('[data-tab="writing"]')){
