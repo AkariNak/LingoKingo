@@ -41,10 +41,14 @@ const PREMADE_DECKS = {
   spanish_mx_a2:       [{name:'MX Spanish A2', color:'#7ac8c8', filter: w => w.freq === 9}],
   spanish_mx_b1:       [{name:'MX Spanish B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
   spanish_mx_b2:       [{name:'MX Spanish B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
+  spanish_mx_c1:       [{name:'MX Spanish C1', color:'#c87a7a', filter: w => w.freq === 4}],
+  spanish_mx_c2:       [{name:'MX Spanish C2', color:'#a87ac8', filter: w => w.freq === 3}],
   spanish_ve_a1:       [{name:'VE Spanish A1', color:'#7ac8a0', filter: w => w.freq >= 10}],
   spanish_ve_a2:       [{name:'VE Spanish A2', color:'#7ac8c8', filter: w => w.freq === 9}],
   spanish_ve_b1:       [{name:'VE Spanish B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
   spanish_ve_b2:       [{name:'VE Spanish B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
+  spanish_ve_c1:       [{name:'VE Spanish C1', color:'#c87a7a', filter: w => w.freq === 4}],
+  spanish_ve_c2:       [{name:'VE Spanish C2', color:'#a87ac8', filter: w => w.freq === 3}],
   japanese_vocab:     [{name:'Japanese Vocabulary', color:'#7ac8a0', filter: w => w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n5:        [{name:'JLPT N5', color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n4:        [{name:'JLPT N4', color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
@@ -802,12 +806,12 @@ function renderDeckSwitcher(){
     });
   }
   if(curLang==='spanish_mx'){
-    [{key:'spanish_mx_a1',label:'A1'},{key:'spanish_mx_a2',label:'A2'},{key:'spanish_mx_b1',label:'B1'},{key:'spanish_mx_b2',label:'B2'}].forEach(l=>{
+    [{key:'spanish_mx_a1',label:'A1'},{key:'spanish_mx_a2',label:'A2'},{key:'spanish_mx_b1',label:'B1'},{key:'spanish_mx_b2',label:'B2'},{key:'spanish_mx_c1',label:'C1'},{key:'spanish_mx_c2',label:'C2'}].forEach(l=>{
       const lb=document.createElement('button');lb.className='dbtn';lb.textContent='★ CEFR '+l.label;lb.onclick=()=>addPremadeDeck(l.key);utilRow.appendChild(lb);
     });
   }
   if(curLang==='spanish_ve'){
-    [{key:'spanish_ve_a1',label:'A1'},{key:'spanish_ve_a2',label:'A2'},{key:'spanish_ve_b1',label:'B1'},{key:'spanish_ve_b2',label:'B2'}].forEach(l=>{
+    [{key:'spanish_ve_a1',label:'A1'},{key:'spanish_ve_a2',label:'A2'},{key:'spanish_ve_b1',label:'B1'},{key:'spanish_ve_b2',label:'B2'},{key:'spanish_ve_c1',label:'C1'},{key:'spanish_ve_c2',label:'C2'}].forEach(l=>{
       const lb=document.createElement('button');lb.className='dbtn';lb.textContent='★ CEFR '+l.label;lb.onclick=()=>addPremadeDeck(l.key);utilRow.appendChild(lb);
     });
   }
@@ -3124,7 +3128,7 @@ function renderStories(container) {
     ? ['N5','N4','N3','N2','N1']
     : curLang === 'korean'
     ? ['TOPIK 1','TOPIK 2','TOPIK 3-4','TOPIK 5-6']
-    : ['A1','A2','B1','B2','C1'];
+    : ['A1','A2','B1','B2','C1','C2'];
 
   const allDiffBtn = document.createElement('button');
   allDiffBtn.className = 'gbtn' + (storyDiffFilter.size === 0 ? ' on' : '');
