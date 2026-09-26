@@ -37,6 +37,11 @@ const PREMADE_DECKS = {
   russian_n5:          [{name:'Russian Beginner',      color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
   russian_n4:          [{name:'Russian Elementary',    color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
   russian_n3:          [{name:'Russian Intermediate',  color:'#c8c87a', filter: w => (w.freq === 7 || w.freq === 8) && w.pos !== 'cyrillic' && w.pos !== 'cyrillic_note'}],
+  spanish_a1:          [{name:'Spanish A1', color:'#7ac8a0', filter: w => w.freq >= 10}],
+  spanish_a2:          [{name:'Spanish A2', color:'#7ac8c8', filter: w => w.freq === 9}],
+  spanish_b1:          [{name:'Spanish B1', color:'#c8a87a', filter: w => w.freq === 7 || w.freq === 8}],
+  spanish_b2:          [{name:'Spanish B2', color:'#c87aa8', filter: w => w.freq === 5 || w.freq === 6}],
+  spanish_c1:          [{name:'Spanish C1', color:'#c87a7a', filter: w => w.freq <= 4}],
   japanese_vocab:     [{name:'Japanese Vocabulary', color:'#7ac8a0', filter: w => w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n5:        [{name:'JLPT N5', color:'#7ac8a0', filter: w => w.freq >= 10 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
   japanese_n4:        [{name:'JLPT N4', color:'#7ac8c8', filter: w => w.freq === 9 && w.pos !== 'kanji' && w.pos !== 'hiragana' && w.pos !== 'katakana' && w.pos !== 'hiragana_d' && w.pos !== 'katakana_d' && w.script !== 'kanji' && !w.song}],
@@ -74,6 +79,7 @@ const LANGS = {
   italian:  {label:'Italian',  script:'Italiano',flag:'🇮🇹', placeholder:'search Italian, pronunciation, or meaning…', words: ITALIAN_WORDS,  sentences: () => ITALIAN_SENTENCES,  grammar: () => GRAMMAR.italian},
   japanese: {label:'Japanese', script:'日本語',  flag:'🇯🇵', placeholder:'search hiragana, romaji, or meaning…',       words: JAPANESE_WORDS, sentences: () => JAPANESE_SENTENCES, grammar: () => GRAMMAR.japanese},
   russian:  {label:'Russian',  script:'Русский', flag:'🇷🇺', placeholder:'search Cyrillic, romanization, or meaning…', words: typeof RUSSIAN_WORDS !== 'undefined' ? RUSSIAN_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.russian || []},
+  spanish:  {label:'Spanish',  script:'Español',  flag:'🇲🇽', placeholder:'search Spanish, pronunciation, or meaning…',  words: typeof SPANISH_WORDS !== 'undefined' ? SPANISH_WORDS : [], sentences: () => [], grammar: () => GRAMMAR.spanish || []},
 };
 
 let curLang = localStorage.getItem('lf-lang') || 'korean';
@@ -764,7 +770,7 @@ function renderDeckSwitcher(){
   add.onclick=()=>{const n=prompt('Name your new deck:','');if(n?.trim()){addDeck(n.trim());renderDeckSwitcher();renderDeckChips();renderWordGrid();}};
   utilRow.appendChild(add);
 
-  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute'],russian:['russian']};
+  const pk={korean:['korean'],italian:['italian'],japanese:['japanese_hiragana','japanese_katakana','japanese_kanji','japanese_dakuten','japanese_yofukashi','japanese_kawaikute'],russian:['russian'],spanish:['spanish']};
   if(pk[curLang]){
     const pb=document.createElement('button');pb.className='dbtn';
     pb.textContent=curLang==='japanese'?'★ alphabet + accent decks':'★ starter decks';
@@ -787,6 +793,21 @@ function renderDeckSwitcher(){
     levels.forEach(l=>{
       const lb=document.createElement('button');lb.className='dbtn';
       lb.textContent='★ JLPT '+l.label;
+      lb.onclick=()=>addPremadeDeck(l.key);
+      utilRow.appendChild(lb);
+    });
+  }
+  if(curLang==='spanish'){
+    const levels=[
+      {key:'spanish_a1',label:'A1'},
+      {key:'spanish_a2',label:'A2'},
+      {key:'spanish_b1',label:'B1'},
+      {key:'spanish_b2',label:'B2'},
+      {key:'spanish_c1',label:'C1'},
+    ];
+    levels.forEach(l=>{
+      const lb=document.createElement('button');lb.className='dbtn';
+      lb.textContent='★ CEFR '+l.label;
       lb.onclick=()=>addPremadeDeck(l.key);
       utilRow.appendChild(lb);
     });
@@ -3503,6 +3524,14 @@ function openStory(story, container) {
   applyStoredThemes();
   const L=LANGS[curLang];document.getElementById('langFlag').textContent=L.flag;document.getElementById('langLabel').textContent=L.label;
   const langMenuEl = document.getElementById('langMenu');
+  if (langMenuEl && !langMenuEl.querySelector('[data-lang="spanish"]')) {
+    const esOpt = document.createElement('div');
+    esOpt.className = 'lang-option';
+    esOpt.dataset.lang = 'spanish';
+    esOpt.innerHTML = '<span>🇲🇽</span><span>Spanish</span><span class="lang-script">Español</span>';
+    esOpt.onclick = () => switchLang('spanish');
+    langMenuEl.appendChild(esOpt);
+  }
   if (langMenuEl && !langMenuEl.querySelector('[data-lang="russian"]')) {
     const ruOpt = document.createElement('div');
     ruOpt.className = 'lang-option';
@@ -3512,6 +3541,7 @@ function openStory(story, container) {
     langMenuEl.appendChild(ruOpt);
   }
   if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.russian) GRAMMAR.russian = [];
+  if (typeof GRAMMAR !== 'undefined' && !GRAMMAR.spanish) GRAMMAR.spanish = [];
   document.querySelectorAll('.lang-option').forEach(el=>el.classList.toggle('active',el.dataset.lang===curLang));
   showScriptFilters(curLang==='japanese');
   if(!document.querySelector('[data-tab="writing"]')){
