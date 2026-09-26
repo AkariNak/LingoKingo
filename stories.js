@@ -758,6 +758,7 @@ const STORY_GENRES_BY_LANG = {
   japanese: ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy'],
   korean:   ['romance','slice of life','thriller','mystery','fantasy','action','drama'],
   italian:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
+  spanish:  ['romance','slice of life','mystery','adventure','action','thriller','drama','comedy','fantasy'],
 };
 const STORY_GENRES = ['isekai','fantasy','action','adventure','romance','slice of life','school','mystery','horror','comedy','thriller','drama'];
 
@@ -929,6 +930,247 @@ STORIES.push(
     {q:'How long had the house been empty?',choices:['Five years','Eight years','Eleven years','Twenty years'],answer:'Eleven years'},
     {q:'What did old Enzo warn about the house?',choices:['It was haunted by a ghost','Whoever goes in doesn\'t come out the same','It was dangerous to enter at night','Someone was living there secretly'],answer:'Whoever goes in doesn\'t come out the same'},
     {q:'What was strange about the cup?',choices:['It was broken','It was floating','It was still warm','It was moving'],answer:'It was still warm'},
+  ]
+}
+
+);
+
+// ── SPANISH STORIES ───────────────────────────────────────────────────────────
+
+STORIES.push(
+
+{
+  id:'es_romance_01',
+  lang:'spanish',
+  title:'The Last Table',
+  titleNative:'La última mesa',
+  genres:['romance','slice of life'],
+  difficulty:'A2',
+  blurb:'It was the last table in the café. She was already sitting there. He asked if he could sit. She said yes without looking up.',
+  lines:[
+    {text:'Era la última mesa libre en toda la cafetería.',ro:'',translation:'It was the last free table in the whole café.'},
+    {text:'Ella estaba sentada sola, con un libro abierto y un café a medias.',ro:'',translation:'She was sitting alone, with an open book and a half-finished coffee.'},
+    {text:'"¿Te molesta si me siento aquí?" preguntó él.',ro:'',translation:'"Do you mind if I sit here?" he asked.'},
+    {text:'"No," dijo ella, sin levantar los ojos del libro.',ro:'',translation:'"No," she said, without lifting her eyes from the book.'},
+    {text:'Se sentó. Pidió su café. No dijo nada más.',ro:'',translation:'He sat down. He ordered his coffee. He said nothing else.'},
+    {text:'Veinte minutos después, ella cerró el libro.',ro:'',translation:'Twenty minutes later, she closed the book.'},
+    {text:'"¿Bueno?" preguntó él, señalando el libro. Ella lo miró por primera vez.',ro:'',translation:'"Good?" he asked, pointing at the book. She looked at him for the first time.'},
+  ],
+  questions:[
+    {q:'Why did he sit at her table?',choices:['He knew her','It was the only free table','She invited him','He liked her book'],answer:'It was the only free table'},
+    {q:'What was she doing when he arrived?',choices:['Writing','Eating','Reading a book','On her phone'],answer:'Reading a book'},
+    {q:'What was his first real question to her?',choices:['"What\'s your name?"','"Is this seat taken?"','"Good?" about her book','"Can I have your number?"'],answer:'"Good?" about her book'},
+  ]
+},
+
+{
+  id:'es_thriller_01',
+  lang:'spanish',
+  title:'The Wrong Floor',
+  titleNative:'El piso equivocado',
+  genres:['thriller','mystery'],
+  difficulty:'B1',
+  blurb:'The elevator stopped on a floor that didn\'t exist. She pressed the button again. The doors didn\'t close.',
+  lines:[
+    {text:'El elevador se detuvo solo. No era su piso.',ro:'',translation:'The elevator stopped on its own. It wasn\'t her floor.'},
+    {text:'Las puertas se abrieron. Un pasillo que ella no reconocía.',ro:'',translation:'The doors opened. A hallway she didn\'t recognize.'},
+    {text:'Presionó el botón de su piso otra vez. Las puertas no se cerraron.',ro:'',translation:'She pressed her floor button again. The doors didn\'t close.'},
+    {text:'Miró el número sobre la puerta. Decía 13. En este edificio no había piso 13.',ro:'',translation:'She looked at the number above the door. It said 13. There was no 13th floor in this building.'},
+    {text:'Al fondo del pasillo, una puerta estaba abierta.',ro:'',translation:'At the end of the hallway, a door was open.'},
+    {text:'Desde adentro llegaba el sonido de alguien llorando.',ro:'',translation:'From inside came the sound of someone crying.'},
+    {text:'Y entonces la reconoció. Era su propia voz.',ro:'',translation:'And then she recognized it. It was her own voice.'},
+  ],
+  questions:[
+    {q:'What was strange about where the elevator stopped?',choices:['It was too fast','It was the wrong floor and didn\'t exist','It was dark','The button was broken'],answer:'It was the wrong floor and didn\'t exist'},
+    {q:'What did she hear from the open door?',choices:['Music','Her name','Someone crying','Silence'],answer:'Someone crying'},
+    {q:'What was the most disturbing thing at the end?',choices:['The floor disappeared','She couldn\'t leave','The crying was her own voice','The lights went out'],answer:'The crying was her own voice'},
+  ]
+},
+
+{
+  id:'es_slice_01',
+  lang:'spanish',
+  title:'Ahorita',
+  titleNative:'Ahorita',
+  genres:['slice of life','comedy'],
+  difficulty:'A2',
+  blurb:'He\'d been waiting for her to come downstairs for forty-five minutes. She had said ahorita. He had believed her.',
+  lines:[
+    {text:'"Ahorita bajo," dijo ella desde arriba.',ro:'',translation:'"I\'ll be right down," she said from upstairs.'},
+    {text:'Él se sentó en el sofá.',ro:'',translation:'He sat on the sofa.'},
+    {text:'Pasaron diez minutos. Pasaron veinte. Pasaron cuarenta y cinco.',ro:'',translation:'Ten minutes passed. Twenty. Forty-five.'},
+    {text:'"¿Ya vienes?" gritó él.',ro:'',translation:'"Are you coming?" he shouted.'},
+    {text:'"¡Ahorita!" respondió ella.',ro:'',translation:'"Right now!" she answered.'},
+    {text:'Pasaron otros quince minutos.',ro:'',translation:'Another fifteen minutes passed.'},
+    {text:'Cuando por fin bajó, él ya sabía lo que ahorita significaba realmente.',ro:'',translation:'When she finally came down, he already knew what ahorita really meant.'},
+  ],
+  questions:[
+    {q:'How long did he end up waiting in total?',choices:['Ten minutes','Twenty minutes','At least an hour','Forty-five minutes plus fifteen more'],answer:'Forty-five minutes plus fifteen more'},
+    {q:'What did she say when he shouted up to her?',choices:['"Almost ready"','"Give me five minutes"','"Right now!"','"Sorry, sorry"'],answer:'"Right now!"'},
+    {q:'What did he learn by the end?',choices:['To be more patient','What ahorita really means','That she was worth the wait','To bring a book next time'],answer:'What ahorita really means'},
+  ]
+},
+
+{
+  id:'es_romance_02',
+  lang:'spanish',
+  title:'What You Said at the Airport',
+  titleNative:'Lo que dijiste en el aeropuerto',
+  genres:['romance','drama'],
+  difficulty:'B1',
+  blurb:'She was leaving for six months. He came to say goodbye. He had rehearsed something important. He said none of it.',
+  lines:[
+    {text:'El vuelo salía a las seis de la mañana.',ro:'',translation:'The flight was leaving at six in the morning.'},
+    {text:'Él llegó al aeropuerto a las cuatro. Sin que nadie le dijera.',ro:'',translation:'He arrived at the airport at four. Without anyone telling him to.'},
+    {text:'Ella lo vio y no dijo nada. Solo lo abrazó.',ro:'',translation:'She saw him and said nothing. She just hugged him.'},
+    {text:'Él había practicado lo que iba a decir. Palabras largas, importantes.',ro:'',translation:'He had practiced what he was going to say. Long, important words.'},
+    {text:'Pero cuando llegó el momento, dijo solo: "Cuídate."',ro:'',translation:'But when the moment came, he said only: "Take care of yourself."'},
+    {text:'Ella asintió. Caminó hacia la puerta de embarque.',ro:'',translation:'She nodded. She walked toward the boarding gate.'},
+    {text:'En el avión, ella sacó su teléfono. Tenía un mensaje de él. Las palabras largas, finalmente enviadas.',ro:'',translation:'On the plane, she took out her phone. She had a message from him. The long words, finally sent.'},
+  ],
+  questions:[
+    {q:'Why did he come to the airport?',choices:['To pick someone up','To say goodbye to her','She asked him to come','He had a flight too'],answer:'To say goodbye to her'},
+    {q:'What did he actually say to her?',choices:['"I love you"','"Don\'t go"','"Take care of yourself"','Nothing'],answer:'"Take care of yourself"'},
+    {q:'When did she read his real message?',choices:['Before boarding','While saying goodbye','On the plane','Six months later'],answer:'On the plane'},
+  ]
+},
+
+{
+  id:'es_fantasy_01',
+  lang:'spanish',
+  title:'The Girl Who Collected Storms',
+  titleNative:'La niña que coleccionaba tormentas',
+  genres:['fantasy','adventure'],
+  difficulty:'B1',
+  blurb:'Every village in the valley had one strange child. Theirs could predict any storm that was coming — but only if she had seen a storm like it before.',
+  lines:[
+    {text:'En el valle, cada pueblo tenía su niño raro.',ro:'',translation:'In the valley, every village had its strange child.'},
+    {text:'El de ellos era una niña que coleccionaba tormentas.',ro:'',translation:'Theirs was a girl who collected storms.'},
+    {text:'No en frascos. Las guardaba adentro, en algún lugar detrás de los ojos.',ro:'',translation:'Not in jars. She kept them inside, somewhere behind her eyes.'},
+    {text:'Si una tormenta se acercaba, ella la reconocía. Podía describirla antes de que llegara.',ro:'',translation:'If a storm was approaching, she recognized it. She could describe it before it arrived.'},
+    {text:'Pero solo si ya había visto una igual antes.',ro:'',translation:'But only if she had already seen one like it before.'},
+    {text:'Por eso se iba al cerro sola cada vez que el cielo cambiaba.',ro:'',translation:'That\'s why she went to the hill alone every time the sky changed.'},
+    {text:'Aprendiendo. Siempre aprendiendo la siguiente tormenta.',ro:'',translation:'Learning. Always learning the next storm.'},
+  ],
+  questions:[
+    {q:'How did the girl "collect" storms?',choices:['In jars','In a notebook','Inside herself, behind her eyes','By drawing them'],answer:'Inside herself, behind her eyes'},
+    {q:'What was her limitation?',choices:['She could only predict rain','She had to see a storm to predict it later','She was afraid of thunder','She could only go out at night'],answer:'She had to see a storm to predict it later'},
+    {q:'Why did she go to the hill alone?',choices:['To escape the village','To pray','To learn new storms','To meet someone'],answer:'To learn new storms'},
+  ]
+},
+
+{
+  id:'es_drama_01',
+  lang:'spanish',
+  title:'The Last Call',
+  titleNative:'La última llamada',
+  genres:['drama','slice of life'],
+  difficulty:'B1',
+  blurb:'He called his mother every Sunday without fail. This Sunday he almost didn\'t. He\'s glad he did.',
+  lines:[
+    {text:'Todos los domingos a las siete. Sin falta.',ro:'',translation:'Every Sunday at seven. Without fail.'},
+    {text:'Ese domingo estaba cansado. Tenía cosas que hacer. Pensó en llamar mañana.',ro:'',translation:'That Sunday he was tired. He had things to do. He thought about calling tomorrow.'},
+    {text:'Pero a las siete menos cinco, marcó el número.',ro:'',translation:'But at five to seven, he dialed the number.'},
+    {text:'Ella contestó al primer timbrazo, como siempre.',ro:'',translation:'She answered on the first ring, as always.'},
+    {text:'"Pensé que hoy no ibas a llamar," dijo ella.',ro:'',translation:'"I thought you weren\'t going to call today," she said.'},
+    {text:'Él no supo qué responder.',ro:'',translation:'He didn\'t know what to answer.'},
+    {text:'"Qué bueno que sí llamaste," dijo ella. Y él sintió algo que no sabía cómo llamar.',ro:'',translation:'"I\'m glad you did call," she said. And he felt something he didn\'t know how to name.'},
+  ],
+  questions:[
+    {q:'What had he considered doing that Sunday?',choices:['Not calling at all','Calling early','Calling the next day','Sending a message instead'],answer:'Calling the next day'},
+    {q:'What did his mother say when she answered?',choices:['"You\'re late"','"I thought you weren\'t going to call"','"I was worried"','"Finally"'],answer:'"I thought you weren\'t going to call"'},
+    {q:'What did he feel at the end?',choices:['Relief','Guilt','Something he couldn\'t name','Nothing'],answer:'Something he couldn\'t name'},
+  ]
+},
+
+{
+  id:'es_mystery_01',
+  lang:'spanish',
+  title:'The House Number',
+  titleNative:'El número de la casa',
+  genres:['mystery','thriller'],
+  difficulty:'B2',
+  blurb:'She had lived on Calle Ocho her whole life. She knew every house by heart. Then one Tuesday there was a house she had never seen.',
+  lines:[
+    {text:'Llevaba cuarenta años viviendo en la Calle Ocho.',ro:'',translation:'She had lived on Calle Ocho for forty years.'},
+    {text:'Conocía cada casa, cada árbol, cada bache en el pavimento.',ro:'',translation:'She knew every house, every tree, every pothole in the pavement.'},
+    {text:'El martes, caminando de regreso del mercado, vio una casa que no reconoció.',ro:'',translation:'On Tuesday, walking back from the market, she saw a house she didn\'t recognize.'},
+    {text:'Era amarilla. Tenía una reja verde. El número decía 14.',ro:'',translation:'It was yellow. It had a green gate. The number said 14.'},
+    {text:'Pero en la Calle Ocho no había número 14. Nunca había habido.',ro:'',translation:'But on Calle Ocho there was no number 14. There had never been.'},
+    {text:'Se detuvo. La miró largo tiempo.',ro:'',translation:'She stopped. She looked at it for a long time.'},
+    {text:'Cuando llegó a su casa, llamó a su vecina. "¿Conoces la casa amarilla con reja verde?" La vecina tardó en responder. "¿Qué casa amarilla?"',ro:'',translation:'When she got home, she called her neighbor. "Do you know the yellow house with the green gate?" Her neighbor took a moment to answer. "What yellow house?"'},
+  ],
+  questions:[
+    {q:'How long had she lived on Calle Ocho?',choices:['Ten years','Twenty years','Forty years','Her whole childhood'],answer:'Forty years'},
+    {q:'What was strange about house number 14?',choices:['It was abandoned','It had no windows','It had never existed on that street','It was locked'],answer:'It had never existed on that street'},
+    {q:'What did her neighbor say?',choices:['"Yes, that old place"','"It\'s been there forever"','"What yellow house?"','"Call the police"'],answer:'"What yellow house?"'},
+  ]
+},
+
+{
+  id:'es_comedy_01',
+  lang:'spanish',
+  title:'Spicy',
+  titleNative:'Picante',
+  genres:['comedy','slice of life'],
+  difficulty:'A2',
+  blurb:'He told her he could eat anything spicy. The salsa on the table was from Oaxaca. He should have asked first.',
+  lines:[
+    {text:'"Yo como cualquier cosa picante," dijo él, muy seguro.',ro:'',translation:'"I can eat anything spicy," he said, very confident.'},
+    {text:'Ella no dijo nada. Señaló la salsa en la mesa.',ro:'',translation:'She said nothing. She pointed at the salsa on the table.'},
+    {text:'Era una salsa de Oaxaca que su abuela hacía. Con chiles de árbol.',ro:'',translation:'It was an Oaxacan salsa her grandmother made. With árbol chiles.'},
+    {text:'Él la probó. Sonrió. "No está tan picante."',ro:'',translation:'He tried it. He smiled. "It\'s not that spicy."'},
+    {text:'Diez segundos después, sus ojos lloraban.',ro:'',translation:'Ten seconds later, his eyes were watering.'},
+    {text:'"¿Estás bien?" preguntó ella, muy seria.',ro:'',translation:'"Are you okay?" she asked, very seriously.'},
+    {text:'"Perfectamente," dijo él, y tomó otro taco.',ro:'',translation:'"Perfectly fine," he said, and took another taco.'},
+  ],
+  questions:[
+    {q:'What kind of salsa was it?',choices:['A mild tomato salsa','A store-bought salsa','A homemade Oaxacan salsa with árbol chiles','A Venezuelan hot sauce'],answer:'A homemade Oaxacan salsa with árbol chiles'},
+    {q:'What happened ten seconds after he tried it?',choices:['He loved it','He stopped eating','His eyes started watering','He asked for water'],answer:'His eyes started watering'},
+    {q:'What did he do at the end?',choices:['Admitted it was spicy','Left the table','Took another taco','Asked for milk'],answer:'Took another taco'},
+  ]
+},
+
+// MULTI-PAGE SPANISH STORY
+{
+  id:'es_drama_long_01',
+  lang:'spanish',
+  title:'What We Don\'t Say',
+  titleNative:'Lo que no decimos',
+  genres:['drama','romance','slice of life'],
+  difficulty:'B2',
+  blurb:'Two siblings who haven\'t spoken in three years end up in the same waiting room. One of them is going to have to say something first.',
+  pages:[
+    [
+      {text:'La sala de espera estaba casi vacía cuando ella llegó.',ro:'',translation:'The waiting room was almost empty when she arrived.'},
+      {text:'Se sentó junto a la ventana. Sacó el teléfono. No lo desbloqueó.',ro:'',translation:'She sat by the window. She took out her phone. She didn\'t unlock it.'},
+      {text:'Cinco minutos después, la puerta se abrió.',ro:'',translation:'Five minutes later, the door opened.'},
+      {text:'Lo reconoció antes de que él la viera. Tres años habían cambiado poco.',ro:'',translation:'She recognized him before he saw her. Three years had changed little.'},
+      {text:'Él la vio. Se detuvo.',ro:'',translation:'He saw her. He stopped.'},
+      {text:'No había otras sillas libres junto a la ventana.',ro:'',translation:'There were no other free seats by the window.'},
+    ],
+    [
+      {text:'Se sentó al otro lado de la sala.',ro:'',translation:'He sat on the other side of the room.'},
+      {text:'Pasó media hora. Ninguno de los dos habló.',ro:'',translation:'Half an hour passed. Neither of them spoke.'},
+      {text:'Una enfermera salió. Llamó el nombre de él. Él se levantó.',ro:'',translation:'A nurse came out. She called his name. He stood up.'},
+      {text:'Al pasar junto a ella, se detuvo.',ro:'',translation:'As he passed by her, he stopped.'},
+      {text:'"¿Cómo está mamá?" preguntó. Su voz era la misma.',ro:'',translation:'"How is mom?" he asked. His voice was the same.'},
+      {text:'"Igual," dijo ella. "Pregunta por ti."',ro:'',translation:'"The same," she said. "She asks about you."'},
+    ],
+    [
+      {text:'Él asintió. No dijo nada más. Siguió caminando.',ro:'',translation:'He nodded. He said nothing more. He kept walking.'},
+      {text:'Ella miró por la ventana. El estacionamiento. Los carros. El cielo gris.',ro:'',translation:'She looked out the window. The parking lot. The cars. The grey sky.'},
+      {text:'Tres años de silencio y eso era todo lo que habían podido decir.',ro:'',translation:'Three years of silence and that was all they had been able to say.'},
+      {text:'Pero era algo.',ro:'',translation:'But it was something.'},
+      {text:'Cuando salió, él estaba esperando en la puerta.',ro:'',translation:'When she came out, he was waiting at the door.'},
+      {text:'"¿Quieres un café?" preguntó él.',ro:'',translation:'"Do you want a coffee?" he asked.'},
+      {text:'Ella lo miró. "Dale," dijo.',ro:'',translation:'She looked at him. "Sure," she said.'},
+    ],
+  ],
+  questions:[
+    {q:'How long had they not spoken?',choices:['One year','Two years','Three years','Five years'],answer:'Three years'},
+    {q:'What was his first question to her?',choices:['"Why are you here?"','"How are you?"','"How is mom?"','"Can we talk?"'],answer:'"How is mom?"'},
+    {q:'What did "dale" signal at the end?',choices:['She was angry','She refused','She agreed to have coffee with him','She left without answering'],answer:'She agreed to have coffee with him'},
   ]
 }
 
